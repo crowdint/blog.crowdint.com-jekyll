@@ -1,5 +1,6 @@
 ---
 layout: post
 title: Some Title
+author: David Padilla
 ---
 testing
