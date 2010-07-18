@@ -2,50 +2,21 @@
 layout: default
 title: Crowd
 ---
+
+{% assign first_post = site.posts.first %}
 <div class="post prepend-1">
-  <h1><a href="/articles/2010/05/25/first-things-first-our-initial-git-configuration/">First Things First... Our initial git configuration</a></h1>
+  <h1><a href="{{ first_post.url }}">{{ first_post.title }}</a></h1>
   <p class="author">
+    <span class="date">{{ first_post.short_date }}</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    {{ first_post.content }}
+    <div class="author_box">
+      <p><b>Author:</b> {{ first_post.author }}</p>
+    </div>
+  </div>
+</div>
 
-    <span class="date">May 25</span></p>
-
-    <div class="body prepend-1 append-1"><p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
-      <p>The basic steps we recommend are:</p>
-      <h2>Let us know who you are</h2>
-      <p>You can set up your email and name by using the following command:</p>
-      <blockquote>
-        <p>$ git config &#8212;global user.name &#8220;<span class="caps">YOURNAME</span>&#8221;<br />
-          $ git config &#8212;global user.email &#8220;<span class="caps">YOUREMAIL</span>&#8221;</p>
-        </blockquote>
-        <h2>Reduce the risk factor</h2>
-        <p>Well, it has happened to us before. Let&#8217;s say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-        <blockquote>
-          <p>$ git push &#8212;force<br />
-            + 013c43a&#8230;0759089 master &#8594; master (forced update)<br />
-            + 013c43a&#8230;0759089 your_branch &#8594; your_branch (forced update)<br />
-            + 013c43a&#8230;0759089 not_your_branch &#8594; not_your_branch (forced update)</p>
-          </blockquote>
-          <p>Woah, you just force updated 2 more branches than expected and now you&#8217;ve made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you&#8217;re gonna get yelled at.</p>
-          <p>So, we recommend our rookies to use the following command:</p>
-          <blockquote>
-            <p>$ git config &#8212;global push.default current</p>
-          </blockquote>
-          <p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would&#8217;ve made a smaller mess.</p>
-          <p>If you want to push a branch that is not the one you&#8217;re working on, you can do so by specifying the remote and the branch name:</p>
-          <blockquote>
-            <p>$ git push origin your_branch</p>
-          </blockquote>
-          <p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
-          <h2>Add color to your life</h2>
-          <p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-          <blockquote>
-            <p>$ git config &#8212;global color.branch auto<br />
-              $ git config &#8212;global color.diff auto<br />
-              $ git config &#8212;global color.interactive auto</p>
-            </blockquote>
-            <p>Hope this guide helps you in some way, cheers!</p>
-          </div>
-
-          <div class="author_box">
-            <p><b>Author:</b> David Padilla
-            </div>
-          </div>
+{% for post in site.posts %}
+<li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+{% endfor %}

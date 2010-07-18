@@ -2,5 +2,7 @@
 layout: post
 title: Some Title
 author: David Padilla
+short_date: Dec 27
 ---
+
 testing
