@@ -1,0 +1,162 @@
+body {
+  background-color: black;
+  background-image: url('/images/background21.jpg');
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+}
+
+.container {
+/*  background-color: green;*/
+}
+
+#empty-header{
+  height: 250px;
+}
+
+#white-body {
+  background-color: #ffffff;
+  min-height: 600px;
+}
+
+.round-top {
+  background-color: white;
+  height: 45px;
+  -moz-border-radius: 8px 8px 0 0;
+  -webkit-border-radius: 8px 8px 0 0;
+}
+
+.post {
+  margin-bottom: 50px
+
+}
+
+.post h1, .post h1 a {
+  background-color: white;
+  color: #343434;
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  padding-left:10px;
+
+}
+
+.post h1 a:hover {
+  text-decoration: underline;
+}
+
+.entry h3 a, .entry h3 a:visited {
+  color: #175057;
+  text-decoration: none;
+}
+
+.post .date {
+  color: white;
+  font-weight: normal;
+  font-size:14px;
+  background:url('/images/date.png') no-repeat top left;
+  padding:10px 4px 30px;
+  position:absolute;
+  top:2x;
+  left:-63px;
+}
+
+.post .author {
+  color: #666666;
+  padding-top: 2px;
+  font-size: 16px;
+  position:relative;
+  margin:0;
+
+}
+
+.author_box
+{
+  background:#efeeee url('/images/author_bkg.png') no-repeat 80px 0;
+  color:#666;
+  font-size:14px;
+  position:relative;
+  top:0px;
+  padding:20px 0 0 100px;
+  height:30px;
+  -moz-border-radius: 0 0 8px 8px;
+  -webkit-border-radius: 0 0 8px 8px;
+}
+
+.post .body {
+  background-color: #CDCDCD;
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  color: #353535;
+  /*
+  -moz-border-radius: 8px 8px 0 0;
+  -webkit-border-radius: 8px 8px 0 0;
+  */
+}
+
+.post .body h2 {
+  font-size: 16px;
+  color: #175057;
+}
+
+.post .body blockquote {
+  background-color: black;
+  color: green;
+  padding: 5px;
+  padding-top: 10px;
+}
+
+.right-side h1 {
+  font-size: 16px;
+  color: #175057;
+}
+
+.right-side a {
+  color: #353535;
+  text-decoration: none;
+}
+
+.right-side p {
+  color: #353535;
+}
+
+#footer {
+  height: 100px;
+  text-align: center;
+  color: #CDCDCD;
+  background:url('/images/logo.png') no-repeat 700px 15px;
+  clear:both;
+  border-top: 1px solid #CCC;
+  padding-top:15px;
+}
+
+#footer a, #footer a:visited {
+  color: #175057;
+  text-decoration: none;
+  height: 100px;
+}
+
+
+.about {
+  font-size: 11px;
+}
+
+.left-side
+{
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+
+.round-bottom {
+  background-color: white;
+  height: 45px;
+  -moz-border-radius: 0 0 8px 8px;
+  -webkit-border-radius: 0 0 8px 8px;
+}
+
+.copy
+{
+  text-align:left;
+  padding-left:50px;
+  padding-top:20px;
+}
