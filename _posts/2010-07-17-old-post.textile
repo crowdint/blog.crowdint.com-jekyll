@@ -1,0 +1,6 @@
+---
+layout: post
+title: Some Title
+author: David Padilla
+---
+Testing an old post
