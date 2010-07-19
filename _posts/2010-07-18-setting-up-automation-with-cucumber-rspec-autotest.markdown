@@ -11,7 +11,7 @@ Nowadays, one of the best practices to develop your web applications involves Be
 
 Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.
 
-##. Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails
+## Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails
 
 First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:
 
