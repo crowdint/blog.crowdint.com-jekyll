@@ -11,7 +11,7 @@ Whenever a new teammate joins Crowd Interactive, one of the first things they ha
 
 The basic steps we recommend are:
 
-h2. Let us know who you are
+## Let us know who you are
 
 You can set up your email and name by using the following command:
 
@@ -20,7 +20,7 @@ $ git config --global user.name "YOURNAME"
 $ git config --global user.email "YOUREMAIL"
 {% endhighlight %}
 
-h2. Reduce the risk factor
+## Reduce the risk factor
 
 Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.
 
@@ -49,7 +49,7 @@ $ git push origin your_branch
 
 At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.
 
-h2. Add color to your life
+## Add color to your life
 
 Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:
 
