@@ -99,6 +99,11 @@ body {
   color: #175057;
 }
 
+.post img.avatar {
+  float:left; 
+  margin-right: 20px
+}
+
 .post .body blockquote {
   background-color: black;
   color: green;

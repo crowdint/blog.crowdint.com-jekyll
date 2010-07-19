@@ -7,9 +7,10 @@ layout: default
     <span class="date">{{ page.short_date }}</span>
   </p>
   <div class="body prepend-1 append-1">
+    <img src="http://www.gravatar.com/avatar/{{ page.avatar }}" class="avatar" />
     {{ content }}
     <div class="author_box">
-      <p><b>Author:</b> David Padilla</p>
+      <p><b>Author:</b> {{ page.author }} | {{ page.email }}</p>
     </div>
   </div>
 </div>
