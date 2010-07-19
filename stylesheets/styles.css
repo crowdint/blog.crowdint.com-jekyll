@@ -114,6 +114,7 @@ body {
 .right-side a {
   color: #353535;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .right-side p {
