@@ -4,6 +4,10 @@ The tech blog for Crowd Interactive
 
 ## Requirements & Setup
 
+Clone the repo
+
+    git clone git@github.com:crowdint/blog.crowdint.com.git
+
 Bundler, install the gem:
 
     gem install bundler
