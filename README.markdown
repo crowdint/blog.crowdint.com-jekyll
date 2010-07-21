@@ -54,3 +54,19 @@ The _--auto_ option will make jekyll update the server automatically every time 
 ## Commit
 
 Commit the changes, preferably in your own branch and then, let the blog maintainers know that you're ready to be published.
+
+## Common issues
+
+### Segmentation Fault
+
+If you get something like this:
+
+  ..../rdiscount-1.6.5/lib/rdiscount.bundle: [BUG] Segmentation fault
+
+You will have to reinstall rdiscount gem manually, it will compile it with the correct platform
+
+### pygmentize command not found
+
+Install python syntax highlighter
+
+  sudo easy_install Pygments
