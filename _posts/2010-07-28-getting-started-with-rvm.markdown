@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Getting started with Ruby Version Manager (RVM)
-author: Francisco Guzmán
+author: Francisco Guzm&aacute;n
 email: francisco.guzman@crowdint.com
 avatar: c000ffd0c4ed3e23d09cae624d24b525
 short_date: Jun 28
@@ -11,11 +11,11 @@ Being a Rails developer brings up the need to work with different Ruby versions,
 
 With Rails being in a phase where version 3 is in development, you may (and should) want to take a look to its new features, but surely you don't want to touch your perfectly working Rails 2.3.x installation.
 
-Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this versions gap.
+Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this version gap.
 
 ## Installing RVM
 
-We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check this [post](http://blog.crowdint.com/2010-07-11-git-initial-configuration.markdown).
+We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this [post](/2010/07/11/git-initial-configuration.html).
 
 {% highlight bash %}
 bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
@@ -112,17 +112,17 @@ Also, the BeginRescueEnd guys have a section for each OS; stop by and take a loo
 There is one interesting post in [RafLabs](http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments) about the subject and a very simple implementation by typing:
 
 {% highlight bash %}
-PS1=”[\h:\$(~/.rvm/bin/rvm-prompt)]\W \u\$ “
+PS1="[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ "
 {% endhighlight %}
 
 This will allow your prompt to look a little bit like this:
 
 {% highlight bash %}
-[user 1.8.7]
+[localhost:ruby-1.8.7-p299@r3rc] home~ 
 
 or
 
-[~ ruby-1.9.2-p243]
+[dab-mac:ruby-1.9.1-p378]~ home$ 
 {% endhighlight %}
 
 ## Enjoy!
