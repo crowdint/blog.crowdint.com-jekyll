@@ -1,5 +1,5 @@
 body {
-  background:#fff url(bkg.png) repeat-x 0 0 ;
+  background:#fff url('/images/bkg.png') repeat-x 0 0 ;
 }
 
 .container {
@@ -7,7 +7,7 @@ body {
 }
 
 #empty-header{
-	background:url(tech_blog.png) 290px 0 no-repeat;
+	background:url('/images/tech_blog.png') 290px 0 no-repeat;
 	height: 230px;
  
 }
@@ -61,7 +61,7 @@ body {
   color: white;
   font-weight: normal;
   font-size:14px;
-  background:url(date.png) no-repeat top left;
+  background:url('/images/date.png') no-repeat top left;
   padding:10px 4px 30px;
   position:absolute;
   top:2x;
@@ -79,7 +79,7 @@ body {
 
 .author_box
 {
-	background:#efeeee url(author_bkg.png) no-repeat 80px 0;
+	background:#efeeee url('/images/author_bkg.png') no-repeat 80px 0;
 	color:#666;
 	font-size:14px;
 	position:relative;
@@ -130,7 +130,7 @@ body {
   height: 72px;
   text-align: center;
   color: #CDCDCD;
-  background:url(footer-bkg.gif) repeat-x;
+  background:url('/images/footer-bkg.gif') repeat-x;
   clear:both;
   border-top: 1px solid #CCC;
   padding-top:15px;
@@ -169,6 +169,6 @@ body {
 .copyContent{
 	margin: 0 auto;
 	width:950px;
-	background: url(logo.png) no-repeat 700px 0;
+	background: url('/images/logo.png') no-repeat 700px 0;
 	height:72px;
 }
