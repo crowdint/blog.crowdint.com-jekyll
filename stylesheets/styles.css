@@ -1,8 +1,5 @@
 body {
-  background-color: black;
-  background-image: url('/images/background21.jpg');
-  background-repeat: no-repeat;
-  background-attachment:fixed;
+  background:#fff url(bkg.png) repeat-x 0 0 ;
 }
 
 .container {
@@ -10,12 +7,22 @@ body {
 }
 
 #empty-header{
-  height: 250px;
+	background:url(tech_blog.png) 290px 0 no-repeat;
+	height: 230px;
+ 
 }
+.testGlow{
+	-webkit-box-shadow:0px 0px 13px #3c3c3c; 
+	-moz-box-shadow: 0px 0px 13px #3c3c3c; 
+	box-shadow:0px 0px 13px #3c3c3c;
 
+}
 #white-body {
   background-color: #ffffff;
   min-height: 600px;
+}
+#logoHead{
+	margin:130px 0 0 20px;
 }
 
 .round-top {
@@ -38,7 +45,7 @@ body {
   font-weight: bold;
   text-decoration: none;
   padding-left:10px;
-
+  
 }
 
 .post h1 a:hover {
@@ -54,7 +61,7 @@ body {
   color: white;
   font-weight: normal;
   font-size:14px;
-  background:url('/images/date.png') no-repeat top left;
+  background:url(date.png) no-repeat top left;
   padding:10px 4px 30px;
   position:absolute;
   top:2x;
@@ -65,22 +72,22 @@ body {
   color: #666666;
   padding-top: 2px;
   font-size: 16px;
-  position:relative;
-  margin:0;
-
+   position:relative;
+   margin:0;
+    
 }
 
 .author_box
 {
-  background:#efeeee url('/images/author_bkg.png') no-repeat 80px 0;
-  color:#666;
-  font-size:14px;
-  position:relative;
-  top:0px;
-  padding:20px 0 0 100px;
-  height:30px;
-  -moz-border-radius: 0 0 8px 8px;
-  -webkit-border-radius: 0 0 8px 8px;
+	background:#efeeee url(author_bkg.png) no-repeat 80px 0;
+	color:#666;
+	font-size:14px;
+	position:relative;
+	top:0px;
+	padding:20px 0 0 100px;
+	height:30px;
+	-moz-border-radius: 0 0 8px 8px;
+    -webkit-border-radius: 0 0 8px 8px;
 }
 
 .post .body {
@@ -91,7 +98,7 @@ body {
   /*
   -moz-border-radius: 8px 8px 0 0;
   -webkit-border-radius: 8px 8px 0 0;
-  */
+   */
 }
 
 .post .body h2 {
@@ -99,27 +106,20 @@ body {
   color: #175057;
 }
 
-.post img.avatar {
-  float:left; 
-  margin-right: 20px
-}
-
 .post .body blockquote {
   background-color: black;
   color: green;
   padding: 5px;
-  padding-top: 10px;
 }
 
 .right-side h1 {
   font-size: 16px;
-  color: #175057;
+  color: #879e1c;
 }
 
 .right-side a {
   color: #353535;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .right-side p {
@@ -127,10 +127,10 @@ body {
 }
 
 #footer {
-  height: 100px;
+  height: 72px;
   text-align: center;
   color: #CDCDCD;
-  background:url('/images/logo.png') no-repeat 700px 15px;
+  background:url(footer-bkg.gif) repeat-x;
   clear:both;
   border-top: 1px solid #CCC;
   padding-top:15px;
@@ -139,8 +139,8 @@ body {
 #footer a, #footer a:visited {
   color: #175057;
   text-decoration: none;
-  height: 100px;
-}
+  height: 72px;
+  }
 
 
 .about {
@@ -162,18 +162,13 @@ body {
 
 .copy
 {
-  text-align:left;
-  padding-left:50px;
-  padding-top:20px;
+	text-align:left;
+	padding-left:50px;
+	padding-top:20px;
 }
-
-ul.archives{
-  list-style: none;
-}
-
-ul.archives a {
-  color: black;
-  text-decoration: none;
-  font-size: 16px;
-  color: #175057;
+.copyContent{
+	margin: 0 auto;
+	width:950px;
+	background: url(logo.png) no-repeat 700px 0;
+	height:72px;
 }
