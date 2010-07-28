@@ -16,32 +16,6 @@ Then use bundler to install everything else:
 
     bundle install
 
-You might want to install [Pygments](http://wiki.github.com/mojombo/jekyll/install) to configure your syntax highlighting, so you can try this (depending on your OS):
-
-On OSX with MacPorts:
-
-    sudo port install python25 py25-pygments
-
-Alternatively on OS X Leopard:
-
-    sudo easy_install Pygments
-
-On Archlinux:
-
-    sudo pacman -S pygments
-
-On Ubuntu:
-
-    sudo apt-get install python-pygments
-
-On Gentoo:
-
-    sudo emerge -av dev-python/pygments
-
-On Windows(?):
-
-    Are you using Windows???... Seriously.
-
 ## Write something
 
 Create a file in the _post folder following the permalink convention YYYY-MM-DD-title-of-the-post.markdown or YYYY-MM-DD-title-of-the-post.textile
@@ -93,6 +67,29 @@ You will have to reinstall rdiscount gem manually, it will compile it with the c
 
 ### pygmentize command not found
 
-Install python syntax highlighter
+You might want to install [Pygments](http://wiki.github.com/mojombo/jekyll/install) to configure your syntax highlighting, so you can try this (depending on your OS):
 
-  sudo easy_install Pygments
+On OSX with MacPorts:
+
+    sudo port install python25 py25-pygments
+
+Alternatively on OS X Leopard:
+
+    sudo easy_install Pygments
+
+On Archlinux:
+
+    sudo pacman -S pygments
+
+On Ubuntu:
+
+    sudo apt-get install python-pygments
+
+On Gentoo:
+
+    sudo emerge -av dev-python/pygments
+
+On Windows(?):
+
+    Are you using Windows???... Seriously.
+
