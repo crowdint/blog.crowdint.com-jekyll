@@ -19,22 +19,28 @@ Then use bundler to install everything else:
 You might want to install [Pygments](http://wiki.github.com/mojombo/jekyll/install) to configure your syntax highlighting, so you can try this (depending on your OS):
 
 On OSX with MacPorts:
-sudo port install python25 py25-pygments
+
+    sudo port install python25 py25-pygments
 
 Alternatively on OS X Leopard:
-sudo easy_install Pygments
+
+    sudo easy_install Pygments
 
 On Archlinux:
-sudo pacman -S pygments
+
+    sudo pacman -S pygments
 
 On Ubuntu:
-sudo apt-get install python-pygments
+
+    sudo apt-get install python-pygments
 
 On Gentoo:
-sudo emerge -av dev-python/pygments
+
+    sudo emerge -av dev-python/pygments
 
 On Windows(?):
-Are you using Windows???... Seriously.
+
+    Are you using Windows???... Seriously.
 
 ## Write something
 
