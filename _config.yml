@@ -1,2 +1,4 @@
 markdown: rdiscount
 pygments: true
+destination: /Users/dab/git/crowdblog/public
+exclude: ["Gemfile", "README.markdown"]
