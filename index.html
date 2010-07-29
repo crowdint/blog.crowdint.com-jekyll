@@ -20,7 +20,7 @@ title: Blog
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
-{% for post in site.posts %}
+{% for post in site.posts limit: 10 %}
   <li><span><b>{{ post.date | date_to_string }}</b></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
   </ul>
