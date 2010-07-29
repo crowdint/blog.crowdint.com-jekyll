@@ -16,7 +16,7 @@ Specifically talking about Ruby on Rails, the best tool to accomplish this is de
 First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:
 
 {% highlight bash %}
-gem install rspec rspec-rails
+gem install rspec-rails
 {% endhighlight %}
 
 You can type _spec --help_ to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:
@@ -28,7 +28,7 @@ spec spec/
 It's time to install cucumber gem like this:
 
 {% highlight bash %}
-gem install cucumber cucumber-rails
+gem install cucumber-rails
 {% endhighlight %}
 
 It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:
@@ -62,14 +62,19 @@ At this point we are ready to start writing our features, but before we do that,
 We need to include gemcutter as a repository in case we don't have it already:
 
 {% highlight bash %}
-gem sources –add http://gemcutter.org
+gem sources -add http://gemcutter.org
 {% endhighlight %}
 
 After that we go for the Gems we need for autotest:
 
 {% highlight bash %}
-gem install ZenTest
 gem install autotest-rails
+{% endhighlight %}
+
+You may need to install before ZenTest, in case autotest didn't do it previously:
+
+{% highlight bash %}
+gem install ZenTest
 {% endhighlight %}
 
 And for MacOS users we can even "beautify" it a more using Growl to show us notifications about the status of our tests. So let's keep going.
