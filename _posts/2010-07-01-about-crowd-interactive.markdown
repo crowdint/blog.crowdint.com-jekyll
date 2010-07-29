@@ -3,7 +3,7 @@ layout: post
 title: About Crowd Interactive
 author: David Padilla
 email: david@crowdint.com
-avatar: d32b52ec6403614b1adf3e648cbbe584
+avatar: 43c0c5387a923d62b0060291c5c297f4
 short_date: Jun 01
 ---
 
