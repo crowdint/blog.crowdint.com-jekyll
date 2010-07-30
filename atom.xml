@@ -1,0 +1,27 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Crowd Interactive Tech Blog</title>
+ <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
+ <link href="http://blog.crowdint.com/"/>
+ <updated>{{ site.time | date_to_xmlschema }}</updated>
+ <id>http://blog.crowdint.com</id>
+ 
+ {% for post in site.posts limit:15 %}
+ <entry>
+   <title>{{ post.title }}</title>
+   <link href="http://blog.crowdint.com{{ post.url }}"/>
+   <updated>{{ post.date | date_to_xmlschema }}</updated>
+   <id>http://blog.crowdint.com{{ post.id }}</id>
+   <content type="html">{{ post.content | xml_escape }}</content>
+   <author>
+     <name>{{ post.author }}</name>
+     <email>{{ post.email }}</email>
+   </author>
+ </entry>
+ {% endfor %}
+ 
+</feed>
