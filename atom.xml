@@ -18,7 +18,7 @@ layout: nil
    <id>http://blog.crowdint.com{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
    <author>
-     <name>{{ post.author }}</name>
+     <name>{{ post.author | xml_escape }}</name>
      <email>{{ post.email }}</email>
    </author>
  </entry>
