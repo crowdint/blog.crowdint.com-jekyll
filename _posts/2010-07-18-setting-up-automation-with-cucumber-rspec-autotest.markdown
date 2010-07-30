@@ -4,7 +4,7 @@ title: Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8
 author: Roberto Cataneo
 email: roberto.cataneo@crowdint.com
 avatar: 43c0c5387a923d62b0060291c5c297f4
-short_date: Jul 18
+published: false
 ---
 
 Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known. 

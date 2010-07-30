@@ -4,7 +4,6 @@ title: Getting started with Ruby Version Manager (RVM)
 author: Francisco Guzm&aacute;n
 email: francisco.guzman@crowdint.com
 avatar: c000ffd0c4ed3e23d09cae624d24b525
-short_date: Jul 28
 ---
 
 Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.

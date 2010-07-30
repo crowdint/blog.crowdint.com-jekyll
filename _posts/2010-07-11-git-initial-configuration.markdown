@@ -4,7 +4,6 @@ title: First Things First... Our initial git configuration
 author: David Padilla
 email: david@crowdint.com
 avatar: d32b52ec6403614b1adf3e648cbbe584
-short_date: Jul 11
 ---
 
 Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.
