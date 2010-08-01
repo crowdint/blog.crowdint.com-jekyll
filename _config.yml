@@ -1,3 +1,4 @@
 markdown: rdiscount
 pygments: true
 lsi: true
+exclude: ['README.markdown']
