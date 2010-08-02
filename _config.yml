@@ -1,4 +1,4 @@
 markdown: rdiscount
 pygments: true
 lsi: true
-exclude: ['README.markdown']
+exclude: ['README.markdown', 'README_FOR_COLLABORATORS.markdown']
