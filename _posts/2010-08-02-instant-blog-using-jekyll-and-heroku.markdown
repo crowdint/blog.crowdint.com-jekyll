@@ -4,7 +4,6 @@ title: Instant blog using Jekyll and Heroku
 author: David Padilla
 email: david@crowdint.com
 avatar: d32b52ec6403614b1adf3e648cbbe584
-short_date: Aug 2
 ---
 
 When we were trying to put this blog online, we checked out different options, until we stumbled upon [Jekyll](http://wiki.github.com/mojombo/jekyll/).

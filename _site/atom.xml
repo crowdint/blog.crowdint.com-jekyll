@@ -4,9 +4,163 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-01T01:27:36-05:00</updated>
+ <updated>2010-08-02T00:25:44-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Instant blog using Jekyll and Heroku</title>
+   <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
+   <updated>2010-08-02T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
+   <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.&lt;/p&gt;
+
+&lt;p&gt;We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.&lt;/p&gt;
+
+&lt;p&gt;Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.&lt;/p&gt;
+
+&lt;p&gt;You can find more info on how to use this awesome content management tool on their &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Wiki&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Setup jekyll&lt;/h2&gt;
+
+&lt;p&gt;The first thing you have to do is, install the jekyll gem. Follow the instructions &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/install&quot;&gt;here&lt;/a&gt;, but, basically
+all you have to do is run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install jekyll
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Create the site structure&lt;/h2&gt;
+
+&lt;p&gt;Create a folder wherever you want to put your blog files.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;mkdir my_blog
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;and create the following files:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;my_blog
+touch _config.yml
+touch index.html
+mkdir _posts
+mkdir _layouts
+touch _layouts/default.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;For more info on what those files do, or what should you put on them, take a look &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/usage&quot;&gt;here&lt;/a&gt;, or checkout &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/sites&quot;&gt;this huge list&lt;/a&gt; of working examples.&lt;/p&gt;
+
+&lt;h2&gt;&quot;Hello World&quot; Jekyll&lt;/h2&gt;
+
+&lt;h3&gt;_layouts/default.html&lt;/h3&gt;
+
+&lt;p&gt;First, let's create a Layout, open &lt;em&gt;_layouts/default.html&lt;/em&gt; and put the following code on it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Hello World!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now, we need an index page. Open &lt;em&gt;index.html&lt;/em&gt; and add the following code at the top:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;---
+layout: default
+---
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;What we're telling the index page is to use the default layout we created earlier.&lt;/p&gt;
+
+&lt;p&gt;Run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;jekyll--server --auto
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Open your browser and go to http://127.0.0.1:4000&lt;/p&gt;
+
+&lt;p&gt;You should now see &quot;Hello World&quot;&lt;/p&gt;
+
+&lt;h2&gt;Deploying to Heroku&lt;/h2&gt;
+
+&lt;p&gt;Now, let's try and deploy our Hello World blog to Heroku. There is a gem called &lt;a href=&quot;http://github.com/bry4n/rack-jekyll&quot;&gt;rack-jekyll&lt;/a&gt; that makes this very easy.&lt;/p&gt;
+
+&lt;p&gt;You can read the documentation on the gem page, the basic steps are:&lt;/p&gt;
+
+&lt;p&gt;First, install the Heroku gem&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install heroku
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Create a config.ru file:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;rack/jekyll&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Jekyll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Add the rack-jekyll gem to the heroku manifest:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;rack-jekyll&amp;quot;&lt;/span&gt; &amp;gt; .gems
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Create a git repo and an initial commit:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git init
+git add .
+git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Create a Heroku app:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;heroku create
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And, deploy!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Check out how it looks:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;heroku open
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This is just the basic stuff on Jekyll, make sure you go through the source code of &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/sites&quot;&gt;other blogs&lt;/a&gt; to get more tips on advanced stuff like archives, comments, includes, links to posts...&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Getting started with Ruby Version Manager (RVM)</title>
