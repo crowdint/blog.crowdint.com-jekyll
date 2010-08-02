@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Crowd Interactive Tech Blog</title>
+ <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
+ <link href="http://blog.crowdint.com/"/>
+ <updated>2010-08-01T01:27:36-05:00</updated>
+ <id>http://blog.crowdint.com</id>
+ 
+ 
+ <entry>
+   <title>Getting started with Ruby Version Manager (RVM)</title>
+   <link href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html"/>
+   <updated>2010-07-28T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/07/28/getting-started-with-rvm</id>
+   <content type="html">&lt;p&gt;Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.&lt;/p&gt;
+
+&lt;p&gt;With Rails being in a phase where version 3 is in development, you may (and should) want to take a look to its new features, but surely you don't want to touch your perfectly working Rails 2.3.x installation.&lt;/p&gt;
+
+&lt;p&gt;Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this version gap.&lt;/p&gt;
+
+&lt;h2&gt;Installing RVM&lt;/h2&gt;
+
+&lt;p&gt;We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this &lt;a href=&quot;/2010/07/11/git-initial-configuration.html&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;bash &amp;lt; &amp;lt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; curl http://rvm.beginrescueend.com/releases/rvm-install-head &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This is the best option to install RVM in your machine and will work in Macintosh and *nix environments, can't promise anything about Windows, though.&lt;/p&gt;
+
+&lt;p&gt;There are other two options: from the latest source tarball and as a gem, but the guys from &lt;a href=&quot;http://rvm.beginrescueend.com/rvm/install/&quot;&gt;BeginRescueEnd&lt;/a&gt; recommend to stick to the described method.&lt;/p&gt;
+
+&lt;p&gt;After RVM is installed in your system, you need to add this line to your ~/.bashrc and ~/.bash_profile&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; -s &lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;/.rvm/scripts/rvm &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;/.rvm/scripts/rvm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Now what?&lt;/h2&gt;
+
+&lt;p&gt;Well, you should be ready to start playing around with any Ruby version you want to work with; but before that, it is a good practice to check the Ruby versions that RVM is aware of&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm list known
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;To install a specific Ruby version, you just have to:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm install &amp;lt;ruby version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;When you already have several 'Rubies', you can make any of them the default version:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm --default &amp;lt;ruby version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you ever want (or need) to go back to your previously Ruby/Rails installed version, here's the trick:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm system
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;What about Rails???&lt;/h2&gt;
+
+&lt;p&gt;The real awesomeness start when you discover that you can install as many Rails versions as you want; and the 'bestest' part is the ability to mix them up with your installed 'Rubies'!!!&lt;/p&gt;
+
+&lt;p&gt;Let's take one step at a time.&lt;/p&gt;
+
+&lt;h3&gt;Gemsets&lt;/h3&gt;
+
+&lt;p&gt;RVM provides a feature/concept called 'gemset'; which will allows us to install gems to test them with any of the Ruby versions you have installed.&lt;/p&gt;
+
+&lt;p&gt;To create a gemset you have to run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm gemset create &amp;lt;name &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;your gemset&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I like naming my gemsets after the project I will use the Rails version / Gems version; most of the developers will prefer using a naming convention like 'Rails235', 'Rails_3_0_0_beta4', 'Rails3rc' or anything like that.&lt;/p&gt;
+
+&lt;p&gt;Now, to mix any of your Ruby version with any of your Rails versions, you'll use:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm use &amp;lt;ruby version&amp;gt;@&amp;lt;gemset name&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e.g.&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; rvm use 1.8.7@rails_300_RC
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;you can omit the word 'use' and it will work too&lt;/p&gt;
+
+&lt;p&gt;Now, install the Rails version you want to try within this gemset:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install rails -v 2.3.3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Forget about sudo to install gems&lt;/h3&gt;
+
+&lt;p&gt;This is very important, since you need to install the gems to your current gemset folder, so avoid using sudo or else forget about the magic&lt;/p&gt;
+
+&lt;h2&gt;Checking versions&lt;/h2&gt;
+
+&lt;p&gt;This is pretty straight forward, but make sure to check your Ruby/Rails version each time you switch:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ruby -v &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; rails -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;What else is important?&lt;/h2&gt;
+
+&lt;p&gt;Check on the documentation to become an expert using RVM; you can remove Ruby installations, delete-import-export gemsets and a whole bunch of features that will make your life easier (at least working with RoR versions)&lt;/p&gt;
+
+&lt;p&gt;Also, the BeginRescueEnd guys have a section for each OS; stop by and take a look.&lt;/p&gt;
+
+&lt;h2&gt;Current Ruby selection in your prompt line&lt;/h2&gt;
+
+&lt;p&gt;There is one interesting post in &lt;a href=&quot;http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments&quot;&gt;RafLabs&lt;/a&gt; about the subject and a very simple implementation by typing:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;PS1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ &amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will allow your prompt to look a little bit like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost:ruby-1.8.7-p299@r3rc&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; home~ 
+
+or
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;dab-mac:ruby-1.9.1-p378&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;~ home&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Enjoy!&lt;/h2&gt;
+</content>
+   <author>
+     <name>Francisco Guzm&amp;aacute;n</name>
+     <email>francisco.guzman@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</title>
+   <link href="http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html"/>
+   <updated>2010-07-18T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest</id>
+   <content type="html">&lt;p&gt;Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.&lt;/p&gt;
+
+&lt;p&gt;Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.&lt;/p&gt;
+
+&lt;h2&gt;Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails&lt;/h2&gt;
+
+&lt;p&gt;First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install rspec-rails
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can type &lt;em&gt;spec --help&lt;/em&gt; to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;spec spec/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's time to install cucumber gem like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install cucumber-rails
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install gherkin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;After that, try to install cucumber gem again, and if there is no problem, you may see cucumber help:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cucumber --help
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In order to run your cucumber scenarios, you use this command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cucumber features/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Just as a note here, when you write your features and describe your steps for a web application it is a handy to make use of the webrat gem which includes some useful steps:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install webrat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Installing ZenTest, Autotest-Rails y Autotest-Growl&lt;/h2&gt;
+
+&lt;p&gt;At this point we are ready to start writing our features, but before we do that, we want to go a little bit further and install autotest, which will allow us to write our features and rspec scenarios while autotest will handle to run tests every time it detects a change in our code, really cool eh?&lt;/p&gt;
+
+&lt;p&gt;We need to include gemcutter as a repository in case we don't have it already:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem sources -add http://gemcutter.org
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;After that we go for the Gems we need for autotest:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install autotest-rails
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You may need to install before ZenTest, in case autotest didn't do it previously:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install ZenTest
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And for MacOS users we can even &quot;beautify&quot; it a more using Growl to show us notifications about the status of our tests. So let's keep going.&lt;/p&gt;
+
+&lt;p&gt;In order to do that, now you have to install the autotest/growl gem:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install autotest-growl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now create a  file ~/.autotest where you need to require it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt; 
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;autotest/growl&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Once you have written  your features, and rspec tests, you can use autospec for rspec and it will be waiting for you to make changes and rerun automatically your tests every time, you just have to use this command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;autospec
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And you can do so to include cucumber scenarios in you autotest:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;AUTOFEATURE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true &lt;/span&gt;autospec
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You'll be getting a nice Growl notification every time you change your code and you can be aware of the status of your tests at any time.&lt;/p&gt;
+
+&lt;p&gt;In the case you include cucumber, it may be running the tests indefinitely which can be  a little bit annoying, also could be a memory hazard, so I encourage you to add a new file .autotest in your application root directory and write this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Autotest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_hook&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_exception&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;%r{^\.git}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# ignore Version Control System&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_exception&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;%r{^./tmp}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# ignore temp files, lest autotest will run again, and again...&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_exception&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;rerun.txt&amp;quot;&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_mapping&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;%r{^lib/.*\.rb$}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;no&quot;&gt;Dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;spec/**/*.rb&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+     &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;After this you are now good to go, and you can start using cucumber and rspec to &quot;bddify&quot; your app development!!&lt;/p&gt;
+</content>
+   <author>
+     <name>Roberto Cataneo</name>
+     <email>roberto.cataneo@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>First Things First... Our initial git configuration</title>
+   <link href="http://blog.crowdint.com/2010/07/11/git-initial-configuration.html"/>
+   <updated>2010-07-11T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/07/11/git-initial-configuration</id>
+   <content type="html">&lt;p&gt;Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.&lt;/p&gt;
+
+&lt;p&gt;The basic steps we recommend are:&lt;/p&gt;
+
+&lt;h2&gt;Let us know who you are&lt;/h2&gt;
+
+&lt;p&gt;You can set up your email and name by using the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global user.name &lt;span class=&quot;s2&quot;&gt;&amp;quot;YOURNAME&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global user.email &lt;span class=&quot;s2&quot;&gt;&amp;quot;YOUREMAIL&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Reduce the risk factor&lt;/h2&gt;
+
+&lt;p&gt;Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push --force
++ 013c43a...0759089 master -&amp;gt; master &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
++ 013c43a...0759089 your_branch -&amp;gt; your_branch &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
++ 013c43a...0759089 not_your_branch -&amp;gt; not_your_branch &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.&lt;/p&gt;
+
+&lt;p&gt;So, we recommend our rookies to use the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global push.default current
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.&lt;/p&gt;
+
+&lt;p&gt;If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push origin your_branch
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.&lt;/p&gt;
+
+&lt;h2&gt;Add color to your life&lt;/h2&gt;
+
+&lt;p&gt;Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.branch auto
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.diff auto
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.interactive auto
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Hope this guide helps you in some way, cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ 
+</feed>

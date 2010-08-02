@@ -7,20 +7,23 @@ title: Blog
 <div class="post prepend-1">
   <h1><a href="{{ first_post.url }}">{{ first_post.title }}</a></h1>
   <p class="author">
-    <span class="date">{{ first_post.short_date }}</span>
+    <span class="date">{{ first_post.date | date:"<b>%b %d</b><br />%Y" }}</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="span-3"><img src="http://www.gravatar.com/avatar/{{ first_post.avatar }}" class="avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ first_post.avatar }}" class="avatar" /></div>
     {{ first_post.content }}
     <div class="author_box">
       <p><b>Author:</b> {{ first_post.author }} | {{ first_post.email }}</p>
+    </div>
+    <div class="comments">
+      <h2><a href="{{ first_post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>
   </div>
 </div>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
-{% for post in site.posts limit: 10 %}
+{% for post in site.posts offset:1 limit: 10 %}
   <li><span><b>{{ post.date | date_to_string }}</b></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
   </ul>

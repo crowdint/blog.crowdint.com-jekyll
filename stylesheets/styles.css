@@ -60,12 +60,14 @@ body {
 .post .date {
   color: white;
   font-weight: normal;
-  font-size:14px;
+  font-size:12px;
   background:url('/images/date.png') no-repeat top left;
-  padding:10px 4px 30px;
+  padding:5px 10px 30px;
   position:absolute;
   top:2x;
   left:-63px;
+  text-align:center;
+  line-height:15px
 }
 
 .post .author {
@@ -108,6 +110,7 @@ body {
 
 .post .body h3 {
   font-size: 16px;
+  color: #175057;
 }
 
 .post .body blockquote {
@@ -210,6 +213,11 @@ ul.archives {
   border-color: black;
 }
 
-#disqus_thread h3{
-  
+.comments {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.gravatar {
+  width: 90px;
 }
