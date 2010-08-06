@@ -221,3 +221,7 @@ ul.archives {
 .gravatar {
   width: 90px;
 }
+
+em {
+  font-weight: bold;
+}
