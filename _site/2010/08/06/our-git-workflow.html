@@ -48,7 +48,7 @@
 
 <p>Let's say we have our first commit A.</p>
 
-<p><img src="images/2010/08/09/a.jpg" alt="A" /></p>
+<p><img src="/images/2010/08/09/a.jpg" alt="A" /></p>
 
 <p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
 
@@ -62,11 +62,11 @@ git branch feature2
 
 <p>Now, our tree looks a bit like this:</p>
 
-<p><img src="images/2010/08/09/b.jpg" alt="B" /></p>
+<p><img src="/images/2010/08/09/b.jpg" alt="B" /></p>
 
 <p>Team Feature 2 catches up and creates commit D</p>
 
-<p><img src="images/2010/08/09/c.jpg" alt="C" /></p>
+<p><img src="/images/2010/08/09/c.jpg" alt="C" /></p>
 
 <p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
 
@@ -79,7 +79,7 @@ Fast-forward
 </div>
 
 
-<p><img src="images/2010/08/09/d.jpg" alt="D" /></p>
+<p><img src="/images/2010/08/09/d.jpg" alt="D" /></p>
 
 <p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
 
@@ -91,7 +91,7 @@ git merge master
 </div>
 
 
-<p><img src="images/2010/08/09/e.jpg" alt="E" /></p>
+<p><img src="/images/2010/08/09/e.jpg" alt="E" /></p>
 
 <p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
 
@@ -106,7 +106,7 @@ Fast-forward
 </div>
 
 
-<p><img src="images/2010/08/09/f.jpg" alt="F" /></p>
+<p><img src="/images/2010/08/09/f.jpg" alt="F" /></p>
 
 <p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
 
@@ -121,7 +121,7 @@ Fast-forward
 
 <p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
 
-<p><img src="images/2010/08/09/h.jpg" alt="H" /></p>
+<p><img src="/images/2010/08/09/h.jpg" alt="H" /></p>
 
 <p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
 
@@ -149,6 +149,8 @@ Fast-forward
 <div class="post prepend-1">
   <h1>Related Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
 
   <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
 

@@ -12,7 +12,7 @@ Here is how we do git, hoping this explanation helps someone understand *the pow
 
 Let's say we have our first commit A.
 
-![A](images/2010/08/09/a.jpg)
+![A](/images/2010/08/09/a.jpg)
 
 Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.
 
@@ -25,11 +25,11 @@ Now, Team Feature 1 works hard and commits B and C.
 
 Now, our tree looks a bit like this:
 
-![B](images/2010/08/09/b.jpg)
+![B](/images/2010/08/09/b.jpg)
 
 Team Feature 2 catches up and creates commit D
 
-![C](images/2010/08/09/c.jpg)
+![C](/images/2010/08/09/c.jpg)
 
 Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:
 
@@ -42,7 +42,7 @@ Fast-forward
 
 {% endhighlight %}
 
-![D](images/2010/08/09/d.jpg)
+![D](/images/2010/08/09/d.jpg)
 
 Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.
 
@@ -53,7 +53,7 @@ git checkout feature1
 git merge master
 {% endhighlight %}
 
-![E](images/2010/08/09/e.jpg)
+![E](/images/2010/08/09/e.jpg)
 
 Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.
 
@@ -68,7 +68,7 @@ Fast-forward
 
 {% endhighlight %}
 
-![F](images/2010/08/09/f.jpg)
+![F](/images/2010/08/09/f.jpg)
 
 Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.
 
@@ -83,8 +83,8 @@ Fast-forward
 
 Now, all of the branches are at the same level and both teams are ready to start working on new features.
 
-![H](images/2010/08/09/h.jpg)
+![H](/images/2010/08/09/h.jpg)
 
 And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.
 
-Cheers! 
+Cheers!
