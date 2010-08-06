@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Instant blog using Jekyll and Heroku</title>
+  <title>Crowd Interactive Tech Blog :: Our git workflow</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -36,152 +36,94 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Instant blog using Jekyll and Heroku</h1>
+  <h1>Our git workflow</h1>
   <p class="author">
-    <span class="date"><b>Aug 02</b><br />2010</span>
+    <span class="date"><b>Aug 06</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" /></div>
-    <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
+    <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
 
-<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
+<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
 
-<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
+<p>Let's say we have our first commit A.</p>
 
-<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
+<p><img src="images/2010/08/09/a.jpg" alt="A" /></p>
 
-<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
+<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
 
-<h2>Setup jekyll</h2>
-
-<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
-all you have to do is run:</p>
-
-<div class="highlight"><pre><code class="bash">gem install jekyll
+<div class="highlight"><pre><code class="bash">git branch feature1
+git branch feature2
 </code></pre>
 </div>
 
 
-<h2>Create the site structure</h2>
+<p>Now, Team Feature 1 works hard and commits B and C.</p>
 
-<p>Create a folder wherever you want to put your blog files.</p>
+<p>Now, our tree looks a bit like this:</p>
 
-<div class="highlight"><pre><code class="bash">mkdir my_blog
+<p><img src="images/2010/08/09/b.jpg" alt="B" /></p>
+
+<p>Team Feature 2 catches up and creates commit D</p>
+
+<p><img src="images/2010/08/09/c.jpg" alt="C" /></p>
+
+<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
+
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature2
+
+Updating 04511b4..ed6d1fb
+Fast-forward
 </code></pre>
 </div>
 
 
-<p>and create the following files:</p>
+<p><img src="images/2010/08/09/d.jpg" alt="D" /></p>
 
-<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
-touch _config.yml
-touch index.html
-mkdir _posts
-mkdir _layouts
-touch _layouts/default.html
+<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
+
+<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature1
+git merge master
 </code></pre>
 </div>
 
 
-<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
+<p><img src="images/2010/08/09/e.jpg" alt="E" /></p>
 
-<h2>"Hello World" Jekyll</h2>
+<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
 
-<h3>_layouts/default.html</h3>
+<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
 
-<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature1
 
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+Updating ed6d1fb..359c6cf
+Fast-forward
 </code></pre>
 </div>
 
 
-<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
+<p><img src="images/2010/08/09/f.jpg" alt="F" /></p>
 
-<div class="highlight"><pre><code class="html">---
-layout: default
----
+<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature2
+git merge master
+
+Updating ed6d1fb..359c6cf
+Fast-forward
 </code></pre>
 </div>
 
 
-<p>What we're telling the index page is to use the default layout we created earlier.</p>
+<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
 
-<p>Run:</p>
+<p><img src="images/2010/08/09/h.jpg" alt="H" /></p>
 
-<div class="highlight"><pre><code class="bash">jekyll--server --auto
-</code></pre>
-</div>
-
-
-<p>Open your browser and go to http://127.0.0.1:4000</p>
-
-<p>You should now see "Hello World"</p>
-
-<h2>Deploying to Heroku</h2>
-
-<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
-
-<p>You can read the documentation on the gem page, the basic steps are:</p>
-
-<p>First, install the Heroku gem</p>
-
-<div class="highlight"><pre><code class="bash">gem install heroku
-</code></pre>
-</div>
-
-
-<p>Create a config.ru file:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
-
-<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
-</code></pre>
-</div>
-
-
-<p>Add the rack-jekyll gem to the heroku manifest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
-</code></pre>
-</div>
-
-
-<p>Create a git repo and an initial commit:</p>
-
-<div class="highlight"><pre><code class="bash">git init
-git add .
-git commit -m <span class="s2">&quot;First commit&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Create a Heroku app:</p>
-
-<div class="highlight"><pre><code class="bash">heroku create
-</code></pre>
-</div>
-
-
-<p>And, deploy!</p>
-
-<div class="highlight"><pre><code class="bash">git push heroku master
-</code></pre>
-</div>
-
-
-<p>Check out how it looks:</p>
-
-<div class="highlight"><pre><code class="bash">heroku open
-</code></pre>
-</div>
-
-
-<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
+<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
 
 <p>Cheers!</p>
 
@@ -208,13 +150,13 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+  <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
 
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
-  <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
-  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
+  <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
 
   </ul>
 </div>

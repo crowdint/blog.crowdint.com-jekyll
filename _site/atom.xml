@@ -4,9 +4,105 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-05T11:58:35-05:00</updated>
+ <updated>2010-08-06T11:48:32-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Our git workflow</title>
+   <link href="http://blog.crowdint.com/2010/08/06/our-git-workflow.html"/>
+   <updated>2010-08-06T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/06/our-git-workflow</id>
+   <content type="html">&lt;p&gt;Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.&lt;/p&gt;
+
+&lt;p&gt;Here is how we do git, hoping this explanation helps someone understand &lt;em&gt;the power of git&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let's say we have our first commit A.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/a.jpg&quot; alt=&quot;A&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git branch feature1
+git branch feature2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now, Team Feature 1 works hard and commits B and C.&lt;/p&gt;
+
+&lt;p&gt;Now, our tree looks a bit like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/b.jpg&quot; alt=&quot;B&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Team Feature 2 catches up and creates commit D&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/c.jpg&quot; alt=&quot;C&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git checkout master
+git merge feature2
+
+Updating 04511b4..ed6d1fb
+Fast-forward
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/d.jpg&quot; alt=&quot;D&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.&lt;/p&gt;
+
+&lt;p&gt;Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge &lt;em&gt;master into feature1&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git checkout feature1
+git merge master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/e.jpg&quot; alt=&quot;E&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.&lt;/p&gt;
+
+&lt;p&gt;After we're sure everything is going to be all right, we now merge &lt;em&gt;feature1 into master&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git checkout master
+git merge feature1
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/f.jpg&quot; alt=&quot;F&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git checkout feature2
+git merge master
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now, all of the branches are at the same level and both teams are ready to start working on new features.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2010/08/09/h.jpg&quot; alt=&quot;H&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Instant blog using Jekyll and Heroku</title>
