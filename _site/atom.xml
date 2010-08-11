@@ -4,9 +4,192 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-06T11:48:32-05:00</updated>
+ <updated>2010-08-10T16:36:47-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Agile/Bundler small test App</title>
+   <link href="http://blog.crowdint.com/2010/08/10/bundler.html"/>
+   <updated>2010-08-10T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/10/bundler</id>
+   <content type="html">&lt;p&gt;This guide is intended to show how Bundler helps you keep organized your gem dependencies.&lt;/p&gt;
+
+&lt;p&gt;Think about the following scenarios when working with Ruby and requiring gems:
+* You have to change some gem versions due some unfixed bug
+* One of your teammates has a different gem version than yours
+* Your project depends on multiple gems wich at the same time have many other dependencies
+* Your project has different environments and each environment has different gems&lt;/p&gt;
+
+&lt;p&gt;Well Bundler brings you some work arounds to this common issues and takes thigs further by
+introducing some clever tricks to orginize you project dependencies.&lt;/p&gt;
+
+&lt;p&gt;Let's create a simple project whose purpose will be retrieve a list of your gmail contacts, this
+project will have two environments: test and production.&lt;/p&gt;
+
+&lt;p&gt;Let's start by creating our project skeleton:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;mkdir -p gcontacts/lib gcontacts/test gcontacts/bin
+touch gcontacts/lib/gcontacts.rb gcontacts/test/gcontacts_test.rb gcontacts/bin/gcontacts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And now let's create our test &lt;em&gt;gcontacts/test/gcontacts_test.rb&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GContactsTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Unit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;TestCase&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@gcontacts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;GContacts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;USER&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;PASSWD&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_contains_expected_methods&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assert_true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@gcontacts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;methods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;include?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;retrieve_all&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;  
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_retrieve_all&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assert_true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@gcontacts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;retrieve_all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_a?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This empty test with fail with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ruby gcontacts/test/gcontacts_test.rb
+gcontacts/test/gcontacts_test.rb:1: uninitialized constant Test &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;NameError&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;OK so we need our testing framework, so I am going to use Test::Unit, and introduce Bundler,
+first lets install bundler:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install bundler
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now bundler allows you to change your gems source so they might come from gemcutter, rubygems, even
+git repositories, all gem dependencies are declared on one single &lt;em&gt;Gemfile&lt;/em&gt; file, we are going to
+add Test/Unit, and since we only require it for test will put it inside :test group:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;cat &amp;gt; gcontacts/Gemfile &lt;span class=&quot;s&quot;&gt;&amp;lt;&amp;lt; YEEAH&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;source :gemcutter&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;gem &amp;#39;test-unit&amp;#39;, :group =&amp;gt; &amp;#39;test&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;YEEAH&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Once you have that file you only need to install you dependencies through:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gcontacts
+bundle install
+Fetching &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;index from http://gemcutter.org/
+Using &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;-unit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.1.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from bundler gems 
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! Use &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;bundle show &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;gemname&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; to see where a bundled gem is installed.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Bundle is installed so we are back in track, so we need to include this dependencies in top of our
+test case, so lets modify it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bundler&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Bundler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;unit/test&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And now we have to run our tests:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/gcontacts_test.rb 
+Loaded suite &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/gcontacts_test
+Started
+EE
+
+  1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Error:
+test_contains_expected_methods&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;GContactsTest&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+NameError: uninitialized constant GContactsTest::GContacts
+    &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/gcontacts_test.rb:8:in &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;setup&lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;s1&quot;&gt;  2) Error:&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;test_retrieve_all(GContactsTest):&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;NameError: uninitialized constant GContactsTest::GContacts&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;    test/gcontacts_test.rb:8:in `setup&amp;#39;&lt;/span&gt;
+
+Finished in 0.005571 seconds.
+
+2 tests, 0 assertions, 0 failures, 2 errors, 0 pendings, 0 omissions, 0 notifications
+0% passed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Good, our tests failed since we do not have our GContacts coded and required, so lets write the
+minimum code for out tests to pass, &lt;em&gt;lib/gcontacts.rb&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GContacts&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;retrieve_all&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And we need to include our project's lib in our &lt;em&gt;test/gcontacts_test.rb&lt;/em&gt; so we have to add this on
+top of it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;vg&quot;&gt;$LOAD_PATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;../../lib&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;__FILE__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;gcontacts&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And re-run our tests, which should pass:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/gcontacts_test.rb 
+Loaded suite &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/gcontacts_test
+Started
+..
+
+Finished in 0.004691 seconds.
+
+2 tests, 2 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
+100% passed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now we need to create the application that will retrieve a list of our contacts using our brand
+new GContacts class, we are going to create a simple command line user, password input system,
+so we add following to &lt;em&gt;bin/gcontacts&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span class=&quot;vg&quot;&gt;$LOAD_PATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;../../lib&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;__FILE__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rubygems&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bundler/setup&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;gcontacts&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;gcontacts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;GContacts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ARGV&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gcontacts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;retrieve_all&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I know this command line application sucks but feel free to improve it, I would
+suggest you either google it or read this &lt;a href=&quot;http://blog.infinitered.com/entries/show/5&quot;&gt;post&lt;/a&gt;
+from &lt;em&gt;Todd Werth&lt;/em&gt;.
+~&lt;/p&gt;
+</content>
+   <author>
+     <name>Emmanuel Delgado</name>
+     <email>emmanuel.delgado@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Our git workflow</title>

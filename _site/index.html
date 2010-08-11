@@ -37,108 +37,197 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
+  <h1><a href="/2010/08/10/bundler.html">Agile/Bundler small test App</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 06</b><br />2010</span>
+    <span class="date"><b>Aug 10</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" /></div>
-    <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" /></div>
+    <p>This guide is intended to show how Bundler helps you keep organized your gem dependencies.</p>
 
-<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
+<p>Think about the following scenarios when working with Ruby and requiring gems:
+* You have to change some gem versions due some unfixed bug
+* One of your teammates has a different gem version than yours
+* Your project depends on multiple gems wich at the same time have many other dependencies
+* Your project has different environments and each environment has different gems</p>
 
-<p>Let's say we have our first commit A.</p>
+<p>Well Bundler brings you some work arounds to this common issues and takes thigs further by
+introducing some clever tricks to orginize you project dependencies.</p>
 
-<p><img src="images/2010/08/09/a.jpg" alt="A" /></p>
+<p>Let's create a simple project whose purpose will be retrieve a list of your gmail contacts, this
+project will have two environments: test and production.</p>
 
-<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
+<p>Let's start by creating our project skeleton:</p>
 
-<div class="highlight"><pre><code class="bash">git branch feature1
-git branch feature2
+<div class="highlight"><pre><code class="bash">mkdir -p gcontacts/lib gcontacts/test gcontacts/bin
+touch gcontacts/lib/gcontacts.rb gcontacts/test/gcontacts_test.rb gcontacts/bin/gcontacts
 </code></pre>
 </div>
 
 
-<p>Now, Team Feature 1 works hard and commits B and C.</p>
+<p>And now let's create our test <em>gcontacts/test/gcontacts_test.rb</em>:</p>
 
-<p>Now, our tree looks a bit like this:</p>
-
-<p><img src="images/2010/08/09/b.jpg" alt="B" /></p>
-
-<p>Team Feature 2 catches up and creates commit D</p>
-
-<p><img src="images/2010/08/09/c.jpg" alt="C" /></p>
-
-<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
-
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature2
-
-Updating 04511b4..ed6d1fb
-Fast-forward
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">GContactsTest</span> <span class="o">&lt;</span> <span class="no">Test</span><span class="o">::</span><span class="no">Unit</span><span class="o">::</span><span class="no">TestCase</span>
+  <span class="k">def</span> <span class="nf">setup</span>
+    <span class="vi">@gcontacts</span> <span class="o">=</span> <span class="no">GContacts</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;USER&#39;</span><span class="p">,</span> <span class="s1">&#39;PASSWD&#39;</span><span class="p">)</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">test_contains_expected_methods</span>
+    <span class="n">assert_true</span><span class="p">(</span><span class="vi">@gcontacts</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;retrieve_all&#39;</span><span class="p">))</span>
+  <span class="k">end</span>  
+  <span class="k">def</span> <span class="nf">test_retrieve_all</span>
+    <span class="n">assert_true</span><span class="p">(</span><span class="vi">@gcontacts</span><span class="o">.</span><span class="n">retrieve_all</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">Array</span><span class="p">))</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p><img src="images/2010/08/09/d.jpg" alt="D" /></p>
+<p>This empty test with fail with:</p>
 
-<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
-
-<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout feature1
-git merge master
+<div class="highlight"><pre><code class="bash">ruby gcontacts/test/gcontacts_test.rb
+gcontacts/test/gcontacts_test.rb:1: uninitialized constant Test <span class="o">(</span>NameError<span class="o">)</span>
 </code></pre>
 </div>
 
 
-<p><img src="images/2010/08/09/e.jpg" alt="E" /></p>
+<p>OK so we need our testing framework, so I am going to use Test::Unit, and introduce Bundler,
+first lets install bundler:</p>
 
-<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
-
-<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature1
-
-Updating ed6d1fb..359c6cf
-Fast-forward
+<div class="highlight"><pre><code class="bash">gem install bundler
 </code></pre>
 </div>
 
 
-<p><img src="images/2010/08/09/f.jpg" alt="F" /></p>
+<p>Now bundler allows you to change your gems source so they might come from gemcutter, rubygems, even
+git repositories, all gem dependencies are declared on one single <em>Gemfile</em> file, we are going to
+add Test/Unit, and since we only require it for test will put it inside :test group:</p>
 
-<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout feature2
-git merge master
-
-Updating ed6d1fb..359c6cf
-Fast-forward
+<div class="highlight"><pre><code class="bash">cat &gt; gcontacts/Gemfile <span class="s">&lt;&lt; YEEAH</span>
+<span class="s">source :gemcutter</span>
+<span class="s">gem &#39;test-unit&#39;, :group =&gt; &#39;test&#39;</span>
+<span class="s">YEEAH</span>
 </code></pre>
 </div>
 
 
-<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
+<p>Once you have that file you only need to install you dependencies through:</p>
 
-<p><img src="images/2010/08/09/h.jpg" alt="H" /></p>
+<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>gcontacts
+bundle install
+Fetching <span class="nb">source </span>index from http://gemcutter.org/
+Using <span class="nb">test</span>-unit <span class="o">(</span>2.1.1<span class="o">)</span> from bundler gems 
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+</code></pre>
+</div>
 
-<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
 
-<p>Cheers!</p>
+<p>Bundle is installed so we are back in track, so we need to include this dependencies in top of our
+test case, so lets modify it:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;bundler&#39;</span>
+<span class="no">Bundler</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="ss">:test</span><span class="p">)</span>
+<span class="nb">require</span> <span class="s1">&#39;unit/test&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And now we have to run our tests:</p>
+
+<div class="highlight"><pre><code class="bash">ruby <span class="nb">test</span>/gcontacts_test.rb 
+Loaded suite <span class="nb">test</span>/gcontacts_test
+Started
+EE
+
+  1<span class="o">)</span> Error:
+test_contains_expected_methods<span class="o">(</span>GContactsTest<span class="o">)</span>:
+NameError: uninitialized constant GContactsTest::GContacts
+    <span class="nb">test</span>/gcontacts_test.rb:8:in <span class="sb">`</span>setup<span class="s1">&#39;</span>
+
+<span class="s1">  2) Error:</span>
+<span class="s1">test_retrieve_all(GContactsTest):</span>
+<span class="s1">NameError: uninitialized constant GContactsTest::GContacts</span>
+<span class="s1">    test/gcontacts_test.rb:8:in `setup&#39;</span>
+
+Finished in 0.005571 seconds.
+
+2 tests, 0 assertions, 0 failures, 2 errors, 0 pendings, 0 omissions, 0 notifications
+0% passed
+</code></pre>
+</div>
+
+
+<p>Good, our tests failed since we do not have our GContacts coded and required, so lets write the
+minimum code for out tests to pass, <em>lib/gcontacts.rb</em>:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">GContacts</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">retrieve_all</span>
+    <span class="o">[]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And we need to include our project's lib in our <em>test/gcontacts_test.rb</em> so we have to add this on
+top of it:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="vg">$LOAD_PATH</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../../lib&#39;</span> <span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
+<span class="nb">require</span> <span class="s1">&#39;gcontacts&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And re-run our tests, which should pass:</p>
+
+<div class="highlight"><pre><code class="bash">ruby <span class="nb">test</span>/gcontacts_test.rb 
+Loaded suite <span class="nb">test</span>/gcontacts_test
+Started
+..
+
+Finished in 0.004691 seconds.
+
+2 tests, 2 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
+100% passed
+</code></pre>
+</div>
+
+
+<p>Now we need to create the application that will retrieve a list of our contacts using our brand
+new GContacts class, we are going to create a simple command line user, password input system,
+so we add following to <em>bin/gcontacts</em>:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1">#!/usr/bin/env ruby</span>
+<span class="vg">$LOAD_PATH</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../../lib&#39;</span> <span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
+<span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;bundler/setup&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;gcontacts&#39;</span>
+
+<span class="n">gcontacts</span> <span class="o">=</span> <span class="no">GContacts</span><span class="o">.</span><span class="n">new</span> <span class="o">*</span><span class="no">ARGV</span>
+<span class="nb">p</span> <span class="n">gcontacts</span><span class="o">.</span><span class="n">retrieve_all</span>
+</code></pre>
+</div>
+
+
+<p>I know this command line application sucks but feel free to improve it, I would
+suggest you either google it or read this <a href="http://blog.infinitered.com/entries/show/5">post</a>
+from <em>Todd Werth</em>.
+~</p>
 
     <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
     </div>
     <div class="comments">
-      <h2><a href="/2010/08/06/our-git-workflow.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/08/10/bundler.html#disqus_thread">Click here for Comments</a></h2>
     </div>
   </div>
 </div>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
 
   <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
 
