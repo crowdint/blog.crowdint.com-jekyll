@@ -11,11 +11,11 @@ This guide is intended to show how Bundler helps you keep organized your gem dep
 Think about the following scenarios when working with Ruby and requiring gems:
 * You have to change some gem versions due some unfixed bug
 * One of your teammates has a different gem version than yours
-* Your project depends on multiple gems wich at the same time have many other dependencies
+* Your project depends on multiple gems which at the same time have many other dependencies
 * Your project has different environments and each environment has different gems  
 
-Well Bundler brings you some work arounds to this common issues and takes thigs further by 
-introducing some clever tricks to orginize you project dependencies.
+Well Bundler brings you some work arounds to this common issues and takes things further by 
+introducing some clever tricks to organize you project dependencies.
 
 Let's create a simple project whose purpose will be retrieve a list of your gmail contacts, this 
 project will have two environments: test and production.
@@ -57,10 +57,12 @@ Now bundler allows you to change your gems source so they might come from gemcut
 git repositories, all gem dependencies are declared on one single *Gemfile* file, we are going to
 add Test/Unit, and since we only require it for test will put it inside :test group:
 {% highlight bash %}
-cat > gcontacts/Gemfile << YEEAH
+touch gcontacts/Gemfile
+{% endhighlight %}
+Then, edit *Gemfile*
+{% highlight ruby %}
 source :gemcutter
 gem 'test-unit', :group => 'test'
-YEEAH
 {% endhighlight %}
 
 Once you have that file you only need to install you dependencies through:
@@ -72,8 +74,9 @@ Using test-unit (2.1.1) from bundler gems
 Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
 {% endhighlight %}
 
-Bundle is installed so we are back in track, so we need to include this dependencies in top of our
+Bundle is now installed so we are back in track, now we need to include this dependencies in top of our
 test case, so lets modify it:
+
 {% highlight ruby %}
 require 'bundler'
 Bundler.setup(:test)
@@ -104,7 +107,7 @@ Finished in 0.005571 seconds.
 {% endhighlight %}
 
 Good, our tests failed since we do not have our GContacts coded and required, so lets write the 
-minimum code for out tests to pass, *lib/gcontacts.rb*:
+minimum code for out tests to pass, edit *lib/gcontacts.rb*:
 {% highlight ruby %}
 class GContacts
   def initialize(user, password)
@@ -153,25 +156,25 @@ I know this command line application sucks but feel free to improve it, I would
 suggest you either google it or read this [post](http://blog.infinitered.com/entries/show/5) 
 from *Todd Werth*.
 
-Let's try out cli application:
+Let's try out the cli application:
 {% highlight bash %}
 chmod 777 bin/gcontacts
 bin/gcontacts username password
 []
 {% endhighlight %}
 
-Yeah our awesome app is alive!... yes, we are not yet retrieving anything, we will work on
+Yeah our awesome app is alive!... no, we are not retrieving anything yet, we will work on
 that later before finishing this post.
 
 Lets review the most important points so far:
 1. You declare all your project gem dependecies, groups and sources inside a single Gemfile
 2. If you want some script/classes/files to take into account your gem dependencies use:
- 1. require 'bundler/setup'
- 2. require 'bundler'
+  1. require 'bundler/setup'
+  2. require 'bundler'
     Bundler.setup or Bundler.setup(:group1, :group2)
- 3. There is another approach that can help you remove some code duplication by taking off from your 
- files rubygems and bundler requires, this is achieved using bundle cli. Find more related information 
- on [gembundler site](http://gembundler.com/) or in [this post](http://gluei.com/blog/view/getting-bundlersetup-bundlerrequire-and-bundle-exec-to-play-nicely-together), actually that last link clarified me many things.
+  3. There is another approach that can help you remove some code duplication by taking off from your 
+  files rubygems and bundler requires, this is achieved using bundle cli. Find more related information 
+  on [gembundler site](http://gembundler.com/) or in [this post](http://gluei.com/blog/view/getting-bundlersetup-bundlerrequire-and-bundle-exec-to-play-nicely-together), actually that last link helped me understand a lot of things.
 3. Bundler.setup loads all gems in :default group, default group gems are all the ones not
 included in any other group
 4. We are creating our example using a basic TDD red-green-refactor cycle approach.
