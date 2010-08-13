@@ -10,7 +10,7 @@ title: Blog
     <span class="date">{{ first_post.date | date:"<b>%b %d</b><br />%Y" }}</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ first_post.avatar }}" class="avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ first_post.avatar }}" class="avatar" alt="Avatar" /></div>
     {{ first_post.content }}
     <div class="author_box">
       <p><b>Author:</b> {{ first_post.author }} | {{ first_post.email }}</p>
