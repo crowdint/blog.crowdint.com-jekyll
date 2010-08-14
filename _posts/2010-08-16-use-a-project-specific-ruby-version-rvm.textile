@@ -1,0 +1,56 @@
+---
+layout: post
+title: Use a project specific Ruby version with RVM
+author: Chalo Fernandez
+email: gonzalo.fernandez@crowdint.com
+avatar: d3177da7794ac3ce603d65b33bf4a981
+---
+
+If you are using "RVM":http://rvm.beginrescueend.com/ in your machine (just as "Francisco showed":/2010/07/28/getting-started-with-rvm.html the other day) then you should take adventage of the "project .rvmrc":http://rvm.beginrescueend.com/workflow/rvmrc/#project feature.
+
+Lets say your proyect is in the directory:
+
+{% highlight bash %}
+~/repo/myproject
+{% endhighlight %}
+
+And you have ruby-1.8.7 and ruby-1.9.2 in RVM and you want to use 1.9.2 ruby version in that project.
+
+Then you can put this in your @~/repo/myproject/.rvmrc@ file:
+
+{% highlight bash %}
+rvm 1.9.2
+{% endhighlight %}
+
+So, every time you change to that project directory, *RVM will change to the specified ruby version*.
+
+{% highlight bash linenos %}
+chalofa [1.8.7]:~/repo/myproject$ ruby --version
+  ruby 1.8.7 (2010-06-23 patchlevel 299) [x86_64-linux]
+
+chalofa [1.8.7]:~/repo$ cd myproject/
+chalofa [1.9.2]:~/repo/myproject$ ruby --version
+  ruby 1.9.2dev (2010-07-11 revision 28618) [x86_64-linux]
+
+chalofa [1.9.2]:~/repo/myproject$ cd ..
+chalofa [1.8.7]:~/repo$ ruby --version
+  ruby 1.8.7 (2010-06-23 patchlevel 299) [x86_64-linux]
+{% endhighlight %}
+
+As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the @.rvmrc@ is used: 1.9.2
+Once you abandon the project directory, your default Ruby version will be used!
+
+It even *works with gemsets* so you can have something like this in your @.rvmrc@ file:
+
+{% highlight bash %}
+rvm 1.9.2@blog
+{% endhighlight %}
+
+*And every time you cd into your directory, your ruby version and gemset will be changed :)*
+
+h2. Final thoughs
+
+Whether this file should or shouldn't be in your project repo is up to you, but IMO it should be ignored, creating the possibility to be defined by every user...
+
+What do you think about that?
+
