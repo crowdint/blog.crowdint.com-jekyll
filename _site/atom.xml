@@ -4,14 +4,83 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-06T12:15:55-05:00</updated>
+ <updated>2010-08-13T17:46:19-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Improve performance between attachment_fu and acts_as_list</title>
+   <link href="http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"/>
+   <updated>2010-08-13T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list</id>
+   <content type="html">&lt;p&gt;If you are stuck in your project using &lt;a href=&quot;http://github.com/technoweenie/attachment_fu&quot;&gt;&lt;em&gt;&lt;strong&gt;attachment_fu&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; and&lt;br /&gt;
+&lt;a href=&quot;http://github.com/rails/acts_as_list&quot;&gt;&lt;em&gt;&lt;strong&gt;acts_as_list&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; plugins/gems in your project,&lt;br /&gt;
+you might be facing a weird performance issue when dealing with images with thumbnails.&lt;/p&gt;
+&lt;p&gt;Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;images&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;Even if this query is limited to 1 row, this is a really &lt;strong&gt;slow query&lt;/strong&gt;. For example in my development machine, each of these queries take about ~900ms (yes! the &lt;i&gt;images&lt;/i&gt; table is &lt;span class=&quot;caps&quot;&gt;HUGE&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;So, let&amp;#8217;s assume the following models:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;thumbnail IS NULL&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;acts_as_list&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;#acts_as_list declaration&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;has_attachment&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:content_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#attachment_fu declaration&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;:storage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:file_system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;:thumbnails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thumb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;150&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:tiny&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.&lt;/p&gt;
+&lt;p&gt;If you add an image attachment now&amp;#8230; &lt;strong&gt;the slow query will be executed for each thumbnail&lt;/strong&gt;. The reasons are:&lt;/p&gt;
+&lt;ol&gt;
+	&lt;li&gt;The image file is uploaded to the server.&lt;/li&gt;
+	&lt;li&gt;attachment_fu saves the image and creates a new Image row with article_id established.&lt;/li&gt;
+	&lt;li&gt;acts_as_list assigns the position attribute to the parent image.&lt;/li&gt;
+	&lt;li&gt;attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;&lt;/li&gt;
+	&lt;li&gt;acts_as_list assigns the position attribute to images after the thumbnail created.&lt;/li&gt;
+	&lt;li&gt;Repeat step #4 and #5 for each thumbnail to be created.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The problem with this procedure, if you see the acts_as_list source code:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;scope_condition&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#{configuration[:scope].to_s}.nil?&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; IS NULL&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\#&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;As we configured our Image model to use &lt;code&gt;acts_as_list :scope =&amp;gt; :article!&lt;/code&gt;, and in the thumbnails the article_id is &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;, the condition is generated as &amp;#8220;&lt;strong&gt;&lt;span class=&quot;caps&quot;&gt;WHERE&lt;/span&gt; (article_id  IS &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;)&lt;/strong&gt;&amp;#8221;.&lt;/p&gt;
+&lt;p&gt;To avoid this, you need to manually &lt;strong&gt;set the article_id value before the thumbnails are saved&lt;/strong&gt;. This can be done using a &lt;strong&gt;callback in the Image model&lt;/strong&gt; (as suggested in acts_as_list source code):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#Callback before a thumbnail is saved...&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#Assign the article_id to avoid a HUGE query with IS NULL clause&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;before_thumbnail_saved&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thumbnail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;With this callback, after generating a thumbnail each image will have the &lt;code&gt;article_id&lt;/code&gt; attribute filled. Thus in the Article model, the has_many relation is defined as:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;thumbnail IS NULL&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;Now, &lt;strong&gt;only the article images will have thumbnail.nil&lt;/strong&gt; and the thumbnails will be hidden in the image.thumbnails relation.&lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;In our project, we &lt;strong&gt;expected a 570% &lt;span class=&quot;caps&quot;&gt;SQL&lt;/span&gt; improvement&lt;/strong&gt; when creating, modifying or deleting image attachments.&lt;/p&gt;</content>
+   <author>
+     <name>Chalo Fernandez</name>
+     <email>gonzalo.fernandez@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Our git workflow</title>
    <link href="http://blog.crowdint.com/2010/08/06/our-git-workflow.html"/>
-   <updated>2010-08-06T00:00:00-05:00</updated>
+   <updated>2010-08-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/06/our-git-workflow</id>
    <content type="html">&lt;p&gt;Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.&lt;/p&gt;
 
@@ -107,7 +176,7 @@ Fast-forward
  <entry>
    <title>Instant blog using Jekyll and Heroku</title>
    <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
-   <updated>2010-08-02T00:00:00-05:00</updated>
+   <updated>2010-08-02T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
    <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
 
@@ -261,7 +330,7 @@ git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&
  <entry>
    <title>Getting started with Ruby Version Manager (RVM)</title>
    <link href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html"/>
-   <updated>2010-07-28T00:00:00-05:00</updated>
+   <updated>2010-07-28T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/28/getting-started-with-rvm</id>
    <content type="html">&lt;p&gt;Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.&lt;/p&gt;
 
@@ -404,7 +473,7 @@ or
  <entry>
    <title>Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</title>
    <link href="http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html"/>
-   <updated>2010-07-18T00:00:00-05:00</updated>
+   <updated>2010-07-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest</id>
    <content type="html">&lt;p&gt;Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.&lt;/p&gt;
 
@@ -545,7 +614,7 @@ or
  <entry>
    <title>First Things First... Our initial git configuration</title>
    <link href="http://blog.crowdint.com/2010/07/11/git-initial-configuration.html"/>
-   <updated>2010-07-11T00:00:00-05:00</updated>
+   <updated>2010-07-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/11/git-initial-configuration</id>
    <content type="html">&lt;p&gt;Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.&lt;/p&gt;
 
