@@ -198,7 +198,7 @@ upstream balancer_thin {
   server 127.0.0.1:3003;
   server 127.0.0.1:3004;
 }
-{% endhightlight%}
+{% endhighlight%}
 
 And I started 5 thins listening in ports 3000-3004
 {% highlight bash %}
@@ -209,7 +209,7 @@ Starting server on 0.0.0.0:3002 ...
 Starting server on 0.0.0.0:3003 ... 
 Starting server on 0.0.0.0:3004 ... 
 ecruz@ecruz-mbp:ecomm (prod)$ 
-{% endhightlight%}
+{% endhighlight%}
 
 I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).
 
@@ -252,11 +252,11 @@ Percentage of the requests served within a certain time (ms)
   98%    919
   99%    919
  100%    919 (longest request)
-{% endhightlight%}
+{% endhighlight%}
 
 Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:
 
-{% hightlight bash %}
+{% highlight bash %}
 ecruz@ecruz-mbp:ecomm (prod)$ mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
 
 ecruz@ecruz-mbp:ecomm (prod)$ unicorn_rails -p 8000 -E production
@@ -266,10 +266,10 @@ I, [2010-08-14T20:52:48.686348 #40603]  INFO -- : worker=1 spawning...
 I, [2010-08-14T20:52:48.687000 #40603]  INFO -- : worker=2 spawning...
 I, [2010-08-14T20:52:48.687786 #40603]  INFO -- : worker=3 spawning...
 I, [2010-08-14T20:52:48.689268 #40603]  INFO -- : worker=4 spawning...
-{% endhightlight%}
+{% endhighlight%}
 
 Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:
-{% hightlight bash %}
+{% highlight bash %}
 ecruz@ecruz-mbp:blog.crowdint.com (edwin.cruz)$ ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
 
 Server Software:        nginx/0.7.64
