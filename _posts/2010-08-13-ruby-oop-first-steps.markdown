@@ -9,10 +9,10 @@ avatar: a302e7dd208f335dc67761a6db911561
 Motivation
 ----------
 
-Always when I'm learning a new language the first thing I try to learn is how this new language
-implements OOP and now is Ruby's turn. Before joining CI I had been playing with Java for some
-years and when I first heard about Ruby being a fully OOP language I got really excited, but then
-I started seeing some Ruby codes and thing seemed confusing.
+Everytime I'm learning a new language, the first thing I try to learn is how this new language
+implements OOP, and now its Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
+years, but when I first heard about Ruby being a fully OOP language I got really excited, but then
+when I got hands-on on some existing Ruby code thing got confusing.
 
 I would've liked to know all of this before looking at any Ruby code:
 
@@ -20,7 +20,7 @@ First things first: Ruby Objects
 -------------------------------
 Things that we have to know:
 
-* And objects is formed by: State + Behavior = Object
+* And object is formed by: State + Behavior = Object
 * Everything in Ruby is an object, even nil which is *NilClass*, false *FalseClass*, true *TrueClass* and modules
 
 {% highlight ruby %}
@@ -51,7 +51,8 @@ and when I say objects I really mean it. Consider following stored in test.rb fi
 class A
   def self.outside
     self
-  end 
+  end
+
   def inside
     self
   end 
@@ -90,14 +91,15 @@ ruby-1.8.7-p299 > Blabla.new
 
 Self
 ----
-When I first met Ruby I thought "self is *this* (like in many other languages), and I was wrong, so lets 
+When I first met Ruby I thought "self" was the same as *this* (like in many other languages), and I was wrong, so lets 
 see what it is:
 
 #### Default receiver of method calls 
-Since everything in Ruby are objects, then all this function definitions we find defined all around 
+Since everything in Ruby are objects, then all the function definitions we find defined all around 
 and all those functions we call like [p](http://ruby-doc.org/core/classes/Kernel.html#M005961), 
 [puts](http://ruby-doc.org/core/classes/Kernel.html#M005954), def, etc are method calls. Some may 
 not be exactly defined inside a class but, in the end they will get either inherited or mixed in.
+
 Look at following example:
 {% highlight ruby %}
 p "1. Current receiver is #{self}"
@@ -139,7 +141,7 @@ user@user-desktop:~$ ruby test.rb
 
 Metaprogramming
 ------------------------------
-This is why I felt in love with ruby, it is a huge topic which I won't cover, but it allows you 
+This is why I fell in love with ruby, it is a huge topic which I won't cover, but it allows you
 to write code that writes code lets see some examples:
 
 #### Create a *A Class*, re-open it and see how it is the same object
@@ -212,7 +214,7 @@ user@user-desktop:~$ ruby test.rb
 {% endhighlight %}
 
 That's it I hope this gives you some good overview and if you are ready for the whole package I 
-suggest you to start with:
+suggest you start with:
 
 * Some good metaprogramming screencasts [Pragmatic Programmers screencasts](http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming)
 * An in deep look at [Rafa Magaña's presentation](http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/) on Ruby object model 
