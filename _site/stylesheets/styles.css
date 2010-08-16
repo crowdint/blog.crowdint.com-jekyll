@@ -119,16 +119,16 @@ body {
   padding: 5px;
 }
 
-.right-side h1 {
-  font-size: 16px;
-  color: #879e1c;
-}
-
 .right-side a {
   color: #175057;
   text-decoration: none;
   border-bottom:1px solid;
   font-weight: bold;
+}
+
+.right-side h1 {
+  font-size: 16px;
+  color: #879e1c;
 }
 
 .right-side ul li a {
@@ -224,4 +224,9 @@ ul.archives {
 
 em {
   font-weight: bold;
+}
+
+.tweet {
+  text-align: center;
+  margin: 20px;
 }
