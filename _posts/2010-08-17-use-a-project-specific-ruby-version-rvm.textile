@@ -4,12 +4,11 @@ title: Use a project specific Ruby version with RVM
 author: Chalo Fernandez
 email: gonzalo.fernandez@crowdint.com
 avatar: d3177da7794ac3ce603d65b33bf4a981
-published: false
 ---
 
-If you are using "RVM":http://rvm.beginrescueend.com/ in your machine (just as "Francisco showed":/2010/07/28/getting-started-with-rvm.html the other day) then you should take adventage of the "project .rvmrc":http://rvm.beginrescueend.com/workflow/rvmrc/#project feature.
+If you are using "RVM":http://rvm.beginrescueend.com/ in your machine (just as "Francisco showed us":/2010/07/28/getting-started-with-rvm.html the other day) then you should take advantage of the "project .rvmrc":http://rvm.beginrescueend.com/workflow/rvmrc/#project feature.
 
-Lets say your proyect is in the directory:
+Let's say your project is in the directory:
 
 {% highlight bash %}
 ~/repo/myproject
