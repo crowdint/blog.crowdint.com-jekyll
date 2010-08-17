@@ -1,6 +1,6 @@
 ---
 layout: post
-title: What I would've love to know when I first met Ruby
+title: What I would've loved I had known when I first met Ruby
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
@@ -10,15 +10,15 @@ Motivation
 ----------
 
 Everytime I'm learning a new language, the first thing I try to learn is how this new language
-implements OOP, and now its Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
-years, but when I first heard about Ruby being a fully OOP language I got really excited, but then
-when I got hands-on on some existing Ruby code thing got confusing.
+implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
+years; then I first heard about Ruby being a fully OOP language I got really excited, and
+when I got hands-on some existing Ruby code, things got confusing.
 
 I would've liked to know all of this before looking at any Ruby code:
 
 First things first: Ruby Objects
 -------------------------------
-Things that we have to know:
+Things that we must know:
 
 * And object is formed by: State + Behavior = Object
 * Everything in Ruby is an object, even nil which is *NilClass*, false *FalseClass*, true *TrueClass* and modules
@@ -44,8 +44,8 @@ ruby-1.8.7-p299 > B.class.superclass
  => Object 
 {% endhighlight %}
 
-* Do you remember those called static classes in languages other than Ruby? They're objects too, 
-and when I say objects I really mean it. Consider following stored in test.rb file:
+* Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too, 
+and when I say objects, I really mean it. Consider the following code stored in test.rb file:
 
 {% highlight ruby %}
 class A
@@ -213,7 +213,7 @@ user@user-desktop:~$ ruby test.rb
 "Welcome"
 {% endhighlight %}
 
-That's it I hope this gives you some good overview and if you are ready for the whole package I 
+That's it. I hope this gives you some good overview and if you are ready for the whole package I 
 suggest you start with:
 
 * Some good metaprogramming screencasts [Pragmatic Programmers screencasts](http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming)
