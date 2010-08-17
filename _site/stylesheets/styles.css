@@ -230,3 +230,22 @@ em {
   text-align: center;
   margin: 20px;
 }
+
+.nav_links {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nav_links a {
+  text-decoration: none;
+}
+
+.nav_links .next {
+  text-align: right;
+  font-size: 12pt;
+}
+
+.nav_links .previous {
+  text-align: left;
+  font-size: 12pt;
+}

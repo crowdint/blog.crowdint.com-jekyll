@@ -232,14 +232,20 @@ em {
 }
 
 .nav_links {
-  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nav_links a {
+  text-decoration: none;
 }
 
 .nav_links .next {
-  float: right;
   text-align: right;
+  font-size: 12pt;
 }
 
 .nav_links .previous {
-  position: absolute;
+  text-align: left;
+  font-size: 12pt;
 }
