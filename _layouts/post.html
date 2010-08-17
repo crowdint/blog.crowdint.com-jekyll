@@ -31,6 +31,14 @@ layout: default
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
+  <div class="nav_links">
+    {% if page.previous %}
+      <div class="previous"><a href="{{ page.previous.url }}">Previous</a></div>
+    {% endif %}
+    {% if page.next %}
+      <div class="next"><a href="{{ page.next.url }}">Next</a></div>
+    {% endif %}
+  </div>
 </div>
 <div class="post prepend-1">
   <h1>Related Posts</h1>

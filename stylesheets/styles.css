@@ -230,3 +230,16 @@ em {
   text-align: center;
   margin: 20px;
 }
+
+.nav_links {
+  width: 100%;
+}
+
+.nav_links .next {
+  float: right;
+  text-align: right;
+}
+
+.nav_links .previous {
+  position: absolute;
+}
