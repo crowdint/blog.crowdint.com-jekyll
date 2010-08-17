@@ -6,7 +6,7 @@ email: edwin.cruz@crowdint.com
 avatar: f7412b373affd1d6db10752cf5d69315
 ---
 
-Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it in production, I answered that no, we're really happy using nginx + haproxy + thin + akamai.
+Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.
 
 But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.
 
@@ -400,9 +400,11 @@ Percentage of the requests served within a certain time (ms)
 ecruz@ecruz-mbp:blog.crowdint.com (edwin.cruz)$
 {% endhighlight %}
 
+Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.
+
 Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).
 
-Machine used:
-Processor: 2.4 GHz Intel Core i5
-Memory: 4GB 1067 MHz DDR3
-Mac OS X: 10.6.3
+## Machine used:
+    Processor: 2.4 GHz Intel Core i5
+    Memory: 4GB 1067 MHz DDR3
+    Mac OS X: 10.6.3
