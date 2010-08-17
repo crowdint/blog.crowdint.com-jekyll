@@ -48,7 +48,7 @@ rvm 1.9.2@blog
 
 *And every time you cd into your directory, your ruby version and gemset will be changed :)*
 
-h2. Final thoughs
+h2. Final thoughts
 
 Whether this file should or shouldn't be in your project repo is up to you, but IMO it should be ignored, creating the possibility to be defined by every user...
 

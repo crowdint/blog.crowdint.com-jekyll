@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-17T11:54:41-07:00</updated>
+ <updated>2010-08-17T11:58:23-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
@@ -39,7 +39,7 @@ Once you abandon the project directory, your default Ruby version will be used!&
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm 1.9.2@blog
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;And every time you cd into your directory, your ruby version and gemset will be changed :)&lt;/strong&gt;&lt;/p&gt;
-&lt;h2&gt;Final thoughs&lt;/h2&gt;
+&lt;h2&gt;Final thoughts&lt;/h2&gt;
 &lt;p&gt;Whether this file should or shouldn&amp;#8217;t be in your project repo is up to you, but &lt;span class=&quot;caps&quot;&gt;IMO&lt;/span&gt; it should be ignored, creating the possibility to be defined by every user&amp;#8230;&lt;/p&gt;
 &lt;p&gt;What do you think about that?&lt;/p&gt;</content>
    <author>
