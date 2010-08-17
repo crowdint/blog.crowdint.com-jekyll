@@ -15,6 +15,10 @@ title: Blog
     <div class="author_box">
       <p><b>Author:</b> {{ first_post.author }} | {{ first_post.email }}</p>
     </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>    
     <div class="comments">
       <h2><a href="{{ first_post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>

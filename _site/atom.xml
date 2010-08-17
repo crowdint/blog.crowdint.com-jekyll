@@ -4,9 +4,49 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-13T17:46:19-07:00</updated>
+ <updated>2010-08-17T11:58:23-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Use a project specific Ruby version with RVM</title>
+   <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
+   <updated>2010-08-17T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
+   <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
+&lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~/repo/myproject
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;And you have ruby-1.8.7 and ruby-1.9.2 in &lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt; and you want to use 1.9.2 ruby version in that project.&lt;/p&gt;
+&lt;p&gt;Then you can put this in your &lt;code&gt;~/repo/myproject/.rvmrc&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm 1.9.2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;So, every time you change to that project directory, &lt;strong&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt; will change to the specified ruby version&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;lineno&quot;&gt; 1&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
+&lt;span class=&quot;lineno&quot;&gt; 2&lt;/span&gt;   ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 3&lt;/span&gt; 
+&lt;span class=&quot;lineno&quot;&gt; 4&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;myproject/
+&lt;span class=&quot;lineno&quot;&gt; 5&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.9.2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
+&lt;span class=&quot;lineno&quot;&gt; 6&lt;/span&gt;   ruby 1.9.2dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-07-11 revision 28618&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 7&lt;/span&gt; 
+&lt;span class=&quot;lineno&quot;&gt; 8&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.9.2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ..
+&lt;span class=&quot;lineno&quot;&gt; 9&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
+&lt;span class=&quot;lineno&quot;&gt;10&lt;/span&gt;   ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the &lt;code&gt;.rvmrc&lt;/code&gt; is used: 1.9.2&lt;br /&gt;
+Once you abandon the project directory, your default Ruby version will be used!&lt;/p&gt;
+&lt;p&gt;It even &lt;strong&gt;works with gemsets&lt;/strong&gt; so you can have something like this in your &lt;code&gt;.rvmrc&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm 1.9.2@blog
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;And every time you cd into your directory, your ruby version and gemset will be changed :)&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Final thoughts&lt;/h2&gt;
+&lt;p&gt;Whether this file should or shouldn&amp;#8217;t be in your project repo is up to you, but &lt;span class=&quot;caps&quot;&gt;IMO&lt;/span&gt; it should be ignored, creating the possibility to be defined by every user&amp;#8230;&lt;/p&gt;
+&lt;p&gt;What do you think about that?&lt;/p&gt;</content>
+   <author>
+     <name>Chalo Fernandez</name>
+     <email>gonzalo.fernandez@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Improve performance between attachment_fu and acts_as_list</title>
