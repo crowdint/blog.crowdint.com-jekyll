@@ -4,7 +4,7 @@ title: What I would've love to know when I first met Ruby
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
-published: false
+published: true
 ---
 
 Motivation
@@ -218,6 +218,6 @@ That's it I hope this gives you some good overview and if you are ready for the 
 suggest you start with:
 
 * Some good metaprogramming screencasts [Pragmatic Programmers screencasts](http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming)
-* An in deep look at [Rafa Magaña's presentation](http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/) on Ruby object model 
+* An in deep look at [Rafa Maga&ntilde;a's presentation](http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/) on Ruby object model 
 
 Happy programming!
