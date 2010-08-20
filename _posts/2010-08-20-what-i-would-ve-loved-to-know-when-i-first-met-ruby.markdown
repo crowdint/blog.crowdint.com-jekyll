@@ -1,6 +1,6 @@
 ---
 layout: post
-title: What I would've love to know when I first met Ruby
+title: What I would've loved to know when I first met Ruby
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
