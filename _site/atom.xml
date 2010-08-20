@@ -4,27 +4,27 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-20T16:35:19-07:00</updated>
+ <updated>2010-08-20T16:39:41-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
-   <title>What I would've loved to know when I first met Ruby</title>
+   <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
    <updated>2010-08-20T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
 &lt;p&gt;Everytime I'm learning a new language, the first thing I try to learn is how this new language
-implements OOP, and now its Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
-years, but when I first heard about Ruby being a fully OOP language I got really excited, but then
-when I got hands-on on some existing Ruby code thing got confusing.&lt;/p&gt;
+implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
+years; then I first heard about Ruby being a fully OOP language I got really excited, and
+when I got hands-on some existing Ruby code, things got confusing.&lt;/p&gt;
 
 &lt;p&gt;I would've liked to know all of this before looking at any Ruby code:&lt;/p&gt;
 
 &lt;h2&gt;First things first: Ruby Objects&lt;/h2&gt;
 
-&lt;p&gt;Things that we have to know:&lt;/p&gt;
+&lt;p&gt;Things that we must know:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;And object is formed by: State + Behavior = Object&lt;/li&gt;
@@ -55,8 +55,8 @@ when I got hands-on on some existing Ruby code thing got confusing.&lt;/p&gt;
 
 
 &lt;ul&gt;
-&lt;li&gt;Do you remember those called static classes in languages other than Ruby? They're objects too,
-and when I say objects I really mean it. Consider following stored in test.rb file:&lt;/li&gt;
+&lt;li&gt;Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
+and when I say objects, I really mean it. Consider the following code stored in test.rb file:&lt;/li&gt;
 &lt;/ul&gt;
 
 
@@ -250,7 +250,7 @@ of &lt;em&gt;A&lt;/em&gt; would have.&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;That's it I hope this gives you some good overview and if you are ready for the whole package I
+&lt;p&gt;That's it. I hope this gives you some good overview and if you are ready for the whole package I
 suggest you start with:&lt;/p&gt;
 
 &lt;ul&gt;
