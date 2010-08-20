@@ -2,7 +2,7 @@
 layout: default
 ---
 <div class="post prepend-1">
-  <h1>{{ page.title }}</h1>
+  <h1>{{ page.title }}</h1>  
   <p class="author">
     <span class="date">{{ page.date | date:"<b>%b %d</b><br />%Y" }}</span>
   </p>
@@ -11,6 +11,10 @@ layout: default
     {{ content }}
     <div class="author_box">
       <p><b>Author:</b> {{ page.author }} | {{ page.email }}</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
     <div id="disqus_thread"></div>
     <script type="text/javascript">
@@ -27,11 +31,19 @@ layout: default
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
+  <div class="nav_links span-16">
+    {% if page.previous %}
+      <div class="previous span-8"><a href="{{ page.previous.url }}"><< {{page.previous.title}}</a></div>
+    {% endif %}
+    {% if page.next %}
+      <div class="next span-8 last"><a href="{{ page.next.url }}">{{page.next.title}} >></a></div>
+    {% endif %}
+  </div>
 </div>
 <div class="post prepend-1">
   <h1>Related Posts</h1>
   <ul class="archives">
-{% for post in site.related_posts limit: 10 %}
+{% for post in site.related_posts limit: 5 %}
   <li><span><b>{{ post.date | date_to_string }}</b></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
   </ul>
