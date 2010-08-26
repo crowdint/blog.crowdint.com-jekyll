@@ -10,7 +10,7 @@ Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web app
 
 But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.
 
-Let's start with my nginx.conf, it looks like this [nginx.conf](/extras/2010/08/15/nginx.conf):
+Let's start with my nginx.conf, it looks like this [nginx.conf](/extras/2010/08/26/nginx.conf.txt):
 
 I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.
 {% highlight bash %}
