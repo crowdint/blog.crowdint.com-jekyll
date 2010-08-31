@@ -1,0 +1,43 @@
+worker_processes  1;
+events {
+  worker_connections  1024;
+}
+http {
+  include mime.types;
+  default_type  application/octet-stream;
+  upstream balancer_thin {
+    server 127.0.0.1:3000;
+  }
+  upstream balancer_unicorn {
+    server 127.0.0.1:8000;
+  }
+  proxy_redirect off;
+  sendfile        on;
+  keepalive_timeout  65;
+  server {
+    listen       80;
+    server_name  ecomm_thin;
+    location / {
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      root /Users/user/crowdint/modcloth/public;
+      if (!-f $request_filename){
+             proxy_pass http://balancer;
+      }
+    }
+  }
+  server {
+    listen       80;
+    server_name  ecomm_unicorn;
+    location / {
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      root /Users/user/crowdint/modcloth/public;
+      if (!-f $request_filename){
+             proxy_pass http://balancer_unicorn;
+      }
+    }
+  }
+}

@@ -4,14 +4,450 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-08-20T16:39:41-07:00</updated>
+ <updated>2010-08-26T16:17:12-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Benchmarking thin vs unicorn</title>
+   <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
+   <updated>2010-08-26T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
+   <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
+
+&lt;p&gt;But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.&lt;/p&gt;
+
+&lt;p&gt;Let's start with my nginx.conf, it looks like this &lt;a href=&quot;/extras/2010/08/26/nginx.conf.txt&quot;&gt;nginx.conf&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create thin_test
+
+info: Gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;thin_test&amp;#39;&lt;/span&gt; created.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use thin_test
+
+info: Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;thin_test&amp;#39;&lt;/span&gt;
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Fetching &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;index from http://rubygems.org/
+Installing RedCloth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4.2.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing active_presenter &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing crack &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing httparty &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.6.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing bitly &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.5.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing cgi_multipart_eof_fix &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.5.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing columnize &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.3.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing curb &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.7.7.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing daemons &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.1.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing delayed_job &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing fastercsv &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.5.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing fastthread &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.7&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing gem_plugin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.2.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing handsoap &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.1.7&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing json &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.4.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing linecache &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.43&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing mash &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing mime-types &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.16&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing mysql &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.8.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing nokogiri &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.4.3.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing oauth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.4.2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing packet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.15&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing rmagick &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.13.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug-base &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing twitter &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.6.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing twitter_oauth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.4.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! Use &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;bundle show &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;gemname&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; to see where a bundled gem is installed.
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri thin
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Successfully installed rack-1.2.1
+Successfully installed eventmachine-0.12.10
+Successfully installed thin-1.2.7
+3 gems installed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby -v
+ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;i686-darwin10.3.1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;thin -e production -p 3000 -d start
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 10 -c 10 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      10
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   0.713 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817362 bytes
+HTML transferred:       813850 bytes
+Requests per second:    14.02 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       713.256 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       71.326 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          1119.10 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       0
+Processing:   711  712   0.5    713     713
+Waiting:      710  711   0.6    711     712
+Total:        711  713   0.4    713     713
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    713
+  66%    713
+  75%    713
+  80%    713
+  90%    713
+  95%    713
+  98%    713
+  99%    713
+ 100%    713 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!&lt;/p&gt;
+
+&lt;p&gt;Now let's work with Unicorn:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create unicorn_test
+
+info: Gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;unicorn_test&amp;#39;&lt;/span&gt; created.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use unicorn_test
+
+info: Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;unicorn_test&amp;#39;&lt;/span&gt;
+gecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Fetching &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;index from http://rubygems.org/
+   &lt;span class=&quot;c&quot;&gt;#same gems&lt;/span&gt;
+   
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! Use &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;bundle show &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;gemname&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; to see where a bundled gem is installed.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri unicorn
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Successfully installed rack-1.2.1
+Successfully installed unicorn-1.1.2
+2 gems installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Done... I love bundler, I really do, OK, let's continue with our tests:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+
+ecruz@ecruz-mbp:~ &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      10
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   0.737 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817581 bytes
+HTML transferred:       813910 bytes
+Requests per second:    13.56 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       737.212 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       73.721 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          1083.02 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       0
+Processing:    47  332 227.5    406     736
+Waiting:       47  332 227.5    406     736
+Total:         48  332 227.4    406     737
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    406
+  66%    436
+  75%    480
+  80%    510
+  90%    737
+  95%    737
+  98%    737
+  99%    737
+ 100%    737 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:&lt;/p&gt;
+
+&lt;p&gt;I've adjusted my nginx.conf to support multiples thins&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;upstream balancer_thin &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  server 127.0.0.1:3000;
+  server 127.0.0.1:3001;
+  server 127.0.0.1:3002;
+  server 127.0.0.1:3003;
+  server 127.0.0.1:3004;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And I started 5 thins listening in ports 3000-3004&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;thin -e production -p 3000 -d -s 5 start
+Starting server on 0.0.0.0:3000 ... 
+Starting server on 0.0.0.0:3001 ... 
+Starting server on 0.0.0.0:3002 ... 
+Starting server on 0.0.0.0:3003 ... 
+Starting server on 0.0.0.0:3004 ... 
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 100 -c 15 http://ecomm/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      15
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   2.665 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8173616 bytes
+HTML transferred:       8138500 bytes
+Requests per second:    37.53 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       399.706 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       26.647 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2995.47 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       1
+Processing:    54  374 227.0    324     918
+Waiting:       51  271 167.3    232     708
+Total:         54  375 227.0    325     919
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    325
+  66%    494
+  75%    528
+  80%    594
+  90%    656
+  95%    858
+  98%    919
+  99%    919
+ 100%    919 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.684992 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.685496 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=0 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.686348 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=1 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.687000 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=2 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.687786 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=3 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.689268 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=4 spawning...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      15
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   2.672 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8175813 bytes
+HTML transferred:       8139100 bytes
+Requests per second:    37.42 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       400.860 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       26.724 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2987.65 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       1
+Processing:    69  368 165.3    334     642
+Waiting:       69  368 165.3    334     641
+Total:         69  368 165.3    334     642
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    334
+  66%    504
+  75%    523
+  80%    543
+  90%    587
+  95%    614
+  98%    622
+  99%    642
+ 100%    642 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Look at that!!! the difference is minimal, this is a really huge surprise.&lt;/p&gt;
+
+&lt;p&gt;Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   31.030 seconds
+Complete requests:      1000
+Failed requests:        4
+   &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Connect: 0, Receive: 0, Length: 4, Exceptions: 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Write errors:           0
+Total transferred:      81736483 bytes
+HTML transferred:       81385312 bytes
+Requests per second:    32.23 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       3102.981 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       31.030 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2572.39 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    1   1.0      0      10
+Processing:    55 3035 1467.6   2880    7831
+Waiting:       54 2433 1276.4   2202    7369
+Total:         55 3036 1468.1   2880    7833
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%   2880
+  66%   3314
+  75%   3584
+  80%   3794
+  90%   4485
+  95%   6825
+  98%   7073
+  99%   7369
+ 100%   7833 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Wow! my machine survived...&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   27.692 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      81758141 bytes
+HTML transferred:       81391000 bytes
+Requests per second:    36.11 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       2769.227 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       27.692 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2883.18 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.8      0       4
+Processing:    81 2639 441.8   2671    3178
+Waiting:       81 2638 441.8   2670    3172
+Total:         86 2639 441.1   2671    3179
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%   2671
+  66%   2759
+  75%   2868
+  80%   2923
+  90%   2976
+  95%   3008
+  98%   3048
+  99%   3099
+ 100%   3179 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.&lt;/p&gt;
+
+&lt;p&gt;Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).&lt;/p&gt;
+
+&lt;h2&gt;Machine used:&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Processor: 2.4 GHz Intel Core i5
+Memory: 4GB 1067 MHz DDR3
+Mac OS X: 10.6.3
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+   <author>
+     <name>Edwin Cruz</name>
+     <email>edwin.cruz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
-   <updated>2010-08-20T00:00:00-07:00</updated>
+   <updated>2010-08-20T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
@@ -270,7 +706,7 @@ suggest you start with:&lt;/p&gt;
  <entry>
    <title>Use a project specific Ruby version with RVM</title>
    <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
-   <updated>2010-08-17T00:00:00-07:00</updated>
+   <updated>2010-08-17T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
    <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
 &lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
@@ -310,7 +746,7 @@ Once you abandon the project directory, your default Ruby version will be used!&
  <entry>
    <title>Improve performance between attachment_fu and acts_as_list</title>
    <link href="http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"/>
-   <updated>2010-08-13T00:00:00-07:00</updated>
+   <updated>2010-08-13T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list</id>
    <content type="html">&lt;p&gt;If you are stuck in your project using &lt;a href=&quot;http://github.com/technoweenie/attachment_fu&quot;&gt;&lt;em&gt;&lt;strong&gt;attachment_fu&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; and&lt;br /&gt;
 &lt;a href=&quot;http://github.com/rails/acts_as_list&quot;&gt;&lt;em&gt;&lt;strong&gt;acts_as_list&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; plugins/gems in your project,&lt;br /&gt;
@@ -379,7 +815,7 @@ you might be facing a weird performance issue when dealing with images with thum
  <entry>
    <title>Our git workflow</title>
    <link href="http://blog.crowdint.com/2010/08/06/our-git-workflow.html"/>
-   <updated>2010-08-06T00:00:00-07:00</updated>
+   <updated>2010-08-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/06/our-git-workflow</id>
    <content type="html">&lt;p&gt;Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.&lt;/p&gt;
 
@@ -475,7 +911,7 @@ Fast-forward
  <entry>
    <title>Instant blog using Jekyll and Heroku</title>
    <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
-   <updated>2010-08-02T00:00:00-07:00</updated>
+   <updated>2010-08-02T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
    <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
 
@@ -629,7 +1065,7 @@ git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&
  <entry>
    <title>Getting started with Ruby Version Manager (RVM)</title>
    <link href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html"/>
-   <updated>2010-07-28T00:00:00-07:00</updated>
+   <updated>2010-07-28T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/07/28/getting-started-with-rvm</id>
    <content type="html">&lt;p&gt;Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.&lt;/p&gt;
 
@@ -772,7 +1208,7 @@ or
  <entry>
    <title>Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</title>
    <link href="http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html"/>
-   <updated>2010-07-18T00:00:00-07:00</updated>
+   <updated>2010-07-18T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest</id>
    <content type="html">&lt;p&gt;Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.&lt;/p&gt;
 
@@ -913,7 +1349,7 @@ or
  <entry>
    <title>First Things First... Our initial git configuration</title>
    <link href="http://blog.crowdint.com/2010/07/11/git-initial-configuration.html"/>
-   <updated>2010-07-11T00:00:00-07:00</updated>
+   <updated>2010-07-11T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/07/11/git-initial-configuration</id>
    <content type="html">&lt;p&gt;Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.&lt;/p&gt;
 
