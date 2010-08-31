@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Our git workflow</title>
+  <title>Crowd Interactive Tech Blog :: Open and watch specific git branches using gitx</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -38,96 +38,49 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Our git workflow</h1>  
+  <h1>Open and watch specific git branches using gitx</h1>  
   <p class="author">
-    <span class="date"><b>Aug 06</b><br />2010</span>
+    <span class="date"><b>Aug 31</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
+    <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
 
-<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
+<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
 
-<p>Let's say we have our first commit A.</p>
+<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
 
-<p><img src="/images/2010/08/09/a.jpg" alt="A" /></p>
+<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
 
-<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
+<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
 
-<div class="highlight"><pre><code class="bash">git branch feature1
-git branch feature2
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
 </code></pre>
 </div>
 
 
-<p>Now, Team Feature 1 works hard and commits B and C.</p>
+<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
 
-<p>Now, our tree looks a bit like this:</p>
+<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
 
-<p><img src="/images/2010/08/09/b.jpg" alt="B" /></p>
+<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
 
-<p>Team Feature 2 catches up and creates commit D</p>
-
-<p><img src="/images/2010/08/09/c.jpg" alt="C" /></p>
-
-<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
-
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature2
-
-Updating 04511b4..ed6d1fb
-Fast-forward
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
 </code></pre>
 </div>
 
 
-<p><img src="/images/2010/08/09/d.jpg" alt="D" /></p>
+<p>Then you'd get something like this:</p>
 
-<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
+<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
 
-<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
+<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
 
-<div class="highlight"><pre><code class="bash">git checkout feature1
-git merge master
-</code></pre>
-</div>
+<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
 
+<p>Hope this helps you in some way,</p>
 
-<p><img src="/images/2010/08/09/e.jpg" alt="E" /></p>
-
-<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
-
-<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature1
-
-Updating ed6d1fb..359c6cf
-Fast-forward
-</code></pre>
-</div>
-
-
-<p><img src="/images/2010/08/09/f.jpg" alt="F" /></p>
-
-<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout feature2
-git merge master
-
-Updating ed6d1fb..359c6cf
-Fast-forward
-</code></pre>
-</div>
-
-
-<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
-
-<p><img src="/images/2010/08/09/h.jpg" alt="H" /></p>
-
-<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
-
-<p>Cheers!</p>
+<p>Cheers.</p>
 
     <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -153,10 +106,8 @@ Fast-forward
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html"><< Instant blog using Jekyll and Heroku</a></div>
+      <div class="previous span-8"><a href="/2010/08/26/thin-vs-unicorn.html"><< Benchmarking thin vs unicorn</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list >></a></div>
     
   </div>
 </div>
@@ -164,15 +115,15 @@ Fast-forward
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
-
   <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
 
-  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
+  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
 
-  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
+
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
   </ul>
 </div>

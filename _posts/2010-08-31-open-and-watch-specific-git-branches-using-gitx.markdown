@@ -4,12 +4,14 @@ title: Open and watch specific git branches using gitx
 author: David Padilla
 email: david@crowdint.com
 avatar: d32b52ec6403614b1adf3e648cbbe584
-published: false
+published: true
 ---
 
 It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called *branchitis*, and it happens to everyone at some point.
 
-So, you open gitx, and all you see is a bowl of spaghetti
+If you're lucky enough to be working on a Mac, odds are that you're using [gitx](http://gitx.frim.nl/) to watch over your git repos. You're not?! Shame on you.
+
+Anyway, so, you open gitx, and all you see is a bowl of spaghetti
 
 ![Bowl of Spaghetti](/images/2010/08/31/a.jpg)
 
@@ -38,6 +40,6 @@ Cool! You can actually read this first hand, and it's faster than trying to desc
 
 In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.
 
-Hope this helps you in one way,
+Hope this helps you in some way,
 
 Cheers.
