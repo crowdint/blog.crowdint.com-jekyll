@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Use a project specific Ruby version with RVM</title>
+  <title>Crowd Interactive Tech Blog :: A simple way to setup a class for global values</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -38,43 +38,77 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Use a project specific Ruby version with RVM</h1>  
+  <h1>A simple way to setup a class for global values</h1>  
   <p class="author">
-    <span class="date"><b>Aug 17</b><br />2010</span>
+    <span class="date"><b>Sep 06</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <p>If you are using <a href="http://rvm.beginrescueend.com/"><span class="caps">RVM</span></a> in your machine (just as <a href="/2010/07/28/getting-started-with-rvm.html">Francisco showed us</a> the other day) then you should take advantage of the <a href="http://rvm.beginrescueend.com/workflow/rvmrc/#project">project .rvmrc</a> feature.</p>
-<p>Let&#8217;s say your project is in the directory:</p>
-<div class="highlight"><pre><code class="bash">~/repo/myproject
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
+
+<h2>Setting up the class</h2>
+
+<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
 </code></pre>
-</div><p>And you have ruby-1.8.7 and ruby-1.9.2 in <span class="caps">RVM</span> and you want to use 1.9.2 ruby version in that project.</p>
-<p>Then you can put this in your <code>~/repo/myproject/.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2
+</div>
+
+
+<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
+<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
 </code></pre>
-</div><p>So, every time you change to that project directory, <strong><span class="caps">RVM</span> will change to the specified ruby version</strong>.</p>
-<div class="highlight"><pre><code class="bash"><span class="lineno"> 1</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 2</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 3</span> 
-<span class="lineno"> 4</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span><span class="nb">cd </span>myproject/
-<span class="lineno"> 5</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 6</span>   ruby 1.9.2dev <span class="o">(</span>2010-07-11 revision 28618<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 7</span> 
-<span class="lineno"> 8</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span><span class="nb">cd</span> ..
-<span class="lineno"> 9</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span>ruby --version
-<span class="lineno">10</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
+</div>
+
+
+<p>Each of these values will become an attribute for your AppConfig class:</p>
+
+<div class="highlight"><pre><code class="bash">AppConfig.app_name
+<span class="c">#=&gt; &quot;My application name&quot;</span>
+
+AppConfig.base_domain
+<span class="c">#=&gt; &quot;myapp.com&quot;</span>
 </code></pre>
-</div><p>As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the <code>.rvmrc</code> is used: 1.9.2<br />
-Once you abandon the project directory, your default Ruby version will be used!</p>
-<p>It even <strong>works with gemsets</strong> so you can have something like this in your <code>.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2@blog
+</div>
+
+
+<p>You can take advantage of YAML's syntax and use indentation to create a hash of values:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
+<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
+
+<span class="n">development</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
+
+<span class="n">production</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
 </code></pre>
-</div><p><strong>And every time you cd into your directory, your ruby version and gemset will be changed :)</strong></p>
-<h2>Final thoughts</h2>
-<p>Whether this file should or shouldn&#8217;t be in your project repo is up to you, but <span class="caps">IMO</span> it should be ignored, creating the possibility to be defined by every user&#8230;</p>
-<p>What do you think about that?</p>
+</div>
+
+
+<p>Now your class has some hashes values like this:</p>
+
+<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app key&quot;</span>
+
+AppConfig.<span class="o">[</span>Rail.env<span class="o">][</span><span class="err">&#39;</span>twitter_prod_secret<span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app secret&quot;</span>
+</code></pre>
+</div>
+
+
+<h2>Enjoy!</h2>
+
     <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -97,10 +131,8 @@ Once you abandon the project directory, your default Ruby version will be used!<
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"><< Improve performance between attachment_fu and acts_as_list</a></div>
+      <div class="previous span-8"><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"><< Open and watch specific git branches using gitx</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby >></a></div>
     
   </div>
 </div>
@@ -108,15 +140,15 @@ Once you abandon the project directory, your default Ruby version will be used!<
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
-
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
-  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
+  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
+
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
   <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
+
+  <li><span><b>13 Aug 2010</b></span> &raquo; <a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></li>
 
   </ul>
 </div>
