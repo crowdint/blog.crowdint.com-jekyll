@@ -39,6 +39,64 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 31</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
+
+<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
+
+<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
+
+<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
+
+<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
+
+<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
+
+<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
+</code></pre>
+</div>
+
+
+<p>Then you'd get something like this:</p>
+
+<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
+
+<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
+
+<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
+
+<p>Hope this helps you in some way,</p>
+
+<p>Cheers.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>    
+    <div class="comments">
+      <h2><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></h1>
   <p class="author">
     <span class="date"><b>Aug 26</b><br />2010</span>
@@ -752,57 +810,10 @@ suggest you start with:</p>
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 17</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <p>If you are using <a href="http://rvm.beginrescueend.com/"><span class="caps">RVM</span></a> in your machine (just as <a href="/2010/07/28/getting-started-with-rvm.html">Francisco showed us</a> the other day) then you should take advantage of the <a href="http://rvm.beginrescueend.com/workflow/rvmrc/#project">project .rvmrc</a> feature.</p>
-<p>Let&#8217;s say your project is in the directory:</p>
-<div class="highlight"><pre><code class="bash">~/repo/myproject
-</code></pre>
-</div><p>And you have ruby-1.8.7 and ruby-1.9.2 in <span class="caps">RVM</span> and you want to use 1.9.2 ruby version in that project.</p>
-<p>Then you can put this in your <code>~/repo/myproject/.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2
-</code></pre>
-</div><p>So, every time you change to that project directory, <strong><span class="caps">RVM</span> will change to the specified ruby version</strong>.</p>
-<div class="highlight"><pre><code class="bash"><span class="lineno"> 1</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 2</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 3</span> 
-<span class="lineno"> 4</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span><span class="nb">cd </span>myproject/
-<span class="lineno"> 5</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 6</span>   ruby 1.9.2dev <span class="o">(</span>2010-07-11 revision 28618<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 7</span> 
-<span class="lineno"> 8</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span><span class="nb">cd</span> ..
-<span class="lineno"> 9</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span>ruby --version
-<span class="lineno">10</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-</code></pre>
-</div><p>As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the <code>.rvmrc</code> is used: 1.9.2<br />
-Once you abandon the project directory, your default Ruby version will be used!</p>
-<p>It even <strong>works with gemsets</strong> so you can have something like this in your <code>.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2@blog
-</code></pre>
-</div><p><strong>And every time you cd into your directory, your ruby version and gemset will be changed :)</strong></p>
-<h2>Final thoughts</h2>
-<p>Whether this file should or shouldn&#8217;t be in your project repo is up to you, but <span class="caps">IMO</span> it should be ignored, creating the possibility to be defined by every user&#8230;</p>
-<p>What do you think about that?</p>
-    <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>    
-    <div class="comments">
-      <h2><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
 
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
