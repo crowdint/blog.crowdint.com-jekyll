@@ -3,27 +3,32 @@ layout: default
 title: Blog
 ---
 
-{% assign first_post = site.posts.first %}
+{% for post in site.posts limit: 3 %}
 <div class="post prepend-1">
-  <h1><a href="{{ first_post.url }}">{{ first_post.title }}</a></h1>
+  <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
   <p class="author">
-    <span class="date">{{ first_post.date | date:"<b>%b %d</b><br />%Y" }}</span>
+    <span class="date">{{ post.date | date:"<b>%b %d</b><br />%Y" }}</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ first_post.avatar }}" class="avatar" /></div>
-    {{ first_post.content }}
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ post.avatar }}" class="avatar" alt="Avatar" /></div>
+    {{ post.content }}
     <div class="author_box">
-      <p><b>Author:</b> {{ first_post.author }} | {{ first_post.email }}</p>
+      <p><b>Author:</b> {{ post.author }} | {{ post.email }}</p>
     </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>    
     <div class="comments">
-      <h2><a href="{{ first_post.url }}#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>
   </div>
 </div>
+{% endfor %}
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
-{% for post in site.posts offset:1 limit: 10 %}
+{% for post in site.posts limit: 20 %}
   <li><span><b>{{ post.date | date_to_string }}</b></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
   </ul>

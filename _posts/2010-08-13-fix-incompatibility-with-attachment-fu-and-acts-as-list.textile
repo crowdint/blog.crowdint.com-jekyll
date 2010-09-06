@@ -1,0 +1,88 @@
+---
+layout: post
+title: Improve performance between attachment_fu and acts_as_list
+author: Chalo Fernandez
+email: gonzalo.fernandez@crowdint.com
+avatar: d3177da7794ac3ce603d65b33bf4a981
+---
+
+If you are stuck in your project using "_*attachment_fu*_":http://github.com/technoweenie/attachment_fu and
+"_*acts_as_list*_":http://github.com/rails/acts_as_list plugins/gems in your project,
+you might be facing a weird performance issue when dealing with images with thumbnails.
+
+Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:
+
+{% highlight sql %}
+SELECT * FROM images
+WHERE (article_id IS NULL)
+ORDER BY position DESC, position
+LIMIT 1
+{% endhighlight %}
+
+Even if this query is limited to 1 row, this is a really *slow query*. For example in my development machine, each of these queries take about ~900ms (yes! the __images__ table is HUGE).
+
+So, let's assume the following models:
+
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  has_many :images, :order => 'position', :conditions => 'thumbnail IS NULL'
+end
+
+class Image < ActiveRecord::Base
+  belongs_to :article
+  acts_as_list :scope => :article      #acts_as_list declaration
+
+  has_attachment :content_type => :image,   #attachment_fu declaration
+    :storage => :file_system,
+    :thumbnails => {:thumb => [100,150], :tiny => [50,70]}
+end
+{% endhighlight %}
+
+p. So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.
+
+If you add an image attachment now... *the slow query will be executed for each thumbnail*. The reasons are:
+
+# The image file is uploaded to the server.
+# attachment_fu saves the image and creates a new Image row with article_id established.
+# acts_as_list assigns the position attribute to the parent image.
+# attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = NULL
+# acts_as_list assigns the position attribute to images after the thumbnail created.
+# Repeat step #4 and #5 for each thumbnail to be created.
+
+The problem with this procedure, if you see the acts_as_list source code:
+
+{% highlight ruby %}
+def scope_condition
+  if #{configuration[:scope].to_s}.nil?
+    "#{configuration[:scope].to_s} IS NULL"
+  else
+    "#{configuration[:scope].to_s} = \#{#{configuration[:scope].to_s}}"
+  end
+end
+{% endhighlight %}
+
+As we configured our Image model to use @acts_as_list :scope => :article!@, and in the thumbnails the article_id is NULL, the condition is generated as "*WHERE (article_id  IS NULL)*".
+
+To avoid this, you need to manually *set the article_id value before the thumbnails are saved*. This can be done using a *callback in the Image model* (as suggested in acts_as_list source code):
+
+{% highlight ruby %}
+#Callback before a thumbnail is saved...
+#Assign the article_id to avoid a HUGE query with IS NULL clause
+before_thumbnail_saved do |record, thumbnail|
+  image = Image.find(record.parent_id)
+  record.article_id = image.article_id if image
+end
+{% endhighlight %}
+
+With this callback, after generating a thumbnail each image will have the @article_id@ attribute filled. Thus in the Article model, the has_many relation is defined as:
+
+{% highlight ruby %}
+has_many :images, :order => 'position', :conditions => 'thumbnail IS NULL'
+{% endhighlight %}
+
+Now, *only the article images will have thumbnail.nil* and the thumbnails will be hidden in the image.thumbnails relation.
+
+h3. Conclusion
+
+In our project, we *expected a 570% SQL improvement* when creating, modifying or deleting image attachments.
+
