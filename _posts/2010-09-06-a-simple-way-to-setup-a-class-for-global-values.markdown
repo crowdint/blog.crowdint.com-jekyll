@@ -58,7 +58,7 @@ Now your class has some hashes values like this:
 AppConfig['development']['twitter_app_prod_key']
 #=> "Your app key"
 
-AppConfig.[Rail.env]['twitter_prod_secret]
+AppConfig[Rail.env]['twitter_prod_secret']
 #=> "Your app secret"
 {% endhighlight %}
 
