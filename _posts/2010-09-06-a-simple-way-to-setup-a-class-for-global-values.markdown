@@ -24,17 +24,17 @@ base_domain: myapp.com
 twitter_app_token: Your app token
 {% endhighlight %}
 
-Each of these values will become an attribute for your AppConfig class:
+The class' attributes will be available as a hash:
 
 {% highlight bash %}
-AppConfig.app_name
+AppConfig['app_name']
 #=> "My application name"
 
-AppConfig.base_domain
+AppConfig['base_domain']
 #=> "myapp.com"
 {% endhighlight %}
 
-You can take advantage of YAML's syntax and use indentation to create a hash of values:
+You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:
 
 {% highlight ruby %}
 defaults: &defaults
