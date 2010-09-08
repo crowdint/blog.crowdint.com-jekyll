@@ -100,10 +100,47 @@ invoke    rspec
 create      spec/helpers/rspec_test_helper_spec.rb
 {% endhighlight %}
 
-We could also specify that we don't want to create view specs just by adding ':views => false' like this:
+We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.erb' like this:
 
 {% highlight bash %}
 g.test_framework :rspec, :views => false
 {% endhighlight %}
 
+Now what? Do you want to create your own generator? Generators, even, can generate generators (sounds like a tongue twisters), check this:
+
+{% highlight bash %}
+~$ rails g generator my_test_method
+create  lib/generators/my_test_method
+create  lib/generators/my_test_method/my_test_method_generator.rb
+create  lib/generators/my_test_method/USAGE
+create  lib/generators/my_test_method/templates
+{% endhighlight %}
+
+This generator creates the files you need to star to work. How it works? Well, it's simple. Basically a directory named "generators" is created in your lib folder like, 'my_generator'_generator.rb is were yo will put your generator logic, USAGE describes what you generator makes and 'templates' is where you will put you generator templates.
+
+What commands you could use inside your generator? Rails 3 generators were created on top of [Thor](http://github.com/wycats/thor), so you could check Thor [documentation](http://rdoc.info/github/wycats/thor/master), and also there is a great document yo can follow on [RailsGuides](http://edgeguides.rubyonrails.org/generators.html).
+
+Anyway, if you want to know more about an specific generator, you could use this command:
+
+{% highlight bash %}
+rails g [generator_name] -h
+{% endhighlight %}
+
+There is a list of generators Rails already handle, also there are others hidden in many gems. If you wan to obtain many helpful generators, I recommend you to check the [rails3-generators](http://github.com/indirect/rails3-generators) gem, there are many helpful generators that can make your way more DRY.
+
+By the way, there are many other things I can't make them works. For example, if I try to use "my_test_method_generator" as follows, you will have an error:
+
+in "application.rb":
+{% highlight bash %}
+g.helper :myhelper
+{% endhighlight %}
+
+in you terminal:
+{% highlight bash %}
+~$ rails g controller [name]
+...
+error  myhelper [not found]
+{% endhighlight %}
+
+However, generators really can help you when you try to be as DRY as possible. So, try it, it might likes you.
 
