@@ -39,6 +39,47 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></h1>
+  <p class="author">
+    <span class="date"><b>Sep 17</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>Because, let's be honest, these days, we're always connected to the internet.</p>
+
+<p>Personally, I've never used the RDoc included on gem installations.</p>
+
+<p>If I need info about a class, method, module, I ask uncle <em>Google</em>.</p>
+
+<p>Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.</p>
+
+<p>So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.</p>
+
+<p>It is as simple as, opening or creating a <em>.gemrc</em> file in your home directory, and adding the following line:</p>
+
+<div class="highlight"><pre><code class="bash">gem: --no-rdoc --no-ri
+</code></pre>
+</div>
+
+
+<p>And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.</p>
+
+<p>There you go, enjoy!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>    
+    <div class="comments">
+      <h2><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></h1>
   <p class="author">
     <span class="date"><b>Sep 10</b><br />2010</span>
@@ -296,66 +337,10 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 31</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
-
-<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
-
-<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
-
-<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
-
-<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
-</code></pre>
-</div>
-
-
-<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
-
-<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
-
-<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
-</code></pre>
-</div>
-
-
-<p>Then you'd get something like this:</p>
-
-<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
-
-<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
-
-<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
-
-<p>Hope this helps you in some way,</p>
-
-<p>Cheers.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>    
-    <div class="comments">
-      <h2><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>17 Sep 2010</b></span> &raquo; <a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></li>
 
   <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 

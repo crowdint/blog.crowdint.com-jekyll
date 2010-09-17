@@ -4,14 +4,46 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-09-10T12:26:42-05:00</updated>
+ <updated>2010-09-16T22:28:00-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Installing gems skipping RDoc and RI</title>
+   <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
+   <updated>2010-09-17T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
+   <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
+
+&lt;p&gt;Personally, I've never used the RDoc included on gem installations.&lt;/p&gt;
+
+&lt;p&gt;If I need info about a class, method, module, I ask uncle &lt;em&gt;Google&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.&lt;/p&gt;
+
+&lt;p&gt;So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.&lt;/p&gt;
+
+&lt;p&gt;It is as simple as, opening or creating a &lt;em&gt;.gemrc&lt;/em&gt; file in your home directory, and adding the following line:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem: --no-rdoc --no-ri
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.&lt;/p&gt;
+
+&lt;p&gt;There you go, enjoy!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Customize your Generators Workflow in Rails 3.0.0</title>
    <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
-   <updated>2010-09-10T00:00:00-05:00</updated>
+   <updated>2010-09-10T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
    <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
 
@@ -176,7 +208,7 @@ error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span 
  <entry>
    <title>A simple way to setup a class for global values</title>
    <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
-   <updated>2010-09-06T00:00:00-05:00</updated>
+   <updated>2010-09-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
    <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
 
@@ -250,7 +282,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Open and watch specific git branches using gitx</title>
    <link href="http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"/>
-   <updated>2010-08-31T00:00:00-05:00</updated>
+   <updated>2010-08-31T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx</id>
    <content type="html">&lt;p&gt;It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called &lt;em&gt;branchitis&lt;/em&gt;, and it happens to everyone at some point.&lt;/p&gt;
 
@@ -299,7 +331,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Benchmarking thin vs unicorn</title>
    <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
-   <updated>2010-08-26T00:00:00-05:00</updated>
+   <updated>2010-08-26T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
    <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
 
@@ -735,7 +767,7 @@ Mac OS X: 10.6.3
  <entry>
    <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
-   <updated>2010-08-20T00:00:00-05:00</updated>
+   <updated>2010-08-20T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
@@ -994,7 +1026,7 @@ suggest you start with:&lt;/p&gt;
  <entry>
    <title>Use a project specific Ruby version with RVM</title>
    <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
-   <updated>2010-08-17T00:00:00-05:00</updated>
+   <updated>2010-08-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
    <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
 &lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
@@ -1034,7 +1066,7 @@ Once you abandon the project directory, your default Ruby version will be used!&
  <entry>
    <title>Improve performance between attachment_fu and acts_as_list</title>
    <link href="http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"/>
-   <updated>2010-08-13T00:00:00-05:00</updated>
+   <updated>2010-08-13T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list</id>
    <content type="html">&lt;p&gt;If you are stuck in your project using &lt;a href=&quot;http://github.com/technoweenie/attachment_fu&quot;&gt;&lt;em&gt;&lt;strong&gt;attachment_fu&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; and&lt;br /&gt;
 &lt;a href=&quot;http://github.com/rails/acts_as_list&quot;&gt;&lt;em&gt;&lt;strong&gt;acts_as_list&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; plugins/gems in your project,&lt;br /&gt;
@@ -1103,7 +1135,7 @@ you might be facing a weird performance issue when dealing with images with thum
  <entry>
    <title>Our git workflow</title>
    <link href="http://blog.crowdint.com/2010/08/06/our-git-workflow.html"/>
-   <updated>2010-08-06T00:00:00-05:00</updated>
+   <updated>2010-08-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/06/our-git-workflow</id>
    <content type="html">&lt;p&gt;Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.&lt;/p&gt;
 
@@ -1199,7 +1231,7 @@ Fast-forward
  <entry>
    <title>Instant blog using Jekyll and Heroku</title>
    <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
-   <updated>2010-08-02T00:00:00-05:00</updated>
+   <updated>2010-08-02T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
    <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
 
@@ -1353,7 +1385,7 @@ git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&
  <entry>
    <title>Getting started with Ruby Version Manager (RVM)</title>
    <link href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html"/>
-   <updated>2010-07-28T00:00:00-05:00</updated>
+   <updated>2010-07-28T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/28/getting-started-with-rvm</id>
    <content type="html">&lt;p&gt;Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.&lt;/p&gt;
 
@@ -1496,7 +1528,7 @@ or
  <entry>
    <title>Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</title>
    <link href="http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html"/>
-   <updated>2010-07-18T00:00:00-05:00</updated>
+   <updated>2010-07-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest</id>
    <content type="html">&lt;p&gt;Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.&lt;/p&gt;
 
@@ -1637,7 +1669,7 @@ or
  <entry>
    <title>First Things First... Our initial git configuration</title>
    <link href="http://blog.crowdint.com/2010/07/11/git-initial-configuration.html"/>
-   <updated>2010-07-11T00:00:00-05:00</updated>
+   <updated>2010-07-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/07/11/git-initial-configuration</id>
    <content type="html">&lt;p&gt;Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.&lt;/p&gt;
 
