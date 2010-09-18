@@ -4,9 +4,7 @@ The tech blog for Crowd Interactive
 
 ## Requirements & Setup
 
-Clone the repo
-
-    git clone git@github.com:crowdint/blog.crowdint.com.git
+Fork the repo, then clone it locally
 
 Bundler, install the gem:
 
@@ -53,7 +51,7 @@ The _--auto_ option will make jekyll update the server automatically every time 
 
 ## Commit
 
-Commit the changes, preferably in your own branch and then, let the blog maintainers know that you're ready to be published.
+Commit the changes, preferably in your own branch and then, do a pull request to the owners of the main repo to let them know you are ready to be published.
 
 ## Common issues
 
