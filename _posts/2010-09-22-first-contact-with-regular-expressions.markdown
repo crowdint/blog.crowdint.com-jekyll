@@ -31,7 +31,7 @@ Also, in Ruby you can express a regular expression in two alternate ways:
 Regexp.new('pattern' [, options])
 {% endhighlight %}
 
-The method *match* and the operator *=~* can be used to verify if a string matches a regular expression:
+The *match* method and the operator *=~* can be used to verify if a string matches a regular expression:
 
 {% highlight ruby %}
 match1 = /Example/.match("Example of a Regexp")
@@ -40,7 +40,7 @@ puts match1.class
 #=> MatchData
 {% endhighlight %}
 
-When using the method *match*, the returned value is the matched string or *nil* if no match was found. The class of the object that received the assignment is *MatchData*.
+When using the *match* method, the returned value is the matched string or *nil* if no match was found. The class of the object that received the assignment is *MatchData*.
 
 ##Building regular expressions
 
