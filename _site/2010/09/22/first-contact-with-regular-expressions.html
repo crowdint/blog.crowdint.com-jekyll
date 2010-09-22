@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Blog</title>
+  <title>Crowd Interactive Tech Blog :: First contact with regular expressions</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -37,9 +37,8 @@
       </div>
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
-          
-<div class="post prepend-1">
-  <h1><a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
+          <div class="post prepend-1">
+  <h1>First contact with regular expressions</h1>  
   <p class="author">
     <span class="date"><b>Sep 22</b><br />2010</span>
   </p>
@@ -249,263 +248,45 @@ but there are some few more useful links to look at:
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>    
-    <div class="comments">
-      <h2><a href="/2010/09/22/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
     </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  <div class="nav_links span-16">
+    
+      <div class="previous span-8"><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"><< Installing gems skipping RDoc and RI</a></div>
+    
+    
   </div>
 </div>
-
 <div class="post prepend-1">
-  <h1><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 17</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Because, let's be honest, these days, we're always connected to the internet.</p>
-
-<p>Personally, I've never used the RDoc included on gem installations.</p>
-
-<p>If I need info about a class, method, module, I ask uncle <em>Google</em>.</p>
-
-<p>Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.</p>
-
-<p>So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.</p>
-
-<p>It is as simple as, opening or creating a <em>.gemrc</em> file in your home directory, and adding the following line:</p>
-
-<div class="highlight"><pre><code class="bash">gem: --no-rdoc --no-ri
-</code></pre>
-</div>
-
-
-<p>And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.</p>
-
-<p>There you go, enjoy!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>    
-    <div class="comments">
-      <h2><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
-  <h1><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 10</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.</p>
-
-<p>We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?</p>
-
-<p>Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.</p>
-
-<p>So, let's try an example:</p>
-
-<h2>Hands on!</h2>
-
-<p>First, we need to create a new Rails Project:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test
-</code></pre>
-</div>
-
-
-<p>In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test -T
-</code></pre>
-</div>
-
-
-<p>Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:</p>
-
-<div class="highlight"><pre><code class="bash">group :test <span class="k">do</span>
-<span class="k">  </span>gem <span class="s2">&quot;rspec-rails&quot;</span>, <span class="s2">&quot;&gt;= 2.0.0.beta.19&quot;</span>
-  gem <span class="s1">&#39;cucumber-rails&#39;</span>
-  gem <span class="s1">&#39;capybara&#39;</span>
-end
-
-gem <span class="s1">&#39;haml-rails&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Then, we just need to install our gems to start playing with our generators:</p>
-
-<div class="highlight"><pre><code class="bash">bundle install
-</code></pre>
-</div>
-
-
-<p>And, that's it! Now we have a perfect (almost) environment to work with.</p>
-
-<h2>Generators</h2>
-
-<p>Now, let's invoke a Rails generator to create a new controller called Test:</p>
-
-<div class="highlight"><pre><code class="bash">rails g controller Test
-</code></pre>
-</div>
-
-
-<p>This function is just going to invoke many other generators, to create something like this:</p>
-
-<div class="highlight"><pre><code class="bash">create  app/controllers/test_controller.rb
-invoke  haml
-create    app/views/test
-invoke  test_unit
-create    <span class="nb">test</span>/functional/test_controller_test.rb
-invoke  helper
-create    app/helpers/test_helper.rb
-invoke    test_unit
-create      <span class="nb">test</span>/unit/helpers/test_helper_test.rb
-</code></pre>
-</div>
-
-
-<p>As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:</p>
-
-<div class="highlight"><pre><code class="bash">rails g cucumber:install
-rails g rspec:install
-</code></pre>
-</div>
-
-
-<p>Then, just add these lines to our '~/application.erb'</p>
-
-<div class="highlight"><pre><code class="bash">config.generators <span class="k">do</span> |g|
-  g.test_framework :rspec
-end
-</code></pre>
-</div>
-
-
-<p>If we try to generate a new controller called RspecTest something like this will show up:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller RspecTest
-create  app/controllers/rspec_test_controller.rb
-invoke  haml
-create    app/views/rspec_test
-invoke  rspec
-create    spec/controllers/rspec_test_controller_spec.rb
-invoke  helper
-create    app/helpers/rspec_test_helper.rb
-invoke    rspec
-create      spec/helpers/rspec_test_helper_spec.rb
-</code></pre>
-</div>
-
-
-<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.erb' like this:</p>
-
-<div class="highlight"><pre><code class="bash">g.test_framework :rspec, :views <span class="o">=</span>&gt; <span class="nb">false</span>
-</code></pre>
-</div>
-
-
-<p>Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g generator my_test_method
-create  lib/generators/my_test_method
-create  lib/generators/my_test_method/my_test_method_generator.rb
-create  lib/generators/my_test_method/USAGE
-create  lib/generators/my_test_method/templates
-</code></pre>
-</div>
-
-
-<p>This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named "generators" is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.</p>
-
-<p>What commands can you use inside your generator? Rails 3 generators were created on top of <a href="http://github.com/wycats/thor">Thor</a>, so you could check Thor <a href="http://rdoc.info/github/wycats/thor/master">documentation</a>, and also there is a great document you can follow on <a href="http://edgeguides.rubyonrails.org/generators.html">RailsGuides</a>.</p>
-
-<p>Anyway, if you want to know more about an specific generator, you could use this command:</p>
-
-<div class="highlight"><pre><code class="bash">rails g <span class="o">[</span>generator_name<span class="o">]</span> -h
-</code></pre>
-</div>
-
-
-<p>There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the <a href="http://github.com/indirect/rails3-generators">rails3-generators</a> gem, there are many helpful generators that can make your coding more DRY.</p>
-
-<p>By the way, there are other things I can't make them to do. For example, if I try to use "my_test_method_generator" as follows, I get an error:</p>
-
-<p>in "application.rb":</p>
-
-<div class="highlight"><pre><code class="bash">g.helper :myhelper
-</code></pre>
-</div>
-
-
-<p>in you terminal:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller <span class="o">[</span>name<span class="o">]</span>
-...
-error  myhelper <span class="o">[</span>not found<span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>    
-    <div class="comments">
-      <h2><a href="/2010/09/10/customize-your-generators-workflow.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
-  <h1>Recent Posts</h1>
+  <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
-
-  <li><span><b>17 Sep 2010</b></span> &raquo; <a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></li>
-
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
-
-  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
-
-  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
-
-  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
-
   <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
-
-  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
-
-  <li><span><b>13 Aug 2010</b></span> &raquo; <a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></li>
-
-  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
-
-  <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
 
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
-  <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
+  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
+
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
   </ul>
 </div>
-
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
