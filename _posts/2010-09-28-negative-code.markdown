@@ -20,11 +20,11 @@ A little shocked and confused I continued reading below on the discussion. Thilo
 
 Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:
 
-"Why his managers stops stopped to bother him after he wrote -2000? I know, he improved the system throwing away the fat and... oh, I see!"
+"Why managers stopped to bother him after he wrote -2000? I know, he improved the system throwing away the fat and... oh, I see!"
 
-Yes, that was the right answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.
+Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.
 
-There are many ways to solve a problem. Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solute  solve them. Often our code is optimal, but not all the time. Other times we fine old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes this code lines get obsolete. The old code we used to use are not worth anymore. What should we do? Well, there are two solutions.
+There are many ways to solve a problem. Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. Often our code is optimal, but not all the time. Other times we fine old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes this code lines get obsolete. The old code we used to use are not worth anymore. What should we do? Well, there are two solutions.
 
 * We keep updating our code to fits new requirements; we make it more robust, more stable and more compatible with old code.
 * Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".
