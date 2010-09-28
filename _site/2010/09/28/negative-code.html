@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Use a project specific Ruby version with RVM</title>
+  <title>Crowd Interactive Tech Blog :: Negative Code</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -38,43 +38,50 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Use a project specific Ruby version with RVM</h1>  
+  <h1>Negative Code</h1>  
   <p class="author">
-    <span class="date"><b>Aug 17</b><br />2010</span>
+    <span class="date"><b>Sep 28</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <p>If you are using <a href="http://rvm.beginrescueend.com/"><span class="caps">RVM</span></a> in your machine (just as <a href="/2010/07/28/getting-started-with-rvm.html">Francisco showed us</a> the other day) then you should take advantage of the <a href="http://rvm.beginrescueend.com/workflow/rvmrc/#project">project .rvmrc</a> feature.</p>
-<p>Let&#8217;s say your project is in the directory:</p>
-<div class="highlight"><pre><code class="bash">~/repo/myproject
-</code></pre>
-</div><p>And you have ruby-1.8.7 and ruby-1.9.2 in <span class="caps">RVM</span> and you want to use 1.9.2 ruby version in that project.</p>
-<p>Then you can put this in your <code>~/repo/myproject/.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2
-</code></pre>
-</div><p>So, every time you change to that project directory, <strong><span class="caps">RVM</span> will change to the specified ruby version</strong>.</p>
-<div class="highlight"><pre><code class="bash"><span class="lineno"> 1</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 2</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 3</span> 
-<span class="lineno"> 4</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span><span class="nb">cd </span>myproject/
-<span class="lineno"> 5</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 6</span>   ruby 1.9.2dev <span class="o">(</span>2010-07-11 revision 28618<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 7</span> 
-<span class="lineno"> 8</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span><span class="nb">cd</span> ..
-<span class="lineno"> 9</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span>ruby --version
-<span class="lineno">10</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-</code></pre>
-</div><p>As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the <code>.rvmrc</code> is used: 1.9.2<br />
-Once you abandon the project directory, your default Ruby version will be used!</p>
-<p>It even <strong>works with gemsets</strong> so you can have something like this in your <code>.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2@blog
-</code></pre>
-</div><p><strong>And every time you cd into your directory, your ruby version and gemset will be changed :)</strong></p>
-<h2>Final thoughts</h2>
-<p>Whether this file should or shouldn&#8217;t be in your project repo is up to you, but <span class="caps">IMO</span> it should be ignored, creating the possibility to be defined by every user&#8230;</p>
-<p>What do you think about that?</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <p>Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was "negative code". "What is it?" I thought.</p>
+
+<p>As astonished as I was at that time, I took a few seconds to ask my old fellow (<a href="http://www.google.com">G...</a>) "what is negative code?". Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found <a href="http://stackoverflow.com/questions/3800707/what-is-negative-code">this</a> discussion at <a href="http://stackoverflow.com">stackoverflow</a>. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:</p>
+
+<p>  "...reducing lines of code, by removing redundancies or using more concise constructs".</p>
+
+<p>Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, "Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!".</p>
+
+<p>A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:</p>
+
+<p>  "When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put "-2000" on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied."</p>
+
+<p>Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:</p>
+
+<p>"Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!".</p>
+
+<p>Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.</p>
+
+<p>Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?</p>
+
+<p>Well, there are two solutions.</p>
+
+<ul>
+<li>We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.</li>
+<li>Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".</li>
+</ul>
+
+
+<p>All those LOC we "saved", or that we didn't write, that is negative code.</p>
+
+<p>We usually fall in a hole when someone says "do not re-invent the wheel, re-use". That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.</p>
+
+<p>Remember, the less code you use, the less code you maintain!</p>
+
+<p>I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.</p>
+
     <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -97,10 +104,8 @@ Once you abandon the project directory, your default Ruby version will be used!<
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"><< Improve performance between attachment_fu and acts_as_list</a></div>
+      <div class="previous span-8"><a href="/2010/09/22/first-contact-with-regular-expressions.html"><< First contact with regular expressions</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby >></a></div>
     
   </div>
 </div>
@@ -108,15 +113,15 @@ Once you abandon the project directory, your default Ruby version will be used!<
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
-
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+
+  <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
 
   </ul>
 </div>

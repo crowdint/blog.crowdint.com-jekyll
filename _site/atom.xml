@@ -4,9 +4,56 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-09-22T14:21:50-07:00</updated>
+ <updated>2010-09-28T11:52:18-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Negative Code</title>
+   <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
+   <updated>2010-09-28T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
+   <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
+
+&lt;p&gt;As astonished as I was at that time, I took a few seconds to ask my old fellow (&lt;a href=&quot;http://www.google.com&quot;&gt;G...&lt;/a&gt;) &quot;what is negative code?&quot;. Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found &lt;a href=&quot;http://stackoverflow.com/questions/3800707/what-is-negative-code&quot;&gt;this&lt;/a&gt; discussion at &lt;a href=&quot;http://stackoverflow.com&quot;&gt;stackoverflow&lt;/a&gt;. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:&lt;/p&gt;
+
+&lt;p&gt;  &quot;...reducing lines of code, by removing redundancies or using more concise constructs&quot;.&lt;/p&gt;
+
+&lt;p&gt;Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, &quot;Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!&quot;.&lt;/p&gt;
+
+&lt;p&gt;A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:&lt;/p&gt;
+
+&lt;p&gt;  &quot;When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put &quot;-2000&quot; on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied.&quot;&lt;/p&gt;
+
+&lt;p&gt;Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:&lt;/p&gt;
+
+&lt;p&gt;&quot;Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!&quot;.&lt;/p&gt;
+
+&lt;p&gt;Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.&lt;/p&gt;
+
+&lt;p&gt;Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?&lt;/p&gt;
+
+&lt;p&gt;Well, there are two solutions.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.&lt;/li&gt;
+&lt;li&gt;Or we just simply throw away that old code and we remake it. Writing lean code, &quot;same result less code&quot;.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All those LOC we &quot;saved&quot;, or that we didn't write, that is negative code.&lt;/p&gt;
+
+&lt;p&gt;We usually fall in a hole when someone says &quot;do not re-invent the wheel, re-use&quot;. That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.&lt;/p&gt;
+
+&lt;p&gt;Remember, the less code you use, the less code you maintain!&lt;/p&gt;
+
+&lt;p&gt;I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>First contact with regular expressions</title>
@@ -1103,7 +1150,7 @@ not be exactly defined inside a class but, in the end they will get either inher
 
 &lt;p&gt;Running this script we see:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;.rb 
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;1. Current receiver is main&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;2. Current receiver is A&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;4. Current receiver is A&amp;quot;&lt;/span&gt;
@@ -1127,7 +1174,7 @@ not be exactly defined inside a class but, in the end they will get either inher
 
 &lt;p&gt;Running this script we see:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;.rb 
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;@b&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;@a&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -1163,7 +1210,7 @@ to write code that writes code lets see some examples:&lt;/p&gt;
 
 &lt;p&gt;Which throws:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;.rb 
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;method1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
 70312385439840
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;method2&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;method1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
@@ -1206,7 +1253,7 @@ of &lt;em&gt;A&lt;/em&gt; would have.&lt;/p&gt;
 
 &lt;p&gt;Which throws:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;.rb 
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;Unknown method&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bye&amp;quot;&lt;/span&gt;
@@ -1284,7 +1331,7 @@ you might be facing a weird performance issue when dealing with images with thum
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;images&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;&lt;p&gt;Even if this query is limited to 1 row, this is a really &lt;strong&gt;slow query&lt;/strong&gt;. For example in my development machine, each of these queries take about ~900ms (yes! the &lt;i&gt;images&lt;/i&gt; table is &lt;span class=&quot;caps&quot;&gt;HUGE&lt;/span&gt;).&lt;/p&gt;
 &lt;p&gt;So, let&amp;#8217;s assume the following models:&lt;/p&gt;

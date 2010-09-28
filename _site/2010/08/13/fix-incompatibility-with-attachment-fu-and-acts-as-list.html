@@ -51,7 +51,7 @@ you might be facing a weird performance issue when dealing with images with thum
 <div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
 <span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
 <span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
-<span class="k">LIMIT</span> <span class="mi">1</span>
+<span class="n">LIMIT</span> <span class="mi">1</span>
 </code></pre>
 </div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
 <p>So, let&#8217;s assume the following models:</p>
