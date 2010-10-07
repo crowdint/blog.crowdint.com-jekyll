@@ -4,14 +4,36 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-09-28T11:52:18-07:00</updated>
+ <updated>2010-10-07T03:26:28-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Magma Rails is just around the corner!</title>
+   <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
+   <updated>2010-10-07T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
+   <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
+
+&lt;p&gt;Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.&lt;/p&gt;
+
+&lt;div style=&quot;text-align:center&quot;&gt;
+  &lt;a href=&quot;http://www.magmarails.com&quot;&gt;&lt;img src=&quot;/images/2010/10/07/bluetooth.png&quot; /&gt;&lt;/a&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;More info on the site: &lt;a href=&quot;http://www.magmarails.com&quot;&gt;http://www.magmarails.com&lt;/a&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Negative Code</title>
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-07:00</updated>
+   <updated>2010-09-28T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
@@ -58,7 +80,7 @@
  <entry>
    <title>First contact with regular expressions</title>
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-07:00</updated>
+   <updated>2010-09-22T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
@@ -267,7 +289,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Installing gems skipping RDoc and RI</title>
    <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-07:00</updated>
+   <updated>2010-09-17T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
    <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
 
@@ -299,7 +321,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Customize your Generators Workflow in Rails 3.0.0</title>
    <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
-   <updated>2010-09-10T00:00:00-07:00</updated>
+   <updated>2010-09-10T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
    <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
 
@@ -464,7 +486,7 @@ error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span 
  <entry>
    <title>A simple way to setup a class for global values</title>
    <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
-   <updated>2010-09-06T00:00:00-07:00</updated>
+   <updated>2010-09-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
    <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
 
@@ -538,7 +560,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Open and watch specific git branches using gitx</title>
    <link href="http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"/>
-   <updated>2010-08-31T00:00:00-07:00</updated>
+   <updated>2010-08-31T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx</id>
    <content type="html">&lt;p&gt;It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called &lt;em&gt;branchitis&lt;/em&gt;, and it happens to everyone at some point.&lt;/p&gt;
 
@@ -587,7 +609,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Benchmarking thin vs unicorn</title>
    <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
-   <updated>2010-08-26T00:00:00-07:00</updated>
+   <updated>2010-08-26T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
    <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
 
@@ -1023,7 +1045,7 @@ Mac OS X: 10.6.3
  <entry>
    <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
-   <updated>2010-08-20T00:00:00-07:00</updated>
+   <updated>2010-08-20T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
@@ -1282,7 +1304,7 @@ suggest you start with:&lt;/p&gt;
  <entry>
    <title>Use a project specific Ruby version with RVM</title>
    <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
-   <updated>2010-08-17T00:00:00-07:00</updated>
+   <updated>2010-08-17T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
    <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
 &lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
@@ -1322,7 +1344,7 @@ Once you abandon the project directory, your default Ruby version will be used!&
  <entry>
    <title>Improve performance between attachment_fu and acts_as_list</title>
    <link href="http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"/>
-   <updated>2010-08-13T00:00:00-07:00</updated>
+   <updated>2010-08-13T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list</id>
    <content type="html">&lt;p&gt;If you are stuck in your project using &lt;a href=&quot;http://github.com/technoweenie/attachment_fu&quot;&gt;&lt;em&gt;&lt;strong&gt;attachment_fu&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; and&lt;br /&gt;
 &lt;a href=&quot;http://github.com/rails/acts_as_list&quot;&gt;&lt;em&gt;&lt;strong&gt;acts_as_list&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; plugins/gems in your project,&lt;br /&gt;
@@ -1391,7 +1413,7 @@ you might be facing a weird performance issue when dealing with images with thum
  <entry>
    <title>Our git workflow</title>
    <link href="http://blog.crowdint.com/2010/08/06/our-git-workflow.html"/>
-   <updated>2010-08-06T00:00:00-07:00</updated>
+   <updated>2010-08-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/06/our-git-workflow</id>
    <content type="html">&lt;p&gt;Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.&lt;/p&gt;
 
@@ -1487,7 +1509,7 @@ Fast-forward
  <entry>
    <title>Instant blog using Jekyll and Heroku</title>
    <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
-   <updated>2010-08-02T00:00:00-07:00</updated>
+   <updated>2010-08-02T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
    <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
 
@@ -1641,7 +1663,7 @@ git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&
  <entry>
    <title>Getting started with Ruby Version Manager (RVM)</title>
    <link href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html"/>
-   <updated>2010-07-28T00:00:00-07:00</updated>
+   <updated>2010-07-28T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/07/28/getting-started-with-rvm</id>
    <content type="html">&lt;p&gt;Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.&lt;/p&gt;
 
@@ -1784,7 +1806,7 @@ or
  <entry>
    <title>Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</title>
    <link href="http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html"/>
-   <updated>2010-07-18T00:00:00-07:00</updated>
+   <updated>2010-07-18T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest</id>
    <content type="html">&lt;p&gt;Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.&lt;/p&gt;
 
@@ -1919,76 +1941,6 @@ or
    <author>
      <name>Roberto Cataneo</name>
      <email>roberto.cataneo@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>First Things First... Our initial git configuration</title>
-   <link href="http://blog.crowdint.com/2010/07/11/git-initial-configuration.html"/>
-   <updated>2010-07-11T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2010/07/11/git-initial-configuration</id>
-   <content type="html">&lt;p&gt;Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.&lt;/p&gt;
-
-&lt;p&gt;The basic steps we recommend are:&lt;/p&gt;
-
-&lt;h2&gt;Let us know who you are&lt;/h2&gt;
-
-&lt;p&gt;You can set up your email and name by using the following command:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global user.name &lt;span class=&quot;s2&quot;&gt;&amp;quot;YOURNAME&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global user.email &lt;span class=&quot;s2&quot;&gt;&amp;quot;YOUREMAIL&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Reduce the risk factor&lt;/h2&gt;
-
-&lt;p&gt;Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push --force
-+ 013c43a...0759089 master -&amp;gt; master &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-+ 013c43a...0759089 your_branch -&amp;gt; your_branch &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-+ 013c43a...0759089 not_your_branch -&amp;gt; not_your_branch &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;forced update&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.&lt;/p&gt;
-
-&lt;p&gt;So, we recommend our rookies to use the following command:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global push.default current
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.&lt;/p&gt;
-
-&lt;p&gt;If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git push origin your_branch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.&lt;/p&gt;
-
-&lt;h2&gt;Add color to your life&lt;/h2&gt;
-
-&lt;p&gt;Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.branch auto
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.diff auto
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config --global color.interactive auto
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Hope this guide helps you in some way, cheers!&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
    </author>
  </entry>
  
