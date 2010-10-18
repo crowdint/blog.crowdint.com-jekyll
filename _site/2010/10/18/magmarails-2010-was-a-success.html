@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: First Things First... Our initial git configuration</title>
+  <title>Crowd Interactive Tech Blog :: Magma Rails 2010, a success!</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -38,70 +38,25 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>First Things First... Our initial git configuration</h1>  
+  <h1>Magma Rails 2010, a success!</h1>  
   <p class="author">
-    <span class="date"><b>Jul 11</b><br />2010</span>
+    <span class="date"><b>Oct 18</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+    <p>And it's all thanks to <em>you</em>.</p>
 
-<p>The basic steps we recommend are:</p>
+<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
 
-<h2>Let us know who you are</h2>
+<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
 
-<p>You can set up your email and name by using the following command:</p>
+<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
-</code></pre>
-</div>
+<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
 
+<p>Thanks again to everyone involved.</p>
 
-<h2>Reduce the risk factor</h2>
-
-<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
-
-<p>So, we recommend our rookies to use the following command:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
-</code></pre>
-</div>
-
-
-<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
-
-<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
-</code></pre>
-</div>
-
-
-<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
-
-<h2>Add color to your life</h2>
-
-<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
-</code></pre>
-</div>
-
-
-<p>Hope this guide helps you in some way, cheers!</p>
+<p>Hope to see you next year!</p>
 
     <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -127,8 +82,8 @@
   </div>
   <div class="nav_links span-16">
     
+      <div class="previous span-8"><a href="/2010/10/07/magma-rails.html"><< Magma Rails is just around the corner!</a></div>
     
-      <div class="next span-8 last"><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8 >></a></div>
     
   </div>
 </div>
@@ -136,15 +91,15 @@
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
-
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
 
   <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
-  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
+
+  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
+
+  <li><span><b>28 Sep 2010</b></span> &raquo; <a href="/2010/09/28/negative-code.html">Negative Code</a></li>
 
   </ul>
 </div>
