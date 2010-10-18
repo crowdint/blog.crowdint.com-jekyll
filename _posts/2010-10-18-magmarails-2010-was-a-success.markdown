@@ -17,6 +17,10 @@ I loved the crowd's reaction to the event, and we're hoping it helped them catch
 
 We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to *info@magmarails.com*, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )
 
+<div style="text-align:center; margin: 10px">
+  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
+</div>
+
 Thanks again to everyone involved.
 
 Hope to see you next year!
