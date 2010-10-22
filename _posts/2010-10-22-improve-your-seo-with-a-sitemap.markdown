@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Improve your SEO - sitemap generator
+title: Improve your SEO with a sitemap
 author: Roberto Sanchez
 email: roberto.sanchez@crowdint.com
 avatar: 0a34cf6219c554ee75506e544473aea1
@@ -8,7 +8,7 @@ avatar: 0a34cf6219c554ee75506e544473aea1
 
 Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.
 
-There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap in a regular basis.
+There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.
 
 Let's use Rails to dynamically generate a sitemap on request.
 
