@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Generate a dynamic sitemap in Rails
+title: Improve your SEO - sitemap generator
 author: Roberto Sanchez
 email: roberto.sanchez@crowdint.com
 avatar: 0a34cf6219c554ee75506e544473aea1
