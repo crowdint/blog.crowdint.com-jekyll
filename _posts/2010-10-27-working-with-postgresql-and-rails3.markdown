@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Getting PostgreSQL into Rails3
+title: Working with PostgreSQL and Rails3
 author: Luis Velasco
 email: luis.velasco@crowdint.com
 avatar: 44db71cea383d8a2203162ed1ecbec35
@@ -14,7 +14,7 @@ OK so, let's begin with our brief trip
 
 ## Installing Ruby
 
-I'd personally recommend using RVM (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:
+I'd personally recommend using [RVM](http://rvm.beginrescueend.com/) (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:
 
 {% highlight ruby %}
 $ rvm install 1.8.7
@@ -65,7 +65,7 @@ $ bundle install
 
 And in your *'config/database.yml'* file use *'postgresql'* as your adapter for each environment.
 
-You could use *'postgres'* username but I recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:
+You could use *'postgres'* as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:
 
 {% highlight bash %}
 $ sudo -u postgres psql template1
@@ -115,7 +115,7 @@ production:
   host: 127.0.0.1
 {% endhighlight %}
 
-And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to *follow BDD with Cucumber and RSpec cycle!* That's very important!
+And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to *follow the BDD with Cucumber and RSpec cycle!* That's very important!
 
 This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!
 
