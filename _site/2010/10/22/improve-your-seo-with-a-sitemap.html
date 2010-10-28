@@ -53,7 +53,40 @@
 
 <p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
 
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
+    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
+        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
+        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
+        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
 <p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
+<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+    <span class="k">end</span>
+    
+    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
 
 <p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
 
@@ -68,6 +101,11 @@
 
 
 <p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
+</code></pre>
+</div>
+
 
 <p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
 
@@ -125,9 +163,9 @@
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
-<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>About Crowd Interactive</h1>
 <p class="append-1 about">Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico... <a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>Our Favorite Sites</h1>
 <ul>
   <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>

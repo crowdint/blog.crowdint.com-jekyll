@@ -60,11 +60,31 @@
 <p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
 all you have to do is run:</p>
 
+<div class="highlight"><pre><code class="bash">gem install jekyll
+</code></pre>
+</div>
+
+
 <h2>Create the site structure</h2>
 
 <p>Create a folder wherever you want to put your blog files.</p>
 
+<div class="highlight"><pre><code class="bash">mkdir my_blog
+</code></pre>
+</div>
+
+
 <p>and create the following files:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
+touch _config.yml
+touch index.html
+mkdir _posts
+mkdir _layouts
+touch _layouts/default.html
+</code></pre>
+</div>
+
 
 <p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
 
@@ -74,11 +94,32 @@ all you have to do is run:</p>
 
 <p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
 
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+
 <p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
+
+<div class="highlight"><pre><code class="html">---
+layout: default
+---
+</code></pre>
+</div>
+
 
 <p>What we're telling the index page is to use the default layout we created earlier.</p>
 
 <p>Run:</p>
+
+<div class="highlight"><pre><code class="bash">jekyll--server --auto
+</code></pre>
+</div>
+
 
 <p>Open your browser and go to http://127.0.0.1:4000</p>
 
@@ -92,17 +133,56 @@ all you have to do is run:</p>
 
 <p>First, install the Heroku gem</p>
 
+<div class="highlight"><pre><code class="bash">gem install heroku
+</code></pre>
+</div>
+
+
 <p>Create a config.ru file:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
+
+<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
+</code></pre>
+</div>
+
 
 <p>Add the rack-jekyll gem to the heroku manifest:</p>
 
+<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
+</code></pre>
+</div>
+
+
 <p>Create a git repo and an initial commit:</p>
+
+<div class="highlight"><pre><code class="bash">git init
+git add .
+git commit -m <span class="s2">&quot;First commit&quot;</span>
+</code></pre>
+</div>
+
 
 <p>Create a Heroku app:</p>
 
+<div class="highlight"><pre><code class="bash">heroku create
+</code></pre>
+</div>
+
+
 <p>And, deploy!</p>
 
+<div class="highlight"><pre><code class="bash">git push heroku master
+</code></pre>
+</div>
+
+
 <p>Check out how it looks:</p>
+
+<div class="highlight"><pre><code class="bash">heroku open
+</code></pre>
+</div>
+
 
 <p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
 
@@ -158,9 +238,9 @@ all you have to do is run:</p>
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
-<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>About Crowd Interactive</h1>
 <p class="append-1 about">Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico... <a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>Our Favorite Sites</h1>
 <ul>
   <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
