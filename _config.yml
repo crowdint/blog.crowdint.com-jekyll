@@ -2,4 +2,4 @@ markdown: rdiscount
 pygments: true
 lsi: true
 exclude: ['README.markdown', 'README_FOR_COLLABORATORS.markdown', 'Gemfile.lock', 'Gemfile']
-production: true
+production: false
