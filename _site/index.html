@@ -39,6 +39,150 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 27</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
+    <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
+
+<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
+
+<p>OK so, let's begin with our brief trip</p>
+
+<h2>Installing Ruby</h2>
+
+<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
+</code></pre>
+</div>
+
+
+<p>and switch to that ruby version by running:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
+</code></pre>
+</div>
+
+
+<h2>Installing Rails</h2>
+
+<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em>&lt;gemset_name></em>' and 'rvm gemset use <em>&lt;gemset_name></em>', so after this we do:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
+</code></pre>
+</div>
+
+
+<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
+
+<h2>Installing PostgreSQL with Visual Administrator</h2>
+
+<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
+</code></pre>
+</div>
+
+
+<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
+</code></pre>
+</div>
+
+
+<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
+ As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And run the bundler:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
+</code></pre>
+</div>
+
+
+<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
+
+<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
+</code></pre>
+</div>
+
+
+<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
+So this will create a user with database and user creation permissions with a defined password.</p>
+
+<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
+
+<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
+
+<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+
+<span class="nb">test</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+
+<span class="n">production</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+</code></pre>
+</div>
+
+
+<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
+
+<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
   <p class="author">
     <span class="date"><b>Oct 22</b><br />2010</span>
@@ -166,39 +310,10 @@
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 07</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
-
-<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
-
-<div style="text-align:center">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
-</div>
-
-
-<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
   <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
 

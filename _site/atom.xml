@@ -4,9 +4,144 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-10-22T14:32:05-05:00</updated>
+ <updated>2010-10-28T01:40:12-05:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Working with PostgreSQL and Rails3</title>
+   <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
+   <updated>2010-10-27T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
+   <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.&lt;/p&gt;
+
+&lt;p&gt;OK so, let's begin with our brief trip&lt;/p&gt;
+
+&lt;h2&gt;Installing Ruby&lt;/h2&gt;
+
+&lt;p&gt;I'd personally recommend using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rvm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;and switch to that ruby version by running:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm 1.8.7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Installing Rails&lt;/h2&gt;
+
+&lt;p&gt; When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create &lt;em&gt;&amp;lt;gemset_name&gt;&lt;/em&gt;' and 'rvm gemset use &lt;em&gt;&amp;lt;gemset_name&gt;&lt;/em&gt;', so after this we do:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install rails --version 3.0.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2&gt;Installing PostgreSQL with Visual Administrator&lt;/h2&gt;
+
+&lt;p&gt;Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt; Aditionally you can install &lt;em&gt;'pgadmin'&lt;/em&gt; visual management tool to make queries, add users or manage any other information from your databases with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install pgadmin3 postgresql-doc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
+ As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;pg&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And run the bundler:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And in your &lt;em&gt;'config/database.yml'&lt;/em&gt; file use &lt;em&gt;'postgresql'&lt;/em&gt; as your adapter for each environment.&lt;/p&gt;
+
+&lt;p&gt;You could use &lt;em&gt;'postgres'&lt;/em&gt; as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo -u postgres psql template1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATEDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATEUSER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ENCRYPTED&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PASSWORD&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;password&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I put some words in capital so you can identify the reserved words that PostgreSQL uses and in &lt;em&gt;&amp;lt;&gt;&lt;/em&gt; tags you can put your own information.
+So this will create a user with database and user creation permissions with a defined password.&lt;/p&gt;
+
+&lt;p&gt;But if you opted to keep using &lt;em&gt;'postgres'&lt;/em&gt; user, you can always change the password with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ENCRYPTED&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PASSWORD&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;new_password&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Note: Don't forget to put &lt;em&gt;';' (semicollon)&lt;/em&gt; at the end of each instruction in PostgreSQL console&lt;/p&gt;
+
+&lt;h2&gt;Configuring our database.yml to use PostgreSQL adapter&lt;/h2&gt;
+
+&lt;p&gt;And finally, we have to put that information into your &lt;em&gt;'config/database.yml'&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;development_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;production_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to &lt;em&gt;follow the BDD with Cucumber and RSpec cycle!&lt;/em&gt; That's very important!&lt;/p&gt;
+
+&lt;p&gt;This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Velasco</name>
+     <email>luis.velasco@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Improve your SEO with a sitemap</title>
@@ -1606,160 +1741,6 @@ Fast-forward
 &lt;p&gt;&lt;img src=&quot;/images/2010/08/09/h.jpg&quot; alt=&quot;H&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.&lt;/p&gt;
-
-&lt;p&gt;Cheers!&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Instant blog using Jekyll and Heroku</title>
-   <link href="http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html"/>
-   <updated>2010-08-02T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku</id>
-   <content type="html">&lt;p&gt;When we were trying to put this blog online, we checked out different options, until we stumbled upon &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Jekyll&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.&lt;/p&gt;
-
-&lt;p&gt;We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.&lt;/p&gt;
-
-&lt;p&gt;Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.&lt;/p&gt;
-
-&lt;p&gt;You can find more info on how to use this awesome content management tool on their &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/&quot;&gt;Wiki&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Setup jekyll&lt;/h2&gt;
-
-&lt;p&gt;The first thing you have to do is, install the jekyll gem. Follow the instructions &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/install&quot;&gt;here&lt;/a&gt;, but, basically
-all you have to do is run:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install jekyll
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Create the site structure&lt;/h2&gt;
-
-&lt;p&gt;Create a folder wherever you want to put your blog files.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;mkdir my_blog
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and create the following files:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;my_blog
-touch _config.yml
-touch index.html
-mkdir _posts
-mkdir _layouts
-touch _layouts/default.html
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;For more info on what those files do, or what should you put on them, take a look &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/usage&quot;&gt;here&lt;/a&gt;, or checkout &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/sites&quot;&gt;this huge list&lt;/a&gt; of working examples.&lt;/p&gt;
-
-&lt;h2&gt;&quot;Hello World&quot; Jekyll&lt;/h2&gt;
-
-&lt;h3&gt;_layouts/default.html&lt;/h3&gt;
-
-&lt;p&gt;First, let's create a Layout, open &lt;em&gt;_layouts/default.html&lt;/em&gt; and put the following code on it:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Hello World!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now, we need an index page. Open &lt;em&gt;index.html&lt;/em&gt; and add the following code at the top:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;---
-layout: default
----
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;What we're telling the index page is to use the default layout we created earlier.&lt;/p&gt;
-
-&lt;p&gt;Run:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;jekyll--server --auto
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Open your browser and go to http://127.0.0.1:4000&lt;/p&gt;
-
-&lt;p&gt;You should now see &quot;Hello World&quot;&lt;/p&gt;
-
-&lt;h2&gt;Deploying to Heroku&lt;/h2&gt;
-
-&lt;p&gt;Now, let's try and deploy our Hello World blog to Heroku. There is a gem called &lt;a href=&quot;http://github.com/bry4n/rack-jekyll&quot;&gt;rack-jekyll&lt;/a&gt; that makes this very easy.&lt;/p&gt;
-
-&lt;p&gt;You can read the documentation on the gem page, the basic steps are:&lt;/p&gt;
-
-&lt;p&gt;First, install the Heroku gem&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem install heroku
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Create a config.ru file:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;rack/jekyll&amp;quot;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Jekyll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Add the rack-jekyll gem to the heroku manifest:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;rack-jekyll&amp;quot;&lt;/span&gt; &amp;gt; .gems
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Create a git repo and an initial commit:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git init
-git add .
-git commit -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;First commit&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Create a Heroku app:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;heroku create
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And, deploy!&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git push heroku master
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Check out how it looks:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;heroku open
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This is just the basic stuff on Jekyll, make sure you go through the source code of &lt;a href=&quot;http://wiki.github.com/mojombo/jekyll/sites&quot;&gt;other blogs&lt;/a&gt; to get more tips on advanced stuff like archives, comments, includes, links to posts...&lt;/p&gt;
 
 &lt;p&gt;Cheers!&lt;/p&gt;
 </content>
