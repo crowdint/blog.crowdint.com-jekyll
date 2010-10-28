@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
@@ -59,85 +60,19 @@ when I got hands-on some existing Ruby code, things got confusing.</p>
 
 <ul>
 <li>And object is formed by: State + Behavior = Object</li>
-<li>Everything in Ruby is an object, even nil which is <em>NilClass</em>, false <em>FalseClass</em>, true <em>TrueClass</em> and modules</li>
+<li><p>Everything in Ruby is an object, even nil which is <em>NilClass</em>, false <em>FalseClass</em>, true <em>TrueClass</em> and modules</p></li>
+<li><p>Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
+and when I say objects, I really mean it. Consider the following code stored in test.rb file:</p></li>
 </ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="nb">String</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">NilClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">false</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">FalseClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">true</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">TrueClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="k">module</span> <span class="nn">B</span> <span class="k">end</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Module</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
-</code></pre>
-</div>
-
-
-<ul>
-<li>Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
-and when I say objects, I really mean it. Consider the following code stored in test.rb file:</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">outside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">inside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
-</code></pre>
-</div>
 
 
 <p>Let's play with it using irb:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;./test&#39;</span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;A:0x7ffc94046f58&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
-</code></pre>
-</div>
-
 
 <p>As you can see both are <em>A</em> objects whose type is <em>Class</em></p>
 
 <ul>
 <li>Those class names are constants containing references to objects:</li>
 </ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Class:0x7f8fdec83230&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span> <span class="o">=</span> <span class="n">clazz</span>
- <span class="o">=&gt;</span> <span class="no">Blabla</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Blabla:0x7f8fdec77a70&gt; </span>
-</code></pre>
-</div>
 
 
 <h2>Self</h2>
@@ -154,50 +89,11 @@ not be exactly defined inside a class but, in the end they will get either inher
 
 <p>Look at following example:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="nb">p</span> <span class="s2">&quot;1. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="nb">p</span> <span class="s2">&quot;2. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="nb">p</span> <span class="s2">&quot;3. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">end</span> 
-  <span class="nb">p</span> <span class="s2">&quot;4. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">end</span>
-<span class="nb">p</span> <span class="s2">&quot;5. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre>
-</div>
-
-
 <p>Running this script we see:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="s2">&quot;1. Current receiver is main&quot;</span>
-<span class="s2">&quot;2. Current receiver is A&quot;</span>
-<span class="s2">&quot;4. Current receiver is A&quot;</span>
-<span class="s2">&quot;5. Current receiver is main&quot;</span>
-</code></pre>
-</div>
-
 
 <h4>Where instance variables are found</h4>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="vi">@a</span><span class="p">,</span> <span class="vi">@b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">instance_variables</span>
-</code></pre>
-</div>
-
-
 <p>Running this script we see:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="o">[</span><span class="s2">&quot;@b&quot;</span>, <span class="s2">&quot;@a&quot;</span><span class="o">]</span>
-</code></pre>
-</div>
-
 
 <h2>Metaprogramming</h2>
 
@@ -206,37 +102,7 @@ to write code that writes code lets see some examples:</p>
 
 <h4>Create a <em>A Class</em>, re-open it and see how it is the same object</h4>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method1</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method one&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method2</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method two&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-</code></pre>
-</div>
-
-
 <p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="o">[</span><span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-<span class="o">[</span><span class="s2">&quot;method2&quot;</span>, <span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-</code></pre>
-</div>
-
 
 <p>As you saw the object id remains the same after re-open a class in order to add a second method, also,
 we got all instance methods that one <a href="http://ruby-doc.org/core/classes/Object.html#M000350">class</a>
@@ -244,42 +110,7 @@ of <em>A</em> would have.</p>
 
 <h4>Call all instance methods of a certain class whenever you call a method whose name matches</h4>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">hello</span>
-    <span class="nb">p</span> <span class="s2">&quot;Hello&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">bye</span> 
-    <span class="nb">p</span> <span class="s2">&quot;Bye&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">welcome</span>
-    <span class="nb">p</span> <span class="s1">&#39;Welcome&#39;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-    <span class="n">method_to_call</span> <span class="o">=</span> <span class="nb">methods</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="nb">name</span> <span class="o">=~</span> <span class="sr">/</span><span class="si">#{</span><span class="n">method_name</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="sr">/</span><span class="p">}</span>
-    <span class="nb">send</span><span class="p">(</span><span class="n">method_to_call</span><span class="p">)</span> <span class="k">if</span> <span class="n">method_to_call</span>
-    <span class="nb">p</span> <span class="s1">&#39;Unknown method&#39;</span> <span class="k">unless</span> <span class="n">method_to_call</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
-
-<span class="n">instance</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">els</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">hel</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">by</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">wel</span>
-</code></pre>
-</div>
-
-
 <p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="s2">&quot;Unknown method&quot;</span>
-<span class="s2">&quot;Hello&quot;</span>
-<span class="s2">&quot;Bye&quot;</span>
-<span class="s2">&quot;Welcome&quot;</span>
-</code></pre>
-</div>
-
 
 <p>That's it. I hope this gives you some good overview and if you are ready for the whole package I
 suggest you start with:</p>
@@ -327,6 +158,8 @@ suggest you start with:</p>
   <h1>Related Posts</h1>
   <ul class="archives">
 
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
+
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
@@ -335,13 +168,12 @@ suggest you start with:</p>
 
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
-
   </ul>
 </div>
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>About Crowd Interactive</h1>
 <p class="append-1 about">Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico... <a href="/about.html">Read More...</a></p>
 <h1>Our Favorite Sites</h1>

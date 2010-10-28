@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
@@ -52,54 +53,23 @@
 
 <p>You can set up your email and name by using the following command:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
-</code></pre>
-</div>
-
-
 <h2>Reduce the risk factor</h2>
 
 <p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
-</code></pre>
-</div>
-
 
 <p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
 
 <p>So, we recommend our rookies to use the following command:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
-</code></pre>
-</div>
-
-
 <p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
 
 <p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
-</code></pre>
-</div>
-
 
 <p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
 
 <h2>Add color to your life</h2>
 
 <p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
-</code></pre>
-</div>
-
 
 <p>Hope this guide helps you in some way, cheers!</p>
 
@@ -136,6 +106,8 @@
   <h1>Related Posts</h1>
   <ul class="archives">
 
+  <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
+
   <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
 
   <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
@@ -144,13 +116,12 @@
 
   <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
   </ul>
 </div>
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>About Crowd Interactive</h1>
 <p class="append-1 about">Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico... <a href="/about.html">Read More...</a></p>
 <h1>Our Favorite Sites</h1>

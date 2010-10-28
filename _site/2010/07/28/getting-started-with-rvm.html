@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
@@ -54,51 +55,21 @@
 
 <p>We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this <a href="/2010/07/11/git-initial-configuration.html">post</a>.</p>
 
-<div class="highlight"><pre><code class="bash">bash &lt; &lt;<span class="o">(</span> curl http://rvm.beginrescueend.com/releases/rvm-install-head <span class="o">)</span>
-</code></pre>
-</div>
-
-
 <p>This is the best option to install RVM in your machine and will work in Macintosh and *nix environments, can't promise anything about Windows, though.</p>
 
 <p>There are other two options: from the latest source tarball and as a gem, but the guys from <a href="http://rvm.beginrescueend.com/rvm/install/">BeginRescueEnd</a> recommend to stick to the described method.</p>
 
 <p>After RVM is installed in your system, you need to add this line to your ~/.bashrc and ~/.bash_profile</p>
 
-<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$HOME</span>/.rvm/scripts/rvm <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$HOME</span>/.rvm/scripts/rvm
-</code></pre>
-</div>
-
-
 <h2>Now what?</h2>
 
 <p>Well, you should be ready to start playing around with any Ruby version you want to work with; but before that, it is a good practice to check the Ruby versions that RVM is aware of</p>
 
-<div class="highlight"><pre><code class="bash">rvm list known
-</code></pre>
-</div>
-
-
 <p>To install a specific Ruby version, you just have to:</p>
-
-<div class="highlight"><pre><code class="bash">rvm install &lt;ruby version&gt;
-</code></pre>
-</div>
-
 
 <p>When you already have several 'Rubies', you can make any of them the default version:</p>
 
-<div class="highlight"><pre><code class="bash">rvm --default &lt;ruby version&gt;
-</code></pre>
-</div>
-
-
 <p>If you ever want (or need) to go back to your previously Ruby/Rails installed version, here's the trick:</p>
-
-<div class="highlight"><pre><code class="bash">rvm system
-</code></pre>
-</div>
-
 
 <h2>What about Rails???</h2>
 
@@ -112,28 +83,13 @@
 
 <p>To create a gemset you have to run:</p>
 
-<div class="highlight"><pre><code class="bash">rvm gemset create &lt;name <span class="k">for </span>your gemset&gt;
-</code></pre>
-</div>
-
-
 <p>I like naming my gemsets after the project I will use the Rails version / Gems version; most of the developers will prefer using a naming convention like 'Rails235', 'Rails_3_0_0_beta4', 'Rails3rc' or anything like that.</p>
 
 <p>Now, to mix any of your Ruby version with any of your Rails versions, you'll use:</p>
 
-<div class="highlight"><pre><code class="bash">rvm use &lt;ruby version&gt;@&lt;gemset name&gt; <span class="o">(</span>e.g.<span class="o">)</span> rvm use 1.8.7@rails_300_RC
-</code></pre>
-</div>
-
-
 <p>you can omit the word 'use' and it will work too</p>
 
 <p>Now, install the Rails version you want to try within this gemset:</p>
-
-<div class="highlight"><pre><code class="bash">gem install rails -v 2.3.3
-</code></pre>
-</div>
-
 
 <h3>Forget about sudo to install gems</h3>
 
@@ -142,11 +98,6 @@
 <h2>Checking versions</h2>
 
 <p>This is pretty straight forward, but make sure to check your Ruby/Rails version each time you switch:</p>
-
-<div class="highlight"><pre><code class="bash">ruby -v <span class="o">&amp;&amp;</span> rails -v
-</code></pre>
-</div>
-
 
 <h2>What else is important?</h2>
 
@@ -158,21 +109,7 @@
 
 <p>There is one interesting post in <a href="http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments">RafLabs</a> about the subject and a very simple implementation by typing:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ &quot;</span>
-</code></pre>
-</div>
-
-
 <p>This will allow your prompt to look a little bit like this:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="o">[</span>localhost:ruby-1.8.7-p299@r3rc<span class="o">]</span> home~ 
-
-or
-
-<span class="o">[</span>dab-mac:ruby-1.9.1-p378<span class="o">]</span>~ home<span class="nv">$ </span>
-</code></pre>
-</div>
-
 
 <h2>Enjoy!</h2>
 
@@ -211,6 +148,8 @@ or
   <h1>Related Posts</h1>
   <ul class="archives">
 
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
@@ -219,13 +158,12 @@ or
 
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
-  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
-
   </ul>
 </div>
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
 <h1>About Crowd Interactive</h1>
 <p class="append-1 about">Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico... <a href="/about.html">Read More...</a></p>
 <h1>Our Favorite Sites</h1>
