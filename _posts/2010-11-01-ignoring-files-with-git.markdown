@@ -4,7 +4,7 @@ title: Ignoring files with Git
 author: Daniel Gaytán
 email: daniel@crowdint.com
 avatar: 554ca5879badb8dfd61f5ea7e54aef9e
-published: false
+published: true
 ---
 
 When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)

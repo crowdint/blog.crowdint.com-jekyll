@@ -40,6 +40,61 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 01</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/554ca5879badb8dfd61f5ea7e54aef9e" class="avatar" alt="Avatar" /></div>
+    <p>When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)</p>
+
+<p>Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name ".gitignore"</p>
+
+<div class="highlight"><pre><code class="bash">touch .gitignore
+</code></pre>
+</div>
+
+
+<p>On this file you can include those files you do not want to be tracked by git:</p>
+
+<div class="highlight"><pre><code class="bash">some_file.rb
+*.log
+doc/**/*
+public/images/system/**/*
+</code></pre>
+</div>
+
+
+<p>As you see, you can include the file name or include wildcards to select several files.</p>
+
+<p>Git by default ignores empty folders, so if your application requires a folder to exist, you just need to create a blank .gitignore file.</p>
+
+<p>But what if you must include a file inside a folder among others you want to ignore? such as config files, or whatever. Then you may want to prevent git from ignoring those files:</p>
+
+<div class="highlight"><pre><code class="bash">config/*
+!config/a_special_file.rb
+</code></pre>
+</div>
+
+
+<p>This will tell git to ignore all the files, except for the one that is marked with a bang (!).</p>
+
+<p>I hope this is helpful for someone.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Daniel Gaytán | daniel@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/11/01/ignoring-files-with-git.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
   <p class="author">
     <span class="date"><b>Oct 27</b><br />2010</span>
@@ -272,47 +327,10 @@ So this will create a user with database and user creation permissions with a de
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 18</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>And it's all thanks to <em>you</em>.</p>
-
-<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
-
-<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
-
-<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
-
-<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
-
-<div style="text-align:center; margin: 10px">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
-</div>
-
-
-<p>Thanks again to everyone involved.</p>
-
-<p>Hope to see you next year!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
