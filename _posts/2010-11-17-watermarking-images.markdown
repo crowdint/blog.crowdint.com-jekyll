@@ -18,10 +18,11 @@ For this post's purposes I will only re-create such functionality specifying a f
 
 ###Opening the file
 
-We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name ["wallpaper"](/images/wallpaper.jpg) (the file is 1.1 Mb)
+We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name ["wallpaper_original.jpg"](/images/wallpaper_original.jpg) (the file is 1.1 Mb)
 {% highlight ruby %}
 example_image_path = "#{RAILS_ROOT}/public/images/wallpaper_original.jpg"
 
+ # Let's also specify the file path for our watermarked image
 example_image_output_path = "#{RAILS_ROOT}/public/images/wallpaper_watermarked.jpg"
 {% endhighlight %}
 Image dimensions are: 1800 x 1200 pixels (big enough)
@@ -57,7 +58,7 @@ end
 Now we just have to call our _apply\_watermark_ method passing the _example\_image\_path_ string as the _image\_path_ and the _new\_filename\_path_ arguments:
 
 {% highlight ruby %}
-apply_watermark(example_image_path, example_image_path)
+apply_watermark(example_image_path, example_image_output_path)
 {% endhighlight %}
 
 Now let's add some code to our _apply\_watermark_ method to perform [benchmarking](http://ruby-doc.org/core/classes/Benchmark.html):
