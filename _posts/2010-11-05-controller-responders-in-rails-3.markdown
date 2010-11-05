@@ -6,11 +6,11 @@ email: luis.galaviz@crowdint.com
 avatar: 1e7f8fb8733b6193cf3bdbc85693f515
 ---
 
-When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What could I say? I'm believer!
+When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!
 
 Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.
 
-Imagine you are creating a basic RESTFUL controller, you will start with:
+Imagine you are creating a basic RESTFUL controller, you could start with:
 
 {% highlight bash %}
 class VariantsController < ApplicationController
@@ -37,7 +37,7 @@ class VariantsController < ApplicationController
   .
 {% endhighlight %}
 
-Once you finish, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different mime requests, like xml, json, html. So, in your controller you may have something like this:
+Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:
 
 {% highlight bash %}
 class VariantsController < ApplicationController
@@ -71,9 +71,9 @@ class VariantsController < ApplicationController
   .
 {% endhighlight %}
 
-Now our controller looks overweighted. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time to respond_with to come to the rescue.
+Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.
 
-First, we have to define which mime responses our controller has to respond. In this case are html and xml, so we have to define:
+First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:
 
 {% highlight bash %}
 class VariantsController < ApplicationController
@@ -105,12 +105,12 @@ end
 .
 {% endhighlight %}
 
-## When do I need to use respond_with?
+## So, when do I need to use respond_with?
 
 You need to use it when:
 
-* You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and to read for others (and you as well).
-* When you have to respond to many different mime requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:
+* You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).
+* When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:
 
 {% highlight bash %}
 def create
@@ -129,9 +129,9 @@ def create
 end
 {% endhighlight %}
 
-If you get complicated when customizing a respond_with I recommend you, stop customizing and go back to the old configuration.
+If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.
 
-Other tool that plays very well with this new controllers way is the gem [responders](http://github.com/plataformatec/responders). Once you are using respond_with you might still keep using manual flash (notice, alert) messages. But, with responders gem you will use automatic response messages configured trough the i18n. When you install this gem you will customize your flash messages using your local yml. Just install the gem:
+Other tool that plays very well with this new controllers feature is [responders](http://github.com/plataformatec/responders). Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:
 
 {% highlight bash %}
 $ gem install responders
@@ -147,7 +147,7 @@ and then, configure it through the appropriate generator:
 rails generate responders:install
 {% endhighlight %}
 
-and you will see this changes:
+You will see these changes:
 
 {% highlight bash %}
 create  lib/application_responder.rb
@@ -181,9 +181,9 @@ def create
 end
 {% endhighlight %}
 
-And this way you could have, even, the flash notice.
+And this way you get everything, including the flash notice.
 
-So, at the end, this  could be your complete RESTFUL controller:
+So, in the end, this could be your complete RESTFUL controller:
 
 {% highlight bash %}
 class VariantsController < ApplicationController
@@ -221,13 +221,13 @@ end
 
 ## What else?
 
-Well, if you want to define a particular response by default, you could set in your "routes.rb" this:
+Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:
 
 {% highlight bash %}
 resources :variants, :defaults => {:action => "index", :format => "xml"}
 {% endhighlight %}
 
-If you define a view for this format (example index.xml.haml) it will render it. But if not, then it will invoke to_xml to render it.
+If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.
 
 Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit [Ryan Daigle's](http://ryandaigle.com/) posts, they are really helpful.
 
