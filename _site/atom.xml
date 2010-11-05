@@ -4,14 +4,266 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-11-01T22:41:41-05:00</updated>
+ <updated>2010-11-05T12:41:00-07:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Controller responders in Rails 3</title>
+   <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
+   <updated>2010-11-05T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
+   <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
+
+&lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
+
+&lt;p&gt;Imagine you are creating a basic RESTFUL controller, you could start with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+
+  def index
+    @variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all
+  end
+  
+  def new
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new
+  end
+  
+  def create
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @variant.save
+      flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Fortunately it was saved!&amp;quot;&lt;/span&gt;
+      redirect_to variant_path
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;      &lt;/span&gt;render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt;
+    end
+  end
+  .
+  .
+  .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+
+  def index
+    @users &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; User.all
+    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+      format.html
+      format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    end
+  end
+  .
+  .
+  .
+
+  def create
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
+        flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt;
+        format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; redirect_to variant_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @varian, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :created, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;        &lt;/span&gt;format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant.errors, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :unprocessable_entity &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      end
+    end
+  end
+  .
+  .
+  .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.&lt;/p&gt;
+
+&lt;p&gt;First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+  respond_to :html, :xml
+  .
+  .
+  .
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then, we will use respond_with to set the response, like follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def index
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+
+def new
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+
+def create
+  @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+  flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+.
+.
+.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;So, when do I need to use respond_with?&lt;/h2&gt;
+
+&lt;p&gt;You need to use it when:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).&lt;/li&gt;
+&lt;li&gt;When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; variants_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;or, you could specify different actions for each response:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+    format.html
+    format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.&lt;/p&gt;
+
+&lt;p&gt;Other tool that plays very well with this new controllers feature is &lt;a href=&quot;http://github.com/plataformatec/responders&quot;&gt;responders&lt;/a&gt;. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install responders
+
+or, in your Gemfile
+
+gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;responders&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;and then, configure it through the appropriate generator:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails generate responders:install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You will see these changes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  lib/application_responder.rb
+prepend  app/controllers/application_controller.rb
+inject  app/controllers/application_controller.rb
+create  config/locales/responders.en.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;what we will use is the last file &quot;responders.en.yml&quot;, this file contains the messages for each action of the responders, and it looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;en:
+  flash:
+    actions:
+      create:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully created.&amp;#39;&lt;/span&gt;
+      update:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully updated.&amp;#39;&lt;/span&gt;
+      destroy:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully destroyed.&amp;#39;&lt;/span&gt;
+        alert: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} could not be destroyed.&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.&lt;/p&gt;
+
+&lt;p&gt;Ok, so, back to the controller, yo could define the create action as follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And this way you get everything, including the flash notice.&lt;/p&gt;
+
+&lt;p&gt;So, in the end, this could be your complete RESTFUL controller:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+  respond_to :html
+
+  def index
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+
+  def new
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+
+  def create
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+
+  def edit
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+
+  def update
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant.update_attributes&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+  
+  def destroy
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    @variant.destroy
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+  
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;What else?&lt;/h2&gt;
+
+&lt;p&gt;Well, if you want to define a particular response by default, you could set it in your &quot;routes.rb&quot; like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;resources :variants, :defaults &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt;, :format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.&lt;/p&gt;
+
+&lt;p&gt;Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit &lt;a href=&quot;http://ryandaigle.com/&quot;&gt;Ryan Daigle's&lt;/a&gt; posts, they are really helpful.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Ignoring files with Git</title>
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
-   <updated>2010-11-01T00:00:00-05:00</updated>
+   <updated>2010-11-01T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
 
@@ -57,7 +309,7 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-05:00</updated>
+   <updated>2010-10-27T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
@@ -192,7 +444,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-05:00</updated>
+   <updated>2010-10-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
@@ -271,7 +523,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-05:00</updated>
+   <updated>2010-10-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
@@ -301,7 +553,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-05:00</updated>
+   <updated>2010-10-07T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
@@ -323,7 +575,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Negative Code</title>
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-05:00</updated>
+   <updated>2010-09-28T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
@@ -370,7 +622,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>First contact with regular expressions</title>
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-05:00</updated>
+   <updated>2010-09-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
@@ -579,7 +831,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Installing gems skipping RDoc and RI</title>
    <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-05:00</updated>
+   <updated>2010-09-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
    <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
 
@@ -611,7 +863,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Customize your Generators Workflow in Rails 3.0.0</title>
    <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
-   <updated>2010-09-10T00:00:00-05:00</updated>
+   <updated>2010-09-10T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
    <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
 
@@ -776,7 +1028,7 @@ error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span 
  <entry>
    <title>A simple way to setup a class for global values</title>
    <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
-   <updated>2010-09-06T00:00:00-05:00</updated>
+   <updated>2010-09-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
    <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
 
@@ -850,7 +1102,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Open and watch specific git branches using gitx</title>
    <link href="http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"/>
-   <updated>2010-08-31T00:00:00-05:00</updated>
+   <updated>2010-08-31T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx</id>
    <content type="html">&lt;p&gt;It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called &lt;em&gt;branchitis&lt;/em&gt;, and it happens to everyone at some point.&lt;/p&gt;
 
@@ -899,7 +1151,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Benchmarking thin vs unicorn</title>
    <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
-   <updated>2010-08-26T00:00:00-05:00</updated>
+   <updated>2010-08-26T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
    <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
 
@@ -1335,7 +1587,7 @@ Mac OS X: 10.6.3
  <entry>
    <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
-   <updated>2010-08-20T00:00:00-05:00</updated>
+   <updated>2010-08-20T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
@@ -1594,7 +1846,7 @@ suggest you start with:&lt;/p&gt;
  <entry>
    <title>Use a project specific Ruby version with RVM</title>
    <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
-   <updated>2010-08-17T00:00:00-05:00</updated>
+   <updated>2010-08-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
    <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
 &lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
@@ -1625,75 +1877,6 @@ Once you abandon the project directory, your default Ruby version will be used!&
 &lt;h2&gt;Final thoughts&lt;/h2&gt;
 &lt;p&gt;Whether this file should or shouldn&amp;#8217;t be in your project repo is up to you, but &lt;span class=&quot;caps&quot;&gt;IMO&lt;/span&gt; it should be ignored, creating the possibility to be defined by every user&amp;#8230;&lt;/p&gt;
 &lt;p&gt;What do you think about that?&lt;/p&gt;</content>
-   <author>
-     <name>Chalo Fernandez</name>
-     <email>gonzalo.fernandez@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Improve performance between attachment_fu and acts_as_list</title>
-   <link href="http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html"/>
-   <updated>2010-08-13T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list</id>
-   <content type="html">&lt;p&gt;If you are stuck in your project using &lt;a href=&quot;http://github.com/technoweenie/attachment_fu&quot;&gt;&lt;em&gt;&lt;strong&gt;attachment_fu&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; and&lt;br /&gt;
-&lt;a href=&quot;http://github.com/rails/acts_as_list&quot;&gt;&lt;em&gt;&lt;strong&gt;acts_as_list&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt; plugins/gems in your project,&lt;br /&gt;
-you might be facing a weird performance issue when dealing with images with thumbnails.&lt;/p&gt;
-&lt;p&gt;Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;images&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;position&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;Even if this query is limited to 1 row, this is a really &lt;strong&gt;slow query&lt;/strong&gt;. For example in my development machine, each of these queries take about ~900ms (yes! the &lt;i&gt;images&lt;/i&gt; table is &lt;span class=&quot;caps&quot;&gt;HUGE&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;So, let&amp;#8217;s assume the following models:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;thumbnail IS NULL&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;acts_as_list&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;#acts_as_list declaration&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;has_attachment&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:content_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#attachment_fu declaration&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;:storage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:file_system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;:thumbnails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thumb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;150&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:tiny&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.&lt;/p&gt;
-&lt;p&gt;If you add an image attachment now&amp;#8230; &lt;strong&gt;the slow query will be executed for each thumbnail&lt;/strong&gt;. The reasons are:&lt;/p&gt;
-&lt;ol&gt;
-	&lt;li&gt;The image file is uploaded to the server.&lt;/li&gt;
-	&lt;li&gt;attachment_fu saves the image and creates a new Image row with article_id established.&lt;/li&gt;
-	&lt;li&gt;acts_as_list assigns the position attribute to the parent image.&lt;/li&gt;
-	&lt;li&gt;attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;&lt;/li&gt;
-	&lt;li&gt;acts_as_list assigns the position attribute to images after the thumbnail created.&lt;/li&gt;
-	&lt;li&gt;Repeat step #4 and #5 for each thumbnail to be created.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The problem with this procedure, if you see the acts_as_list source code:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;scope_condition&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#{configuration[:scope].to_s}.nil?&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; IS NULL&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\#&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;As we configured our Image model to use &lt;code&gt;acts_as_list :scope =&amp;gt; :article!&lt;/code&gt;, and in the thumbnails the article_id is &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;, the condition is generated as &amp;#8220;&lt;strong&gt;&lt;span class=&quot;caps&quot;&gt;WHERE&lt;/span&gt; (article_id  IS &lt;span class=&quot;caps&quot;&gt;NULL&lt;/span&gt;)&lt;/strong&gt;&amp;#8221;.&lt;/p&gt;
-&lt;p&gt;To avoid this, you need to manually &lt;strong&gt;set the article_id value before the thumbnails are saved&lt;/strong&gt;. This can be done using a &lt;strong&gt;callback in the Image model&lt;/strong&gt; (as suggested in acts_as_list source code):&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#Callback before a thumbnail is saved...&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#Assign the article_id to avoid a HUGE query with IS NULL clause&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;before_thumbnail_saved&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thumbnail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;article_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;With this callback, after generating a thumbnail each image will have the &lt;code&gt;article_id&lt;/code&gt; attribute filled. Thus in the Article model, the has_many relation is defined as:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;position&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;thumbnail IS NULL&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;Now, &lt;strong&gt;only the article images will have thumbnail.nil&lt;/strong&gt; and the thumbnails will be hidden in the image.thumbnails relation.&lt;/p&gt;
-&lt;h3&gt;Conclusion&lt;/h3&gt;
-&lt;p&gt;In our project, we &lt;strong&gt;expected a 570% &lt;span class=&quot;caps&quot;&gt;SQL&lt;/span&gt; improvement&lt;/strong&gt; when creating, modifying or deleting image attachments.&lt;/p&gt;</content>
    <author>
      <name>Chalo Fernandez</name>
      <email>gonzalo.fernandez@crowdint.com</email>
