@@ -26,6 +26,7 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+<<<<<<< HEAD
   <h1><a href="/2010/11/01/rack.html">Rack Introduction</a></h1>
   <p class="author">
     <span class="date"><b>Nov 01</b><br />2010</span>
@@ -56,10 +57,47 @@ of the whole story.</p>
 <p>Just install the rack gem, as simple as:</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
+=======
+  <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 05</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <p>When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!</p>
+
+<p>Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.</p>
+
+<p>Imagine you are creating a basic RESTFUL controller, you could start with:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+
+  def index
+    @variants <span class="o">=</span> Variant.all
+  end
+  
+  def new
+    @variant <span class="o">=</span> Variant.new
+  end
+  
+  def create
+    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+    <span class="k">if</span> @variant.save
+      flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Fortunately it was saved!&quot;</span>
+      redirect_to variant_path
+    <span class="k">else</span>
+<span class="k">      </span>render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span>
+    end
+  end
+  .
+  .
+  .
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <h2>Basic requirements</h2>
 
 <p>A Rack application is a <strong>Ruby object</strong> that <strong>respond_to? 'call'</strong>, it takes exactly <em>one argument</em>:
@@ -71,10 +109,44 @@ headers</strong>, and <strong>http body</strong>.</p>
 <p>So basically anything like following may act as a rack application:</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
+=======
+<p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+
+  def index
+    @users <span class="o">=</span> User.all
+    respond_to <span class="k">do</span> |format|
+      format.html
+      format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
+    end
+  end
+  .
+  .
+  .
+
+  def create
+    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+    respond_to <span class="k">do</span> |format|
+      <span class="k">if</span> @user.save
+        flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span>
+        format.html <span class="o">{</span> redirect_to variant_path<span class="o">)</span> <span class="o">}</span>
+        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @varian, :status <span class="o">=</span>&gt; :created, :location <span class="o">=</span>&gt; @variant <span class="o">}</span>
+      <span class="k">else</span>
+<span class="k">        </span>format.html <span class="o">{</span> render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span> <span class="o">}</span>
+        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @variant.errors, :status <span class="o">=</span>&gt; :unprocessable_entity <span class="o">}</span>
+      end
+    end
+  end
+  .
+  .
+  .
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>Of course, there are more things that you need to check in order to make your application
 <strong>Rack compliant</strong>, but we'll get to that later.</p>
 
@@ -94,10 +166,23 @@ World" message.</p>
      <span class="s1">&#39;Hello World&#39;</span><span class="o">]</span>
   <span class="k">end</span> 
   <span class="n">run</span> <span class="n">app</span> 
+=======
+<p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
+
+<p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+  respond_to :html, :xml
+  .
+  .
+  .
+  
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>In order to run it, I'll first send the <em>rackup hello_world.ru</em> to background, next using <em>curl</em>
 we'll send a request to localhost:</p>
 
@@ -106,10 +191,31 @@ we'll send a request to localhost:</p>
   ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:9292
   127.0.0.1 - - <span class="o">[</span>05/Nov/2010 12:07:54<span class="o">]</span> <span class="s2">&quot;GET / HTTP/1.1&quot;</span> 200 - 0.0008
   Hello World
+=======
+<p>Then, we will use respond_with to set the response, like follows:</p>
+
+<div class="highlight"><pre><code class="bash">def index
+  respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
+end
+
+def new
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
+end
+
+def create
+  @variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+  flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span> <span class="k">if</span> @user.save
+  respond_with<span class="o">(</span>@variant<span class="o">)</span>
+end
+.
+.
+.
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>And there we have our <strong>Hello World</strong> message from the <em>http body</em> example.</p>
 
 <h2>Basic API</h2>
@@ -176,10 +282,26 @@ and then we'll mix it in each class using include.</p>
   <span class="n">use</span> <span class="no">SayHi</span>
   <span class="n">use</span> <span class="no">SayNothing</span>
   <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;I&#39;m the endpoint&quot;</span><span class="o">]]</span> <span class="p">}</span>
+=======
+<h2>So, when do I need to use respond_with?</h2>
+
+<p>You need to use it when:</p>
+
+<ul>
+<li>You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).</li>
+<li>When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:</li>
+</ul>
+
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
+end
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>Let's test it using <em>rackup</em>:</p>
 
 <div class="highlight"><pre><code class="bash">...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup  simple_stacked.ru  -p 1111 &amp;
@@ -189,10 +311,21 @@ and then we'll mix it in each class using include.</p>
 I<span class="err">&#39;</span>m the endpoint
 Hi from SayNothing
 Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>
+=======
+<p>or, you could specify different actions for each response:</p>
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span> <span class="k">do</span> |format|
+    format.html
+    format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
+  end
+end
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>The response shows the endpoint's message on first line, plus the SayNothing response,
 plus the SayHi response. As you can see all the applications directly interacted with the
 request and its response.</p>
@@ -225,10 +358,22 @@ application in order to make it <strong>Rack complain</strong>. By running your 
 command line tool, you are already using it, otherwise include it with a:</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Lint</span>
+=======
+<p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
+
+<p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install responders
+
+or, in your Gemfile
+
+gem <span class="s1">&#39;responders&#39;</span>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, following is an
 example I'm working on based on the Rack Spec:</p>
 
@@ -252,10 +397,16 @@ start!.</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
   <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
+=======
+<p>and then, configure it through the appropriate generator:</p>
+
+<div class="highlight"><pre><code class="bash">rails generate responders:install
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>Now create a <em>public</em> folder and a <em>index.html</em> file inside and fill in this html file with:</p>
 
 <div class="highlight"><pre><code class="html">  <span class="nt">&lt;html&gt;</span>
@@ -266,10 +417,19 @@ start!.</p>
       The body
     <span class="nt">&lt;/body&gt;</span>
   <span class="nt">&lt;/html&gt;</span>
+=======
+<p>You will see these changes:</p>
+
+<div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
+prepend  app/controllers/application_controller.rb
+inject  app/controllers/application_controller.rb
+create  config/locales/responders.en.yml
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>Now let's test it using <em>rackup</em> and <em>curl</em>:</p>
 
 <div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
@@ -286,10 +446,25 @@ start!.</p>
       The body
     &lt;/body&gt;
   &lt;/html&gt;
+=======
+<p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
+
+<div class="highlight"><pre><code class="bash">en:
+  flash:
+    actions:
+      create:
+        notice: <span class="s1">&#39;%{resource_name} was successfully created.&#39;</span>
+      update:
+        notice: <span class="s1">&#39;%{resource_name} was successfully updated.&#39;</span>
+      destroy:
+        notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
+        alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <p>It works, now we have a static files server.</p>
 
 <h3>Step 2. Serve haml files as html</h3>
@@ -349,10 +524,59 @@ following:</p>
       %title The index from a haml file
     %body
       The haml body
+=======
+<p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
+
+<p>Ok, so, back to the controller, yo could define the create action as follows:</p>
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+end
 </code></pre>
 </div>
 
 
+<p>And this way you get everything, including the flash notice.</p>
+
+<p>So, in the end, this could be your complete RESTFUL controller:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+  respond_to :html
+
+  def index
+    respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
+  end
+
+  def new
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
+  end
+
+  def create
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+  end
+
+  def edit
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">]))</span>
+  end
+
+  def update
+    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
+    respond_with<span class="o">(</span>@variant.update_attributes<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+  end
+  
+  def destroy
+    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
+    @variant.destroy
+    respond_with<span class="o">(</span>@variant<span class="o">)</span>
+  end
+  
+end
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
+</code></pre>
+</div>
+
+
+<<<<<<< HEAD
 <p>Let's test it with <em>rackup</em> and <em>curl</em>:</p>
 
 <div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
@@ -368,10 +592,18 @@ following:</p>
       The haml body
     &lt;/body&gt;
   &lt;/html&gt;
+=======
+<h2>What else?</h2>
+
+<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
+
+<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
+<<<<<<< HEAD
 <h2>Conclusion</h2>
 
 <p>There are many other topics that I dindn't mention, for example:</p>
@@ -393,13 +625,25 @@ is sometimes your best teacher.</p>
 
     <div class="author_box">
       <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+=======
+<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
+
+<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
     <div class="comments">
+<<<<<<< HEAD
       <h2><a href="/2010/11/01/rack.html#disqus_thread">Click here for Comments</a></h2>
+=======
+      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
     </div>
   </div>
 </div>
@@ -607,7 +851,11 @@ So this will create a user with database and user creation permissions with a de
   <h1>Recent Posts</h1>
   <ul class="archives">
 
+<<<<<<< HEAD
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
+=======
+  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+>>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
