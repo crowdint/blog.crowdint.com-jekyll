@@ -4,48 +4,14 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
-<<<<<<< HEAD
- <updated>2010-11-08T17:36:41-06:00</updated>
-=======
- <updated>2010-11-05T12:41:00-07:00</updated>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
+ <updated>2010-11-09T20:27:06-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
-<<<<<<< HEAD
-   <title>Rack Introduction</title>
-   <link href="http://blog.crowdint.com/2010/11/01/rack.html"/>
-   <updated>2010-11-01T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/11/01/rack</id>
-   <content type="html">&lt;h1&gt;Implementing Rack&lt;/h1&gt;
-
-&lt;p&gt;Rack provides a minimal interface between webservers supporting Ruby, it containts a full
-stack of middleware components. Using Rack middleware you can build standalone applications that
-may be inserted on Rails, Sinatra or many other Rack based frameworks.&lt;/p&gt;
-
-&lt;p&gt;So Rack is one of those &quot;bare minimum components&quot; that you need to create modular web
-applications, furthermore, by learning Rack you step forward to master rails internals, why?,
-Rails has adopted the &lt;strong&gt;Rack philosophy&lt;/strong&gt; throughout the framework, a Rails application is actually
-&lt;em&gt;a collection of Rack and Rails middleware components&lt;/em&gt; that all work together to form the completed
-whole.&lt;/p&gt;
-
-&lt;p&gt;In this article I'll guide you through the process of installing rack, stating what every rack
-application must implement/provide and creating a rack application, in the process I'll explain some
-concepts with a design pattern interpretation of rack and finally we'll see an integrating example
-of the whole story.&lt;/p&gt;
-
-&lt;p&gt;Let's start.&lt;/p&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;Just install the rack gem, as simple as:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack&lt;/span&gt;
-=======
    <title>Controller responders in Rails 3</title>
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-07:00</updated>
+   <updated>2010-11-05T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
    <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
 
@@ -75,24 +41,10 @@ of the whole story.&lt;/p&gt;
   .
   .
   .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;h2&gt;Basic requirements&lt;/h2&gt;
-
-&lt;p&gt;A Rack application is a &lt;strong&gt;Ruby object&lt;/strong&gt; that &lt;strong&gt;respond_to? 'call'&lt;/strong&gt;, it takes exactly &lt;em&gt;one argument&lt;/em&gt;:
-&lt;strong&gt;the environment&lt;/strong&gt;, and &lt;em&gt;returns&lt;/em&gt; an &lt;strong&gt;Array&lt;/strong&gt; of exactly &lt;strong&gt;three values&lt;/strong&gt;: &lt;strong&gt;http status&lt;/strong&gt;, &lt;strong&gt;http
-headers&lt;/strong&gt;, and &lt;strong&gt;http body&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;The headers and body returned by call have to &lt;strong&gt;respond_to? 'each'&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;So basically anything like following may act as a rack application:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack_app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;
-=======
 &lt;p&gt;Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
@@ -124,32 +76,10 @@ headers&lt;/strong&gt;, and &lt;strong&gt;http body&lt;/strong&gt;.&lt;/p&gt;
   .
   .
   .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;Of course, there are more things that you need to check in order to make your application
-&lt;strong&gt;Rack compliant&lt;/strong&gt;, but we'll get to that later.&lt;/p&gt;
-
-&lt;p&gt;Now we are going to build a classic example application.&lt;/p&gt;
-
-&lt;h2&gt;Hello World example&lt;/h2&gt;
-
-&lt;p&gt;In this example, it returns a three elements Array, array's elements in order are: 200 HTTP
-successful response code, a text/html content type and the HTTP response body with a &quot;Hello
-World&quot; message.&lt;/p&gt;
-
-&lt;p&gt;Open a file, call it &lt;em&gt;hello_world.ru&lt;/em&gt;, and write following:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
-    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; 
-     &lt;span class=&quot;s1&quot;&gt;&amp;#39;Hello World&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
-=======
 &lt;p&gt;Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.&lt;/p&gt;
 
 &lt;p&gt;First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:&lt;/p&gt;
@@ -160,21 +90,10 @@ World&quot; message.&lt;/p&gt;
   .
   .
   
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;In order to run it, I'll first send the &lt;em&gt;rackup hello_world.ru&lt;/em&gt; to background, next using &lt;em&gt;curl&lt;/em&gt;
-we'll send a request to localhost:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ..&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup hello_world.ru &amp;amp;
-  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 12508
-  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:9292
-  127.0.0.1 - - &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;05/Nov/2010 12:07:54&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;GET / HTTP/1.1&amp;quot;&lt;/span&gt; 200 - 0.0008
-  Hello World
-=======
 &lt;p&gt;Then, we will use respond_with to set the response, like follows:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def index
@@ -193,79 +112,10 @@ end
 .
 .
 .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;And there we have our &lt;strong&gt;Hello World&lt;/strong&gt; message from the &lt;em&gt;http body&lt;/em&gt; example.&lt;/p&gt;
-
-&lt;h2&gt;Basic API&lt;/h2&gt;
-
-&lt;p&gt;Before continue with the next examples, you need to know that rack applications usually call
-following methods:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;use(middleware, **args, &amp;amp;block)&lt;/em&gt; adds a middleware to the stack&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;run(app)&lt;/em&gt; dispatches to an application&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;map(path, &amp;amp;block)&lt;/em&gt; constructs a Rack::URLMap in a convenient way&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
-many rack applications.&lt;/p&gt;
-
-&lt;h2&gt;Middleware&lt;/h2&gt;
-
-&lt;p&gt;A middleware is a Rack application that is &lt;em&gt;designed&lt;/em&gt; to &lt;em&gt;run&lt;/em&gt; in &lt;em&gt;conjunction&lt;/em&gt; with another Rack
-application that acts as the &lt;em&gt;endpoint&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Think of a Rack middleware as a filter &lt;em&gt;receiving&lt;/em&gt; the Rack environment for the request
-from the previous &lt;em&gt;middleware, then doing some work with or on the &lt;/em&gt;request's environment&lt;em&gt;
-and then &lt;/em&gt;calling&lt;em&gt; the &lt;/em&gt;next middleware&lt;em&gt; in the chain. The &lt;/em&gt;last&lt;em&gt; Rack application in the
-chain is the &lt;/em&gt;application itself&lt;em&gt;, &lt;/em&gt;any&lt;em&gt; middleware in the chain can &lt;/em&gt;return the Rack response
-itself&lt;em&gt;, thus &lt;/em&gt;preventing&lt;em&gt; the rest of the middlewares in the chain from &lt;/em&gt;executing*.&lt;/p&gt;
-
-&lt;p&gt;Now let's build and chain three rack applications/middlewares, one &lt;em&gt;lambda endpoint&lt;/em&gt; and two &lt;em&gt;call&lt;/em&gt;
-responders: SayHi and SayNothing. After this example we'll go through how implements a
-&lt;em&gt;design pattern&lt;/em&gt;, can you guess which one?.&lt;/p&gt;
-
-&lt;h2&gt;Chaining example&lt;/h2&gt;
-
-&lt;p&gt;Our endpoint application is just like the previous Hello World example but it returns an
-&quot;I'm an endpoint&quot; body.&lt;/p&gt;
-
-&lt;p&gt;The objective here is to show how three different objects (middlewares) are chained, classes
-&lt;em&gt;SayHi&lt;/em&gt; and &lt;em&gt;SayNothing&lt;/em&gt; will simply append a message to the response body, in the end, the returned
-request body will contain the message added by each middleware.&lt;/p&gt;
-
-&lt;p&gt;In order to avoid code repetition we'll define the common code is inside the Initializer module
-and then we'll mix it in each class using include.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Initializer&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Hi from &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayHi&lt;/span&gt;
-    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayNothing&lt;/span&gt;
-    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayHi&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayNothing&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;I&amp;#39;m the endpoint&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-=======
 &lt;h2&gt;So, when do I need to use respond_with?&lt;/h2&gt;
 
 &lt;p&gt;You need to use it when:&lt;/p&gt;
@@ -279,22 +129,10 @@ and then we'll mix it in each class using include.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
   respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; variants_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;Let's test it using &lt;em&gt;rackup&lt;/em&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup  simple_stacked.ru  -p 1111 &amp;amp;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 19216
-
-...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
-I&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;m the endpoint
-Hi from SayNothing
-Hi from SayHi...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
-=======
 &lt;p&gt;or, you could specify different actions for each response:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
@@ -303,45 +141,10 @@ Hi from SayHi...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span cla
     format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
   end
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;The response shows the endpoint's message on first line, plus the SayNothing response,
-plus the SayHi response. As you can see all the applications directly interacted with the
-request and its response.&lt;/p&gt;
-
-&lt;h2&gt;Decorator pattern&lt;/h2&gt;
-
-&lt;p&gt;This is important because of Rack applications follow a decorator pattern, where each application
-receives an &lt;em&gt;Array of three elements and returns an Array of three elements&lt;/em&gt;, this Array must follow
-the specification we discussed above.&lt;/p&gt;
-
-&lt;p&gt;This pattern allows components to receive/add behavior dynamically using a common interface, if
-you want to digg deeper on the subject I recommend you to go through &lt;a href=&quot;http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html&quot;&gt;Luke Redpath's excellent
-article&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Following gist intends to show a very basic decorator implementation &lt;strong&gt;MyBaseApp&lt;/strong&gt;
-that initializes with a three elements array mimicking a Rack Application, that application will be
-decorated with HTML and JSON outputs:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/668084.js&quot;&gt; &lt;/script&gt;
-
-
-&lt;p&gt;Given the dynamic nature of Ruby language there are many ways to implement a decorator, you decide
-which one fits better on your needs.&lt;/p&gt;
-
-&lt;h2&gt;Valid Rack applications&lt;/h2&gt;
-
-&lt;p&gt;Every Rack application must follow the &lt;a href=&quot;http://rack.rubyforge.org/doc/SPEC.html&quot;&gt;Rack Spec&lt;/a&gt;,
-Rack helps you to follow it by proving a &lt;strong&gt;Rack::Lint&lt;/strong&gt; middleware, you should include it in your
-application in order to make it &lt;strong&gt;Rack complain&lt;/strong&gt;. By running your application using &lt;strong&gt;rackup&lt;/strong&gt;
-command line tool, you are already using it, otherwise include it with a:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Lint&lt;/span&gt;
-=======
 &lt;p&gt;If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.&lt;/p&gt;
 
 &lt;p&gt;Other tool that plays very well with this new controllers feature is &lt;a href=&quot;http://github.com/plataformatec/responders&quot;&gt;responders&lt;/a&gt;. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:&lt;/p&gt;
@@ -351,85 +154,27 @@ command line tool, you are already using it, otherwise include it with a:&lt;/p&
 or, in your Gemfile
 
 gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;responders&amp;#39;&lt;/span&gt;
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;Also, you may test your application with &lt;a href=&quot;http://relishapp.com/rspec&quot;&gt;RSpec&lt;/a&gt;, following is an
-example I'm working on based on the Rack Spec:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/668111.js&quot;&gt; &lt;/script&gt;
-
-
-&lt;p&gt;Now, let's implement and tie everything together with the next last example:&lt;/p&gt;
-
-&lt;h2&gt;Final more useful example&lt;/h2&gt;
-
-&lt;p&gt;Imagine your application returns files from a certain folder, just like a file server, but,
-whenever these files have a &lt;a href=&quot;http://haml-lang.com/&quot;&gt;Haml&lt;/a&gt; extension they will be parsed and
-rendered as html.&lt;/p&gt;
-
-&lt;p&gt;We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
-start!.&lt;/p&gt;
-
-&lt;h3&gt;Step 1. Serving static files&lt;/h3&gt;
-
-&lt;p&gt;Create a &lt;em&gt;file_server.rb&lt;/em&gt; file, and put following code in it:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-=======
 &lt;p&gt;and then, configure it through the appropriate generator:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails generate responders:install
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;Now create a &lt;em&gt;public&lt;/em&gt; folder and a &lt;em&gt;index.html&lt;/em&gt; file inside and fill in this html file with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;The index file&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-      The body
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-=======
 &lt;p&gt;You will see these changes:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  lib/application_responder.rb
 prepend  app/controllers/application_controller.rb
 inject  app/controllers/application_controller.rb
 create  config/locales/responders.en.yml
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;Now let's test it using &lt;em&gt;rackup&lt;/em&gt; and &lt;em&gt;curl&lt;/em&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup file_server.ru -p 1111 &amp;amp;
-  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 17882
-
-  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
-  File not found: /
-  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111/index.html
-  &amp;lt;html&amp;gt;
-    &amp;lt;head&amp;gt;
-      &amp;lt;title&amp;gt;The index file&amp;lt;/title&amp;gt;
-    &amp;lt;/head&amp;gt;
-    &amp;lt;body&amp;gt;
-      The body
-    &amp;lt;/body&amp;gt;
-  &amp;lt;/html&amp;gt;
-=======
 &lt;p&gt;what we will use is the last file &quot;responders.en.yml&quot;, this file contains the messages for each action of the responders, and it looks like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;en:
@@ -442,72 +187,10 @@ create  config/locales/responders.en.yml
       destroy:
         notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully destroyed.&amp;#39;&lt;/span&gt;
         alert: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} could not be destroyed.&amp;#39;&lt;/span&gt;
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;It works, now we have a static files server.&lt;/p&gt;
-
-&lt;h3&gt;Step 2. Serve haml files as html&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyHaml&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;PATH_INFO&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/\.haml$/&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Length&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Haml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyHaml&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Our call method basically looks for request paths where the file name has a haml extension,
-we also have to change the content length and type to match what the response is returning,
-also, here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response
-body, since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
-
-&lt;p&gt;In order to test this, create a &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
-following:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  !!!
-  %html
-    %head
-      %title The index from a haml file
-    %body
-      The haml body
-=======
 &lt;p&gt;You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.&lt;/p&gt;
 
 &lt;p&gt;Ok, so, back to the controller, yo could define the create action as follows:&lt;/p&gt;
@@ -554,12 +237,355 @@ end
   end
   
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
+&lt;h2&gt;What else?&lt;/h2&gt;
+
+&lt;p&gt;Well, if you want to define a particular response by default, you could set it in your &quot;routes.rb&quot; like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;resources :variants, :defaults &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt;, :format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.&lt;/p&gt;
+
+&lt;p&gt;Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit &lt;a href=&quot;http://ryandaigle.com/&quot;&gt;Ryan Daigle's&lt;/a&gt; posts, they are really helpful.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Rack Introduction</title>
+   <link href="http://blog.crowdint.com/2010/11/01/rack.html"/>
+   <updated>2010-11-01T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2010/11/01/rack</id>
+   <content type="html">&lt;h1&gt;Implementing Rack&lt;/h1&gt;
+
+&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full
+stack of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build standalone applications that
+can be plugged in Rails, Sinatra and many other &lt;em&gt;Rack based frameworks&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Rack is one of those &quot;bare minimum components&quot; that you need for creating modular web
+applications, furthermore, by learning Rack you begin mastering part of the &lt;em&gt;Rails internals&lt;/em&gt;, why?,
+because of &lt;strong&gt;Rails&lt;/strong&gt; has adopted the &lt;em&gt;Rack philosophy&lt;/em&gt; throughout its framework, a Rails application is actually
+&lt;em&gt;a collection of Rack and Rails middleware components&lt;/em&gt; that all work together to form the completed
+whole.&lt;/p&gt;
+
+&lt;p&gt;In this article I'll guide you through the process of installing Rack, letting you know what every rack
+application must implement/provide and creating a rack application, in the process I'll explain some
+concepts with a design pattern interpretation of rack and finally we'll see an integrating example
+of the whole story.&lt;/p&gt;
+
+&lt;p&gt;Let's begin.&lt;/p&gt;
+
+&lt;h2&gt;Installing Rack&lt;/h2&gt;
+
+&lt;p&gt;Just install the rack gem, as simple as:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Basic requirements&lt;/h2&gt;
+
+&lt;p&gt;A Rack application is a &lt;strong&gt;Ruby object&lt;/strong&gt; that &lt;strong&gt;respond_to? 'call'&lt;/strong&gt;, it takes exactly &lt;em&gt;one argument&lt;/em&gt;:
+&lt;strong&gt;the environment&lt;/strong&gt;, and &lt;em&gt;returns&lt;/em&gt; an &lt;strong&gt;Array&lt;/strong&gt; of exactly &lt;strong&gt;three values&lt;/strong&gt;: &lt;strong&gt;http status&lt;/strong&gt;, &lt;strong&gt;http
+headers&lt;/strong&gt;, and &lt;strong&gt;http body&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The headers and body returned by call have to &lt;strong&gt;respond_to? 'each'&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So basically anything like the following may act as a rack application:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack_app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Of course, there are more things that you need to check in order to make your application
+&lt;strong&gt;Rack compliant&lt;/strong&gt;, but we'll get to that later.&lt;/p&gt;
+
+&lt;p&gt;Now we are going to build a classic example application.&lt;/p&gt;
+
+&lt;h2&gt;Hello World example&lt;/h2&gt;
+
+&lt;p&gt;In this example, it returns a three element Array, array's elements in order are: 200 HTTP
+successful response code, a text/html content type and the HTTP response body with a &quot;Hello
+World&quot; message.&lt;/p&gt;
+
+&lt;p&gt;Open a file, call it &lt;em&gt;hello_world.ru&lt;/em&gt;, and write following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; 
+     &lt;span class=&quot;s1&quot;&gt;&amp;#39;Hello World&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In order to run it, I'll first send the &lt;em&gt;rackup hello_world.ru&lt;/em&gt; to background, next using &lt;em&gt;curl&lt;/em&gt;
+we'll send a request to localhost:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ..&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup hello_world.ru &amp;amp;
+  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 12508
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:9292
+  127.0.0.1 - - &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;05/Nov/2010 12:07:54&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;GET / HTTP/1.1&amp;quot;&lt;/span&gt; 200 - 0.0008
+  Hello World
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And there we have our &lt;strong&gt;Hello World&lt;/strong&gt; message from the &lt;em&gt;http body&lt;/em&gt; example.&lt;/p&gt;
+
+&lt;h2&gt;Basic API&lt;/h2&gt;
+
+&lt;p&gt;Before going on to the next examples, you need to know that rack applications usually call
+following methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;use(middleware, **args, &amp;amp;block)&lt;/em&gt; adds a middleware to the stack&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;run(app)&lt;/em&gt; dispatches to an application&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;map(path, &amp;amp;block)&lt;/em&gt; constructs a Rack::URLMap in a convenient way&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
+many rack applications.&lt;/p&gt;
+
+&lt;h2&gt;Middleware&lt;/h2&gt;
+
+&lt;p&gt;A middleware is a Rack application that is &lt;em&gt;designed&lt;/em&gt; to &lt;em&gt;run&lt;/em&gt; in &lt;em&gt;conjunction&lt;/em&gt; with another Rack
+application that acts as the &lt;em&gt;endpoint&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Think of a Rack middleware as a filter &lt;em&gt;receiving&lt;/em&gt; the Rack environment for the request
+from the previous &lt;em&gt;middleware, then doing some work with or on the &lt;/em&gt;request's environment&lt;em&gt;
+and then &lt;/em&gt;calling&lt;em&gt; the &lt;/em&gt;next middleware&lt;em&gt; in the chain. The &lt;/em&gt;last&lt;em&gt; Rack application in the
+chain is the &lt;/em&gt;application itself&lt;em&gt;, &lt;/em&gt;any&lt;em&gt; middleware in the chain can &lt;/em&gt;return the Rack response
+itself&lt;em&gt;, thus &lt;/em&gt;preventing&lt;em&gt; the rest of the middlewares in the chain from &lt;/em&gt;executing*.&lt;/p&gt;
+
+&lt;p&gt;Now let's build and chain three rack applications/middlewares, one &lt;em&gt;lambda endpoint&lt;/em&gt; and two &lt;em&gt;call&lt;/em&gt;
+responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
+&lt;em&gt;design pattern&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Chaining Rack applications example&lt;/h2&gt;
+
+&lt;p&gt;Our endpoint application is just like the previous Hello World example but it returns an
+&quot;I'm an endpoint&quot; body.&lt;/p&gt;
+
+&lt;p&gt;The point here is to show how three different objects (middlewares) are chained, classes
+&lt;em&gt;SayHi&lt;/em&gt; and &lt;em&gt;SayNothing&lt;/em&gt; will simply append a message to the response body, in the end, the returned
+request body will contain the message added by each middleware.&lt;/p&gt;
+
+&lt;p&gt;In order to avoid code repetition we'll define the common code that is inside the Initializer module
+and then we'll mix it in each class using &lt;strong&gt;Module#include&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Initializer&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Hi from &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayHi&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayNothing&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayHi&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayNothing&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;I&amp;#39;m the endpoint&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Let's test it using &lt;em&gt;rackup&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup  simple_stacked.ru  -p 1111 &amp;amp;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 19216
+
+...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
+I&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;m the endpoint
+Hi from SayNothing
+Hi from SayHi...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The response shows the endpoint's message on the first line, plus the SayNothing response,
+plus the SayHi response. As you can see all the applications interacted directly with the
+request and its response.&lt;/p&gt;
+
+&lt;h2&gt;Decorator pattern&lt;/h2&gt;
+
+&lt;p&gt;It is important to note that Rack applications follow a decorator pattern, where each application
+receives an &lt;em&gt;Array of three elements and returns an Array of three elements&lt;/em&gt;, this Array must follow
+the specification we discussed above.&lt;/p&gt;
+
+&lt;p&gt;This pattern allows components to receive/add behavior dynamically using a common interface. If
+you want to learn more about the subject I recommend you go through &lt;a href=&quot;http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html&quot;&gt;Luke Redpath's excellent
+article&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The following gist intends to show a very basic decorator implementation &lt;strong&gt;MyBaseApp&lt;/strong&gt;
+that initializes with a three elements array mimicking a Rack Application, that application will be
+decorated with HTML and JSON outputs:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/668084.js&quot;&gt; &lt;/script&gt;
+
+
+&lt;p&gt;Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
+which one fits your needs.&lt;/p&gt;
+
+&lt;h2&gt;Creating valid Rack applications&lt;/h2&gt;
+
+&lt;p&gt;Every Rack application must follow the &lt;a href=&quot;http://rack.rubyforge.org/doc/SPEC.html&quot;&gt;Rack Spec&lt;/a&gt;,
+Rack helps you to follow it by proving a &lt;strong&gt;Rack::Lint&lt;/strong&gt; middleware, you should include it in your
+application in order to make it &lt;strong&gt;Rack complain&lt;/strong&gt;. By running your application using &lt;strong&gt;rackup&lt;/strong&gt;
+command line tool, you are already using it, otherwise include it with a:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Lint&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Also, you may test your application with &lt;a href=&quot;http://relishapp.com/rspec&quot;&gt;RSpec&lt;/a&gt;, the following is an
+example I'm working on based on the Rack Spec:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/668111.js&quot;&gt; &lt;/script&gt;
+
+
+&lt;p&gt;Now, let's implement and tie everything together with the next example:&lt;/p&gt;
+
+&lt;h2&gt;Static file server with Haml support example&lt;/h2&gt;
+
+&lt;p&gt;Imagine your application returns files from a certain folder, just like a file server, but,
+whenever these files have a &lt;a href=&quot;http://haml-lang.com/&quot;&gt;Haml&lt;/a&gt; extension they will be parsed and
+rendered as html.&lt;/p&gt;
+
+&lt;p&gt;We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
+start!.&lt;/p&gt;
+
+&lt;h3&gt;Step 1. Serving static files&lt;/h3&gt;
+
+&lt;p&gt;Create a &lt;em&gt;file_server.rb&lt;/em&gt; file, and put following code in it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now create a &lt;em&gt;public&lt;/em&gt; folder and a &lt;em&gt;index.html&lt;/em&gt; file inside and fill in this html file with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;The index file&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+      The body
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now let's test it using &lt;em&gt;rackup&lt;/em&gt; and &lt;em&gt;curl&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup file_server.ru -p 1111 &amp;amp;
+  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 17882
+
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
+  File not found: /
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111/index.html
+  &amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+      &amp;lt;title&amp;gt;The index file&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+      The body
+    &amp;lt;/body&amp;gt;
+  &amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It works, now we have a static files server.&lt;/p&gt;
+
+&lt;h3&gt;Step 2. Serve haml files as html&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyHaml&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;PATH_INFO&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/\.haml$/&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Length&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Haml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyHaml&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Our call method basically looks for request paths where the file name has a haml extension,
+we have to change the content length and type to match what the response is returning,
+also, here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response
+body, since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
+
+&lt;p&gt;In order to test this, create a &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
+following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  !!!
+  %html
+    %head
+      %title The index from a haml file
+    %body
+      The haml body
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
 &lt;p&gt;Let's test it with &lt;em&gt;rackup&lt;/em&gt; and &lt;em&gt;curl&lt;/em&gt;:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup file_server.ru -p 1111 &amp;amp;
@@ -575,18 +601,10 @@ end
       The haml body
     &amp;lt;/body&amp;gt;
   &amp;lt;/html&amp;gt;
-=======
-&lt;h2&gt;What else?&lt;/h2&gt;
-
-&lt;p&gt;Well, if you want to define a particular response by default, you could set it in your &quot;routes.rb&quot; like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;resources :variants, :defaults &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt;, :format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-<<<<<<< HEAD
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;There are many other topics that I dindn't mention, for example:&lt;/p&gt;
@@ -609,26 +627,13 @@ is sometimes your best teacher.&lt;/p&gt;
    <author>
      <name>Emmanuel Delgado</name>
      <email>emmanuel.delgado@crowdint.com</email>
-=======
-&lt;p&gt;If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.&lt;/p&gt;
-
-&lt;p&gt;Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit &lt;a href=&quot;http://ryandaigle.com/&quot;&gt;Ryan Daigle's&lt;/a&gt; posts, they are really helpful.&lt;/p&gt;
-</content>
-   <author>
-     <name>Luis Galaviz</name>
-     <email>luis.galaviz@crowdint.com</email>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
    </author>
  </entry>
  
  <entry>
    <title>Ignoring files with Git</title>
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
-<<<<<<< HEAD
    <updated>2010-11-01T00:00:00-06:00</updated>
-=======
-   <updated>2010-11-01T00:00:00-07:00</updated>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
 
@@ -674,7 +679,7 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-07:00</updated>
+   <updated>2010-10-27T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
@@ -809,7 +814,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-07:00</updated>
+   <updated>2010-10-22T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
@@ -888,7 +893,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-07:00</updated>
+   <updated>2010-10-18T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
@@ -918,7 +923,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-07:00</updated>
+   <updated>2010-10-07T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
@@ -940,7 +945,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Negative Code</title>
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-07:00</updated>
+   <updated>2010-09-28T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
@@ -987,7 +992,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>First contact with regular expressions</title>
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-07:00</updated>
+   <updated>2010-09-22T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
@@ -1196,7 +1201,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Installing gems skipping RDoc and RI</title>
    <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-07:00</updated>
+   <updated>2010-09-17T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
    <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
 
@@ -1228,7 +1233,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Customize your Generators Workflow in Rails 3.0.0</title>
    <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
-   <updated>2010-09-10T00:00:00-07:00</updated>
+   <updated>2010-09-10T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
    <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
 
@@ -1393,7 +1398,7 @@ error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span 
  <entry>
    <title>A simple way to setup a class for global values</title>
    <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
-   <updated>2010-09-06T00:00:00-07:00</updated>
+   <updated>2010-09-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
    <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
 
@@ -1467,7 +1472,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Open and watch specific git branches using gitx</title>
    <link href="http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"/>
-   <updated>2010-08-31T00:00:00-07:00</updated>
+   <updated>2010-08-31T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx</id>
    <content type="html">&lt;p&gt;It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called &lt;em&gt;branchitis&lt;/em&gt;, and it happens to everyone at some point.&lt;/p&gt;
 
@@ -1516,7 +1521,7 @@ AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&q
  <entry>
    <title>Benchmarking thin vs unicorn</title>
    <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
-   <updated>2010-08-26T00:00:00-07:00</updated>
+   <updated>2010-08-26T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
    <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
 
@@ -1952,7 +1957,7 @@ Mac OS X: 10.6.3
  <entry>
    <title>What I would've loved I had known when I first met Ruby</title>
    <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
-   <updated>2010-08-20T00:00:00-07:00</updated>
+   <updated>2010-08-20T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
    <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
 
@@ -2205,46 +2210,6 @@ suggest you start with:&lt;/p&gt;
    <author>
      <name>Emmanuel Delgado</name>
      <email>emmanuel.delgado@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Use a project specific Ruby version with RVM</title>
-   <link href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html"/>
-   <updated>2010-08-17T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm</id>
-   <content type="html">&lt;p&gt;If you are using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt;&lt;/a&gt; in your machine (just as &lt;a href=&quot;/2010/07/28/getting-started-with-rvm.html&quot;&gt;Francisco showed us&lt;/a&gt; the other day) then you should take advantage of the &lt;a href=&quot;http://rvm.beginrescueend.com/workflow/rvmrc/#project&quot;&gt;project .rvmrc&lt;/a&gt; feature.&lt;/p&gt;
-&lt;p&gt;Let&amp;#8217;s say your project is in the directory:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~/repo/myproject
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;And you have ruby-1.8.7 and ruby-1.9.2 in &lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt; and you want to use 1.9.2 ruby version in that project.&lt;/p&gt;
-&lt;p&gt;Then you can put this in your &lt;code&gt;~/repo/myproject/.rvmrc&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm 1.9.2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;So, every time you change to that project directory, &lt;strong&gt;&lt;span class=&quot;caps&quot;&gt;RVM&lt;/span&gt; will change to the specified ruby version&lt;/strong&gt;.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;lineno&quot;&gt; 1&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
-&lt;span class=&quot;lineno&quot;&gt; 2&lt;/span&gt;   ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;lineno&quot;&gt; 3&lt;/span&gt; 
-&lt;span class=&quot;lineno&quot;&gt; 4&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;myproject/
-&lt;span class=&quot;lineno&quot;&gt; 5&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.9.2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
-&lt;span class=&quot;lineno&quot;&gt; 6&lt;/span&gt;   ruby 1.9.2dev &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-07-11 revision 28618&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;lineno&quot;&gt; 7&lt;/span&gt; 
-&lt;span class=&quot;lineno&quot;&gt; 8&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.9.2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo/myproject&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ..
-&lt;span class=&quot;lineno&quot;&gt; 9&lt;/span&gt; chalofa &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1.8.7&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;:~/repo&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby --version
-&lt;span class=&quot;lineno&quot;&gt;10&lt;/span&gt;   ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x86_64-linux&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the &lt;code&gt;.rvmrc&lt;/code&gt; is used: 1.9.2&lt;br /&gt;
-Once you abandon the project directory, your default Ruby version will be used!&lt;/p&gt;
-&lt;p&gt;It even &lt;strong&gt;works with gemsets&lt;/strong&gt; so you can have something like this in your &lt;code&gt;.rvmrc&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rvm 1.9.2@blog
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;And every time you cd into your directory, your ruby version and gemset will be changed :)&lt;/strong&gt;&lt;/p&gt;
-&lt;h2&gt;Final thoughts&lt;/h2&gt;
-&lt;p&gt;Whether this file should or shouldn&amp;#8217;t be in your project repo is up to you, but &lt;span class=&quot;caps&quot;&gt;IMO&lt;/span&gt; it should be ignored, creating the possibility to be defined by every user&amp;#8230;&lt;/p&gt;
-&lt;p&gt;What do you think about that?&lt;/p&gt;</content>
-   <author>
-     <name>Chalo Fernandez</name>
-     <email>gonzalo.fernandez@crowdint.com</email>
    </author>
  </entry>
  

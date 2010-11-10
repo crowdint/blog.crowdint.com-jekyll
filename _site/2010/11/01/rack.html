@@ -33,24 +33,24 @@
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
     <h1>Implementing Rack</h1>
 
-<p>Rack provides a minimal interface between webservers supporting Ruby, it containts a full
-stack of middleware components. Using Rack middleware you can build standalone applications that
-may be inserted on Rails, Sinatra or many other Rack based frameworks.</p>
+<p>Rack provides a minimal interface between web servers supporting <strong>Ruby</strong>. It contains a full
+stack of middleware components. Using <strong>Rack</strong> middleware you can build standalone applications that
+can be plugged in Rails, Sinatra and many other <em>Rack based frameworks</em>.</p>
 
-<p>So Rack is one of those "bare minimum components" that you need to create modular web
-applications, furthermore, by learning Rack you step forward to master rails internals, why?,
-Rails has adopted the <strong>Rack philosophy</strong> throughout the framework, a Rails application is actually
+<p>Rack is one of those "bare minimum components" that you need for creating modular web
+applications, furthermore, by learning Rack you begin mastering part of the <em>Rails internals</em>, why?,
+because of <strong>Rails</strong> has adopted the <em>Rack philosophy</em> throughout its framework, a Rails application is actually
 <em>a collection of Rack and Rails middleware components</em> that all work together to form the completed
 whole.</p>
 
-<p>In this article I'll guide you through the process of installing rack, stating what every rack
+<p>In this article I'll guide you through the process of installing Rack, letting you know what every rack
 application must implement/provide and creating a rack application, in the process I'll explain some
 concepts with a design pattern interpretation of rack and finally we'll see an integrating example
 of the whole story.</p>
 
-<p>Let's start.</p>
+<p>Let's begin.</p>
 
-<h2>Installation</h2>
+<h2>Installing Rack</h2>
 
 <p>Just install the rack gem, as simple as:</p>
 
@@ -67,7 +67,7 @@ headers</strong>, and <strong>http body</strong>.</p>
 
 <p>The headers and body returned by call have to <strong>respond_to? 'each'</strong>.</p>
 
-<p>So basically anything like following may act as a rack application:</p>
+<p>So basically anything like the following may act as a rack application:</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
 </code></pre>
@@ -81,7 +81,7 @@ headers</strong>, and <strong>http body</strong>.</p>
 
 <h2>Hello World example</h2>
 
-<p>In this example, it returns a three elements Array, array's elements in order are: 200 HTTP
+<p>In this example, it returns a three element Array, array's elements in order are: 200 HTTP
 successful response code, a text/html content type and the HTTP response body with a "Hello
 World" message.</p>
 
@@ -113,7 +113,7 @@ we'll send a request to localhost:</p>
 
 <h2>Basic API</h2>
 
-<p>Before continue with the next examples, you need to know that rack applications usually call
+<p>Before going on to the next examples, you need to know that rack applications usually call
 following methods:</p>
 
 <ul>
@@ -138,20 +138,20 @@ chain is the </em>application itself<em>, </em>any<em> middleware in the chain c
 itself<em>, thus </em>preventing<em> the rest of the middlewares in the chain from </em>executing*.</p>
 
 <p>Now let's build and chain three rack applications/middlewares, one <em>lambda endpoint</em> and two <em>call</em>
-responders: SayHi and SayNothing. After this example we'll go through how implements a
-<em>design pattern</em>, can you guess which one?.</p>
+responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
+<em>design pattern</em>.</p>
 
-<h2>Chaining example</h2>
+<h2>Chaining Rack applications example</h2>
 
 <p>Our endpoint application is just like the previous Hello World example but it returns an
 "I'm an endpoint" body.</p>
 
-<p>The objective here is to show how three different objects (middlewares) are chained, classes
+<p>The point here is to show how three different objects (middlewares) are chained, classes
 <em>SayHi</em> and <em>SayNothing</em> will simply append a message to the response body, in the end, the returned
 request body will contain the message added by each middleware.</p>
 
-<p>In order to avoid code repetition we'll define the common code is inside the Initializer module
-and then we'll mix it in each class using include.</p>
+<p>In order to avoid code repetition we'll define the common code that is inside the Initializer module
+and then we'll mix it in each class using <strong>Module#include</strong>.</p>
 
 <div class="highlight"><pre><code class="ruby">  <span class="k">module</span> <span class="nn">Initializer</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
@@ -192,31 +192,31 @@ Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span cla
 </div>
 
 
-<p>The response shows the endpoint's message on first line, plus the SayNothing response,
-plus the SayHi response. As you can see all the applications directly interacted with the
+<p>The response shows the endpoint's message on the first line, plus the SayNothing response,
+plus the SayHi response. As you can see all the applications interacted directly with the
 request and its response.</p>
 
 <h2>Decorator pattern</h2>
 
-<p>This is important because of Rack applications follow a decorator pattern, where each application
+<p>It is important to note that Rack applications follow a decorator pattern, where each application
 receives an <em>Array of three elements and returns an Array of three elements</em>, this Array must follow
 the specification we discussed above.</p>
 
-<p>This pattern allows components to receive/add behavior dynamically using a common interface, if
-you want to digg deeper on the subject I recommend you to go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
+<p>This pattern allows components to receive/add behavior dynamically using a common interface. If
+you want to learn more about the subject I recommend you go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
 article</a>.</p>
 
-<p>Following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
+<p>The following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
 that initializes with a three elements array mimicking a Rack Application, that application will be
 decorated with HTML and JSON outputs:</p>
 
 <script src="https://gist.github.com/668084.js"> </script>
 
 
-<p>Given the dynamic nature of Ruby language there are many ways to implement a decorator, you decide
-which one fits better on your needs.</p>
+<p>Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
+which one fits your needs.</p>
 
-<h2>Valid Rack applications</h2>
+<h2>Creating valid Rack applications</h2>
 
 <p>Every Rack application must follow the <a href="http://rack.rubyforge.org/doc/SPEC.html">Rack Spec</a>,
 Rack helps you to follow it by proving a <strong>Rack::Lint</strong> middleware, you should include it in your
@@ -228,15 +228,15 @@ command line tool, you are already using it, otherwise include it with a:</p>
 </div>
 
 
-<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, following is an
+<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, the following is an
 example I'm working on based on the Rack Spec:</p>
 
 <script src="https://gist.github.com/668111.js"> </script>
 
 
-<p>Now, let's implement and tie everything together with the next last example:</p>
+<p>Now, let's implement and tie everything together with the next example:</p>
 
-<h2>Final more useful example</h2>
+<h2>Static file server with Haml support example</h2>
 
 <p>Imagine your application returns files from a certain folder, just like a file server, but,
 whenever these files have a <a href="http://haml-lang.com/">Haml</a> extension they will be parsed and
@@ -335,7 +335,7 @@ start!.</p>
 
 
 <p>Our call method basically looks for request paths where the file name has a haml extension,
-we also have to change the content length and type to match what the response is returning,
+we have to change the content length and type to match what the response is returning,
 also, here we are using <em>traverse_body</em> method just to read through the previous response
 body, since it is a <em>Rack::File</em> instance.</p>
 
@@ -417,19 +417,21 @@ is sometimes your best teacher.</p>
       <div class="previous span-8"><a href="/2010/11/01/ignoring-files-with-git.html"><< Ignoring files with Git</a></div>
     
     
+      <div class="next span-8 last"><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3 >></a></div>
+    
   </div>
 </div>
 <div class="post prepend-1">
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack</a></li>
+  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
+
+  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
-
-  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
 
   <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 

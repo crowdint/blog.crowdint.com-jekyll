@@ -26,38 +26,6 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-<<<<<<< HEAD
-  <h1><a href="/2010/11/01/rack.html">Rack Introduction</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 01</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <h1>Implementing Rack</h1>
-
-<p>Rack provides a minimal interface between webservers supporting Ruby, it containts a full
-stack of middleware components. Using Rack middleware you can build standalone applications that
-may be inserted on Rails, Sinatra or many other Rack based frameworks.</p>
-
-<p>So Rack is one of those "bare minimum components" that you need to create modular web
-applications, furthermore, by learning Rack you step forward to master rails internals, why?,
-Rails has adopted the <strong>Rack philosophy</strong> throughout the framework, a Rails application is actually
-<em>a collection of Rack and Rails middleware components</em> that all work together to form the completed
-whole.</p>
-
-<p>In this article I'll guide you through the process of installing rack, stating what every rack
-application must implement/provide and creating a rack application, in the process I'll explain some
-concepts with a design pattern interpretation of rack and finally we'll see an integrating example
-of the whole story.</p>
-
-<p>Let's start.</p>
-
-<h2>Installation</h2>
-
-<p>Just install the rack gem, as simple as:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
-=======
   <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
   <p class="author">
     <span class="date"><b>Nov 05</b><br />2010</span>
@@ -92,24 +60,10 @@ of the whole story.</p>
   .
   .
   .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<h2>Basic requirements</h2>
-
-<p>A Rack application is a <strong>Ruby object</strong> that <strong>respond_to? 'call'</strong>, it takes exactly <em>one argument</em>:
-<strong>the environment</strong>, and <em>returns</em> an <strong>Array</strong> of exactly <strong>three values</strong>: <strong>http status</strong>, <strong>http
-headers</strong>, and <strong>http body</strong>.</p>
-
-<p>The headers and body returned by call have to <strong>respond_to? 'each'</strong>.</p>
-
-<p>So basically anything like following may act as a rack application:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
-=======
 <p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
 
 <div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
@@ -141,32 +95,10 @@ headers</strong>, and <strong>http body</strong>.</p>
   .
   .
   .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>Of course, there are more things that you need to check in order to make your application
-<strong>Rack compliant</strong>, but we'll get to that later.</p>
-
-<p>Now we are going to build a classic example application.</p>
-
-<h2>Hello World example</h2>
-
-<p>In this example, it returns a three elements Array, array's elements in order are: 200 HTTP
-successful response code, a text/html content type and the HTTP response body with a "Hello
-World" message.</p>
-
-<p>Open a file, call it <em>hello_world.ru</em>, and write following:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">app</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> 
-    <span class="o">[</span><span class="mi">200</span><span class="p">,</span> 
-      <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span> 
-     <span class="s1">&#39;Hello World&#39;</span><span class="o">]</span>
-  <span class="k">end</span> 
-  <span class="n">run</span> <span class="n">app</span> 
-=======
 <p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
 
 <p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
@@ -177,21 +109,10 @@ World" message.</p>
   .
   .
   
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>In order to run it, I'll first send the <em>rackup hello_world.ru</em> to background, next using <em>curl</em>
-we'll send a request to localhost:</p>
-
-<div class="highlight"><pre><code class="bash">  ..<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup hello_world.ru &amp;
-  <span class="o">[</span>1<span class="o">]</span> 12508
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:9292
-  127.0.0.1 - - <span class="o">[</span>05/Nov/2010 12:07:54<span class="o">]</span> <span class="s2">&quot;GET / HTTP/1.1&quot;</span> 200 - 0.0008
-  Hello World
-=======
 <p>Then, we will use respond_with to set the response, like follows:</p>
 
 <div class="highlight"><pre><code class="bash">def index
@@ -210,79 +131,10 @@ end
 .
 .
 .
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>And there we have our <strong>Hello World</strong> message from the <em>http body</em> example.</p>
-
-<h2>Basic API</h2>
-
-<p>Before continue with the next examples, you need to know that rack applications usually call
-following methods:</p>
-
-<ul>
-<li><em>use(middleware, **args, &amp;block)</em> adds a middleware to the stack</li>
-<li><em>run(app)</em> dispatches to an application</li>
-<li><em>map(path, &amp;block)</em> constructs a Rack::URLMap in a convenient way</li>
-</ul>
-
-
-<p>Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
-many rack applications.</p>
-
-<h2>Middleware</h2>
-
-<p>A middleware is a Rack application that is <em>designed</em> to <em>run</em> in <em>conjunction</em> with another Rack
-application that acts as the <em>endpoint</em>.</p>
-
-<p>Think of a Rack middleware as a filter <em>receiving</em> the Rack environment for the request
-from the previous <em>middleware, then doing some work with or on the </em>request's environment<em>
-and then </em>calling<em> the </em>next middleware<em> in the chain. The </em>last<em> Rack application in the
-chain is the </em>application itself<em>, </em>any<em> middleware in the chain can </em>return the Rack response
-itself<em>, thus </em>preventing<em> the rest of the middlewares in the chain from </em>executing*.</p>
-
-<p>Now let's build and chain three rack applications/middlewares, one <em>lambda endpoint</em> and two <em>call</em>
-responders: SayHi and SayNothing. After this example we'll go through how implements a
-<em>design pattern</em>, can you guess which one?.</p>
-
-<h2>Chaining example</h2>
-
-<p>Our endpoint application is just like the previous Hello World example but it returns an
-"I'm an endpoint" body.</p>
-
-<p>The objective here is to show how three different objects (middlewares) are chained, classes
-<em>SayHi</em> and <em>SayNothing</em> will simply append a message to the response body, in the end, the returned
-request body will contain the message added by each middleware.</p>
-
-<p>In order to avoid code repetition we'll define the common code is inside the Initializer module
-and then we'll mix it in each class using include.</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">module</span> <span class="nn">Initializer</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span> 
-    <span class="k">end</span> 
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">body</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hi from </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">&quot;</span>
-      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
-    <span class="k">end</span> 
-  <span class="k">end</span>
-
-  <span class="k">class</span> <span class="nc">SayHi</span>
-    <span class="kp">include</span> <span class="no">Initializer</span>
-  <span class="k">end</span>
-
-  <span class="k">class</span> <span class="nc">SayNothing</span>
-    <span class="kp">include</span> <span class="no">Initializer</span>
-  <span class="k">end</span>
-    
-  <span class="n">use</span> <span class="no">SayHi</span>
-  <span class="n">use</span> <span class="no">SayNothing</span>
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;I&#39;m the endpoint&quot;</span><span class="o">]]</span> <span class="p">}</span>
-=======
 <h2>So, when do I need to use respond_with?</h2>
 
 <p>You need to use it when:</p>
@@ -296,22 +148,10 @@ and then we'll mix it in each class using include.</p>
 <div class="highlight"><pre><code class="bash">def create
   respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>Let's test it using <em>rackup</em>:</p>
-
-<div class="highlight"><pre><code class="bash">...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup  simple_stacked.ru  -p 1111 &amp;
-<span class="o">[</span>1<span class="o">]</span> 19216
-
-...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
-I<span class="err">&#39;</span>m the endpoint
-Hi from SayNothing
-Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>
-=======
 <p>or, you could specify different actions for each response:</p>
 
 <div class="highlight"><pre><code class="bash">def create
@@ -320,45 +160,10 @@ Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span cla
     format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
   end
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>The response shows the endpoint's message on first line, plus the SayNothing response,
-plus the SayHi response. As you can see all the applications directly interacted with the
-request and its response.</p>
-
-<h2>Decorator pattern</h2>
-
-<p>This is important because of Rack applications follow a decorator pattern, where each application
-receives an <em>Array of three elements and returns an Array of three elements</em>, this Array must follow
-the specification we discussed above.</p>
-
-<p>This pattern allows components to receive/add behavior dynamically using a common interface, if
-you want to digg deeper on the subject I recommend you to go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
-article</a>.</p>
-
-<p>Following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
-that initializes with a three elements array mimicking a Rack Application, that application will be
-decorated with HTML and JSON outputs:</p>
-
-<script src="https://gist.github.com/668084.js"> </script>
-
-
-<p>Given the dynamic nature of Ruby language there are many ways to implement a decorator, you decide
-which one fits better on your needs.</p>
-
-<h2>Valid Rack applications</h2>
-
-<p>Every Rack application must follow the <a href="http://rack.rubyforge.org/doc/SPEC.html">Rack Spec</a>,
-Rack helps you to follow it by proving a <strong>Rack::Lint</strong> middleware, you should include it in your
-application in order to make it <strong>Rack complain</strong>. By running your application using <strong>rackup</strong>
-command line tool, you are already using it, otherwise include it with a:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Lint</span>
-=======
 <p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
 
 <p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
@@ -368,85 +173,27 @@ command line tool, you are already using it, otherwise include it with a:</p>
 or, in your Gemfile
 
 gem <span class="s1">&#39;responders&#39;</span>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, following is an
-example I'm working on based on the Rack Spec:</p>
-
-<script src="https://gist.github.com/668111.js"> </script>
-
-
-<p>Now, let's implement and tie everything together with the next last example:</p>
-
-<h2>Final more useful example</h2>
-
-<p>Imagine your application returns files from a certain folder, just like a file server, but,
-whenever these files have a <a href="http://haml-lang.com/">Haml</a> extension they will be parsed and
-rendered as html.</p>
-
-<p>We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
-start!.</p>
-
-<h3>Step 1. Serving static files</h3>
-
-<p>Create a <em>file_server.rb</em> file, and put following code in it:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
-  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
-=======
 <p>and then, configure it through the appropriate generator:</p>
 
 <div class="highlight"><pre><code class="bash">rails generate responders:install
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>Now create a <em>public</em> folder and a <em>index.html</em> file inside and fill in this html file with:</p>
-
-<div class="highlight"><pre><code class="html">  <span class="nt">&lt;html&gt;</span>
-    <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;title&gt;</span>The index file<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;/head&gt;</span>
-    <span class="nt">&lt;body&gt;</span>
-      The body
-    <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-=======
 <p>You will see these changes:</p>
 
 <div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
 prepend  app/controllers/application_controller.rb
 inject  app/controllers/application_controller.rb
 create  config/locales/responders.en.yml
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>Now let's test it using <em>rackup</em> and <em>curl</em>:</p>
-
-<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
-  <span class="o">[</span>2<span class="o">]</span> 17882
-
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
-  File not found: /
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111/index.html
-  &lt;html&gt;
-    &lt;head&gt;
-      &lt;title&gt;The index file&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-      The body
-    &lt;/body&gt;
-  &lt;/html&gt;
-=======
 <p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
 
 <div class="highlight"><pre><code class="bash">en:
@@ -459,72 +206,10 @@ create  config/locales/responders.en.yml
       destroy:
         notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
         alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
-<p>It works, now we have a static files server.</p>
-
-<h3>Step 2. Serve haml files as html</h3>
-
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
-
-  <span class="k">class</span> <span class="nc">MyHaml</span>
-    <span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span>
-    <span class="k">end</span>
-
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-
-      <span class="k">if</span> <span class="n">env</span><span class="o">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/\.haml$/</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">to_s</span>
-        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;text/html&#39;</span>
-      <span class="k">end</span>
-
-      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
-    <span class="k">end</span>
-
-    <span class="kp">private</span>
-    <span class="k">def</span> <span class="nf">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">full_body</span> <span class="o">=</span> <span class="n">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">engine</span> <span class="o">=</span> <span class="no">Haml</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">new</span> <span class="n">full_body</span>
-      <span class="n">engine</span><span class="o">.</span><span class="n">render</span>
-    <span class="k">end</span>
-
-    <span class="k">def</span> <span class="nf">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-      <span class="n">body</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">text</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">}</span>
-      <span class="n">text</span>
-    <span class="k">end</span>
-
-  <span class="k">end</span>
-
-  <span class="n">use</span> <span class="no">MyHaml</span>
-  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>Our call method basically looks for request paths where the file name has a haml extension,
-we also have to change the content length and type to match what the response is returning,
-also, here we are using <em>traverse_body</em> method just to read through the previous response
-body, since it is a <em>Rack::File</em> instance.</p>
-
-<p>In order to test this, create a <em>index.haml</em> file inside public folder and fill it in with
-following:</p>
-
-<div class="highlight"><pre><code class="html">  !!!
-  %html
-    %head
-      %title The index from a haml file
-    %body
-      The haml body
-=======
 <p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
 
 <p>Ok, so, back to the controller, yo could define the create action as follows:</p>
@@ -571,12 +256,364 @@ end
   end
   
 end
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
+<h2>What else?</h2>
+
+<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
+
+<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
+
+<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
+  <h1><a href="/2010/11/01/rack.html">Rack Introduction</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 01</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
+    <h1>Implementing Rack</h1>
+
+<p>Rack provides a minimal interface between web servers supporting <strong>Ruby</strong>. It contains a full
+stack of middleware components. Using <strong>Rack</strong> middleware you can build standalone applications that
+can be plugged in Rails, Sinatra and many other <em>Rack based frameworks</em>.</p>
+
+<p>Rack is one of those "bare minimum components" that you need for creating modular web
+applications, furthermore, by learning Rack you begin mastering part of the <em>Rails internals</em>, why?,
+because of <strong>Rails</strong> has adopted the <em>Rack philosophy</em> throughout its framework, a Rails application is actually
+<em>a collection of Rack and Rails middleware components</em> that all work together to form the completed
+whole.</p>
+
+<p>In this article I'll guide you through the process of installing Rack, letting you know what every rack
+application must implement/provide and creating a rack application, in the process I'll explain some
+concepts with a design pattern interpretation of rack and finally we'll see an integrating example
+of the whole story.</p>
+
+<p>Let's begin.</p>
+
+<h2>Installing Rack</h2>
+
+<p>Just install the rack gem, as simple as:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
+</code></pre>
+</div>
+
+
+<h2>Basic requirements</h2>
+
+<p>A Rack application is a <strong>Ruby object</strong> that <strong>respond_to? 'call'</strong>, it takes exactly <em>one argument</em>:
+<strong>the environment</strong>, and <em>returns</em> an <strong>Array</strong> of exactly <strong>three values</strong>: <strong>http status</strong>, <strong>http
+headers</strong>, and <strong>http body</strong>.</p>
+
+<p>The headers and body returned by call have to <strong>respond_to? 'each'</strong>.</p>
+
+<p>So basically anything like the following may act as a rack application:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
+</code></pre>
+</div>
+
+
+<p>Of course, there are more things that you need to check in order to make your application
+<strong>Rack compliant</strong>, but we'll get to that later.</p>
+
+<p>Now we are going to build a classic example application.</p>
+
+<h2>Hello World example</h2>
+
+<p>In this example, it returns a three element Array, array's elements in order are: 200 HTTP
+successful response code, a text/html content type and the HTTP response body with a "Hello
+World" message.</p>
+
+<p>Open a file, call it <em>hello_world.ru</em>, and write following:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">app</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> 
+    <span class="o">[</span><span class="mi">200</span><span class="p">,</span> 
+      <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span> 
+     <span class="s1">&#39;Hello World&#39;</span><span class="o">]</span>
+  <span class="k">end</span> 
+  <span class="n">run</span> <span class="n">app</span> 
+</code></pre>
+</div>
+
+
+<p>In order to run it, I'll first send the <em>rackup hello_world.ru</em> to background, next using <em>curl</em>
+we'll send a request to localhost:</p>
+
+<div class="highlight"><pre><code class="bash">  ..<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup hello_world.ru &amp;
+  <span class="o">[</span>1<span class="o">]</span> 12508
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:9292
+  127.0.0.1 - - <span class="o">[</span>05/Nov/2010 12:07:54<span class="o">]</span> <span class="s2">&quot;GET / HTTP/1.1&quot;</span> 200 - 0.0008
+  Hello World
+</code></pre>
+</div>
+
+
+<p>And there we have our <strong>Hello World</strong> message from the <em>http body</em> example.</p>
+
+<h2>Basic API</h2>
+
+<p>Before going on to the next examples, you need to know that rack applications usually call
+following methods:</p>
+
+<ul>
+<li><em>use(middleware, **args, &amp;block)</em> adds a middleware to the stack</li>
+<li><em>run(app)</em> dispatches to an application</li>
+<li><em>map(path, &amp;block)</em> constructs a Rack::URLMap in a convenient way</li>
+</ul>
+
+
+<p>Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
+many rack applications.</p>
+
+<h2>Middleware</h2>
+
+<p>A middleware is a Rack application that is <em>designed</em> to <em>run</em> in <em>conjunction</em> with another Rack
+application that acts as the <em>endpoint</em>.</p>
+
+<p>Think of a Rack middleware as a filter <em>receiving</em> the Rack environment for the request
+from the previous <em>middleware, then doing some work with or on the </em>request's environment<em>
+and then </em>calling<em> the </em>next middleware<em> in the chain. The </em>last<em> Rack application in the
+chain is the </em>application itself<em>, </em>any<em> middleware in the chain can </em>return the Rack response
+itself<em>, thus </em>preventing<em> the rest of the middlewares in the chain from </em>executing*.</p>
+
+<p>Now let's build and chain three rack applications/middlewares, one <em>lambda endpoint</em> and two <em>call</em>
+responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
+<em>design pattern</em>.</p>
+
+<h2>Chaining Rack applications example</h2>
+
+<p>Our endpoint application is just like the previous Hello World example but it returns an
+"I'm an endpoint" body.</p>
+
+<p>The point here is to show how three different objects (middlewares) are chained, classes
+<em>SayHi</em> and <em>SayNothing</em> will simply append a message to the response body, in the end, the returned
+request body will contain the message added by each middleware.</p>
+
+<p>In order to avoid code repetition we'll define the common code that is inside the Initializer module
+and then we'll mix it in each class using <strong>Module#include</strong>.</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">module</span> <span class="nn">Initializer</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span> 
+    <span class="k">end</span> 
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">body</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hi from </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
+    <span class="k">end</span> 
+  <span class="k">end</span>
+
+  <span class="k">class</span> <span class="nc">SayHi</span>
+    <span class="kp">include</span> <span class="no">Initializer</span>
+  <span class="k">end</span>
+
+  <span class="k">class</span> <span class="nc">SayNothing</span>
+    <span class="kp">include</span> <span class="no">Initializer</span>
+  <span class="k">end</span>
+    
+  <span class="n">use</span> <span class="no">SayHi</span>
+  <span class="n">use</span> <span class="no">SayNothing</span>
+  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;I&#39;m the endpoint&quot;</span><span class="o">]]</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>Let's test it using <em>rackup</em>:</p>
+
+<div class="highlight"><pre><code class="bash">...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup  simple_stacked.ru  -p 1111 &amp;
+<span class="o">[</span>1<span class="o">]</span> 19216
+
+...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
+I<span class="err">&#39;</span>m the endpoint
+Hi from SayNothing
+Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>The response shows the endpoint's message on the first line, plus the SayNothing response,
+plus the SayHi response. As you can see all the applications interacted directly with the
+request and its response.</p>
+
+<h2>Decorator pattern</h2>
+
+<p>It is important to note that Rack applications follow a decorator pattern, where each application
+receives an <em>Array of three elements and returns an Array of three elements</em>, this Array must follow
+the specification we discussed above.</p>
+
+<p>This pattern allows components to receive/add behavior dynamically using a common interface. If
+you want to learn more about the subject I recommend you go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
+article</a>.</p>
+
+<p>The following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
+that initializes with a three elements array mimicking a Rack Application, that application will be
+decorated with HTML and JSON outputs:</p>
+
+<script src="https://gist.github.com/668084.js"> </script>
+
+
+<p>Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
+which one fits your needs.</p>
+
+<h2>Creating valid Rack applications</h2>
+
+<p>Every Rack application must follow the <a href="http://rack.rubyforge.org/doc/SPEC.html">Rack Spec</a>,
+Rack helps you to follow it by proving a <strong>Rack::Lint</strong> middleware, you should include it in your
+application in order to make it <strong>Rack complain</strong>. By running your application using <strong>rackup</strong>
+command line tool, you are already using it, otherwise include it with a:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Lint</span>
+</code></pre>
+</div>
+
+
+<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, the following is an
+example I'm working on based on the Rack Spec:</p>
+
+<script src="https://gist.github.com/668111.js"> </script>
+
+
+<p>Now, let's implement and tie everything together with the next example:</p>
+
+<h2>Static file server with Haml support example</h2>
+
+<p>Imagine your application returns files from a certain folder, just like a file server, but,
+whenever these files have a <a href="http://haml-lang.com/">Haml</a> extension they will be parsed and
+rendered as html.</p>
+
+<p>We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
+start!.</p>
+
+<h3>Step 1. Serving static files</h3>
+
+<p>Create a <em>file_server.rb</em> file, and put following code in it:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
+  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
+</code></pre>
+</div>
+
+
+<p>Now create a <em>public</em> folder and a <em>index.html</em> file inside and fill in this html file with:</p>
+
+<div class="highlight"><pre><code class="html">  <span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+      <span class="nt">&lt;title&gt;</span>The index file<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+      The body
+    <span class="nt">&lt;/body&gt;</span>
+  <span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+
+<p>Now let's test it using <em>rackup</em> and <em>curl</em>:</p>
+
+<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
+  <span class="o">[</span>2<span class="o">]</span> 17882
+
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
+  File not found: /
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111/index.html
+  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;The index file&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      The body
+    &lt;/body&gt;
+  &lt;/html&gt;
+</code></pre>
+</div>
+
+
+<p>It works, now we have a static files server.</p>
+
+<h3>Step 2. Serve haml files as html</h3>
+
+<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
+
+  <span class="k">class</span> <span class="nc">MyHaml</span>
+    <span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">env</span><span class="o">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/\.haml$/</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">to_s</span>
+        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;text/html&#39;</span>
+      <span class="k">end</span>
+
+      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span>
+    <span class="k">def</span> <span class="nf">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">full_body</span> <span class="o">=</span> <span class="n">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">engine</span> <span class="o">=</span> <span class="no">Haml</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">new</span> <span class="n">full_body</span>
+      <span class="n">engine</span><span class="o">.</span><span class="n">render</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+      <span class="n">body</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">text</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">}</span>
+      <span class="n">text</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+
+  <span class="n">use</span> <span class="no">MyHaml</span>
+  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
+</code></pre>
+</div>
+
+
+<p>Our call method basically looks for request paths where the file name has a haml extension,
+we have to change the content length and type to match what the response is returning,
+also, here we are using <em>traverse_body</em> method just to read through the previous response
+body, since it is a <em>Rack::File</em> instance.</p>
+
+<p>In order to test this, create a <em>index.haml</em> file inside public folder and fill it in with
+following:</p>
+
+<div class="highlight"><pre><code class="html">  !!!
+  %html
+    %head
+      %title The index from a haml file
+    %body
+      The haml body
+</code></pre>
+</div>
+
+
 <p>Let's test it with <em>rackup</em> and <em>curl</em>:</p>
 
 <div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
@@ -592,18 +629,10 @@ end
       The haml body
     &lt;/body&gt;
   &lt;/html&gt;
-=======
-<h2>What else?</h2>
-
-<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
-
-<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
 </code></pre>
 </div>
 
 
-<<<<<<< HEAD
 <h2>Conclusion</h2>
 
 <p>There are many other topics that I dindn't mention, for example:</p>
@@ -625,25 +654,13 @@ is sometimes your best teacher.</p>
 
     <div class="author_box">
       <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-=======
-<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
-
-<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
     <div class="comments">
-<<<<<<< HEAD
       <h2><a href="/2010/11/01/rack.html#disqus_thread">Click here for Comments</a></h2>
-=======
-      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
     </div>
   </div>
 </div>
@@ -704,158 +721,12 @@ public/images/system/**/*
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 27</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
-    <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
-
-<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
-
-<p>OK so, let's begin with our brief trip</p>
-
-<h2>Installing Ruby</h2>
-
-<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
-</code></pre>
-</div>
-
-
-<p>and switch to that ruby version by running:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
-</code></pre>
-</div>
-
-
-<h2>Installing Rails</h2>
-
-<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em>&lt;gemset_name></em>' and 'rvm gemset use <em>&lt;gemset_name></em>', so after this we do:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
-</code></pre>
-</div>
-
-
-<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
-
-<h2>Installing PostgreSQL with Visual Administrator</h2>
-
-<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
-</code></pre>
-</div>
-
-
-<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
-</code></pre>
-</div>
-
-
-<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
- As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And run the bundler:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-</code></pre>
-</div>
-
-
-<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
-
-<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
-</code></pre>
-</div>
-
-
-<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
-So this will create a user with database and user creation permissions with a defined password.</p>
-
-<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
-
-<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
-
-<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-</code></pre>
-</div>
-
-
-<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
-
-<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-<<<<<<< HEAD
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
-=======
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
->>>>>>> a6642e45ab262459fd9f9c88782b96240832210c
+
+  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
 
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
@@ -892,8 +763,6 @@ So this will create a user with database and user creation permissions with a de
   <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
 
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
   </ul>
 </div>
