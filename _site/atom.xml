@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-11-09T20:27:06-06:00</updated>
+ <updated>2010-11-09T20:31:45-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
@@ -570,8 +570,8 @@ start!.&lt;/p&gt;
 
 &lt;p&gt;Our call method basically looks for request paths where the file name has a haml extension,
 we have to change the content length and type to match what the response is returning,
-also, here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response
-body, since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
+here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response body,
+since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
 
 &lt;p&gt;In order to test this, create a &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
 following:&lt;/p&gt;
@@ -607,7 +607,7 @@ following:&lt;/p&gt;
 
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 
-&lt;p&gt;There are many other topics that I dindn't mention, for example:&lt;/p&gt;
+&lt;p&gt;There's lot more to learn about, for example :&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Ruby and Rails integration&lt;/li&gt;
@@ -616,11 +616,11 @@ following:&lt;/p&gt;
 &lt;/ul&gt;
 
 
-&lt;p&gt;I'll go through this examples in following articles, for now it is enough, feel free
-to send any comments, additions, resources or complaints.&lt;/p&gt;
+&lt;p&gt;I'll go through these examples in future articles, for now I think this is enough.
+Feel free to send me your comments, additions, resources or complaints. I will certainly
+look forward to them.&lt;/p&gt;
 
-&lt;p&gt;There's lot more learn on Rack, thanks for your reading and remember, others source code
-is sometimes your best teacher.&lt;/p&gt;
+&lt;p&gt;Thanks for your reading and remember, others sources codes are sometimes your best teachers.&lt;/p&gt;
 
 &lt;p&gt;Regards&lt;/p&gt;
 </content>
