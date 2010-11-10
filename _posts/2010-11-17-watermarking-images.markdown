@@ -4,15 +4,16 @@ title: Watermarking images minimizing the overhead
 author: Francisco Guzm&aacute;n
 email: francisco.guzman@crowdint.com
 avatar: c000ffd0c4ed3e23d09cae624d24b525
+published: false
 ---
 
 During the days I was working for a project called [Creative Allies](http://creativeallies.com), I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.
 
-Atfer doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.
+After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.
 
 ##What I did the first time
 
-The featured included uploading a file, validating it using [RMagick](http://rmagick.rubyforge.org/) and if validation passed, creating thumbnails and a watermarked preview.
+The feature included uploading a file, validating it using [RMagick](http://rmagick.rubyforge.org/) and if validation passed, creating thumbnails and a watermarked preview.
 
 For this post's purposes I will only re-create such functionality specifying a fixed path to file so I we can compare benchmark outcome. Ready?
 
