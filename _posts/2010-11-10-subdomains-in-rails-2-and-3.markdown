@@ -4,6 +4,7 @@ title: Subdomains in Rails (2.3.x & 3)
 author: Francisco Guzm&aacute;n
 email: francisco.guzman@crowdint.com
 avatar: c000ffd0c4ed3e23d09cae624d24b525
+published: false
 ---
 
 #Why?
@@ -77,7 +78,7 @@ There are two different ways to set up your local environment to work with subdo
 [http://cool.lvh.me:3000]()
 
 ##Been there, done that... now what???
-Now you can take advantage of two awsome features: the _current\_subdomain_ method which will return (of course) the current subdomain or _nil_ if there is no subdomain or the current subdomain is a mirror:
+Now you can take advantage of two awesome features: the _current\_subdomain_ method which will return (of course) the current subdomain or _nil_ if there is no subdomain or the current subdomain is a mirror:
 
 {% highlight bash %}
 # http://admin.killerapp.com/
@@ -153,7 +154,7 @@ As for the subdomain, we will only pass it in our request when we need it; that 
 
 ##Mirrors (the 'www' case)
 
-In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit complex way, but not way too complex...
+In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit of a complex way, but not way too complex...
 
 First, we turn the subdomain constraints into a _block_ in our **config/routes.rb** file
 
