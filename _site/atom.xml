@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-11-09T20:31:45-06:00</updated>
+ <updated>2010-11-09T20:33:59-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
@@ -262,9 +262,9 @@ end
  
  <entry>
    <title>Rack Introduction</title>
-   <link href="http://blog.crowdint.com/2010/11/01/rack.html"/>
+   <link href="http://blog.crowdint.com/2010/11/01/rack-introduction.html"/>
    <updated>2010-11-01T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/11/01/rack</id>
+   <id>http://blog.crowdint.com/2010/11/01/rack-introduction</id>
    <content type="html">&lt;h1&gt;Implementing Rack&lt;/h1&gt;
 
 &lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full
@@ -573,7 +573,7 @@ we have to change the content length and type to match what the response is retu
 here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response body,
 since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
 
-&lt;p&gt;In order to test this, create a &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
+&lt;p&gt;In order to test this, create an &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
 following:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  !!!
