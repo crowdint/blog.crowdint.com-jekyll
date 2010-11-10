@@ -1,0 +1,2217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Crowd Interactive Tech Blog</title>
+ <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
+ <link href="http://blog.crowdint.com/"/>
+ <updated>2010-11-09T20:42:47-06:00</updated>
+ <id>http://blog.crowdint.com</id>
+ 
+ 
+ <entry>
+   <title>Controller responders in Rails 3</title>
+   <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
+   <updated>2010-11-05T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
+   <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
+
+&lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
+
+&lt;p&gt;Imagine you are creating a basic RESTFUL controller, you could start with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+
+  def index
+    @variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all
+  end
+  
+  def new
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new
+  end
+  
+  def create
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @variant.save
+      flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Fortunately it was saved!&amp;quot;&lt;/span&gt;
+      redirect_to variant_path
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;      &lt;/span&gt;render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt;
+    end
+  end
+  .
+  .
+  .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+
+  def index
+    @users &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; User.all
+    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+      format.html
+      format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    end
+  end
+  .
+  .
+  .
+
+  def create
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
+        flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt;
+        format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; redirect_to variant_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @varian, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :created, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;        &lt;/span&gt;format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant.errors, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :unprocessable_entity &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      end
+    end
+  end
+  .
+  .
+  .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.&lt;/p&gt;
+
+&lt;p&gt;First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+  respond_to :html, :xml
+  .
+  .
+  .
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then, we will use respond_with to set the response, like follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def index
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+
+def new
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+
+def create
+  @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+  flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+.
+.
+.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;So, when do I need to use respond_with?&lt;/h2&gt;
+
+&lt;p&gt;You need to use it when:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).&lt;/li&gt;
+&lt;li&gt;When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; variants_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;or, you could specify different actions for each response:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
+    format.html
+    format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.&lt;/p&gt;
+
+&lt;p&gt;Other tool that plays very well with this new controllers feature is &lt;a href=&quot;http://github.com/plataformatec/responders&quot;&gt;responders&lt;/a&gt;. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install responders
+
+or, in your Gemfile
+
+gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;responders&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;and then, configure it through the appropriate generator:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails generate responders:install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You will see these changes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  lib/application_responder.rb
+prepend  app/controllers/application_controller.rb
+inject  app/controllers/application_controller.rb
+create  config/locales/responders.en.yml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;what we will use is the last file &quot;responders.en.yml&quot;, this file contains the messages for each action of the responders, and it looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;en:
+  flash:
+    actions:
+      create:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully created.&amp;#39;&lt;/span&gt;
+      update:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully updated.&amp;#39;&lt;/span&gt;
+      destroy:
+        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully destroyed.&amp;#39;&lt;/span&gt;
+        alert: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} could not be destroyed.&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.&lt;/p&gt;
+
+&lt;p&gt;Ok, so, back to the controller, yo could define the create action as follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
+  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And this way you get everything, including the flash notice.&lt;/p&gt;
+
+&lt;p&gt;So, in the end, this could be your complete RESTFUL controller:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
+  respond_to :html
+
+  def index
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+
+  def new
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+
+  def create
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+
+  def edit
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+
+  def update
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant.update_attributes&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
+  end
+  
+  def destroy
+    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
+    @variant.destroy
+    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  end
+  
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;What else?&lt;/h2&gt;
+
+&lt;p&gt;Well, if you want to define a particular response by default, you could set it in your &quot;routes.rb&quot; like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;resources :variants, :defaults &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt;, :format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.&lt;/p&gt;
+
+&lt;p&gt;Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit &lt;a href=&quot;http://ryandaigle.com/&quot;&gt;Ryan Daigle's&lt;/a&gt; posts, they are really helpful.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Rack Introduction</title>
+   <link href="http://blog.crowdint.com/2010/11/01/rack-introduction.html"/>
+   <updated>2010-11-01T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2010/11/01/rack-introduction</id>
+   <content type="html">&lt;h1&gt;Implementing Rack&lt;/h1&gt;
+
+&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full
+stack of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build standalone applications that
+can be plugged in Rails, Sinatra and many other &lt;em&gt;Rack based frameworks&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Rack is one of those &quot;bare minimum components&quot; that you need for creating modular web
+applications, furthermore, by learning Rack you begin mastering part of the &lt;em&gt;Rails internals&lt;/em&gt;, why?,
+because of &lt;strong&gt;Rails&lt;/strong&gt; has adopted the &lt;em&gt;Rack philosophy&lt;/em&gt; throughout its framework, a Rails application is actually
+&lt;em&gt;a collection of Rack and Rails middleware components&lt;/em&gt; that all work together to form the completed
+whole.&lt;/p&gt;
+
+&lt;p&gt;In this article I'll guide you through the process of installing Rack, letting you know what every rack
+application must implement/provide and creating a rack application, in the process I'll explain some
+concepts with a design pattern interpretation of rack and finally we'll see an integrating example
+of the whole story.&lt;/p&gt;
+
+&lt;p&gt;Let's begin.&lt;/p&gt;
+
+&lt;h2&gt;Installing Rack&lt;/h2&gt;
+
+&lt;p&gt;Just install the rack gem, as simple as:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Basic requirements&lt;/h2&gt;
+
+&lt;p&gt;A Rack application is a &lt;strong&gt;Ruby object&lt;/strong&gt; that &lt;strong&gt;respond_to? 'call'&lt;/strong&gt;, it takes exactly &lt;em&gt;one argument&lt;/em&gt;:
+&lt;strong&gt;the environment&lt;/strong&gt;, and &lt;em&gt;returns&lt;/em&gt; an &lt;strong&gt;Array&lt;/strong&gt; of exactly &lt;strong&gt;three values&lt;/strong&gt;: &lt;strong&gt;http status&lt;/strong&gt;, &lt;strong&gt;http
+headers&lt;/strong&gt;, and &lt;strong&gt;http body&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The headers and body returned by call have to &lt;strong&gt;respond_to? 'each'&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So basically anything like the following may act as a rack application:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rack_app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Of course, there are more things that you need to check in order to make your application
+&lt;strong&gt;Rack compliant&lt;/strong&gt;, but we'll get to that later.&lt;/p&gt;
+
+&lt;p&gt;Now we are going to build a classic example application.&lt;/p&gt;
+
+&lt;h2&gt;Hello World example&lt;/h2&gt;
+
+&lt;p&gt;In this example, it returns a three element Array, array's elements in order are: 200 HTTP
+successful response code, a text/html content type and the HTTP response body with a &quot;Hello
+World&quot; message.&lt;/p&gt;
+
+&lt;p&gt;Open a file, call it &lt;em&gt;hello_world.ru&lt;/em&gt;, and write following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; 
+     &lt;span class=&quot;s1&quot;&gt;&amp;#39;Hello World&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In order to run it, I'll first send the &lt;em&gt;rackup hello_world.ru&lt;/em&gt; to background, next using &lt;em&gt;curl&lt;/em&gt;
+we'll send a request to localhost:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ..&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup hello_world.ru &amp;amp;
+  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 12508
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:9292
+  127.0.0.1 - - &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;05/Nov/2010 12:07:54&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;GET / HTTP/1.1&amp;quot;&lt;/span&gt; 200 - 0.0008
+  Hello World
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And there we have our &lt;strong&gt;Hello World&lt;/strong&gt; message from the &lt;em&gt;http body&lt;/em&gt; example.&lt;/p&gt;
+
+&lt;h2&gt;Basic API&lt;/h2&gt;
+
+&lt;p&gt;Before going on to the next examples, you need to know that rack applications usually call
+following methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;use(middleware, **args, &amp;amp;block)&lt;/em&gt; adds a middleware to the stack&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;run(app)&lt;/em&gt; dispatches to an application&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;map(path, &amp;amp;block)&lt;/em&gt; constructs a Rack::URLMap in a convenient way&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
+many rack applications.&lt;/p&gt;
+
+&lt;h2&gt;Middleware&lt;/h2&gt;
+
+&lt;p&gt;A middleware is a Rack application that is &lt;em&gt;designed&lt;/em&gt; to &lt;em&gt;run&lt;/em&gt; in &lt;em&gt;conjunction&lt;/em&gt; with another Rack
+application that acts as the &lt;em&gt;endpoint&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Think of a Rack middleware as a filter &lt;em&gt;receiving&lt;/em&gt; the Rack environment for the request
+from the previous &lt;em&gt;middleware, then doing some work with or on the &lt;/em&gt;request's environment&lt;em&gt;
+and then &lt;/em&gt;calling&lt;em&gt; the &lt;/em&gt;next middleware&lt;em&gt; in the chain. The &lt;/em&gt;last&lt;em&gt; Rack application in the
+chain is the &lt;/em&gt;application itself&lt;em&gt;, &lt;/em&gt;any&lt;em&gt; middleware in the chain can &lt;/em&gt;return the Rack response
+itself&lt;em&gt;, thus &lt;/em&gt;preventing&lt;em&gt; the rest of the middlewares in the chain from &lt;/em&gt;executing*.&lt;/p&gt;
+
+&lt;p&gt;Now let's build and chain three rack applications/middlewares, one &lt;em&gt;lambda endpoint&lt;/em&gt; and two &lt;em&gt;call&lt;/em&gt;
+responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
+&lt;em&gt;design pattern&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Chaining Rack applications example&lt;/h2&gt;
+
+&lt;p&gt;Our endpoint application is just like the previous Hello World example but it returns an
+&quot;I'm an endpoint&quot; body.&lt;/p&gt;
+
+&lt;p&gt;The point here is to show how three different objects (middlewares) are chained, classes
+&lt;em&gt;SayHi&lt;/em&gt; and &lt;em&gt;SayNothing&lt;/em&gt; will simply append a message to the response body, in the end, the returned
+request body will contain the message added by each middleware.&lt;/p&gt;
+
+&lt;p&gt;In order to avoid code repetition we'll define the common code that is inside the Initializer module
+and then we'll mix it in each class using &lt;strong&gt;Module#include&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Initializer&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; 
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Hi from &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayHi&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SayNothing&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Initializer&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayHi&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SayNothing&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;I&amp;#39;m the endpoint&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Let's test it using &lt;em&gt;rackup&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup  simple_stacked.ru  -p 1111 &amp;amp;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 19216
+
+...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
+I&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;m the endpoint
+Hi from SayNothing
+Hi from SayHi...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The response shows the endpoint's message on the first line, plus the SayNothing response,
+plus the SayHi response. As you can see all the applications interacted directly with the
+request and its response.&lt;/p&gt;
+
+&lt;h2&gt;Decorator pattern&lt;/h2&gt;
+
+&lt;p&gt;It is important to note that Rack applications follow a decorator pattern, where each application
+receives an &lt;em&gt;Array of three elements and returns an Array of three elements&lt;/em&gt;, this Array must follow
+the specification we discussed above.&lt;/p&gt;
+
+&lt;p&gt;This pattern allows components to receive/add behavior dynamically using a common interface. If
+you want to learn more about the subject I recommend you go through &lt;a href=&quot;http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html&quot;&gt;Luke Redpath's excellent
+article&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The following gist intends to show a very basic decorator implementation &lt;strong&gt;MyBaseApp&lt;/strong&gt;
+that initializes with a three elements array mimicking a Rack Application, that application will be
+decorated with HTML and JSON outputs:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/668084.js&quot;&gt; &lt;/script&gt;
+
+
+&lt;p&gt;Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
+which one fits your needs.&lt;/p&gt;
+
+&lt;h2&gt;Creating valid Rack applications&lt;/h2&gt;
+
+&lt;p&gt;Every Rack application must follow the &lt;a href=&quot;http://rack.rubyforge.org/doc/SPEC.html&quot;&gt;Rack Spec&lt;/a&gt;,
+Rack helps you to follow it by proving a &lt;strong&gt;Rack::Lint&lt;/strong&gt; middleware, you should include it in your
+application in order to make it &lt;strong&gt;Rack complain&lt;/strong&gt;. By running your application using &lt;strong&gt;rackup&lt;/strong&gt;
+command line tool, you are already using it, otherwise include it with a:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Lint&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Also, you may test your application with &lt;a href=&quot;http://relishapp.com/rspec&quot;&gt;RSpec&lt;/a&gt;, the following is an
+example I'm working on based on the Rack Spec:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/668111.js&quot;&gt; &lt;/script&gt;
+
+
+&lt;p&gt;Now, let's implement and tie everything together with the next example:&lt;/p&gt;
+
+&lt;h2&gt;Static file server with Haml support example&lt;/h2&gt;
+
+&lt;p&gt;Imagine your application returns files from a certain folder, just like a file server, but,
+whenever these files have a &lt;a href=&quot;http://haml-lang.com/&quot;&gt;Haml&lt;/a&gt; extension they will be parsed and
+rendered as html.&lt;/p&gt;
+
+&lt;p&gt;We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
+start!.&lt;/p&gt;
+
+&lt;h3&gt;Step 1. Serving static files&lt;/h3&gt;
+
+&lt;p&gt;Create a &lt;em&gt;file_server.rb&lt;/em&gt; file, and put following code in it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now create a &lt;em&gt;public&lt;/em&gt; folder and a &lt;em&gt;index.html&lt;/em&gt; file inside and fill in this html file with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;The index file&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+      The body
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now let's test it using &lt;em&gt;rackup&lt;/em&gt; and &lt;em&gt;curl&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup file_server.ru -p 1111 &amp;amp;
+  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 17882
+
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111
+  File not found: /
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl localhost:1111/index.html
+  &amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+      &amp;lt;title&amp;gt;The index file&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+      The body
+    &amp;lt;/body&amp;gt;
+  &amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It works, now we have a static files server.&lt;/p&gt;
+
+&lt;h3&gt;Step 2. Serve haml files as html&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rack/file&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyHaml&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;PATH_INFO&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/\.haml$/&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Length&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Content-Type&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Haml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;full_body&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;traverse_body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyHaml&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Our call method basically looks for request paths where the file name has a haml extension,
+we have to change the content length and type to match what the response is returning,
+here we are using &lt;em&gt;traverse_body&lt;/em&gt; method just to read through the previous response body,
+since it is a &lt;em&gt;Rack::File&lt;/em&gt; instance.&lt;/p&gt;
+
+&lt;p&gt;In order to test this, create an &lt;em&gt;index.haml&lt;/em&gt; file inside public folder and fill it in with
+following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;  !!!
+  %html
+    %head
+      %title The index from a haml file
+    %body
+      The haml body
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Let's test it with &lt;em&gt;rackup&lt;/em&gt; and &lt;em&gt;curl&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup file_server.ru -p 1111 &amp;amp;
+  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 19132
+
+  ...&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl  localhost:1111/index.haml
+  &amp;lt;!DOCTYPE html PUBLIC &lt;span class=&quot;s2&quot;&gt;&amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;&lt;/span&gt;&amp;gt;
+  &amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+      &amp;lt;title&amp;gt;The index from a haml file&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+      The haml body
+    &amp;lt;/body&amp;gt;
+  &amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;There's lot more to learn about, for example :&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ruby and Rails integration&lt;/li&gt;
+&lt;li&gt;Ruby and Rails rack architecture&lt;/li&gt;
+&lt;li&gt;Lots of other Rack utilities&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I'll go through these examples in future articles, for now I think this is enough.
+Feel free to send me your comments, additions, resources or complaints. I will certainly
+look forward to them.&lt;/p&gt;
+
+&lt;p&gt;Thanks for your reading and remember, others sources codes are sometimes your best teachers.&lt;/p&gt;
+
+&lt;p&gt;Regards&lt;/p&gt;
+</content>
+   <author>
+     <name>Emmanuel Delgado</name>
+     <email>emmanuel.delgado@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Ignoring files with Git</title>
+   <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
+   <updated>2010-11-01T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
+   <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
+
+&lt;p&gt;Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name &quot;.gitignore&quot;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;touch .gitignore
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;On this file you can include those files you do not want to be tracked by git:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;some_file.rb
+*.log
+doc/**/*
+public/images/system/**/*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you see, you can include the file name or include wildcards to select several files.&lt;/p&gt;
+
+&lt;p&gt;Git by default ignores empty folders, so if your application requires a folder to exist, you just need to create a blank .gitignore file.&lt;/p&gt;
+
+&lt;p&gt;But what if you must include a file inside a folder among others you want to ignore? such as config files, or whatever. Then you may want to prevent git from ignoring those files:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;config/*
+!config/a_special_file.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will tell git to ignore all the files, except for the one that is marked with a bang (!).&lt;/p&gt;
+
+&lt;p&gt;I hope this is helpful for someone.&lt;/p&gt;
+</content>
+   <author>
+     <name>Daniel Gaytán</name>
+     <email>daniel@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Working with PostgreSQL and Rails3</title>
+   <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
+   <updated>2010-10-27T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
+   <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.&lt;/p&gt;
+
+&lt;p&gt;OK so, let's begin with our brief trip&lt;/p&gt;
+
+&lt;h2&gt;Installing Ruby&lt;/h2&gt;
+
+&lt;p&gt;I'd personally recommend using &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rvm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;and switch to that ruby version by running:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm 1.8.7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Installing Rails&lt;/h2&gt;
+
+&lt;p&gt; When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create &lt;em&gt;&amp;lt;gemset_name&gt;&lt;/em&gt;' and 'rvm gemset use &lt;em&gt;&amp;lt;gemset_name&gt;&lt;/em&gt;', so after this we do:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install rails --version 3.0.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2&gt;Installing PostgreSQL with Visual Administrator&lt;/h2&gt;
+
+&lt;p&gt;Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt; Aditionally you can install &lt;em&gt;'pgadmin'&lt;/em&gt; visual management tool to make queries, add users or manage any other information from your databases with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install pgadmin3 postgresql-doc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
+ As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;pg&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And run the bundler:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And in your &lt;em&gt;'config/database.yml'&lt;/em&gt; file use &lt;em&gt;'postgresql'&lt;/em&gt; as your adapter for each environment.&lt;/p&gt;
+
+&lt;p&gt;You could use &lt;em&gt;'postgres'&lt;/em&gt; as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo -u postgres psql template1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATEDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATEUSER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ENCRYPTED&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PASSWORD&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;password&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I put some words in capital so you can identify the reserved words that PostgreSQL uses and in &lt;em&gt;&amp;lt;&gt;&lt;/em&gt; tags you can put your own information.
+So this will create a user with database and user creation permissions with a defined password.&lt;/p&gt;
+
+&lt;p&gt;But if you opted to keep using &lt;em&gt;'postgres'&lt;/em&gt; user, you can always change the password with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ENCRYPTED&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PASSWORD&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;new_password&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Note: Don't forget to put &lt;em&gt;';' (semicollon)&lt;/em&gt; at the end of each instruction in PostgreSQL console&lt;/p&gt;
+
+&lt;h2&gt;Configuring our database.yml to use PostgreSQL adapter&lt;/h2&gt;
+
+&lt;p&gt;And finally, we have to put that information into your &lt;em&gt;'config/database.yml'&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;development_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postgresql&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;production_database_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to &lt;em&gt;follow the BDD with Cucumber and RSpec cycle!&lt;/em&gt; That's very important!&lt;/p&gt;
+
+&lt;p&gt;This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Velasco</name>
+     <email>luis.velasco@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Improve your SEO with a sitemap</title>
+   <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
+   <updated>2010-10-22T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
+   <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
+
+&lt;p&gt;There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.&lt;/p&gt;
+
+&lt;p&gt;Let's use Rails to dynamically generate a sitemap on request.&lt;/p&gt;
+
+&lt;p&gt;In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sitemap&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;ss&quot;&gt;:select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;path, updated_at&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+        &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;active = ?&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+        &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;updated_at DESC&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;layouts/sitemap&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instruct!&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urlset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:xmlns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://www.sitemaps.org/schemas/sitemap/0.9&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;http://www.mywebsite.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xmlschema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;changefreq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;weekly&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;0.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:only_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xmlschema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;changefreq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;weekly&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;0.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter &lt;em&gt;:only_path =&gt; false&lt;/em&gt; is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.&lt;/p&gt;
+
+&lt;p&gt;The parameters of the xml are straightforward:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;loc&lt;/em&gt; is the url&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;lastmod&lt;/em&gt; is the last modified date of that url&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;changefreq&lt;/em&gt; is how often this url is updated&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;priority&lt;/em&gt; is the importance of this url compared to the rest of the urls in our website&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;As a final step, we add the route to the sitemap in &lt;em&gt;config/routes.rb&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.&lt;/p&gt;
+
+&lt;p&gt;If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.&lt;/p&gt;
+
+&lt;p&gt;Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!&lt;/p&gt;
+</content>
+   <author>
+     <name>Roberto Sanchez</name>
+     <email>roberto.sanchez@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Magma Rails 2010, a success!</title>
+   <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
+   <updated>2010-10-18T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
+   <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;We will be posting all the pictures, slides and videos in the &lt;a href=&quot;http://www.magmarails.com&quot;&gt;official Magma Rails site&lt;/a&gt; as soon as we're done organizing and encoding everything.&lt;/p&gt;
+
+&lt;p&gt;However, if you are impatient, you can take a peek at what it was like through it's &lt;a href=&quot;http://bit.ly/bm3a4J&quot;&gt;Hashalbum&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.&lt;/p&gt;
+
+&lt;p&gt;We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to &lt;em&gt;info@magmarails.com&lt;/em&gt;, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )&lt;/p&gt;
+
+&lt;div style=&quot;text-align:center; margin: 10px&quot;&gt;
+  &lt;a href=&quot;http://www.magmarails.com&quot;&gt;&lt;img src=&quot;/images/2010/10/18/entrance.jpg&quot; /&gt;&lt;/a&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Thanks again to everyone involved.&lt;/p&gt;
+
+&lt;p&gt;Hope to see you next year!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Magma Rails is just around the corner!</title>
+   <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
+   <updated>2010-10-07T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
+   <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
+
+&lt;p&gt;Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.&lt;/p&gt;
+
+&lt;div style=&quot;text-align:center&quot;&gt;
+  &lt;a href=&quot;http://www.magmarails.com&quot;&gt;&lt;img src=&quot;/images/2010/10/07/bluetooth.png&quot; /&gt;&lt;/a&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;More info on the site: &lt;a href=&quot;http://www.magmarails.com&quot;&gt;http://www.magmarails.com&lt;/a&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Negative Code</title>
+   <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
+   <updated>2010-09-28T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
+   <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
+
+&lt;p&gt;As astonished as I was at that time, I took a few seconds to ask my old fellow (&lt;a href=&quot;http://www.google.com&quot;&gt;G...&lt;/a&gt;) &quot;what is negative code?&quot;. Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found &lt;a href=&quot;http://stackoverflow.com/questions/3800707/what-is-negative-code&quot;&gt;this&lt;/a&gt; discussion at &lt;a href=&quot;http://stackoverflow.com&quot;&gt;stackoverflow&lt;/a&gt;. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:&lt;/p&gt;
+
+&lt;p&gt;  &quot;...reducing lines of code, by removing redundancies or using more concise constructs&quot;.&lt;/p&gt;
+
+&lt;p&gt;Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, &quot;Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!&quot;.&lt;/p&gt;
+
+&lt;p&gt;A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:&lt;/p&gt;
+
+&lt;p&gt;  &quot;When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put &quot;-2000&quot; on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied.&quot;&lt;/p&gt;
+
+&lt;p&gt;Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:&lt;/p&gt;
+
+&lt;p&gt;&quot;Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!&quot;.&lt;/p&gt;
+
+&lt;p&gt;Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.&lt;/p&gt;
+
+&lt;p&gt;Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?&lt;/p&gt;
+
+&lt;p&gt;Well, there are two solutions.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.&lt;/li&gt;
+&lt;li&gt;Or we just simply throw away that old code and we remake it. Writing lean code, &quot;same result less code&quot;.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;All those LOC we &quot;saved&quot;, or that we didn't write, that is negative code.&lt;/p&gt;
+
+&lt;p&gt;We usually fall in a hole when someone says &quot;do not re-invent the wheel, re-use&quot;. That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.&lt;/p&gt;
+
+&lt;p&gt;Remember, the less code you use, the less code you maintain!&lt;/p&gt;
+
+&lt;p&gt;I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>First contact with regular expressions</title>
+   <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
+   <updated>2010-09-22T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
+   <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
+
+&lt;p&gt;They are built within forward slashes and they even have their own class&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; Regexp&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Taxonomy of a Regular Expression&lt;/h2&gt;
+
+&lt;p&gt;If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Also, in Ruby you can express a regular expression in two alternate ways:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;%r{expression}o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Regexp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;pattern&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;em&gt;match&lt;/em&gt; method and the operator &lt;em&gt;=~&lt;/em&gt; can be used to verify if a string matches a regular expression:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/Example/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Example of a Regexp&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;Example&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; MatchData&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;When using the &lt;em&gt;match&lt;/em&gt; method, the returned value is the matched string or &lt;em&gt;nil&lt;/em&gt; if no match was found. The class of the object that received the assignment is &lt;em&gt;MatchData&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Building regular expressions&lt;/h2&gt;
+
+&lt;p&gt;To start building our own regular expressions, there is a couple of lists we have to become familiar with:&lt;/p&gt;
+
+&lt;h3&gt;1. Special Characters&lt;/h3&gt;
+
+&lt;p&gt;Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is &lt;strong&gt;\&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h4&gt;Special characters list&lt;/h4&gt;
+
+&lt;p&gt;^&lt;br/&gt;
+$&lt;br/&gt;
+?&lt;br/&gt;
+.&lt;br/&gt;
+/&lt;br/&gt;
+\&lt;br/&gt;
+[&lt;br/&gt;
+]&lt;br/&gt;
+{&lt;br/&gt;
+}&lt;br/&gt;
+(&lt;br/&gt;
+)&lt;br/&gt;
++&lt;br/&gt;
+*&lt;/p&gt;
+
+&lt;h3&gt;2. Types of expressions&lt;/h3&gt;
+
+&lt;p&gt;The most common patterns we can specify in a regular expressions are included in the following table:&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;expression&lt;/th&gt;
+        &lt;th&gt;meaning&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+        &lt;td&gt;.&lt;/td&gt;
+        &lt;td&gt;any character&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+        &lt;td&gt;[ ]&lt;/td&gt;
+        &lt;td&gt;specify a range (e.g. [a-z] means a letter from a to z)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+        &lt;td&gt;\w&lt;/td&gt;
+        &lt;td&gt;letter or digit; same as [0-9A-Za-z]&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+        &lt;td&gt;\W&lt;/td&gt;
+        &lt;td&gt;any character but letter or a number&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+        &lt;td&gt;\s&lt;/td&gt;
+        &lt;td&gt;space character; same as [ \t\n\r\f]&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\S&lt;/td&gt;
+      &lt;td&gt;any character but a space space char&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\d&lt;/td&gt;
+      &lt;td&gt;a number; same as [0-9]&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\D&lt;/td&gt;
+      &lt;td&gt;any character but a number&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\b&lt;/td&gt;
+      &lt;td&gt;backspace (0x08), only within a range&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\b&lt;/td&gt;
+      &lt;td&gt;word limit, if NOT within a range&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;\B&lt;/td&gt;
+      &lt;td&gt;not word limit&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;*&lt;/td&gt;
+      &lt;td&gt;zero or more matches of the preceding&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;+&lt;/td&gt;
+      &lt;td&gt;one or more matches of the preceding&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;^&lt;/td&gt;
+      &lt;td&gt;matches the beginning of a line&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;$&lt;/td&gt;
+      &lt;td&gt;matches the end of a line&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;\A&lt;/td&gt;
+        &lt;td&gt;matches the beginning of the string&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;\z&lt;/td&gt;
+        &lt;td&gt;matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')&lt;/td&gt;
+  &lt;tr&gt;
+      &lt;td&gt;{m[,n]}&lt;/td&gt;
+      &lt;td&gt;at least 'm', topping 'n' matches of the preceeding ('n' is optional)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;?&lt;/td&gt;
+      &lt;td&gt;at least one match of the preceeding (same as {1})&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;tr&gt;
+      &lt;td&gt;( )&lt;/td&gt;
+      &lt;td&gt;group expressions&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;|&lt;/td&gt;
+        &lt;td&gt;logical operator 'or', in [a|b] looks for a OR b&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+
+&lt;h2&gt;Common examples&lt;/h2&gt;
+
+&lt;h3&gt;The e-mail address&lt;/h3&gt;
+
+&lt;p&gt;This is a very common pattern example (it's the one that you get by default in &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;First, '\A' makes sure to match the string against the start of string; then ([&lt;sup&gt;@\s]+)&lt;/sup&gt; groups the recipient's name, avoiding @ character and space characters.&lt;/p&gt;
+
+&lt;p&gt;After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.&lt;/p&gt;
+
+&lt;p&gt;Finally, the '\Z' makes sure to match the end of line&lt;/p&gt;
+
+&lt;h3&gt;The phone number&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\((\d{3})\)\s+(\d{3})-(\d{4})/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.&lt;/p&gt;
+
+&lt;h2&gt;Where to look for more information&lt;/h2&gt;
+
+&lt;p&gt;The star of these links is &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;
+but there are some few more useful links to look at:
+&lt;a href=&quot;http://www.regular-expressions.info/ruby.html&quot;&gt;http://www.regular-expressions.info/ruby.html&lt;/a&gt;
+&lt;a href=&quot;http://www.rubyist.net/~slagell/ruby/regexp.html&quot;&gt;http://www.rubyist.net/~slagell/ruby/regexp.html&lt;/a&gt;
+&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&lt;/a&gt;
+&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&lt;/a&gt;
+&lt;a href=&quot;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&quot;&gt;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Enjoy!&lt;/p&gt;
+</content>
+   <author>
+     <name>Francisco Guzm&amp;aacute;n</name>
+     <email>francisco.guzman@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Installing gems skipping RDoc and RI</title>
+   <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
+   <updated>2010-09-17T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
+   <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
+
+&lt;p&gt;Personally, I've never used the RDoc included on gem installations.&lt;/p&gt;
+
+&lt;p&gt;If I need info about a class, method, module, I ask uncle &lt;em&gt;Google&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.&lt;/p&gt;
+
+&lt;p&gt;So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.&lt;/p&gt;
+
+&lt;p&gt;It is as simple as, opening or creating a &lt;em&gt;.gemrc&lt;/em&gt; file in your home directory, and adding the following line:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem: --no-rdoc --no-ri
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.&lt;/p&gt;
+
+&lt;p&gt;There you go, enjoy!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Customize your Generators Workflow in Rails 3.0.0</title>
+   <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
+   <updated>2010-09-10T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
+   <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
+
+&lt;p&gt;We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?&lt;/p&gt;
+
+&lt;p&gt;Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.&lt;/p&gt;
+
+&lt;p&gt;So, let's try an example:&lt;/p&gt;
+
+&lt;h2&gt;Hands on!&lt;/h2&gt;
+
+&lt;p&gt;First, we need to create a new Rails Project:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails new g_test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails new g_test -T
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;group :test &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;gem &lt;span class=&quot;s2&quot;&gt;&amp;quot;rspec-rails&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;gt;= 2.0.0.beta.19&amp;quot;&lt;/span&gt;
+  gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-rails&amp;#39;&lt;/span&gt;
+  gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
+end
+
+gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml-rails&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then, we just need to install our gems to start playing with our generators:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And, that's it! Now we have a perfect (almost) environment to work with.&lt;/p&gt;
+
+&lt;h2&gt;Generators&lt;/h2&gt;
+
+&lt;p&gt;Now, let's invoke a Rails generator to create a new controller called Test:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g controller Test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This function is just going to invoke many other generators, to create something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  app/controllers/test_controller.rb
+invoke  haml
+create    app/views/test
+invoke  test_unit
+create    &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/functional/test_controller_test.rb
+invoke  helper
+create    app/helpers/test_helper.rb
+invoke    test_unit
+create      &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/unit/helpers/test_helper_test.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g cucumber:install
+rails g rspec:install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then, just add these lines to our '~/application.erb'&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;config.generators &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |g|
+  g.test_framework :rspec
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If we try to generate a new controller called RspecTest something like this will show up:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g controller RspecTest
+create  app/controllers/rspec_test_controller.rb
+invoke  haml
+create    app/views/rspec_test
+invoke  rspec
+create    spec/controllers/rspec_test_controller_spec.rb
+invoke  helper
+create    app/helpers/rspec_test_helper.rb
+invoke    rspec
+create      spec/helpers/rspec_test_helper_spec.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;We could also specify that we don't want to create view specs just by adding ':views =&gt; false' in our '~/application.erb' like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;g.test_framework :rspec, :views &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g generator my_test_method
+create  lib/generators/my_test_method
+create  lib/generators/my_test_method/my_test_method_generator.rb
+create  lib/generators/my_test_method/USAGE
+create  lib/generators/my_test_method/templates
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named &quot;generators&quot; is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.&lt;/p&gt;
+
+&lt;p&gt;What commands can you use inside your generator? Rails 3 generators were created on top of &lt;a href=&quot;http://github.com/wycats/thor&quot;&gt;Thor&lt;/a&gt;, so you could check Thor &lt;a href=&quot;http://rdoc.info/github/wycats/thor/master&quot;&gt;documentation&lt;/a&gt;, and also there is a great document you can follow on &lt;a href=&quot;http://edgeguides.rubyonrails.org/generators.html&quot;&gt;RailsGuides&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Anyway, if you want to know more about an specific generator, you could use this command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;generator_name&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; -h
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the &lt;a href=&quot;http://github.com/indirect/rails3-generators&quot;&gt;rails3-generators&lt;/a&gt; gem, there are many helpful generators that can make your coding more DRY.&lt;/p&gt;
+
+&lt;p&gt;By the way, there are other things I can't make them to do. For example, if I try to use &quot;my_test_method_generator&quot; as follows, I get an error:&lt;/p&gt;
+
+&lt;p&gt;in &quot;application.rb&quot;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;g.helper :myhelper
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;in you terminal:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g controller &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;name&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+...
+error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.&lt;/p&gt;
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>A simple way to setup a class for global values</title>
+   <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
+   <updated>2010-09-06T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
+   <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
+
+&lt;h2&gt;Setting up the class&lt;/h2&gt;
+
+&lt;p&gt;It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;AppConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;YAML&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;RAILS_ROOT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;app_config.yml&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will open up the class AppConfig with several attributes for you to use throughout your app, for example:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;app_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;My&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;application&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;base_domain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;twitter_app_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The class' attributes will be available as a hash:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;app_name&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;My application name&amp;quot;&lt;/span&gt;
+
+AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;base_domain&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;myapp.com&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;My&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;application&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;base_domain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;twitter_app_dev_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;twitter_app_dev_secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;secret&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;twitter_app_prod_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;twitter_app_prod_secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;secret&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now your class has some hashes values like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;development&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter_app_prod_key&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;Your app key&amp;quot;&lt;/span&gt;
+
+AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter_prod_secret&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;Your app secret&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Enjoy!&lt;/h2&gt;
+</content>
+   <author>
+     <name>Francisco Guzm&amp;aacute;n</name>
+     <email>francisco.guzman@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Open and watch specific git branches using gitx</title>
+   <link href="http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"/>
+   <updated>2010-08-31T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/31/open-and-watch-specific-git-branches-using-gitx</id>
+   <content type="html">&lt;p&gt;It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called &lt;em&gt;branchitis&lt;/em&gt;, and it happens to everyone at some point.&lt;/p&gt;
+
+&lt;p&gt;If you're lucky enough to be working on a Mac, odds are that you're using &lt;a href=&quot;http://gitx.frim.nl/&quot;&gt;gitx&lt;/a&gt; to watch over your git repos. You're not?! Shame on you.&lt;/p&gt;
+
+&lt;p&gt;Anyway, so, you open gitx, and all you see is a bowl of spaghetti&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2010/08/31/a.jpg&quot; alt=&quot;Bowl of Spaghetti&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitx feature2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/2010/08/31/b.jpg&quot; alt=&quot;One branch&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?&lt;/p&gt;
+
+&lt;p&gt;So, let's say you want to merge the &lt;em&gt;feature2&lt;/em&gt; and the &lt;em&gt;feature5&lt;/em&gt; branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify &lt;em&gt;both&lt;/em&gt; branches as the arguments.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gitx feature2 feature5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then you'd get something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2010/08/31/c.jpg&quot; alt=&quot;Two branches&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.&lt;/p&gt;
+
+&lt;p&gt;In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.&lt;/p&gt;
+
+&lt;p&gt;Hope this helps you in some way,&lt;/p&gt;
+
+&lt;p&gt;Cheers.&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Benchmarking thin vs unicorn</title>
+   <link href="http://blog.crowdint.com/2010/08/26/thin-vs-unicorn.html"/>
+   <updated>2010-08-26T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/26/thin-vs-unicorn</id>
+   <content type="html">&lt;p&gt;Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.&lt;/p&gt;
+
+&lt;p&gt;But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.&lt;/p&gt;
+
+&lt;p&gt;Let's start with my nginx.conf, it looks like this &lt;a href=&quot;/extras/2010/08/26/nginx.conf.txt&quot;&gt;nginx.conf&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create thin_test
+
+info: Gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;thin_test&amp;#39;&lt;/span&gt; created.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use thin_test
+
+info: Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;thin_test&amp;#39;&lt;/span&gt;
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Fetching &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;index from http://rubygems.org/
+Installing RedCloth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4.2.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing active_presenter &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.2.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing crack &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing httparty &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.6.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing bitly &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.5.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing cgi_multipart_eof_fix &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.5.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing columnize &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.3.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing curb &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.7.7.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing daemons &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.1.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing delayed_job &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing fastercsv &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.5.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing fastthread &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.7&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing gem_plugin &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.2.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing handsoap &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.1.7&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing json &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.4.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing linecache &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.43&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing mash &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing mime-types &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.16&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing mysql &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.8.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing nokogiri &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.4.3.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing oauth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.4.2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing packet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.1.15&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing rmagick &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.13.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug-base &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.10.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing twitter &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.6.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Installing twitter_oauth &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.4.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; from rubygems repository at http://rubygems.org/ 
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! Use &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;bundle show &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;gemname&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; to see where a bundled gem is installed.
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri thin
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Successfully installed rack-1.2.1
+Successfully installed eventmachine-0.12.10
+Successfully installed thin-1.2.7
+3 gems installed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby -v
+ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-06-23 patchlevel 299&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;i686-darwin10.3.1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;thin -e production -p 3000 -d start
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 10 -c 10 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      10
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   0.713 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817362 bytes
+HTML transferred:       813850 bytes
+Requests per second:    14.02 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       713.256 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       71.326 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          1119.10 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       0
+Processing:   711  712   0.5    713     713
+Waiting:      710  711   0.6    711     712
+Total:        711  713   0.4    713     713
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    713
+  66%    713
+  75%    713
+  80%    713
+  90%    713
+  95%    713
+  98%    713
+  99%    713
+ 100%    713 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!&lt;/p&gt;
+
+&lt;p&gt;Now let's work with Unicorn:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create unicorn_test
+
+info: Gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;unicorn_test&amp;#39;&lt;/span&gt; created.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use unicorn_test
+
+info: Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;unicorn_test&amp;#39;&lt;/span&gt;
+gecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Fetching &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;index from http://rubygems.org/
+   &lt;span class=&quot;c&quot;&gt;#same gems&lt;/span&gt;
+   
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! Use &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;bundle show &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;gemname&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; to see where a bundled gem is installed.
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install --no-rdoc --no-ri unicorn
+Building native extensions.  This could take a &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;...
+Successfully installed rack-1.2.1
+Successfully installed unicorn-1.1.2
+2 gems installed
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Done... I love bundler, I really do, OK, let's continue with our tests:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+
+ecruz@ecruz-mbp:~ &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      10
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   0.737 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817581 bytes
+HTML transferred:       813910 bytes
+Requests per second:    13.56 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       737.212 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       73.721 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          1083.02 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       0
+Processing:    47  332 227.5    406     736
+Waiting:       47  332 227.5    406     736
+Total:         48  332 227.4    406     737
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    406
+  66%    436
+  75%    480
+  80%    510
+  90%    737
+  95%    737
+  98%    737
+  99%    737
+ 100%    737 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:&lt;/p&gt;
+
+&lt;p&gt;I've adjusted my nginx.conf to support multiples thins&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;upstream balancer_thin &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  server 127.0.0.1:3000;
+  server 127.0.0.1:3001;
+  server 127.0.0.1:3002;
+  server 127.0.0.1:3003;
+  server 127.0.0.1:3004;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And I started 5 thins listening in ports 3000-3004&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;thin -e production -p 3000 -d -s 5 start
+Starting server on 0.0.0.0:3000 ... 
+Starting server on 0.0.0.0:3001 ... 
+Starting server on 0.0.0.0:3002 ... 
+Starting server on 0.0.0.0:3003 ... 
+Starting server on 0.0.0.0:3004 ... 
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 100 -c 15 http://ecomm/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      15
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   2.665 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8173616 bytes
+HTML transferred:       8138500 bytes
+Requests per second:    37.53 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       399.706 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       26.647 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2995.47 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       1
+Processing:    54  374 227.0    324     918
+Waiting:       51  271 167.3    232     708
+Total:         54  375 227.0    325     919
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    325
+  66%    494
+  75%    528
+  80%    594
+  90%    656
+  95%    858
+  98%    919
+  99%    919
+ 100%    919 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
+
+ecruz@ecruz-mbp:ecomm &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;prod&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unicorn_rails -p 8000 -E production
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.684992 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.685496 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=0 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.686348 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=1 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.687000 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=2 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.687786 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=3 spawning...&lt;/span&gt;
+I, &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2010-08-14T20:52:48.689268 &lt;span class=&quot;c&quot;&gt;#40603]  INFO -- : worker=4 spawning...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      15
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   2.672 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8175813 bytes
+HTML transferred:       8139100 bytes
+Requests per second:    37.42 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       400.860 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       26.724 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2987.65 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.1      0       1
+Processing:    69  368 165.3    334     642
+Waiting:       69  368 165.3    334     641
+Total:         69  368 165.3    334     642
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%    334
+  66%    504
+  75%    523
+  80%    543
+  90%    587
+  95%    614
+  98%    622
+  99%    642
+ 100%    642 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Look at that!!! the difference is minimal, this is a really huge surprise.&lt;/p&gt;
+
+&lt;p&gt;Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   31.030 seconds
+Complete requests:      1000
+Failed requests:        4
+   &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Connect: 0, Receive: 0, Length: 4, Exceptions: 0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Write errors:           0
+Total transferred:      81736483 bytes
+HTML transferred:       81385312 bytes
+Requests per second:    32.23 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       3102.981 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       31.030 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2572.39 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    1   1.0      0      10
+Processing:    55 3035 1467.6   2880    7831
+Waiting:       54 2433 1276.4   2202    7369
+Total:         55 3036 1468.1   2880    7833
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%   2880
+  66%   3314
+  75%   3584
+  80%   3794
+  90%   4485
+  95%   6825
+  98%   7073
+  99%   7369
+ 100%   7833 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Wow! my machine survived...&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   27.692 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      81758141 bytes
+HTML transferred:       81391000 bytes
+Requests per second:    36.11 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       2769.227 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       27.692 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2883.18 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.8      0       4
+Processing:    81 2639 441.8   2671    3178
+Waiting:       81 2638 441.8   2670    3172
+Total:         86 2639 441.1   2671    3179
+
+Percentage of the requests served within a certain &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  50%   2671
+  66%   2759
+  75%   2868
+  80%   2923
+  90%   2976
+  95%   3008
+  98%   3048
+  99%   3099
+ 100%   3179 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;longest request&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ecruz@ecruz-mbp:blog.crowdint.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edwin.cruz&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.&lt;/p&gt;
+
+&lt;p&gt;Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).&lt;/p&gt;
+
+&lt;h2&gt;Machine used:&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Processor: 2.4 GHz Intel Core i5
+Memory: 4GB 1067 MHz DDR3
+Mac OS X: 10.6.3
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+   <author>
+     <name>Edwin Cruz</name>
+     <email>edwin.cruz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>What I would've loved I had known when I first met Ruby</title>
+   <link href="http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html"/>
+   <updated>2010-08-20T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby</id>
+   <content type="html">&lt;h2&gt;Motivation&lt;/h2&gt;
+
+&lt;p&gt;Everytime I'm learning a new language, the first thing I try to learn is how this new language
+implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
+years; then I first heard about Ruby being a fully OOP language I got really excited, and
+when I got hands-on some existing Ruby code, things got confusing.&lt;/p&gt;
+
+&lt;p&gt;I would've liked to know all of this before looking at any Ruby code:&lt;/p&gt;
+
+&lt;h2&gt;First things first: Ruby Objects&lt;/h2&gt;
+
+&lt;p&gt;Things that we must know:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;And object is formed by: State + Behavior = Object&lt;/li&gt;
+&lt;li&gt;Everything in Ruby is an object, even nil which is &lt;em&gt;NilClass&lt;/em&gt;, false &lt;em&gt;FalseClass&lt;/em&gt;, true &lt;em&gt;TrueClass&lt;/em&gt; and modules&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;some&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;some&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Object&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;some&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;some&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NilClass&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;FalseClass&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;TrueClass&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Module&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;superclass&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Object&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
+and when I say objects, I really mean it. Consider the following code stored in test.rb file:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;outside&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inside&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Let's play with it using irb:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;./test&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outside&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outside&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Class&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inside&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&amp;lt;A:0x7ffc94046f58&amp;gt; &lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inside&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you can see both are &lt;em&gt;A&lt;/em&gt; objects whose type is &lt;em&gt;Class&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Those class names are constants containing references to objects:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&amp;lt;Class:0x7f8fdec83230&amp;gt; &lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Class&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Blabla&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Blabla&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Blabla&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Class&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p299&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Blabla&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&amp;lt;Blabla:0x7f8fdec77a70&amp;gt; &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Self&lt;/h2&gt;
+
+&lt;p&gt;When I first met Ruby I thought &quot;self&quot; was the same as &lt;em&gt;this&lt;/em&gt; (like in many other languages), and I was wrong, so lets
+see what it is:&lt;/p&gt;
+
+&lt;h4&gt;Default receiver of method calls&lt;/h4&gt;
+
+&lt;p&gt;Since everything in Ruby are objects, then all the function definitions we find defined all around
+and all those functions we call like &lt;a href=&quot;http://ruby-doc.org/core/classes/Kernel.html#M005961&quot;&gt;p&lt;/a&gt;,
+&lt;a href=&quot;http://ruby-doc.org/core/classes/Kernel.html#M005954&quot;&gt;puts&lt;/a&gt;, def, etc are method calls. Some may
+not be exactly defined inside a class but, in the end they will get either inherited or mixed in.&lt;/p&gt;
+
+&lt;p&gt;Look at following example:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1. Current receiver is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2. Current receiver is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;3. Current receiver is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;4. Current receiver is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;5. Current receiver is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Running this script we see:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;1. Current receiver is main&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;2. Current receiver is A&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;4. Current receiver is A&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;5. Current receiver is main&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h4&gt;Where instance variables are found&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance_variables&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Running this script we see:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;@b&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;@a&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Metaprogramming&lt;/h2&gt;
+
+&lt;p&gt;This is why I fell in love with ruby, it is a huge topic which I won't cover, but it allows you
+to write code that writes code lets see some examples:&lt;/p&gt;
+
+&lt;h4&gt;Create a &lt;em&gt;A Class&lt;/em&gt;, re-open it and see how it is the same object&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;method1&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;I&amp;#39;m method one&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance_methods&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;method2&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;I&amp;#39;m method two&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance_methods&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Which throws:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;method1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+70312385439840
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;method2&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;method1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+70312385439840
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you saw the object id remains the same after re-open a class in order to add a second method, also,
+we got all instance methods that one &lt;a href=&quot;http://ruby-doc.org/core/classes/Object.html#M000350&quot;&gt;class&lt;/a&gt;
+of &lt;em&gt;A&lt;/em&gt; would have.&lt;/p&gt;
+
+&lt;h4&gt;Call all instance methods of a certain class whenever you call a method whose name matches&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bye&lt;/span&gt; 
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bye&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;welcome&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Welcome&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;method_missing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;method_to_call&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;methods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_to_call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_to_call&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Unknown method&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_to_call&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;els&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hel&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wel&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Which throws:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;user@user-desktop:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby test.rb 
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;Unknown method&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;Bye&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;Welcome&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;That's it. I hope this gives you some good overview and if you are ready for the whole package I
+suggest you start with:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Some good metaprogramming screencasts &lt;a href=&quot;http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming&quot;&gt;Pragmatic Programmers screencasts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;An in deep look at &lt;a href=&quot;http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/&quot;&gt;Rafa Maga&amp;ntilde;a's presentation&lt;/a&gt; on Ruby object model&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Happy programming!&lt;/p&gt;
+</content>
+   <author>
+     <name>Emmanuel Delgado</name>
+     <email>emmanuel.delgado@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ 
+</feed>
