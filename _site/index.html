@@ -12,20 +12,6 @@
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
   
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-  
 </head>
 <body>
   <div class="container">
@@ -40,133 +26,241 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
+  <h1><a href="/2010/11/17/watermarking-images.html">Watermarking images minimizing the overhead</a></h1>
   <p class="author">
-    <span class="date"><b>Nov 05</b><br />2010</span>
+    <span class="date"><b>Nov 17</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <p>During the days I was working for a project called <a href="http://creativeallies.com">Creative Allies</a>, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.</p>
 
-<p>Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.</p>
+<p>Atfer doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.</p>
 
-<p>Imagine you are creating a basic RESTFUL controller, you could start with:</p>
+<h2>What I did the first time</h2>
 
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+<p>The featured included uploading a file, validating it using <a href="http://rmagick.rubyforge.org/">RMagick</a> and if validation passed, creating thumbnails and a watermarked preview.</p>
 
-  def index
-    @variants <span class="o">=</span> Variant.all
-  end
-  
-  def new
-    @variant <span class="o">=</span> Variant.new
-  end
-  
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    <span class="k">if</span> @variant.save
-      flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Fortunately it was saved!&quot;</span>
-      redirect_to variant_path
-    <span class="k">else</span>
-<span class="k">      </span>render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span>
-    end
-  end
-  .
-  .
-  .
+<p>For this post's purposes I will only re-create such functionality specifying a fixed path to file so I we can compare benchmark outcome. Ready?</p>
+
+<h3>Opening the file</h3>
+
+<p>We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name <a href="/images/wallpaper.jpg">"wallpaper"</a> (the file is 1.1 Mb)</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">example_image_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_original.jpg&quot;</span>
+
+<span class="n">example_image_output_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_watermarked.jpg&quot;</span>
 </code></pre>
 </div>
 
 
-<p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
+<p>Image dimensions are: 1800 x 1200 pixels (big enough)</p>
 
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+<p>Also, we have the <a href="/images/watermark.png">watermark stamp</a> in our images folder.
+Watermark dimensions are: 250 x 250 pixels</p>
 
-  def index
-    @users <span class="o">=</span> User.all
-    respond_to <span class="k">do</span> |format|
-      format.html
-      format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
-    end
-  end
-  .
-  .
-  .
+<h3>Stamping the watermark</h3>
 
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    respond_to <span class="k">do</span> |format|
-      <span class="k">if</span> @user.save
-        flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span>
-        format.html <span class="o">{</span> redirect_to variant_path<span class="o">)</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @varian, :status <span class="o">=</span>&gt; :created, :location <span class="o">=</span>&gt; @variant <span class="o">}</span>
-      <span class="k">else</span>
-<span class="k">        </span>format.html <span class="o">{</span> render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @variant.errors, :status <span class="o">=</span>&gt; :unprocessable_entity <span class="o">}</span>
-      end
-    end
-  end
-  .
-  .
-  .
+<p>I used a method called <em>apply_watermark</em> that will receive the path to our image as a string and the path of the watermarked image, like this:</p>
+
+<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span> <span class="c1"># great idea to fire up the garbage collector here, it&#39;s a good practice</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
+<p>Now we just have to call our <em>apply_watermark</em> method passing the <em>example_image_path</em> string as the <em>image_path</em> and the <em>new_filename_path</em> arguments:</p>
 
-<p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html, :xml
-  .
-  .
-  .
-  
+<div class="highlight"><pre><code class="ruby"><span class="n">apply_watermark</span><span class="p">(</span><span class="n">example_image_path</span><span class="p">,</span> <span class="n">example_image_path</span><span class="p">)</span>
 </code></pre>
 </div>
 
 
-<p>Then, we will use respond_with to set the response, like follows:</p>
+<p>Now let's add some code to our <em>apply_watermark</em> method to perform <a href="http://ruby-doc.org/core/classes/Benchmark.html">benchmarking</a>:</p>
 
-<div class="highlight"><pre><code class="bash">def index
-  respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-end
-
-def new
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-end
-
-def create
-  @variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-  flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span> <span class="k">if</span> @user.save
-  respond_with<span class="o">(</span>@variant<span class="o">)</span>
-end
-.
-.
-.
+<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
+          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<h2>So, when do I need to use respond_with?</h2>
+<p>I entered the console, picked our image's file path, called the method, grabbed a cup of coffee and relaxed... you can see the console output <a href="https://gist.github.com/661883">here</a></p>
 
-<p>You need to use it when:</p>
+<h3>Here's what happened</h3>
+
+<p>The code in our <em>apply_watermark</em> method iterated as many times our watermark file could fit into our original wallpaper image, stamped the watermark once and again until iterations were completed. This demanded memory and processing power and took longer than any user out there would expect. Sometimes our app just hung.</p>
+
+<p>You can see the result here: <a href="/images/wallpaper_watermarked.jpg">wallpaper_watermarked.jpg</a></p>
+
+<h2>How I fixed it</h2>
+
+<p>Sometimes users would upload HUGE files that were about 8000 x 5000 pixels and everything would just fall apart. We needed to find a way to reduce the number of iterations regardless the dimensions of the images; so I created an additional method that would pick a watermark stamp depending on how big the new image was and then using it in the iterations. Results just rocked!</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">pick_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+  <span class="n">image_width</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">columns</span> <span class="o">/</span> <span class="mi">250</span>
+  <span class="k">case</span> <span class="n">image_width</span><span class="o">.</span><span class="n">to_i</span>
+  <span class="k">when</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span> <span class="mi">2</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span>
+  <span class="k">when</span> <span class="mi">3</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark3.png&quot;</span>
+  <span class="k">when</span> <span class="mi">6</span><span class="o">.</span><span class="n">.</span><span class="mi">11</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark6.png&quot;</span>
+  <span class="k">when</span> <span class="mi">12</span><span class="o">.</span><span class="n">.</span><span class="mi">17</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark12.png&quot;</span>
+  <span class="k">when</span> <span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark18.png&quot;</span>
+  <span class="k">else</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark24.png&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pick_watermark</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
+          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Here's the output from our tweaked code (I couldn't even grab another cup of coffee):</p>
+
+<script src="https://gist.github.com/661917.js?file=gistfile1.rb"></script>
+
+
+<p>Pretty amazing, uh?</p>
+
+<p>We saved memory and processor power by 'pre-processing' the watermark stamps and putting them together in separate files so we could pick the one that would demand the lowest number of iterations in our code. After this tweak, our app was ready for the next move...</p>
+
+<h2>Enjoy!</h2>
+
+    <div class="author_box">
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>    
+    <div class="comments">
+      <h2><a href="/2010/11/17/watermarking-images.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
+  <h1><a href="/2010/11/16/subdomains-in-rails.html">Subdomains in Rails (2.3.x & 3)</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 16</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <h1>Why?</h1>
+
+<p>Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having <a href="http://www.facebook.com/j.francisco.guzman">Facebook-like urls =>  http://www.facebook.com/j.francisco.guzman</a>, you may want to have something like <a href="http://francisco.expensd.com">http://francisco.expensd.com</a>.</p>
+
+<p>This can be particularly useful and shiny in two cases:</p>
+
+<p>● You want to have subdomains such as: admin, blog, mail, etc. <br />
+● You want to provide your users with a subdomain they can come up with <br /></p>
+
+<p>Want to give it a shot?</p>
+
+<h2>Sounds cool, but I still use Rails 2.3.x</h2>
+
+<p>Well, your best friend then is <a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a>; according to its <a href="http://github.com/mbleigh/subdomain-fu">GitHub</a> resource, it "<em>provides a modern implementation of subdomain handling in Rails. It takes aspects from account_location, request_routing, and other snippets found around the web and combines them to provide a single, simple solution for subdomain-based route and url management.</em>"</p>
+
+<p>You can either install it as an 'old school' plugin or a more fashion-like gem:</p>
+
+<h3>Plugin</h3>
+
+<div class="highlight"><pre><code class="bash">script/plugin install git://github.com/mbleigh/subdomain-fu.git
+</code></pre>
+</div>
+
+
+<h3>Gem (no Bundle) -- add it to your config/environment.rb file</h3>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
+</code></pre>
+</div>
 
 <ul>
 <li>You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).</li>
 <li>When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:</li>
 </ul>
 
+<p>and then...</p>
 
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
-end
+<div class="highlight"><pre><code class="bash">rake gems:install
 </code></pre>
 </div>
 
 
-<p>or, you could specify different actions for each response:</p>
+<h3>Gem (Bundle) -- add it to your Gemfile</h3>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
+</code></pre>
+</div>
+
+
+<p>and then...</p>
 
 <div class="highlight"><pre><code class="bash">def create
   respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span> <span class="k">do</span> |format|
@@ -178,313 +272,457 @@ end
 </div>
 
 
-<p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
+<h2>Settings (we're still working with subdomains in Rails 2.3.x)</h2>
 
-<p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
+<p>What SubdomainFu provides is an extension for the URL Rewriting engine provided with Rails. This means we will be able to use it anywhere we normally generate URLs: <em>url_for</em>, named routes, etc. So here's the basic configuration (with default values):</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install responders
-
-or, in your Gemfile
-
-gem <span class="s1">&#39;responders&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then, configure it through the appropriate generator:</p>
-
-<div class="highlight"><pre><code class="bash">rails generate responders:install
-</code></pre>
-</div>
-
-
-<p>You will see these changes:</p>
-
-<div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
-prepend  app/controllers/application_controller.rb
-inject  app/controllers/application_controller.rb
-create  config/locales/responders.en.yml
-</code></pre>
-</div>
-
-
-<p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
-
-<div class="highlight"><pre><code class="bash">en:
-  flash:
-    actions:
-      create:
-        notice: <span class="s1">&#39;%{resource_name} was successfully created.&#39;</span>
-      update:
-        notice: <span class="s1">&#39;%{resource_name} was successfully updated.&#39;</span>
-      destroy:
-        notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
-        alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
-</code></pre>
-</div>
-
-
-<p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
-
-<p>Ok, so, back to the controller, yo could define the create action as follows:</p>
-
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-end
-</code></pre>
-</div>
-
-
-<p>And this way you get everything, including the flash notice.</p>
-
-<p>So, in the end, this could be your complete RESTFUL controller:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html
-
-  def index
-    respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-  end
-
-  def new
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-  end
-
-  def create
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
-
-  def edit
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">]))</span>
-  end
-
-  def update
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    respond_with<span class="o">(</span>@variant.update_attributes<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
+<div class="highlight"><pre><code class="ruby"><span class="c1"># in environment.rb</span>
   
-  def destroy
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    @variant.destroy
-    respond_with<span class="o">(</span>@variant<span class="o">)</span>
-  end
+<span class="c1"># These are the sizes of the domain (i.e. 0 for localhost, 1 for something.com)</span>
+<span class="c1"># for each of your environments</span>
+<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">tld_sizes</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:development</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                          <span class="ss">:test</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                          <span class="ss">:production</span> <span class="o">=&gt;</span> <span class="mi">1</span> <span class="p">}</span>
+
+<span class="c1"># These are the subdomains that will be equivalent to no subdomain</span>
+<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">mirrors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;www&quot;</span><span class="o">]</span>
+
+<span class="c1"># This is the &quot;preferred mirror&quot; if you would rather show this subdomain</span>
+<span class="c1"># in the URL than no subdomain at all.</span>
+<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">preferred_mirror</span> <span class="o">=</span> <span class="s2">&quot;www&quot;</span>
+</code></pre>
+</div>
+
+
+<h3>What about local dev environment???</h3>
+
+<p>There are two different ways to set up your local environment to work with subdomain:</p>
+
+<p>● Editing your hosts file (usually located in /etc/hosts) and add each subdomain you will need (I know it doesn't sound like a great idea)</p>
+
+<p>● Using <a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Tim Pope's</a> awsome contributon to work with subdomains in our local environments; doing so, will allow us to use <a href="">http://lvh.me:3000</a> with subdomains</p>
+
+<p><a href="">http://cool.lvh.me:3000</a></p>
+
+<h2>Been there, done that... now what???</h2>
+
+<p>Now you can take advantage of two awsome features: the <em>current_subdomain</em> method which will return (of course) the current subdomain or <em>nil</em> if there is no subdomain or the current subdomain is a mirror:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># http://admin.killerapp.com/</span>
+current_subdomain <span class="c"># =&gt; &quot;admin&quot;</span>
+
+<span class="c"># http://www.killerapp.com/ or http://killerapp.com/</span>
+current_subdomain <span class="c"># =&gt; nil</span>
+
+<span class="c"># http://other.subdomain.killerapp.com</span>
+current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
+</code></pre>
+</div>
+
+
+<p>and the-now-extended URL rewriting features passing the <strong>:subdomain</strong> option to an URL generating method:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;da_controller&quot;</span><span class="p">,</span> 
+  <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;cool_feature&quot;</span><span class="p">,</span> 
+  <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/da_controller/cool_feature</span>
   
-end
+<span class="n">users_url</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>  <span class="c1"># =&gt; http://mykillerapp.com/users</span>
+
+<span class="c1"># The full URL will be generated if the subdomain is not the same as the</span>
+<span class="c1"># current subdomain, regardless of whether _path or _url is used.</span>
+<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/users</span>
+<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="c1"># =&gt; /users</span>
 </code></pre>
 </div>
 
 
-<h2>What else?</h2>
+<h2>Generating subdomains</h2>
 
-<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
+<p>You have two options (again): reserving yourself the right to create them manually or else, giving your users the ability to choose their own subdomain, checking availability and storing the value to a document or db table... you now have the tool, how to use it is up to you.</p>
 
-<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
+<p>Enjoy!</p>
+
+<h1>Enjoy??? Wait!!! What about Rails 3???</h1>
+
+<h2>For our edgy Rails 3 users</h2>
+
+<p>It is a real blessing the guys who worked on Rails 3 decided to incorporate this feature so we can use it out-of-the-box taking advantage of the new routing DSL. A great example we can use is a multiple blog app, where we can have blogs (subdomains), articles and comments:</p>
+
+<p><strong>in config/routes.rb</strong></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
+  <span class="n">resources</span> <span class="ss">:comments</span>  
+  <span class="n">resources</span> <span class="ss">:articles</span>  
+  <span class="n">resources</span> <span class="ss">:blogs</span>  
+  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
+<p>In this example, our root_path will land in <strong>blogs#index</strong>. We would want this only if no subdomain has been specified, otherwise we want to perform the action <strong>blogs#show</strong>. Rails 3 makes it really easy by adding a restriction:</p>
 
-<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
+<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
+  <span class="n">resources</span> <span class="ss">:comments</span>  
+  <span class="n">resources</span> <span class="ss">:articles</span>  
+  <span class="n">resources</span> <span class="ss">:blogs</span>  
+  <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span><span class="p">,</span> <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="sr">/.+/</span> <span class="p">}</span>  
+  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This setting demands our attention in two details: the <em>id</em> that will be passed to the <em>show_path</em> and the <em>subdomain</em> <strong>:constraint</strong></p>
+
+<p>To pass the id we just need to use a finder like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@blog</span> <span class="o">=</span> <span class="no">Blog</span><span class="o">.</span><span class="n">find_by_subdomain</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><strong><em>voilà</em></strong></p>
+
+<p>As for the subdomain, we will only pass it in our request when we need it; that simple!</p>
+
+<h2>Mirrors (the 'www' case)</h2>
+
+<p>In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit complex way, but not way too complex...</p>
+
+<p>First, we turn the subdomain constraints into a <em>block</em> in our <strong>config/routes.rb</strong> file</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
+  <span class="n">resources</span> <span class="ss">:comments</span>  
+  <span class="n">resources</span> <span class="ss">:articles</span>  
+  <span class="n">resources</span> <span class="ss">:blogs</span>
+  <span class="n">constraints</span><span class="p">(</span><span class="no">Subdomain</span><span class="p">)</span> <span class="k">do</span>  
+    <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span>
+  <span class="k">end</span>
+  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>and we pass a new class called <strong>Subdomain</strong>, which we'll define in our <strong>lib</strong> folder (<strong>lib/subdomain.rb</strong>)</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Subdomain</span>  
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">matches?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>  
+    <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span> <span class="o">!=</span> <span class="s1">&#39;www&#39;</span>  
+  <span class="k">end</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><strong><em>done!</em></strong></p>
+
+<h3>Links</h3>
+
+<p>To use subdomains in our links, we can not just pass a <strong>:subdomain</strong> option like we can with <em>SubdomainFu</em>; instead, we must build the host name from scratch and adding the subdomain. This is accomplished using the <em>subdomain</em> attribute in our <strong>blog</strong> object + the request domain + the request port:</p>
+
+<p><strong><em>This won't work...</em></strong></p>
+
+<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">  </span>
+<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">  &lt;div&gt;  </span>
+<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">blog</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
+<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
+<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
+<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">    &lt;/div&gt;  </span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</code></pre>
+</div>
+
+
+<p><strong><em>but this will...</em></strong></p>
+
+<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">  </span>
+<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">  &lt;div&gt;  </span>
+<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
+<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
+<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
+<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
+<span class="x">    &lt;/div&gt;  </span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</code></pre>
+</div>
+
+
+<p><strong><em>... we just need to make it look cleaner... with a helper!</em></strong></p>
+
+<div class="highlight"><pre><code class="erb"><span class="x">&lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="n">with_subdomain</span><span class="p">(</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="p">))</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;</span>
+</code></pre>
+</div>
+
+
+<p><strong><em>the helper must be located in</em></strong> <strong>app/helpers/url_helper.rb</strong></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">UrlHelper</span>  
+  <span class="k">def</span> <span class="nf">with_subdomain</span><span class="p">(</span><span class="n">subdomain</span><span class="p">)</span>  
+    <span class="n">subdomain</span> <span class="o">=</span> <span class="p">(</span><span class="n">subdomain</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>  
+    <span class="n">subdomain</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span> <span class="k">unless</span> <span class="n">subdomain</span><span class="o">.</span><span class="n">empty?</span>  
+    <span class="o">[</span><span class="n">subdomain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="o">].</span><span class="n">join</span>  
+  <span class="k">end</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><strong><em>and include this module in</em></strong> <strong>ApplicationController</strong> <strong><em>to make it available to all controllers in our app...</em></strong></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
+  <span class="kp">include</span> <span class="no">UrlHelper</span>
+  <span class="c1">#other includes, protect_from_forgery, layout, etc.</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h2>That should be enough to get you started</h2>
+
+<p>Enjoy!</p>
+
+<h2>Resources</h2>
+
+<p><strong>Rails 2.3.x</strong> <br />
+<a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a> <br />
+<a href="http://railscasts.com/episodes/123-subdomains">Railscasts</a> <br />
+<a href="http://intridea.com/2008/6/23/subdomainfu-a-new-way-to-tame-the-subdomain">Intridea</a> <em>the guys who created SubdomainFu</em></p>
+
+<p><strong>Rails 3</strong> <br />
+<a href="http://railscasts.com/episodes/221-subdomains-in-rails-3">Railscasts</a> <br />
+<a href="http://asciicasts.com/episodes/221-subdomains-in-rails-3">Asciicasts</a> <br /></p>
+
+<p><strong>Local Virtual Host</strong> <br />
+<a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Post</a></p>
 
     <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
     <div class="comments">
-      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/11/16/subdomains-in-rails.html#disqus_thread">Click here for Comments</a></h2>
     </div>
   </div>
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></h1>
+  <h1><a href="/2010/09/21/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
   <p class="author">
-    <span class="date"><b>Nov 01</b><br />2010</span>
+    <span class="date"><b>Sep 21</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/554ca5879badb8dfd61f5ea7e54aef9e" class="avatar" alt="Avatar" /></div>
-    <p>When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <p>If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.</p>
 
-<p>Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name ".gitignore"</p>
+<p>They are built within forward slashes and they even have their own class</p>
 
-<div class="highlight"><pre><code class="bash">touch .gitignore
+<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/</span><span class="o">.</span><span class="n">class</span>
+<span class="c1">#=&gt; Regexp</span>
 </code></pre>
 </div>
 
 
-<p>On this file you can include those files you do not want to be tracked by git:</p>
+<h2>Taxonomy of a Regular Expression</h2>
 
-<div class="highlight"><pre><code class="bash">some_file.rb
-*.log
-doc/**/*
-public/images/system/**/*
+<p>If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/o</span><span class="n">ptions</span>
 </code></pre>
 </div>
 
 
-<p>As you see, you can include the file name or include wildcards to select several files.</p>
+<p>Also, in Ruby you can express a regular expression in two alternate ways:</p>
 
-<p>Git by default ignores empty folders, so if your application requires a folder to exist, you just need to create a blank .gitignore file.</p>
+<div class="highlight"><pre><code class="ruby"><span class="sr">%r{expression}o</span><span class="n">ptions</span>
 
-<p>But what if you must include a file inside a folder among others you want to ignore? such as config files, or whatever. Then you may want to prevent git from ignoring those files:</p>
-
-<div class="highlight"><pre><code class="bash">config/*
-!config/a_special_file.rb
+<span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span> <span class="o">[</span><span class="p">,</span> <span class="n">options</span><span class="o">]</span><span class="p">)</span>
 </code></pre>
 </div>
 
 
-<p>This will tell git to ignore all the files, except for the one that is marked with a bang (!).</p>
+<p>The method <em>match</em> and the operator <em>=~</em> can be used to verify if a string matches a regular expression:</p>
 
-<p>I hope this is helpful for someone.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Daniel Gaytán | daniel@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/01/ignoring-files-with-git.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 27</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
-    <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
-
-<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
-
-<p>OK so, let's begin with our brief trip</p>
-
-<h2>Installing Ruby</h2>
-
-<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">match1</span> <span class="o">=</span> <span class="sr">/Example/</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Example of a Regexp&quot;</span><span class="p">)</span>
+<span class="c1">#=&gt; &quot;Example&quot;</span>
+<span class="nb">puts</span> <span class="n">match1</span><span class="o">.</span><span class="n">class</span>
+<span class="c1">#=&gt; MatchData</span>
 </code></pre>
 </div>
 
 
-<p>and switch to that ruby version by running:</p>
+<p>When using the method <em>match</em>, the returned value is the matched string or <em>nil</em> if no match was found. The class of the object that received the assignment is <em>MatchData</em>.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
+<h2>Building regular expressions</h2>
+
+<p>To start building our own regular expressions, there is a couple of lists we have to become familiar with:</p>
+
+<h3>1. Special Characters</h3>
+
+<p>Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is <strong>\</strong>.</p>
+
+<h4>Special characters list</h4>
+
+<p>^<br/>
+$<br/>
+?<br/>
+.<br/>
+/<br/>
+\<br/>
+[<br/>
+]<br/>
+{<br/>
+}<br/>
+(<br/>
+)<br/>
++<br/>
+*</p>
+
+<h3>2. Types of expressions</h3>
+
+<p>The most common patterns we can specify in a regular expressions are included in the following table:</p>
+
+<table>
+    <tr>
+        <th>expression</th>
+        <th>meaning</th>
+  </tr>
+  <tr>
+        <td>.</td>
+        <td>any character</td>
+    </tr>
+  <tr>
+        <td>[ ]</td>
+        <td>specify a range (e.g. [a-z] means a letter from a to z)</td>
+    </tr>
+  <tr>
+        <td>\w</td>
+        <td>letter or digit; same as [0-9A-Za-z]</td>
+    </tr>
+  <tr>
+        <td>\W</td>
+        <td>any character but letter or a number</td>
+    </tr>
+  <tr>
+        <td>\s</td>
+        <td>space character; same as [ \t\n\r\f]</td>
+    </tr>
+  <tr>
+      <td>\S</td>
+      <td>any character but a space space char</td>
+    </tr>
+  <tr>
+      <td>\d</td>
+      <td>a number; same as [0-9]</td>
+    </tr>
+  <tr>
+      <td>\D</td>
+      <td>any character but a number</td>
+    </tr>
+  <tr>
+      <td>\b</td>
+      <td>backspace (0x08), only within a range</td>
+    </tr>
+  <tr>
+      <td>\b</td>
+      <td>word limit, if NOT within a range</td>
+    </tr>
+  <tr>
+      <td>\B</td>
+      <td>not word limit</td>
+    </tr>
+  <tr>
+      <td>*</td>
+      <td>zero or more matches of the preceding</td>
+    </tr>
+  <tr>
+      <td>+</td>
+      <td>one or more matches of the preceding</td>
+    </tr>
+  <tr>
+      <td>^</td>
+      <td>matches the beginning of a line</td>
+    </tr>
+  <tr>
+      <td>$</td>
+      <td>matches the end of a line</td>
+    </tr>
+    <tr>
+        <td>\A</td>
+        <td>matches the beginning of the string</td>
+    </tr>
+    <tr>
+        <td>\z</td>
+        <td>matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')</td>
+  <tr>
+      <td>{m[,n]}</td>
+      <td>at least 'm', topping 'n' matches of the preceeding ('n' is optional)</td>
+    </tr>
+  <tr>
+      <td>?</td>
+      <td>at least one match of the preceeding (same as {1})</td>
+    </tr>
+  <tr>
+      <td>( )</td>
+      <td>group expressions</td>
+    </tr>
+    <tr>
+        <td>|</td>
+        <td>logical operator 'or', in [a|b] looks for a OR b</td>
+    </tr>
+</table>
+
+
+<h2>Common examples</h2>
+
+<h3>The e-mail address</h3>
+
+<p>This is a very common pattern example (it's the one that you get by default in <a href="" title="http://rubular.com">Rubular</a>).</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="sr">/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/</span>
 </code></pre>
 </div>
 
 
-<h2>Installing Rails</h2>
+<p>First, '\A' makes sure to match the string against the start of string; then ([<sup>@\s]+)</sup> groups the recipient's name, avoiding @ character and space characters.</p>
 
-<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em>&lt;gemset_name></em>' and 'rvm gemset use <em>&lt;gemset_name></em>', so after this we do:</p>
+<p>After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
+<p>Finally, the '\Z' makes sure to match the end of line</p>
+
+<h3>The phone number</h3>
+
+<div class="highlight"><pre><code class="ruby"><span class="sr">/\((\d{3})\)\s+(\d{3})-(\d{4})/</span>
 </code></pre>
 </div>
 
 
-<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
+<p>First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.</p>
 
-<h2>Installing PostgreSQL with Visual Administrator</h2>
+<h2>Where to look for more information</h2>
 
-<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
+<p>The star of these links is <a href="" title="http://rubular.com">Rubular</a>
+but there are some few more useful links to look at:
+<a href="http://www.regular-expressions.info/ruby.html">http://www.regular-expressions.info/ruby.html</a>
+<a href="http://www.rubyist.net/~slagell/ruby/regexp.html">http://www.rubyist.net/~slagell/ruby/regexp.html</a>
+<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ">http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ</a>
+<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new">http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new</a>
+<a href="http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm">http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm</a></p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
-</code></pre>
-</div>
-
-
-<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
-</code></pre>
-</div>
-
-
-<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
- As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And run the bundler:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-</code></pre>
-</div>
-
-
-<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
-
-<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
-</code></pre>
-</div>
-
-
-<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
-So this will create a user with database and user creation permissions with a defined password.</p>
-
-<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
-
-<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
-
-<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-</code></pre>
-</div>
-
-
-<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
-
-<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
+<p>Enjoy!</p>
 
     <div class="author_box">
       <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
@@ -494,7 +732,7 @@ So this will create a user with database and user creation permissions with a de
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
     <div class="comments">
-      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/09/21/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
     </div>
   </div>
 </div>
@@ -503,21 +741,11 @@ So this will create a user with database and user creation permissions with a de
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
 
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
+  <li><span><b>16 Nov 2010</b></span> &raquo; <a href="/2010/11/16/subdomains-in-rails.html">Subdomains in Rails (2.3.x & 3)</a></li>
 
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
-  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
-
-  <li><span><b>18 Oct 2010</b></span> &raquo; <a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></li>
-
-  <li><span><b>07 Oct 2010</b></span> &raquo; <a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></li>
-
-  <li><span><b>28 Sep 2010</b></span> &raquo; <a href="/2010/09/28/negative-code.html">Negative Code</a></li>
-
-  <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
+  <li><span><b>21 Sep 2010</b></span> &raquo; <a href="/2010/09/21/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
 
   <li><span><b>17 Sep 2010</b></span> &raquo; <a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></li>
 
