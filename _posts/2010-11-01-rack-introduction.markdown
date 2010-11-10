@@ -8,9 +8,9 @@ published: true
 ---
 
 # Implementing Rack #
-Rack provides a minimal interface between web servers supporting **Ruby**. It contains a full 
-stack of middleware components. Using **Rack** middleware you can build standalone applications that 
-can be plugged in Rails, Sinatra and many other *Rack based frameworks*.
+Rack provides a minimal interface between web servers supporting **Ruby**. It contains a full stack 
+of middleware components. Using **Rack** middleware you can build applications that directly interact 
+with a HTTP requests environment and can be plugged in Rails, Sinatra and many other **Rack based frameworks**.
 
 Rack is one of those "bare minimum components" that you need for creating modular web 
 applications, furthermore, by learning Rack you begin mastering part of the *Rails internals*, why?, 
