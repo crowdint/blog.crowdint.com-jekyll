@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: First Things First... Our initial git configuration</title>
+  <title>Crowd Interactive Tech Blog :: A simple way to setup a class for global values</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -11,20 +11,6 @@
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-  
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
   
 </head>
 <body>
@@ -39,73 +25,77 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>First Things First... Our initial git configuration</h1>  
+  <h1>A simple way to setup a class for global values</h1>  
   <p class="author">
-    <span class="date"><b>Jul 11</b><br />2010</span>
+    <span class="date"><b>Sep 06</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
 
-<p>The basic steps we recommend are:</p>
+<h2>Setting up the class</h2>
 
-<h2>Let us know who you are</h2>
+<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
 
-<p>You can set up your email and name by using the following command:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
 </code></pre>
 </div>
 
 
-<h2>Reduce the risk factor</h2>
+<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
 
-<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
+<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
 </code></pre>
 </div>
 
 
-<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+<p>The class' attributes will be available as a hash:</p>
 
-<p>So, we recommend our rookies to use the following command:</p>
+<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;app_name&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;My application name&quot;</span>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+AppConfig<span class="o">[</span><span class="s1">&#39;base_domain&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;myapp.com&quot;</span>
 </code></pre>
 </div>
 
 
-<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+<p>You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:</p>
 
-<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
+<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+<span class="n">development</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
+
+<span class="n">production</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
 </code></pre>
 </div>
 
 
-<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+<p>Now your class has some hashes values like this:</p>
 
-<h2>Add color to your life</h2>
+<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app key&quot;</span>
 
-<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
+AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s1">&#39;twitter_prod_secret&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app secret&quot;</span>
 </code></pre>
 </div>
 
 
-<p>Hope this guide helps you in some way, cheers!</p>
+<h2>Enjoy!</h2>
 
     <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -128,8 +118,10 @@
   </div>
   <div class="nav_links span-16">
     
+      <div class="previous span-8"><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"><< Open and watch specific git branches using gitx</a></div>
     
-      <div class="next span-8 last"><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8 >></a></div>
+    
+      <div class="next span-8 last"><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0 >></a></div>
     
   </div>
 </div>
@@ -137,20 +129,15 @@
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
+  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
 
-  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
-
-<<<<<<< HEAD
-=======
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
-
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
-  <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
+  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
   </ul>
 </div>

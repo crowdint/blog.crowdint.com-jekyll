@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Open and watch specific git branches using gitx</title>
+  <title>Crowd Interactive Tech Blog :: First Things First... Our initial git configuration</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -11,20 +11,6 @@
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-  
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
   
 </head>
 <body>
@@ -39,49 +25,70 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Open and watch specific git branches using gitx</h1>  
+  <h1>First Things First... Our initial git configuration</h1>  
   <p class="author">
-    <span class="date"><b>Aug 31</b><br />2010</span>
+    <span class="date"><b>Jul 11</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
+    <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
 
-<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
+<p>The basic steps we recommend are:</p>
 
-<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
+<h2>Let us know who you are</h2>
 
-<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
+<p>You can set up your email and name by using the following command:</p>
 
-<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
 </code></pre>
 </div>
 
 
-<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
+<h2>Reduce the risk factor</h2>
 
-<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
 
-<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
 </code></pre>
 </div>
 
 
-<p>Then you'd get something like this:</p>
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
 
-<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
+<p>So, we recommend our rookies to use the following command:</p>
 
-<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
+</div>
 
-<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
 
-<p>Hope this helps you in some way,</p>
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
 
-<p>Cheers.</p>
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
+</div>
+
+
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
 
     <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -107,10 +114,8 @@
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/08/26/thin-vs-unicorn.html"><< Benchmarking thin vs unicorn</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values >></a></div>
+      <div class="next span-8 last"><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8 >></a></div>
     
   </div>
 </div>
@@ -119,19 +124,27 @@
   <ul class="archives">
 
   <li><span><b>11 Jul 2010</b></span> &raquo; <a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></li>
-
-  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
-
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+<<<<<<< HEAD
 
   <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
 
-<<<<<<< HEAD
-  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
-=======
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/rack.html">Rack Introduction</a></li>
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
+  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+=======
+
+  <li><span><b>31 Aug 2010</b></span> &raquo; <a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></li>
+
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
+
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+>>>>>>> e589511cdc4ae41ba43a0a9b804ab5566f96eb9e
   </ul>
 </div>
         </div>

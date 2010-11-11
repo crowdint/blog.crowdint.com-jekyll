@@ -4,22 +4,11 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
-<<<<<<< HEAD
- <updated>2010-11-11T11:25:00-08:00</updated>
-=======
- <updated>2010-11-09T20:33:59-06:00</updated>
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
+ <updated>2010-11-09T20:42:47-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
-<<<<<<< HEAD
-   <title>Subdomains in Rails (2.3.x & 3)</title>
-   <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-08:00</updated>
-   <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
-   <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
-=======
    <title>Controller responders in Rails 3</title>
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
    <updated>2010-11-05T00:00:00-06:00</updated>
@@ -167,7 +156,6 @@ or, in your Gemfile
 gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;responders&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
 
 &lt;p&gt;and then, configure it through the appropriate generator:&lt;/p&gt;
@@ -294,11 +282,7 @@ application must implement/provide and creating a rack application, in the proce
 concepts with a design pattern interpretation of rack and finally we'll see an integrating example
 of the whole story.&lt;/p&gt;
 
-<<<<<<< HEAD
-&lt;p&gt;Now you can take advantage of two awesome features: the &lt;em&gt;current_subdomain&lt;/em&gt; method which will return (of course) the current subdomain or &lt;em&gt;nil&lt;/em&gt; if there is no subdomain or the current subdomain is a mirror:&lt;/p&gt;
-=======
 &lt;p&gt;Let's begin.&lt;/p&gt;
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
 &lt;h2&gt;Installing Rack&lt;/h2&gt;
 
@@ -327,11 +311,7 @@ headers&lt;/strong&gt;, and &lt;strong&gt;http body&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Of course, there are more things that you need to check in order to make your application
 &lt;strong&gt;Rack compliant&lt;/strong&gt;, but we'll get to that later.&lt;/p&gt;
 
-<<<<<<< HEAD
-&lt;h2&gt;Enjoy??? Wait!!! What about Rails 3???&lt;/h2&gt;
-=======
 &lt;p&gt;Now we are going to build a classic example application.&lt;/p&gt;
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
 &lt;h2&gt;Hello World example&lt;/h2&gt;
 
@@ -377,12 +357,8 @@ following methods:&lt;/p&gt;
 &lt;/ul&gt;
 
 
-<<<<<<< HEAD
-&lt;p&gt;In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit of a complex way, but not way too complex...&lt;/p&gt;
-=======
 &lt;p&gt;Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
 many rack applications.&lt;/p&gt;
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
 &lt;h2&gt;Middleware&lt;/h2&gt;
 
@@ -491,155 +467,8 @@ example I'm working on based on the Rack Spec:&lt;/p&gt;
 
 &lt;script src=&quot;https://gist.github.com/668111.js&quot;&gt; &lt;/script&gt;
 
-<<<<<<< HEAD
-&lt;p&gt;&lt;strong&gt;Local Virtual Host&lt;/strong&gt; &lt;br /&gt;
-&lt;a href=&quot;http://tbaggery.com/2010/03/04/smack-a-ho-st.html&quot;&gt;Post&lt;/a&gt;&lt;/p&gt;
-</content>
-   <author>
-     <name>Francisco Guzm&amp;aacute;n</name>
-     <email>francisco.guzman@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Controller responders in Rails 3</title>
-   <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
-   <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
-
-&lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
-
-&lt;p&gt;Imagine you are creating a basic RESTFUL controller, you could start with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-
-  def index
-    @variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all
-  end
-  
-  def new
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new
-  end
-  
-  def create
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @variant.save
-      flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Fortunately it was saved!&amp;quot;&lt;/span&gt;
-      redirect_to variant_path
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;      &lt;/span&gt;render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt;
-    end
-  end
-  .
-  .
-  .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-
-  def index
-    @users &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; User.all
-    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-      format.html
-      format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    end
-  end
-  .
-  .
-  .
-
-  def create
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
-        flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt;
-        format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; redirect_to variant_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @varian, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :created, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;        &lt;/span&gt;format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant.errors, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :unprocessable_entity &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      end
-    end
-  end
-  .
-  .
-  .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.&lt;/p&gt;
-
-&lt;p&gt;First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-  respond_to :html, :xml
-  .
-  .
-  .
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Then, we will use respond_with to set the response, like follows:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def index
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-
-def new
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-
-def create
-  @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-  flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-.
-.
-.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;So, when do I need to use respond_with?&lt;/h2&gt;
-
-&lt;p&gt;You need to use it when:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).&lt;/li&gt;
-&lt;li&gt;When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; variants_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;or, you could specify different actions for each response:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-    format.html
-    format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-=======
 
 &lt;p&gt;Now, let's implement and tie everything together with the next example:&lt;/p&gt;
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
 
 &lt;h2&gt;Static file server with Haml support example&lt;/h2&gt;
 
@@ -1064,11 +893,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-<<<<<<< HEAD
-   <updated>2010-10-18T00:00:00-07:00</updated>
-=======
    <updated>2010-10-18T00:00:00-05:00</updated>
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
@@ -1098,11 +923,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-<<<<<<< HEAD
-   <updated>2010-10-07T00:00:00-07:00</updated>
-=======
    <updated>2010-10-07T00:00:00-05:00</updated>
->>>>>>> 82a1cdedc078736c7045858e71322fd67a6e7f3f
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
