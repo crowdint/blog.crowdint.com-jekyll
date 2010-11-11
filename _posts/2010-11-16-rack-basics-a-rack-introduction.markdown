@@ -1,21 +1,20 @@
 ---
 layout: post
-title: Rack Introduction
+title: Rack Basics - A Rack Introduction
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
-published: true
+published: false
 ---
 
-# Implementing Rack #
 Rack provides a minimal interface between web servers supporting **Ruby**. It contains a full stack 
 of middleware components. Using **Rack** middleware you can build applications that directly interact 
 with a HTTP requests environment and can be plugged in Rails, Sinatra and many other **Rack based frameworks**.
 
 Rack is one of those "bare minimum components" that you need for creating modular web 
 applications, furthermore, by learning Rack you begin mastering part of the *Rails internals*, why?, 
-because of **Rails** has adopted the *Rack philosophy* throughout its framework, a Rails application is actually 
-*a collection of Rack and Rails middleware components* that all work together to form the completed 
+because **Rails** has adopted the *Rack philosophy* throughout its framework, a Rails application is actually 
+*a collection of Rack and Rails middleware components* that work together to form the completed 
 whole.
 
 In this article I'll guide you through the process of installing Rack, letting you know what every rack 
@@ -38,7 +37,7 @@ A Rack application is a **Ruby object** that **respond_to? 'call'**, it takes ex
 **the environment**, and *returns* an **Array** of exactly **three values**: **http status**, **http 
 headers**, and **http body**.
 
-The headers and body returned by call have to **respond_to? 'each'**.
+The headers and body returned by the call have to **respond_to? 'each'**.
 
 So basically anything like the following may act as a rack application:
 
@@ -61,14 +60,16 @@ Open a file, call it *hello_world.ru*, and write following:
 
 {% highlight ruby %}
   app = lambda do |env| 
-    [200, 
-      { 'Content-Type' => 'text/html' }, 
-     'Hello World']
+    [
+      200,
+      { 'Content-Type' => 'text/html' },
+     'Hello World'
+    ]
   end 
   run app 
 {% endhighlight %}
 
-In order to run it, I'll first send the *rackup hello_world.ru* to background, next using *curl*
+In order to run it, I'll first send the *rackup hello_world.ru* to the background, and then, using *curl*,
 we'll send a request to localhost:
 
 {% highlight bash %}
@@ -84,7 +85,7 @@ And there we have our **Hello World** message from the *http body* example.
 
 ## Basic API ##
 Before going on to the next examples, you need to know that rack applications usually call
-following methods:
+the following methods:
 
 * *use(middleware, **args, &block)* adds a middleware to the stack
 * *run(app)* dispatches to an application
@@ -183,8 +184,8 @@ which one fits your needs.
 ## Creating valid Rack applications ##
 Every Rack application must follow the [Rack Spec](http://rack.rubyforge.org/doc/SPEC.html),
 Rack helps you to follow it by proving a **Rack::Lint** middleware, you should include it in your 
-application in order to make it **Rack complain**. By running your application using **rackup** 
-command line tool, you are already using it, otherwise include it with a:
+application in order to make it **Rack compliant**. By running your application using **rackup** 
+command line tool, you are already using it, otherwise include it with:
 
 {% highlight ruby %}
   use Rack::Lint
@@ -325,16 +326,16 @@ Let's test it with *rackup* and *curl*:
 {% endhighlight %}
 
 ## Conclusion ##
-There's lot more to learn about, for example :
+There's lot more to learn about Rack, for example :
 
 * Ruby and Rails integration
 * Ruby and Rails rack architecture
 * Lots of other Rack utilities
 
-I'll go through these examples in future articles, for now I think this is enough. 
-Feel free to send me your comments, additions, resources or complaints. I will certainly
+I'll go through these examples in future articles, for now I think this is enough.
+Feel free to send me your comments, additions, resources or complains. I will certainly
 look forward to them.
 
-Thanks for your reading and remember, others sources codes are sometimes your best teachers.
+Thanks for your reading and remember, other's source code is almost every time your best teacher.
 
 Regards
