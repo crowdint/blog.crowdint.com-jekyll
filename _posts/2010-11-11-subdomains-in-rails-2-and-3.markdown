@@ -7,7 +7,7 @@ avatar: c000ffd0c4ed3e23d09cae624d24b525
 published: true
 ---
 
-#Why?
+##Why?
 
 Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having [Facebook-like urls =>  http://www.facebook.com/j.francisco.guzman](http://www.facebook.com/j.francisco.guzman), you may want to have something like [http://francisco.expensd.com](http://francisco.expensd.com).
 
@@ -111,7 +111,7 @@ You have two options (again): reserving yourself the right to create them manual
 
 Enjoy!
 
-#Enjoy??? Wait!!! What about Rails 3???
+##Enjoy??? Wait!!! What about Rails 3???
 
 ##For our edgy Rails 3 users
 It is a real blessing the guys who worked on Rails 3 decided to incorporate this feature so we can use it out-of-the-box taking advantage of the new routing DSL. A great example we can use is a multiple blog app, where we can have blogs (subdomains), articles and comments:
