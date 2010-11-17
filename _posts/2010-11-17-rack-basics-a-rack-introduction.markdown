@@ -183,7 +183,7 @@ which one fits your needs.
 
 ## Creating valid Rack applications ##
 Every Rack application must follow the [Rack Spec](http://rack.rubyforge.org/doc/SPEC.html),
-Rack helps you to follow it by proving a **Rack::Lint** middleware, you should include it in your 
+Rack helps you to follow it by providing a **Rack::Lint** middleware, you should include it in your 
 application in order to make it **Rack compliant**. By running your application using **rackup** 
 command line tool, you are already using it, otherwise include it with:
 
