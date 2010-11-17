@@ -4,7 +4,7 @@ title: Rack Basics - A Rack Introduction
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
-published: false
+published: true
 ---
 
 Rack provides a minimal interface between web servers supporting **Ruby**. It contains a full stack 
