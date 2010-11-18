@@ -8,11 +8,11 @@ short_date: Nov 17
 ---
 
 
-First off, RSpec helps us make BDD (Behaviour Driven Development). This development style is made for testing what exactly our objects do. But now...
+First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.
 
 ## What is RSpec?  
 Well, it’s easy, RSpec is a framework for Ruby that allows us make scenarios for our applications and help us test them.
-The main goal about testing your objects with RSpec, is that you test what your object is going to do. The syntax is very simple, and human readable, this way you can read it as if you were having a conversation with your client to determine what exactly they want the project to do. It’s very easy to use, as long as you know exactly what you want to test, and here is where I think most of us usually get stuck...
+The main goal about testing your objects with RSpec, is that you test what your object is going to do, [Behaviour Driven Development](http://en.wikipedia.org/wiki/Behavior_driven_development). The syntax is very simple, and human readable, this way you can read it as if you were having a conversation with your client to determine what exactly they want the project to do. It’s very easy to use, as long as you know exactly what you want to test, and here is where I think most of us usually get stuck...
 So, after this brief introduction, let’s get to the action!
 
 ##How do we start an RSpec test for our rails application?
@@ -44,35 +44,35 @@ After this, every time you generate from the console a new model or controller, 
 
 ##Let’s begin with Model testing
 
- _RSpec it’s all about expectations_. What are you expecting an object to do? that’s what you must be thinking when you start a new test.
-Normally in a Model, what do you do? you basically validate the fields on your tables, or create definitions in order to get new queries, among other things.
+ _RSpec is all about expectations_. What are you expecting an object to do? That’s what you must be thinking when you start a new test.
+Normally in a Model, what do you do? You basically validate the fields on your tables, or create definitions in order to get new queries, among other things.
 So that’s what you must test, for this you have the following magic words: <br />
 
 _describe, before, it and should_
                         
 _describe_, as the word says, it will help you describe what you want the method to do. <br />
-_before_, will help you define stuff you need to be done before you test a method, for example, if you need to simulate an account, a shipping cart, before is your friend. <br />
+_before_, will help you define stuff you need to be done before you test a method, for example, if you need to simulate an account, a shipping_cart, before is your friend. <br />
 _it_, is meant to be, also, a descriptor for the situation you are testing. <br />
 _should and should_\__not_, with this magic word, you will be able to compare if you’ve received what you were expecting. _Remember it’s all about expectations_.<br />
 
-In the following example, we are going to test the Account model in an application, the first step is to describe the model, next we create some accounts in the before segment.
-Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the third example tests if a given account is found by it’s e-mail address.
+In the following example, we are going to test the Account Model in an application, the first step is to describe the model. Next we create some accounts in the before segment.
+Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the third example tests if a given account is found by its e-mail address.
 
 {% highlight ruby %}
 describe Account do
   before(:each) do
-    @account = Account.create :name => "Test", :email => 'test@test.com'
+    @account = Account.create :name => "Test", :email => "test@test.com"
 
     @account2 = Account.create :name => "Test2"
 
-    @account3 = Account.create :name => "Test3", :email => 'test2@test.com’
+    @account3 = Account.create :name => "Test3", :email => "test2@test.com"
   end
     
   it "has valid attributes" do
     @account.should be_valid
   end
   
-  it "doesn't have a valid email address" do
+  it "does not have a valid email address" do
     @account2.should_not be_valid
   end
    
@@ -84,26 +84,34 @@ end
 
 ##...Now Controllers
 
-It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a post request from our browser would be. This is done by typing _post :show, :id => 1_ in our test file where we say which method we want to use (_:show_) and which parameter we want to send (_:id_).
-In the next example we test the show method from our Accounts controller, let’s say we want the method to find an account by it’s id. We go the same way as before, we create two accounts in the before segment, then we describe the method we are testing and what it should do. In this case as our example says, it should find the account by it's id. The _assigns[:account]_ is what the method returns to the call.
+It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a POST, GET, PUT or DELETE request from our browser would be. This is done, for example, by typing _post :show, :id => 1_ in our test file where we say which method we want to use (_:show_) and which parameter we want to send (_:id_).
+In the next example we test the show method from our Accounts controller, let’s say we want the method to find an account by its id. We go the same way as before, we create two accounts in the before segment, then we describe the method we are testing and what it should do. In this case as our example says, it should find the account by its id. The _assigns[:account]_ is what the method returns to the call. In this case the id, name and e-mail. <br />
+The last example tests the _:new_ method in the controller, again we _post_ the name and email of the account and then we look for the registered name, if it's found then it has been successfully created.
 
 {% highlight ruby %}
 describe AccountsController do
   before(:each) do
-    @account1 = Account.create :name => "Test", :email => 'test@test.com'
-    @account2 = Account.create :name => "Test2", :email => 'test2@test.com'
+    @account1 = Account.create :name => "Name", :email => "test@test.com"
+    @account2 = Account.create :name => "Name 2", :email => "test2@test.com"
   end
 
-  describe "when find_account method is called" do
+  describe "when show method is called" do
     it "should find the account by its id" do
       post :show, :id => 1
-      assigns[:account].name.should == "Test"
+      assigns[:account].name.should == "Name"
+    end
+  end
+  
+  describe "when a new user is created" do 
+    it "should register the new account" do
+      post :new, :account => {:name => "Name 3", :email => "test3@test.com"}
+      assigns[:account].name.should == "Name 3" 
     end
   end
 end
 {% endhighlight %}
 
-To finish, I want to talk a little bit about the views, which are not often tested, at least with RSpec, if you want to get into view testing, I think it will be better for you to use [Webrat](https://github.com/brynary/webrat), [Cucumber](http://cukes.info/) or [Selenium](http://seleniumhq.org/).
+To finish, I want to talk a little bit about the views, which are not often tested, at least with RSpec, if you want to get into view testing, I think it will be better for you to use [Webrat](https://github.com/brynary/webrat), [Cucumber](http://cukes.info/) or [Selenium](http://seleniumhq.org/). I'll just leave this for another post.
 
 ##Hope this will help you start with the long road of BDD!
 
