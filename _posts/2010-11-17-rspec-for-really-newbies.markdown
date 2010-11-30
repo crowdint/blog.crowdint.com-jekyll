@@ -21,7 +21,7 @@ Say you already have a _Rails3_ project. In your Gemfile add the next lines.
 
 {% highlight bash %}
 group :development, :test do
-  gem "rspec-rails" , ">= 2.0.0.beta.10"
+  gem "rspec-rails" , ">= 2.2.0"
 end
 {% endhighlight %}
 
@@ -48,64 +48,70 @@ After this, every time you generate from the console a new model or controller, 
 Normally in a Model, what do you do? You basically validate the fields on your tables, or create definitions in order to get new queries, among other things.
 So that’s what you must test, for this you have the following magic words: <br />
 
-_describe, before, it and should_
+_describe, context, before, it and should_
                         
 _describe_, as the word says, it will help you describe what you want the method to do. <br />
+_context_, will help you to describe the environment or the background where your tests will be running at. <br />
 _before_, will help you define stuff you need to be done before you test a method, for example, if you need to simulate an account, a shipping_cart, before is your friend. <br />
 _it_, is meant to be, also, a descriptor for the situation you are testing. <br />
 _should and should_\__not_, with this magic word, you will be able to compare if you’ve received what you were expecting. _Remember it’s all about expectations_.<br />
 
-In the following example, we are going to test the Account Model in an application, the first step is to describe the model. Next we create some accounts in the before segment.
-Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the third example tests if a given account is found by its e-mail address.
+In the following example, we are going to test the Account Model in an application, the first step is to describe the model. Next we define the context and create some accounts in the before segment.
+Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the second context is meant to search an account by its e-mail address.
 
 {% highlight ruby %}
 describe Account do
-  before(:each) do
-    @account = Account.create :name => "Test", :email => "test@test.com"
+    context "when an account is created it has to have an e-mail address" do
+      before(:each) do
+        @account = Account.create! :name => "Test", :email => "test@test.com"
+        @account2 = Account.create :name => "Test2"
+      end 
+      
+      it "validates the account attributes" do
+        @account.should be_valid
+      end
 
-    @account2 = Account.create :name => "Test2"
+      it "doesn't validates the account attributes" do
+        @account2.should_not be_valid
+      end
+    end
 
-    @account3 = Account.create :name => "Test3", :email => "test2@test.com"
-  end
-    
-  it "has valid attributes" do
-    @account.should be_valid
-  end
-  
-  it "does not have a valid email address" do
-    @account2.should_not be_valid
-  end
-   
-  it "should find an account by its e-mail address" do
-    Account.find_by_email("test@test.com").should be_true
-  end
+    context "when an account is searched by its e-mail address" do 
+      before(:each) do
+        @account = Account.create! :name => "Test Name", :email => "test@test.com"
+      end
+
+      it "should find the account" do
+        Account.find_by_email("test@test.com").should be_true
+      end
+    end
 end
 {% endhighlight %}
 
 ##...Now Controllers
 
-It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a POST, GET, PUT or DELETE request from our browser would be. This is done, for example, by typing _post :show, :id => 1_ in our test file where we say which method we want to use (_:show_) and which parameter we want to send (_:id_).
+It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a POST, GET, PUT or DELETE request from our browser would be. This is done, for example, by typing _get :show, :id => @account.id_ in our test file where we say which method we want to use (_:show_) and which parameter we want to send (_:id_).
 In the next example we test the show method from our Accounts controller, let’s say we want the method to find an account by its id. We go the same way as before, we create two accounts in the before segment, then we describe the method we are testing and what it should do. In this case as our example says, it should find the account by its id. The _assigns[:account]_ is what the method returns to the call. In this case the id, name and e-mail. <br />
 The last example tests the _:new_ method in the controller, again we _post_ the name and email of the account and then we look for the registered name, if it's found then it has been successfully created.
 
 {% highlight ruby %}
 describe AccountsController do
-  before(:each) do
-    @account1 = Account.create :name => "Name", :email => "test@test.com"
-    @account2 = Account.create :name => "Name 2", :email => "test2@test.com"
-  end
 
-  describe "when show method is called" do
+  describe "GET show" do
+    before(:each) do
+      @account = Account.create! :name => "Name", :email => 'test@test.com'
+    end
+    
     it "should find the account by its id" do
-      post :show, :id => 1
+      get :show, :id => @account.id
       assigns[:account].name.should == "Name"
     end
   end
   
-  describe "when a new user is created" do 
+  describe "POST new" do 
     it "should register the new account" do
-      post :new, :account => {:name => "Name 3", :email => "test3@test.com"}
-      assigns[:account].name.should == "Name 3" 
+      post :new, :account => {:name => "Name 3", :email => "test4@test.com"}
+      assigns[:account].name.should == "Name 3"
     end
   end
 end
