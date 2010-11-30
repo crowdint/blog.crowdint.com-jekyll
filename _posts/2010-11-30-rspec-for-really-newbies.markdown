@@ -4,7 +4,7 @@ title: RSpec for really newbies
 author: Ana Rosas
 email: ana@crowdint.com
 avatar: 2f2bc78de007915554f49c3ea0fef125
-short_date: Nov 17
+published: true
 ---
 
 
