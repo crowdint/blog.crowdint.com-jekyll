@@ -4,9 +4,350 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-11-30T11:45:24-06:00</updated>
+ <updated>2010-12-07T15:36:08-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
+ 
+ <entry>
+   <title>Improving your development life with Ruby Enterprise Edition</title>
+   <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
+   <updated>2010-12-07T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
+   <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
+Are you tired of waiting for rspec to finish?
+Is your rails application eating more and more memory and you have to restart your app once in a while?&lt;/p&gt;
+
+&lt;p&gt;Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.&lt;/p&gt;
+
+&lt;h2&gt;What is REE?&lt;/h2&gt;
+
+&lt;p&gt;As you can read on the ruby site: &quot;Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues&quot;. But the most important part, as of this post, is its garbage collection technique: &quot;&lt;a href=&quot;http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep&quot;&gt;mark-and-sweep&lt;/a&gt;&quot;.&lt;/p&gt;
+
+&lt;p&gt;Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.&lt;/p&gt;
+
+&lt;p&gt;Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with &quot;&lt;a href=&quot;http://en.wikipedia.org/wiki/Copy-on-write&quot;&gt;copy-on-write&lt;/a&gt;&quot;, implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to &lt;a href=&quot;http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning&quot;&gt;tweak the garbage collector&lt;/a&gt; via environment variables.&lt;/p&gt;
+
+&lt;p&gt;Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.&lt;/p&gt;
+
+&lt;h2&gt;Installing REE&lt;/h2&gt;
+
+&lt;p&gt;I'll guide you through this post assuming that you already have &lt;a href=&quot;http://rvm.beginrescueend.com/rvm/install/&quot;&gt;rvm&lt;/a&gt; installed on your computer.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm install ree
+&lt;span class=&quot;c&quot;&gt;#go and grab a drink, preferably coffee or beer&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#some output&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#done.&lt;/span&gt;
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm use ree
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm list
+
+rvm &lt;span class=&quot;nv&quot;&gt;rubies&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; ree-1.8.7-2010.02 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; x86_64 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+   ruby-1.8.7-p302 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; x86_64 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+   ruby-1.9.1-p378 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; x86_64 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby -v
+ruby 1.8.7 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2010-04-19 patchlevel 253&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;i686-darwin10.4.0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;, MBARI 0x6770, Ruby Enterprise Edition 2010.02
+
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Installing ...
+Installing ....
+Using bundler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
+
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Hint: go to this &lt;a href=&quot;http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html&quot;&gt;post&lt;/a&gt; and make rvm always use your desired gemset@ruby&lt;/p&gt;
+
+&lt;p&gt;Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;rake &lt;span class=&quot;nv&quot;&gt;spec&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; Building fixtures
+..
+... in 62.33s
+
+SLOW SPEC: 5.9991  Test A
+SLOW SPEC: 5.3510  Test B
+SLOW SPEC: 7.8485  Test C
+SLOW SPEC: 7.6710  Test D
+SLOW SPEC: 5.8465  Test E
+SLOW SPEC: 5.9972  Test F
+SLOW SPEC: 5.9707  Test G
+SLOW SPEC: 5.4557  Test H
+SLOW SPEC: 6.0631  Test I
+SLOW SPEC: 5.4861  Test J
+1763/1763:     100% |##########################################| Time: 00:10:43
+
+Finished in 643.211296 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  13m45.186s
+user  11m0.745s
+sys   0m20.082s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Mmhm, that was... 'fast', I wonder how previous numbers performed.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm use 1.8.7
+Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use my_new_gems
+Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_new_gems&amp;#39;&lt;/span&gt;
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+Installing ...
+Installing ....
+Using bundler &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+Your bundle is &lt;span class=&quot;nb&quot;&gt;complete&lt;/span&gt;! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
+
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;rake &lt;span class=&quot;nv&quot;&gt;spec&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; Building fixtures
+...
+in 84.92s
+
+SLOW SPEC: 8.6082  Test A
+SLOW SPEC: 10.3736 Test B
+SLOW SPEC: 11.3856 Test C
+SLOW SPEC: 7.4864  Test D
+SLOW SPEC: 6.5998  Test E
+SLOW SPEC: 8.8307  Test F
+SLOW SPEC: 8.8013  Test G
+SLOW SPEC: 8.8126  Test H
+SLOW SPEC: 8.9622  Test I
+SLOW SPEC: 8.9033  Test J
+1763/1763:     100% |##########################################| Time: 00:15:30
+
+Finished in 930.143889 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  19m40.629s
+user  16m13.691s
+sys   0m21.632s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!&lt;/p&gt;
+
+&lt;p&gt;Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section &lt;a href=&quot;http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning&quot;&gt;Garbage Collector Performance Tunning&lt;/a&gt;. Twitter has published their production settings, let's see what we can get.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm use ree
+Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm gemset use my_new_gems
+Now using gemset &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_new_gems&amp;#39;&lt;/span&gt;
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_MIN_SLOTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;500000 &lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_SLOTS_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;250000 &lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_SLOTS_GROWTH_FACTOR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;RUBY_GC_MALLOC_LIMIT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;50000000 rake &lt;span class=&quot;nv&quot;&gt;spec&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; Building fixtures
+..
+...in 44.06s
+SLOW SPEC: 6.2397  Test C
+SLOW SPEC: 8.4131  Test D
+SLOW SPEC: 5.6498  Test E
+1763/1763:     100% |##########################################| Time: 00:06:53
+
+Finished in 413.352603 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  9m26.457s
+user  6m46.696s
+sys   0m20.475s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You should've seen my face when I came back and saw the results, that meant 2.2x faster!&lt;/p&gt;
+
+&lt;p&gt;My next thought was: I have to make this a permanent change in my system, so it was easy:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;RUBY_HEAP_MIN_SLOTS=500000&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bash_profile
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;RUBY_HEAP_SLOTS_INCREMENT=250000&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bash_profile
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bash_profile
+ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;RUBY_GC_MALLOC_LIMIT=50000000&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:&lt;/p&gt;
+
+&lt;h3&gt;Using Standard Ruby 1.8.7&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &amp;lt;&lt;span class=&quot;nv&quot;&gt;$Revision&lt;/span&gt;: 655654 &lt;span class=&quot;nv&quot;&gt;$&amp;gt;&lt;/span&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;be patient&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   56.476 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360264 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    17.71 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       5647.631 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       56.476 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          1683.51 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.8      0       6
+Processing:    89 5378 899.5   5653    6163
+Waiting:       88 5377 899.5   5652    6162
+Total:         92 5378 898.9   5653    6165
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Ruby Enterprise Edition&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &amp;lt;&lt;span class=&quot;nv&quot;&gt;$Revision&lt;/span&gt;: 655654 &lt;span class=&quot;nv&quot;&gt;$&amp;gt;&lt;/span&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;be patient&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   45.212 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360134 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    22.12 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       4521.241 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       45.212 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2102.92 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    1   1.0      0       5
+Processing:    83 4285 706.4   4456    5027
+Waiting:       82 4284 706.4   4455    5026
+Total:         88 4286 705.5   4456    5028
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Ruby Enterprise Edition with twitter settings&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &amp;lt;&lt;span class=&quot;nv&quot;&gt;$Revision&lt;/span&gt;: 655654 &lt;span class=&quot;nv&quot;&gt;$&amp;gt;&lt;/span&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;be patient&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   31.348 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360048 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    31.90 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       3134.784 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       31.348 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          3033.01 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.9      0       5
+Processing:   210 2962 562.4   3074    3873
+Waiting:      210 2961 562.4   3073    3872
+Total:        215 2963 561.6   3074    3873
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Ruby Enterprise Edition with 37signals settings&lt;/h3&gt;
+
+&lt;p&gt;37signals has published their production settings too, and I tried to apply them in my project and I got:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;ecruz@ecruz-mbp:project &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;develop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &amp;lt;&lt;span class=&quot;nv&quot;&gt;$Revision&lt;/span&gt;: 655654 &lt;span class=&quot;nv&quot;&gt;$&amp;gt;&lt;/span&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;be patient&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;tests:   46.230 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360135 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    21.63 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#/sec] (mean)&lt;/span&gt;
+Time per request:       4622.981 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time per request:       46.230 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mean, across all concurrent requests&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Transfer rate:          2056.64 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Kbytes/sec&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; received
+
+Connection Times &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ms&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+              min  mean&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;+/-sd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; median   max
+Connect:        0    0   0.9      0       5
+Processing:    79 4390 760.8   4473    5830
+Waiting:       78 4390 760.8   4472    5829
+Total:         84 4391 760.0   4473    5830
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.&lt;/p&gt;
+
+&lt;p&gt;*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.&lt;/p&gt;
+</content>
+   <author>
+     <name>Edwin Cruz</name>
+     <email>edwin.cruz@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>RSpec for really newbies</title>
@@ -1997,80 +2338,6 @@ error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span 
    <author>
      <name>Luis Galaviz</name>
      <email>luis.galaviz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>A simple way to setup a class for global values</title>
-   <link href="http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html"/>
-   <updated>2010-09-06T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values</id>
-   <content type="html">&lt;p&gt;Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.&lt;/p&gt;
-
-&lt;h2&gt;Setting up the class&lt;/h2&gt;
-
-&lt;p&gt;It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;AppConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;YAML&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;RAILS_ROOT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;app_config.yml&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This will open up the class AppConfig with several attributes for you to use throughout your app, for example:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;app_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;My&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;application&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;base_domain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;twitter_app_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;The class' attributes will be available as a hash:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;app_name&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;My application name&amp;quot;&lt;/span&gt;
-
-AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;base_domain&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;myapp.com&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;app_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;My&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;application&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;base_domain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;twitter_app_dev_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;twitter_app_dev_secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;secret&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;twitter_app_prod_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;twitter_app_prod_secret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Your&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;secret&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now your class has some hashes values like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;development&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter_app_prod_key&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;Your app key&amp;quot;&lt;/span&gt;
-
-AppConfig&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Rail.env&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter_prod_secret&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#=&amp;gt; &amp;quot;Your app secret&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Enjoy!&lt;/h2&gt;
-</content>
-   <author>
-     <name>Francisco Guzm&amp;aacute;n</name>
-     <email>francisco.guzman@crowdint.com</email>
    </author>
  </entry>
  
