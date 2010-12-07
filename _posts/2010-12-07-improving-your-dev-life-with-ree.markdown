@@ -7,25 +7,25 @@ avatar: f7412b373affd1d6db10752cf5d69315
 published: true
 ---
 
-Have you ever wondered if you can do anything to make your ruby development even faster?
-Are you tired to wait rspec to finish?
+Have you ever wondered if you can do something to make your ruby development even faster?
+Are you tired of waiting for rspec to finish?
 Is your rails application eating more and more memory and you have to restart your app once in a while?
 
-Ok, This is one those paths to improve your ruby dev life, not new, but it's very effective.
+Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.
 
 ## What is REE?
 
-As you can read on ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collector technique: "[mark-and-sweep](http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep)".
+As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "[mark-and-sweep](http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep)".
 
 Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.
 
-Ruby Enterprise Edition has come to attack this matter, replacing garbage collector algorithm by "[copy-on-write](http://en.wikipedia.org/wiki/Copy-on-write)", implementing forking model(reducing application's memory usage by 33% on average) and the most important part(again, as of this post): ability to [tweak garbage collector](http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning) via environment variables.
+Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "[copy-on-write](http://en.wikipedia.org/wiki/Copy-on-write)", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to [tweak the garbage collector](http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning) via environment variables.
 
-Based on the documentation and some researches made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of release engineering team, I need to run all tests as fast as possible, finding this technique highly recommendable.
+Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.
 
 ## Installing REE
 
-I'll guide this post assuming that you already have [rvm](http://rvm.beginrescueend.com/rvm/install/) installed on your machine.
+I'll guide you through this post assuming that you already have [rvm](http://rvm.beginrescueend.com/rvm/install/) installed on your computer.
 
 {% highlight bash %}
 ecruz@ecruz-mbp:project (master)$ rvm install ree
@@ -59,9 +59,9 @@ Your bundle is complete! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-
 ecruz@ecruz-mbp:project (master)$
 {% endhighlight %}
 
-Hint: go to this [post](http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html) and make rvm to always use your desired gemset@ruby
+Hint: go to this [post](http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html) and make rvm always use your desired gemset@ruby
 
-Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate ree power
+Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power
 {% highlight bash %}
 ecruz@ecruz-mbp:project (develop)$ time rake spec
 => Building fixtures
@@ -129,7 +129,7 @@ user  16m13.691s
 sys   0m21.632s
 {% endhighlight %}
 
-Wow! I hadn't notice the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!
+Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!
 
 Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section [Garbage Collector Performance Tunning](http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning). Twitter has published their production settings, let's see what we can get.
 
@@ -158,7 +158,7 @@ sys   0m20.475s
 
 You should've seen my face when I came back and saw the results, that meant 2.2x faster!
 
-My next thought was: I have to this a permanent change in my system, so it was easy:
+My next thought was: I have to make this a permanent change in my system, so it was easy:
 {% highlight bash %}
 ecruz@ecruz-mbp:project (develop)$ echo "RUBY_HEAP_MIN_SLOTS=500000" >> ~/.bash_profile
 ecruz@ecruz-mbp:project (develop)$ echo "RUBY_HEAP_SLOTS_INCREMENT=250000" >> ~/.bash_profile
