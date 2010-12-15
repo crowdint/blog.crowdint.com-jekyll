@@ -4,14 +4,196 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-12-07T15:36:08-06:00</updated>
+ <updated>2010-12-14T20:23:38-08:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
+   <title>Always Think RESTful</title>
+   <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
+   <updated>2010-12-15T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
+   <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.&lt;/p&gt;
+
+&lt;p&gt;I, at least, personally had a problem getting it when I first started
+using Rails.&lt;/p&gt;
+
+&lt;h2&gt;REST&lt;/h2&gt;
+
+&lt;p&gt;REST stands for &lt;em&gt;Representational State Transfer&lt;/em&gt;.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.&lt;/p&gt;
+
+&lt;h3&gt;The wrong way&lt;/h3&gt;
+
+&lt;p&gt;I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.&lt;/p&gt;
+
+&lt;p&gt;So, with that thought on your mind, you end up with a controller like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;review&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove_review&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cancel&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pay&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;return&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;What's wrong here?&lt;/h3&gt;
+
+&lt;p&gt;If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay, return.&lt;/p&gt;
+
+&lt;p&gt;Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have &lt;em&gt;resources&lt;/em&gt; and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.&lt;/p&gt;
+
+&lt;p&gt;A resource is not necesarily a model, it's just &lt;em&gt;something&lt;/em&gt; that has a
+state or that can be altered.&lt;/p&gt;
+
+&lt;h3&gt;How to make it right?&lt;/h3&gt;
+
+&lt;p&gt;So, if we go back to our example, the right thing to do, is to think
+about those &lt;em&gt;bad&lt;/em&gt; actions as a resource.&lt;/p&gt;
+
+&lt;p&gt;If you're going to review an order, then, you need a &lt;em&gt;OrderReview&lt;/em&gt;
+controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderReviewController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;See? Now we're thinking of the review as a &lt;em&gt;resource&lt;/em&gt;, a resource that
+can receive all the &lt;em&gt;CRUD&lt;/em&gt; actions. In this specific case we &lt;em&gt;SHOULD&lt;/em&gt; have
+a &lt;em&gt;OrderReview&lt;/em&gt; model and whatnot, but I just wanted to make an example
+out of it.&lt;/p&gt;
+
+&lt;p&gt;A most common mistake... an action that actually alters the state of an
+object like the cancel action.&lt;/p&gt;
+
+&lt;p&gt;I know you're, just changing some field from '&lt;em&gt;active&lt;/em&gt;' to '&lt;em&gt;enabled&lt;/em&gt;' or
+something, but still, this looks much better:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderCancellationsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In case you're wondering, the &lt;em&gt;delete&lt;/em&gt; action would be used to cancel the
+cancellation (it can happen).&lt;/p&gt;
+
+&lt;p&gt;You could now refactor all the other actions to their respective
+controller: &lt;em&gt;PaymentsController&lt;/em&gt;, &lt;em&gt;ReturnsController&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Associations&lt;/h2&gt;
+
+&lt;p&gt;In terms of REST, &lt;em&gt;everything is a resource&lt;/em&gt;. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.&lt;/p&gt;
+
+&lt;p&gt;For example, if you had a User that can add other User objects as its
+friends, instead of creating a &lt;em&gt;add_friend&lt;/em&gt; or something action, you'd add
+a &lt;em&gt;Friendship&lt;/em&gt; controller, with &lt;em&gt;create&lt;/em&gt; and &lt;em&gt;delete&lt;/em&gt; actions.&lt;/p&gt;
+
+&lt;p&gt;By the way, I've seen relationships like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;has_and_belongs_to_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Plus a lot of weird code to make this work&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Always remember to think restful&lt;/em&gt;, probably the user should:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friendships&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:through&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friendships&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# This actually requires more code to make it work, but, you get the&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# point, right?&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Think about it. Way better.&lt;/p&gt;
+
+&lt;h3&gt;But, why? You have to write all this &quot;unnecesary&quot; code&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Mantainability&lt;/em&gt; and &lt;em&gt;Readability&lt;/em&gt; mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.&lt;/p&gt;
+
+&lt;p&gt;Also, Rails its all about love and following conventions. This is one of
+them.&lt;/p&gt;
+
+&lt;p&gt;Hope this guide helps you in some way, cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Improving your development life with Ruby Enterprise Edition</title>
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
-   <updated>2010-12-07T00:00:00-06:00</updated>
+   <updated>2010-12-07T00:00:00-08:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
 Are you tired of waiting for rspec to finish?
@@ -352,7 +534,7 @@ Total:         84 4391 760.0   4473    5830
  <entry>
    <title>RSpec for really newbies</title>
    <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
-   <updated>2010-11-30T00:00:00-06:00</updated>
+   <updated>2010-11-30T00:00:00-08:00</updated>
    <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
    <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
 
@@ -489,7 +671,7 @@ The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, a
  <entry>
    <title>Watermarking images minimizing the overhead</title>
    <link href="http://blog.crowdint.com/2010/11/24/watermarking-images.html"/>
-   <updated>2010-11-24T00:00:00-06:00</updated>
+   <updated>2010-11-24T00:00:00-08:00</updated>
    <id>http://blog.crowdint.com/2010/11/24/watermarking-images</id>
    <content type="html">&lt;p&gt;During the days I was working for a project called &lt;a href=&quot;http://creativeallies.com&quot;&gt;Creative Allies&lt;/a&gt;, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.&lt;/p&gt;
 
@@ -660,7 +842,7 @@ Watermark dimensions are: 250 x 250 pixels&lt;/p&gt;
  <entry>
    <title>Rack Basics - A Rack Introduction</title>
    <link href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html"/>
-   <updated>2010-11-17T00:00:00-06:00</updated>
+   <updated>2010-11-17T00:00:00-08:00</updated>
    <id>http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction</id>
    <content type="html">&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full stack
 of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build applications that directly interact
@@ -1030,7 +1212,7 @@ look forward to them.&lt;/p&gt;
  <entry>
    <title>Subdomains in Rails (2.3.x & 3)</title>
    <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-06:00</updated>
+   <updated>2010-11-11T00:00:00-08:00</updated>
    <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
    <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
 
@@ -1327,7 +1509,7 @@ current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.su
  <entry>
    <title>Controller responders in Rails 3</title>
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-06:00</updated>
+   <updated>2010-11-05T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
    <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
 
@@ -1579,7 +1761,7 @@ end
  <entry>
    <title>Ignoring files with Git</title>
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
-   <updated>2010-11-01T00:00:00-06:00</updated>
+   <updated>2010-11-01T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
 
@@ -1625,7 +1807,7 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-05:00</updated>
+   <updated>2010-10-27T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
@@ -1760,7 +1942,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-05:00</updated>
+   <updated>2010-10-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
@@ -1839,7 +2021,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-05:00</updated>
+   <updated>2010-10-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
@@ -1869,7 +2051,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-05:00</updated>
+   <updated>2010-10-07T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
@@ -1891,7 +2073,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Negative Code</title>
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-05:00</updated>
+   <updated>2010-09-28T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
@@ -1938,7 +2120,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>First contact with regular expressions</title>
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-05:00</updated>
+   <updated>2010-09-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
@@ -2147,7 +2329,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Installing gems skipping RDoc and RI</title>
    <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-05:00</updated>
+   <updated>2010-09-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
    <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
 
@@ -2173,171 +2355,6 @@ but there are some few more useful links to look at:
    <author>
      <name>David Padilla</name>
      <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Customize your Generators Workflow in Rails 3.0.0</title>
-   <link href="http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow.html"/>
-   <updated>2010-09-10T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/09/10/customize-your-generators-workflow</id>
-   <content type="html">&lt;p&gt;When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.&lt;/p&gt;
-
-&lt;p&gt;We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?&lt;/p&gt;
-
-&lt;p&gt;Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.&lt;/p&gt;
-
-&lt;p&gt;So, let's try an example:&lt;/p&gt;
-
-&lt;h2&gt;Hands on!&lt;/h2&gt;
-
-&lt;p&gt;First, we need to create a new Rails Project:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails new g_test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails new g_test -T
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;group :test &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;gem &lt;span class=&quot;s2&quot;&gt;&amp;quot;rspec-rails&amp;quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;gt;= 2.0.0.beta.19&amp;quot;&lt;/span&gt;
-  gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-rails&amp;#39;&lt;/span&gt;
-  gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
-end
-
-gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml-rails&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Then, we just need to install our gems to start playing with our generators:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;bundle install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And, that's it! Now we have a perfect (almost) environment to work with.&lt;/p&gt;
-
-&lt;h2&gt;Generators&lt;/h2&gt;
-
-&lt;p&gt;Now, let's invoke a Rails generator to create a new controller called Test:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g controller Test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This function is just going to invoke many other generators, to create something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  app/controllers/test_controller.rb
-invoke  haml
-create    app/views/test
-invoke  test_unit
-create    &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/functional/test_controller_test.rb
-invoke  helper
-create    app/helpers/test_helper.rb
-invoke    test_unit
-create      &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/unit/helpers/test_helper_test.rb
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g cucumber:install
-rails g rspec:install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Then, just add these lines to our '~/application.erb'&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;config.generators &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |g|
-  g.test_framework :rspec
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;If we try to generate a new controller called RspecTest something like this will show up:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g controller RspecTest
-create  app/controllers/rspec_test_controller.rb
-invoke  haml
-create    app/views/rspec_test
-invoke  rspec
-create    spec/controllers/rspec_test_controller_spec.rb
-invoke  helper
-create    app/helpers/rspec_test_helper.rb
-invoke    rspec
-create      spec/helpers/rspec_test_helper_spec.rb
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;We could also specify that we don't want to create view specs just by adding ':views =&gt; false' in our '~/application.erb' like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;g.test_framework :rspec, :views &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g generator my_test_method
-create  lib/generators/my_test_method
-create  lib/generators/my_test_method/my_test_method_generator.rb
-create  lib/generators/my_test_method/USAGE
-create  lib/generators/my_test_method/templates
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named &quot;generators&quot; is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.&lt;/p&gt;
-
-&lt;p&gt;What commands can you use inside your generator? Rails 3 generators were created on top of &lt;a href=&quot;http://github.com/wycats/thor&quot;&gt;Thor&lt;/a&gt;, so you could check Thor &lt;a href=&quot;http://rdoc.info/github/wycats/thor/master&quot;&gt;documentation&lt;/a&gt;, and also there is a great document you can follow on &lt;a href=&quot;http://edgeguides.rubyonrails.org/generators.html&quot;&gt;RailsGuides&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Anyway, if you want to know more about an specific generator, you could use this command:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails g &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;generator_name&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; -h
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the &lt;a href=&quot;http://github.com/indirect/rails3-generators&quot;&gt;rails3-generators&lt;/a&gt; gem, there are many helpful generators that can make your coding more DRY.&lt;/p&gt;
-
-&lt;p&gt;By the way, there are other things I can't make them to do. For example, if I try to use &quot;my_test_method_generator&quot; as follows, I get an error:&lt;/p&gt;
-
-&lt;p&gt;in &quot;application.rb&quot;:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;g.helper :myhelper
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;in you terminal:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g controller &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;name&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-...
-error  myhelper &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;not found&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.&lt;/p&gt;
-</content>
-   <author>
-     <name>Luis Galaviz</name>
-     <email>luis.galaviz@crowdint.com</email>
    </author>
  </entry>
  
