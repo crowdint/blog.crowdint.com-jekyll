@@ -6,7 +6,7 @@ email: david@crowdint.com
 avatar: d32b52ec6403614b1adf3e648cbbe584
 ---
 
-What I am about to describe in this post it's probably obvious to the
+What I am about to describe in this post is probably something obvious to the
 advanced Rails developer. Yet, it's sometimes hard to get the concept
 when you come from other frameworks or technology.
 
@@ -25,7 +25,7 @@ I've seen it a lot of times. It's just easy to think that, let's say, a
 OrderController, must always be tied to a Order model, and that,
 all actions performed on the Order objects should be done via that controller.
 
-So, sometimes you end up with a controller like this:
+So, with that thought on your mind, you end up with a controller like this:
 
 {% highlight ruby %}
 
@@ -69,17 +69,18 @@ end
 
 {% endhighlight %}
 
-### So, what's wrong here?
+### What's wrong here?
 
 If you take a look at it, there's all these actions on the controller
 that shouldn't be there: review, remove_review, cancel, pay, return.
 
 Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
-means that you have *resources* and that you are just changing
-their state on every action or requesting to see them.
+means that you have *resources* and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.
 
 A resource is not necesarily a model, it's just *something* that has a
-state.
+state or that can be altered.
 
 ### How to make it right?
 
