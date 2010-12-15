@@ -62,8 +62,8 @@ class OrderController < ApplicationController
     ...
   end
 
-  def return
-
+  def return_order
+    ...
   end
 end
 
@@ -72,7 +72,8 @@ end
 ### What's wrong here?
 
 If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay, return.
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.
 
 Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
 means that you have *resources* and that with every request you are

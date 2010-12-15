@@ -100,8 +100,8 @@ all actions performed on the Order objects should be done via that controller.</
     <span class="o">.</span><span class="n">.</span><span class="o">.</span>
   <span class="k">end</span>
 
-  <span class="k">def</span> <span class="nf">return</span>
-
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
@@ -111,7 +111,8 @@ all actions performed on the Order objects should be done via that controller.</
 <h3>What's wrong here?</h3>
 
 <p>If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay, return.</p>
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
 
 <p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
 means that you have <em>resources</em> and that with every request you are
