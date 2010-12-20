@@ -1,0 +1,185 @@
+---
+layout: post
+title: Why to code in ruby?
+author: Hector Bustillos
+email: hector.bustillos@crowdint.com
+avatar: fa56812143dd6049ef19d1a8032f21da
+---
+
+We have been seeing a lot of post about different stuff about rails
+ and ruby, benchmarks, ways to develop ,implementations and more. 
+ But if you are a n00b in the ruby world or if you are thinking in
+ change to ruby, but you are not sure, I am about to trying to
+ give some answer for that common question that you may have. 
+ 
+Like php vs Ruby? or thoose sorts of things..
+
+## php, .net, flex or ruby??
+
+### php advantage
+
+Well php is one of the most common and widely use language for
+code dynamic webpages. You wrote the code and
+it's inserted directly in HTML It is secure, stable and open source.
+
+I have to said that it is easy to use, I've started to write webpages in
+php and it was easy to understand 'cause, at time Ive already knew C and php is 
+C based. It runs in almost all systems(UNIX, windows and MAC OSX). to use it
+you only have to install Apache and add the php module.
+
+php have a wide community and a lot of usefull libraries. A lot
+of books and php.net is awesome.
+
+### php disadvantages
+
+First of all, not everything in php is a piece of cake, when I was coding
+in it, I got some issues when I try to do some more "complex" things, like 
+make a file upload feature and something like that.
+<br/>
+Php is not a 100% Object oriented, its trying to implement in the newest 
+version, but is not good enough as others.
+
+The error handling is very poor in php.<br/>
+Sometimes, you will get messy code beacuse the lack of good practices.<br/>
+You have to take care of some security flaws.<br/>
+
+### .net framework advantages
+
+I really dont like to talk about, but, I have to say that its easy
+and it have a complete documentation, its a event language, so it is easy for
+n00b developers.
+C# is powerfull, binding and a couple of more features.
+
+### .net framework disadvantages
+
+With this framework you have to work in windows and within this enviroment, you will
+get a lot of issues trying to connect other DB rather than SQL Server. and It is heavy as
+hell.
+Also you have to pay for everything.
+
+
+### Flex advantages
+ I really dont know much about it, so I ask to a friend of mine *chicken*(Adrian Castillo).
+He told me that, Flex had a lot of good point, like:<br/>
+Cross-browser.<br/>
+Multiplatform.<br/>
+Multimedia content.<br/>
+Authorship, you can create digital signs for you projects.<br/>
+And it is extendible.<br/>
+ 
+ 
+### Flex disadvantages
+
+The bad things about Flex are:
+when you create a project you have to choose a flash version, and you will have to use that version only.
+If you want the edge stuff, It will be not avialable for everyone.
+theres not to much docs and examples.<br/>
+Its a event language, so if you are not carefull, you will get a mess.
+
+
+### Ruby advantages
+
+Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
+it has been amazing time. Everything is so easy, you dont have to worry in write
+common methods, you have to worry in solve the problem that you have, not in trivial
+stuff. <br/>
+The guy who wrote it [*Yukihiro Matsumoto*](http://en.wikipedia.org/wiki/Yukihiro_Matsumoto) wants to have simple code 
+not so complex, something with the developers feel free and happy.
+
+Its so quickly to learn, just a take a look at the documentation and thats all.
+
+In ruby everything is an object, an example.
+{% highlight ruby %}
+
+10.times {puts "hello world"}
+
+{% endhighlight %}
+take a look at the code and you will see that "10" is object with the method "times", 
+and will put on the screen hello world 10 times, just like that. See simple haa?.
+
+Other thing is that ruby have an excellent error handler.
+
+the community is huge now, and you have a lot of gems and plugins to help in your
+projects.
+
+Ruby is develop in GNU/linux, but you can work with it
+ in windows,mac or other systems.
+ 
+When we are talking of ruby and php, we have to talk about [*Ruby on Rails*](http://rubyonrails.org) an
+awesome framework for ruby, there are other out there(like sinatra), but
+right now is the one I like the most.
+
+Soo What can I say about it?. Well you can create a web site in minutes
+I really meant that, with the *scaffold* function you will have a template 
+in a second(not recommended for important projects).
+Theres a lot of cool functions, like time methods:
+{% highlight ruby %}
+
+Time.now
+ #2010-12-19 23:55:57 -0600
+Time.now + 1.day
+ #2010-12-20 23:56:06 -0600
+2.day.ago
+ #Sat, 18 Dec 2010 05:57:15 UTC +00:00
+
+{% endhighlight %}
+its a simple stuff but so usefull.
+
+In ruby on rails, you will write a lot less code,
+ easy configuration, it has an integrated testing framework.
+ 
+And more and more and more.....
+
+### Ruby disadvantages
+
+Like all the languages it has disadvantages, not everything is beatiful.
+ ok now a couple of them:<br/>
+ 
+The documentation is mostly complete, but it doesnt have method examples or stuff
+like php.net<br/>
+
+If you dont have the money to pay the hosting it will be difficult to get your app
+online, theres a solution [*heroku*](http://www.heroku.com) its a free web  hosting, but just for startups.
+So I have to say that its expensive to go live.
+
+Another thing is when ruby sites grow they will need a
+robust infraestructure, its heavy.
+
+
+## My coworkers opinion
+I've asked to some of my co-workers about the things that they like about ruby,
+and the things that not. And I got the next anwsers about they likes:
+
+They love the way you can changes everything, like open the methods and rewrite
+them.<br/>
+They said that everything is so easy to do, the sintax, write methods, the blocks,
+etc.<br/>
+Also, its amazing how everything is an object so, you can create methods for
+that object, and access them so quickly.<br/>
+Its so easy to learn.
+
+On the other hand, I ask about the things that they doent like about it.
+
+Its not multithread.multitask<br/>
+Its so easy that sometimes it convert you on a lazzy dev.<br/>
+Its perfect. I know i now Im just telling you what they said.<br/>
+Its heavy than php.<br/>
+
+
+## Final thoughts
+This are a couple of things, just for make an idea. If you dig more I am sure,
+that you will find more things, god and bad ones, and its the same in every
+language, you have to try it by yourself and see what can you do with ruby.
+
+If you have another question or if you want to say that this post its pure
+crap, dont hesitate on tell. 
+
+I hope this help you a little bit to take a step into ruby or maybe to keep 
+outside of it.
+
+
+
+
+
+
+
