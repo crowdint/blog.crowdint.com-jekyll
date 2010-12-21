@@ -4,9 +4,102 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-12-21T16:17:42-07:00</updated>
+ <updated>2010-12-21T16:31:36-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Cool date formatting in Rails</title>
+   <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
+   <updated>2010-12-21T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
+   <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
+
+&lt;p&gt;That's why the &lt;em&gt;strftime&lt;/em&gt; function exists, and you can customize the output to meet your needs to something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%Y %l:%M %P&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;12/19/2010 10:45 pm&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This is very customizable, but unfortunately, is hard to mantain and definitly... &lt;em&gt;not cool&lt;/em&gt; ;)&lt;br/&gt;
+In fact, this looks like old C/PHP code&lt;/p&gt;
+
+&lt;h2&gt;The &quot;cool&quot; way&lt;/h2&gt;
+
+&lt;p&gt;Rails is a cool framework that follows DRY and Convention over Configuration.&lt;/p&gt;
+
+&lt;p&gt;So that's why we need to use the &lt;em&gt;to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This works with Rails 3 and is compatible with Rails 2.x&lt;/em&gt;!
+By default, Rails comes with a few ones that you can use:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- :long_ordinal  #&amp;lt;- December 19th, 2010 22:42
+- :long          #&amp;lt;- December 19, 2010 22:42
+- :db            #&amp;lt;- 2010-12-19 22:42:43
+- :short         #&amp;lt;- 19 Dec 22:42
+- :time          #&amp;lt;- 22:42
+- :number        #&amp;lt;- 20101219224243
+- :rfc822        #&amp;lt;- Sun, 19 Dec 2010 22:42:43 +0000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, you can execute for example:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:short&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;19 Dec 16:27&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Much better now, isn't it?&lt;/p&gt;
+
+&lt;h2&gt;Custom formats&lt;/h2&gt;
+
+&lt;p&gt;The problem is that Rails doesn't provide an obvious way to do that...&lt;/p&gt;
+
+&lt;p&gt;So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that &lt;em&gt;you could create an initializer in your Rails project and add your own custom formats&lt;/em&gt; there:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;config/initizers/time_formats.rb&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# == Adding your own datetime formats to to_formatted_s&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# DateTime formats are shared with Time. You can add your own to the&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Time::DATE_FORMATS hash. Use the format name as the hash key and&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# either a strftime string or Proc instance that takes a time or&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# datetime argument as the value.&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:month_and_year&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;%B %Y&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;So here I'm creating 2 new date/time formats to use with the to_s method.&lt;/p&gt;
+
+&lt;p&gt;Let's see how different and clean the code is:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# the &amp;quot;cool&amp;quot; way&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# the old school way&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Cool, isn't it?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;And after several reuses of the format, you will start noticing the adventages... especially &lt;em&gt;when you need a change in the format: with this aproach is only one change&lt;/em&gt; (versus search the whole project for strftime usages).&lt;/p&gt;
+
+&lt;p&gt;Hope this help...&lt;br/&gt;
+Thanks for reading&lt;br/&gt;
+Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
+</content>
+   <author>
+     <name>Gonzalo Fernandez</name>
+     <email>gonzalo.fernandez@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Always Think RESTful</title>
@@ -2324,38 +2417,6 @@ but there are some few more useful links to look at:
    <author>
      <name>Francisco Guzm&amp;aacute;n</name>
      <email>francisco.guzman@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Installing gems skipping RDoc and RI</title>
-   <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
-   <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
-
-&lt;p&gt;Personally, I've never used the RDoc included on gem installations.&lt;/p&gt;
-
-&lt;p&gt;If I need info about a class, method, module, I ask uncle &lt;em&gt;Google&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.&lt;/p&gt;
-
-&lt;p&gt;So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.&lt;/p&gt;
-
-&lt;p&gt;It is as simple as, opening or creating a &lt;em&gt;.gemrc&lt;/em&gt; file in your home directory, and adding the following line:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem: --no-rdoc --no-ri
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.&lt;/p&gt;
-
-&lt;p&gt;There you go, enjoy!&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
    </author>
  </entry>
  

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Negative Code</title>
+  <title>Crowd Interactive Tech Blog :: Cool date formatting in Rails</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -39,50 +39,96 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Negative Code</h1>  
+  <h1>Cool date formatting in Rails</h1>  
   <p class="author">
-    <span class="date"><b>Sep 28</b><br />2010</span>
+    <span class="date"><b>Dec 21</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was "negative code". "What is it?" I thought.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
 
-<p>As astonished as I was at that time, I took a few seconds to ask my old fellow (<a href="http://www.google.com">G...</a>) "what is negative code?". Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found <a href="http://stackoverflow.com/questions/3800707/what-is-negative-code">this</a> discussion at <a href="http://stackoverflow.com">stackoverflow</a>. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:</p>
+<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
 
-<p>  "...reducing lines of code, by removing redundancies or using more concise constructs".</p>
-
-<p>Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, "Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!".</p>
-
-<p>A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:</p>
-
-<p>  "When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put "-2000" on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied."</p>
-
-<p>Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:</p>
-
-<p>"Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!".</p>
-
-<p>Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.</p>
-
-<p>Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?</p>
-
-<p>Well, there are two solutions.</p>
-
-<ul>
-<li>We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.</li>
-<li>Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".</li>
-</ul>
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+</code></pre>
+</div>
 
 
-<p>All those LOC we "saved", or that we didn't write, that is negative code.</p>
+<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
+In fact, this looks like old C/PHP code</p>
 
-<p>We usually fall in a hole when someone says "do not re-invent the wheel, re-use". That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.</p>
+<h2>The "cool" way</h2>
 
-<p>Remember, the less code you use, the less code you maintain!</p>
+<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
 
-<p>I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.</p>
+<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
+
+<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
+By default, Rails comes with a few ones that you can use:</p>
+
+<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
+- :long          #&lt;- December 19, 2010 22:42
+- :db            #&lt;- 2010-12-19 22:42:43
+- :short         #&lt;- 19 Dec 22:42
+- :time          #&lt;- 22:42
+- :number        #&lt;- 20101219224243
+- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
+</code></pre>
+
+<p>So, you can execute for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Much better now, isn't it?</p>
+
+<h2>Custom formats</h2>
+
+<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
+
+<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
+
+<p><em>config/initizers/time_formats.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
+<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
+<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
+<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
+<span class="c1"># datetime argument as the value.</span>
+
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+
+<p>Let's see how different and clean the code is:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
+
+<span class="c1"># the old school way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p><em>Cool, isn't it?</em></p>
+
+<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
+
+<p>Hope this help...<br/>
+Thanks for reading<br/>
+Gonzalo "aka Chalo" Fernandez</p>
 
     <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -105,10 +151,8 @@
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/09/22/first-contact-with-regular-expressions.html"><< First contact with regular expressions</a></div>
+      <div class="previous span-8"><a href="/2010/12/15/always-think-restful.html"><< Always Think RESTful</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner! >></a></div>
     
   </div>
 </div>
@@ -118,13 +162,13 @@
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
 
-  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
   </ul>
 </div>
