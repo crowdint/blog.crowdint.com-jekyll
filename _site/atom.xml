@@ -4,14 +4,14 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-12-14T20:23:38-08:00</updated>
- <id>http://blog.crowdint.com</id>
+ <updated>2010-12-21T16:17:42-07:00</updated>
+ <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Always Think RESTful</title>
    <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
-   <updated>2010-12-15T00:00:00-08:00</updated>
+   <updated>2010-12-15T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
    <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
 advanced Rails developer. Yet, it's sometimes hard to get the concept
@@ -67,8 +67,8 @@ all actions performed on the Order objects should be done via that controller.&l
     &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;return&lt;/span&gt;
-
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;return_order&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -78,7 +78,8 @@ all actions performed on the Order objects should be done via that controller.&l
 &lt;h3&gt;What's wrong here?&lt;/h3&gt;
 
 &lt;p&gt;If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay, return.&lt;/p&gt;
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.&lt;/p&gt;
 
 &lt;p&gt;Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
 means that you have &lt;em&gt;resources&lt;/em&gt; and that with every request you are
@@ -193,7 +194,7 @@ them.&lt;/p&gt;
  <entry>
    <title>Improving your development life with Ruby Enterprise Edition</title>
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
-   <updated>2010-12-07T00:00:00-08:00</updated>
+   <updated>2010-12-07T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
 Are you tired of waiting for rspec to finish?
@@ -534,7 +535,7 @@ Total:         84 4391 760.0   4473    5830
  <entry>
    <title>RSpec for really newbies</title>
    <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
-   <updated>2010-11-30T00:00:00-08:00</updated>
+   <updated>2010-11-30T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
    <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
 
@@ -671,7 +672,7 @@ The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, a
  <entry>
    <title>Watermarking images minimizing the overhead</title>
    <link href="http://blog.crowdint.com/2010/11/24/watermarking-images.html"/>
-   <updated>2010-11-24T00:00:00-08:00</updated>
+   <updated>2010-11-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/24/watermarking-images</id>
    <content type="html">&lt;p&gt;During the days I was working for a project called &lt;a href=&quot;http://creativeallies.com&quot;&gt;Creative Allies&lt;/a&gt;, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.&lt;/p&gt;
 
@@ -842,7 +843,7 @@ Watermark dimensions are: 250 x 250 pixels&lt;/p&gt;
  <entry>
    <title>Rack Basics - A Rack Introduction</title>
    <link href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html"/>
-   <updated>2010-11-17T00:00:00-08:00</updated>
+   <updated>2010-11-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction</id>
    <content type="html">&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full stack
 of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build applications that directly interact
@@ -1210,9 +1211,9 @@ look forward to them.&lt;/p&gt;
  </entry>
  
  <entry>
-   <title>Subdomains in Rails (2.3.x & 3)</title>
+   <title>Subdomains in Rails (2.3.x &amp; 3)</title>
    <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-08:00</updated>
+   <updated>2010-11-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
    <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
 
@@ -1807,7 +1808,7 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-07:00</updated>
+   <updated>2010-10-27T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
@@ -1942,7 +1943,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-07:00</updated>
+   <updated>2010-10-22T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
@@ -2021,7 +2022,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-07:00</updated>
+   <updated>2010-10-18T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
@@ -2051,7 +2052,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-07:00</updated>
+   <updated>2010-10-07T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
@@ -2073,7 +2074,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Negative Code</title>
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-07:00</updated>
+   <updated>2010-09-28T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
@@ -2120,7 +2121,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>First contact with regular expressions</title>
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-07:00</updated>
+   <updated>2010-09-22T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
@@ -2329,7 +2330,7 @@ but there are some few more useful links to look at:
  <entry>
    <title>Installing gems skipping RDoc and RI</title>
    <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-07:00</updated>
+   <updated>2010-09-17T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
    <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
 
