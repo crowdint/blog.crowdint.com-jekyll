@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-12-21T16:31:36-07:00</updated>
+ <updated>2010-12-23T13:23:01-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -13,6 +13,7 @@
    <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
    <updated>2010-12-21T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
+   <photo>d3177da7794ac3ce603d65b33bf4a981</photo>
    <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
 
 &lt;p&gt;That's why the &lt;em&gt;strftime&lt;/em&gt; function exists, and you can customize the output to meet your needs to something like this:&lt;/p&gt;
@@ -106,6 +107,7 @@ Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
    <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
    <updated>2010-12-15T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
 advanced Rails developer. Yet, it's sometimes hard to get the concept
 when you come from other frameworks or technology.&lt;/p&gt;
@@ -289,6 +291,7 @@ them.&lt;/p&gt;
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
    <updated>2010-12-07T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
+   <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
 Are you tired of waiting for rspec to finish?
 Is your rails application eating more and more memory and you have to restart your app once in a while?&lt;/p&gt;
@@ -630,6 +633,7 @@ Total:         84 4391 760.0   4473    5830
    <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
    <updated>2010-11-30T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
+   <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
 
 &lt;h2&gt;What is RSpec?&lt;/h2&gt;
@@ -767,6 +771,7 @@ The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, a
    <link href="http://blog.crowdint.com/2010/11/24/watermarking-images.html"/>
    <updated>2010-11-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/24/watermarking-images</id>
+   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;p&gt;During the days I was working for a project called &lt;a href=&quot;http://creativeallies.com&quot;&gt;Creative Allies&lt;/a&gt;, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.&lt;/p&gt;
 
 &lt;p&gt;After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.&lt;/p&gt;
@@ -938,6 +943,7 @@ Watermark dimensions are: 250 x 250 pixels&lt;/p&gt;
    <link href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html"/>
    <updated>2010-11-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction</id>
+   <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full stack
 of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build applications that directly interact
 with a HTTP requests environment and can be plugged in Rails, Sinatra and many other &lt;strong&gt;Rack based frameworks&lt;/strong&gt;.&lt;/p&gt;
@@ -1308,6 +1314,7 @@ look forward to them.&lt;/p&gt;
    <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
    <updated>2010-11-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
+   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
 
 &lt;p&gt;Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having &lt;a href=&quot;http://www.facebook.com/j.francisco.guzman&quot;&gt;Facebook-like urls =&gt;  http://www.facebook.com/j.francisco.guzman&lt;/a&gt;, you may want to have something like &lt;a href=&quot;http://francisco.expensd.com&quot;&gt;http://francisco.expensd.com&lt;/a&gt;.&lt;/p&gt;
@@ -1605,6 +1612,7 @@ current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.su
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
    <updated>2010-11-05T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
+   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
 
 &lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
@@ -1857,6 +1865,7 @@ end
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
    <updated>2010-11-01T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
+   <photo>554ca5879badb8dfd61f5ea7e54aef9e</photo>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
 
 &lt;p&gt;Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name &quot;.gitignore&quot;&lt;/p&gt;
@@ -1903,6 +1912,7 @@ public/images/system/**/*
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
    <updated>2010-10-27T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
+   <photo>44db71cea383d8a2203162ed1ecbec35</photo>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
 &lt;p&gt;It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.&lt;/p&gt;
@@ -2038,6 +2048,7 @@ So this will create a user with database and user creation permissions with a de
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
    <updated>2010-10-22T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
+   <photo>0a34cf6219c554ee75506e544473aea1</photo>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
 &lt;p&gt;There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.&lt;/p&gt;
@@ -2117,6 +2128,7 @@ So this will create a user with database and user creation permissions with a de
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
    <updated>2010-10-18T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;We will be posting all the pictures, slides and videos in the &lt;a href=&quot;http://www.magmarails.com&quot;&gt;official Magma Rails site&lt;/a&gt; as soon as we're done organizing and encoding everything.&lt;/p&gt;
@@ -2147,6 +2159,7 @@ So this will create a user with database and user creation permissions with a de
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
    <updated>2010-10-07T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
 &lt;p&gt;Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.&lt;/p&gt;
@@ -2169,6 +2182,7 @@ So this will create a user with database and user creation permissions with a de
    <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
    <updated>2010-09-28T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
+   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
 
 &lt;p&gt;As astonished as I was at that time, I took a few seconds to ask my old fellow (&lt;a href=&quot;http://www.google.com&quot;&gt;G...&lt;/a&gt;) &quot;what is negative code?&quot;. Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found &lt;a href=&quot;http://stackoverflow.com/questions/3800707/what-is-negative-code&quot;&gt;this&lt;/a&gt; discussion at &lt;a href=&quot;http://stackoverflow.com&quot;&gt;stackoverflow&lt;/a&gt;. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:&lt;/p&gt;
@@ -2216,6 +2230,7 @@ So this will create a user with database and user creation permissions with a de
    <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
    <updated>2010-09-22T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
+   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
 
 &lt;p&gt;They are built within forward slashes and they even have their own class&lt;/p&gt;
