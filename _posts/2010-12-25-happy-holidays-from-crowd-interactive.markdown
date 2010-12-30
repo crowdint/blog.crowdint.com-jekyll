@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Happy Holidays, from your friends at Crowd Interactive
+title: Happy Holidays, your friends from Crowd Interactive
 author: Crowd Interactive
 email: info@crowdint.com
 avatar: 43c0c5387a923d62b0060291c5c297f4
