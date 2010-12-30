@@ -4,9 +4,44 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2010-12-23T13:23:01-07:00</updated>
+ <updated>2010-12-30T12:08:46-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Happy Holidays, from your friends at Crowd Interactive</title>
+   <link href="http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive.html"/>
+   <updated>2010-12-25T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive</id>
+   <photo>43c0c5387a923d62b0060291c5c297f4</photo>
+   <content type="html">&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/2010/12/30/holidays.jpg&quot; alt=&quot;Happy Holidays&quot; /&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>Crowd Interactive</name>
+     <email>info@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Cool date formatting in Rails</title>
@@ -2222,216 +2257,6 @@ So this will create a user with database and user creation permissions with a de
    <author>
      <name>Luis Galaviz</name>
      <email>luis.galaviz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>First contact with regular expressions</title>
-   <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
-   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
-   <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
-
-&lt;p&gt;They are built within forward slashes and they even have their own class&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; Regexp&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Taxonomy of a Regular Expression&lt;/h2&gt;
-
-&lt;p&gt;If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Also, in Ruby you can express a regular expression in two alternate ways:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;%r{expression}o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
-
-&lt;span class=&quot;no&quot;&gt;Regexp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;pattern&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;The &lt;em&gt;match&lt;/em&gt; method and the operator &lt;em&gt;=~&lt;/em&gt; can be used to verify if a string matches a regular expression:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/Example/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Example of a Regexp&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;Example&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; MatchData&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;When using the &lt;em&gt;match&lt;/em&gt; method, the returned value is the matched string or &lt;em&gt;nil&lt;/em&gt; if no match was found. The class of the object that received the assignment is &lt;em&gt;MatchData&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Building regular expressions&lt;/h2&gt;
-
-&lt;p&gt;To start building our own regular expressions, there is a couple of lists we have to become familiar with:&lt;/p&gt;
-
-&lt;h3&gt;1. Special Characters&lt;/h3&gt;
-
-&lt;p&gt;Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is &lt;strong&gt;\&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h4&gt;Special characters list&lt;/h4&gt;
-
-&lt;p&gt;^&lt;br/&gt;
-$&lt;br/&gt;
-?&lt;br/&gt;
-.&lt;br/&gt;
-/&lt;br/&gt;
-\&lt;br/&gt;
-[&lt;br/&gt;
-]&lt;br/&gt;
-{&lt;br/&gt;
-}&lt;br/&gt;
-(&lt;br/&gt;
-)&lt;br/&gt;
-+&lt;br/&gt;
-*&lt;/p&gt;
-
-&lt;h3&gt;2. Types of expressions&lt;/h3&gt;
-
-&lt;p&gt;The most common patterns we can specify in a regular expressions are included in the following table:&lt;/p&gt;
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;th&gt;expression&lt;/th&gt;
-        &lt;th&gt;meaning&lt;/th&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;.&lt;/td&gt;
-        &lt;td&gt;any character&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;[ ]&lt;/td&gt;
-        &lt;td&gt;specify a range (e.g. [a-z] means a letter from a to z)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\w&lt;/td&gt;
-        &lt;td&gt;letter or digit; same as [0-9A-Za-z]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\W&lt;/td&gt;
-        &lt;td&gt;any character but letter or a number&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\s&lt;/td&gt;
-        &lt;td&gt;space character; same as [ \t\n\r\f]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\S&lt;/td&gt;
-      &lt;td&gt;any character but a space space char&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\d&lt;/td&gt;
-      &lt;td&gt;a number; same as [0-9]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\D&lt;/td&gt;
-      &lt;td&gt;any character but a number&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\b&lt;/td&gt;
-      &lt;td&gt;backspace (0x08), only within a range&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\b&lt;/td&gt;
-      &lt;td&gt;word limit, if NOT within a range&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\B&lt;/td&gt;
-      &lt;td&gt;not word limit&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;*&lt;/td&gt;
-      &lt;td&gt;zero or more matches of the preceding&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;+&lt;/td&gt;
-      &lt;td&gt;one or more matches of the preceding&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;^&lt;/td&gt;
-      &lt;td&gt;matches the beginning of a line&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;$&lt;/td&gt;
-      &lt;td&gt;matches the end of a line&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;\A&lt;/td&gt;
-        &lt;td&gt;matches the beginning of the string&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;\z&lt;/td&gt;
-        &lt;td&gt;matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')&lt;/td&gt;
-  &lt;tr&gt;
-      &lt;td&gt;{m[,n]}&lt;/td&gt;
-      &lt;td&gt;at least 'm', topping 'n' matches of the preceeding ('n' is optional)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;?&lt;/td&gt;
-      &lt;td&gt;at least one match of the preceeding (same as {1})&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;( )&lt;/td&gt;
-      &lt;td&gt;group expressions&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;|&lt;/td&gt;
-        &lt;td&gt;logical operator 'or', in [a|b] looks for a OR b&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-
-&lt;h2&gt;Common examples&lt;/h2&gt;
-
-&lt;h3&gt;The e-mail address&lt;/h3&gt;
-
-&lt;p&gt;This is a very common pattern example (it's the one that you get by default in &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;).&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;First, '\A' makes sure to match the string against the start of string; then ([&lt;sup&gt;@\s]+)&lt;/sup&gt; groups the recipient's name, avoiding @ character and space characters.&lt;/p&gt;
-
-&lt;p&gt;After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.&lt;/p&gt;
-
-&lt;p&gt;Finally, the '\Z' makes sure to match the end of line&lt;/p&gt;
-
-&lt;h3&gt;The phone number&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\((\d{3})\)\s+(\d{3})-(\d{4})/&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.&lt;/p&gt;
-
-&lt;h2&gt;Where to look for more information&lt;/h2&gt;
-
-&lt;p&gt;The star of these links is &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;
-but there are some few more useful links to look at:
-&lt;a href=&quot;http://www.regular-expressions.info/ruby.html&quot;&gt;http://www.regular-expressions.info/ruby.html&lt;/a&gt;
-&lt;a href=&quot;http://www.rubyist.net/~slagell/ruby/regexp.html&quot;&gt;http://www.rubyist.net/~slagell/ruby/regexp.html&lt;/a&gt;
-&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&lt;/a&gt;
-&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&lt;/a&gt;
-&lt;a href=&quot;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&quot;&gt;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-</content>
-   <author>
-     <name>Francisco Guzm&amp;aacute;n</name>
-     <email>francisco.guzman@crowdint.com</email>
    </author>
  </entry>
  
