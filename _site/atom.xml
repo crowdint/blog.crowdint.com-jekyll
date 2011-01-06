@@ -4,15 +4,15 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-05T21:48:04-07:00</updated>
+ <updated>2011-01-05T21:56:42-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Custom Sorting with Ruby</title>
-   <link href="http://blog.crowdint.com/2011/01/02/custom-sorting-with-ruby.html"/>
-   <updated>2011-01-02T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/01/02/custom-sorting-with-ruby</id>
+   <link href="http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby.html"/>
+   <updated>2011-01-05T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Sometimes, sorting the elements in an array depend on something more
 complex than just alphabetical order or numerical order.&lt;/p&gt;
