@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Blog</title>
+  <title>Crowd Interactive Tech Blog :: Custom Sorting with Ruby</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -38,9 +38,8 @@
       </div>
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
-          
-<div class="post prepend-1">
-  <h1><a href="/2011/01/02/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
+          <div class="post prepend-1">
+  <h1>Custom Sorting with Ruby</h1>  
   <p class="author">
     <span class="date"><b>Jan 02</b><br />2011</span>
   </p>
@@ -223,204 +222,44 @@ Module, or an external class to reuse them.</p>
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2011/01/02/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  <div class="nav_links span-16">
+    
+      <div class="previous span-8"><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html"><< Happy Holidays, your friends from Crowd Interactive</a></div>
+    
+    
   </div>
 </div>
-
 <div class="post prepend-1">
-  <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 25</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/43c0c5387a923d62b0060291c5c297f4" class="avatar" alt="Avatar" /></div>
-    <br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<p><img src="/images/2010/12/30/holidays.jpg" alt="Happy Holidays" /></p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Crowd Interactive | info@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
-  <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 21</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
-
-<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
-</code></pre>
-</div>
-
-
-<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
-In fact, this looks like old C/PHP code</p>
-
-<h2>The "cool" way</h2>
-
-<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
-
-<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
-
-<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
-By default, Rails comes with a few ones that you can use:</p>
-
-<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
-- :long          #&lt;- December 19, 2010 22:42
-- :db            #&lt;- 2010-12-19 22:42:43
-- :short         #&lt;- 19 Dec 22:42
-- :time          #&lt;- 22:42
-- :number        #&lt;- 20101219224243
-- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
-</code></pre>
-
-<p>So, you can execute for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Much better now, isn't it?</p>
-
-<h2>Custom formats</h2>
-
-<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
-
-<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
-
-<p><em>config/initizers/time_formats.rb</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
-<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
-<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
-<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
-<span class="c1"># datetime argument as the value.</span>
-
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
-</code></pre>
-</div>
-
-
-<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
-
-<p>Let's see how different and clean the code is:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
-
-<span class="c1"># the old school way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
-</code></pre>
-</div>
-
-
-<p><em>Cool, isn't it?</em></p>
-
-<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
-
-<p>Hope this help...<br/>
-Thanks for reading<br/>
-Gonzalo "aka Chalo" Fernandez</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/21/cool-date-formatting-in-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
-  <h1>Recent Posts</h1>
+  <h1>Related Posts</h1>
   <ul class="archives">
-
-  <li><span><b>02 Jan 2011</b></span> &raquo; <a href="/2011/01/02/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
-
-  <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
-
-  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
-
-  <li><span><b>07 Dec 2010</b></span> &raquo; <a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></li>
-
-  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
-
-  <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
 
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
+  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
 
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
-  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
-
-  <li><span><b>18 Oct 2010</b></span> &raquo; <a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></li>
-
-  <li><span><b>07 Oct 2010</b></span> &raquo; <a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></li>
-
-  <li><span><b>28 Sep 2010</b></span> &raquo; <a href="/2010/09/28/negative-code.html">Negative Code</a></li>
-
-  <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
-
-  <li><span><b>17 Sep 2010</b></span> &raquo; <a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></li>
-
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
-
-  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
 
   </ul>
 </div>
-
         </div>
         <div class="right-side span-5 last prepend-1">
           <h1><a href="/">Blog Home</a></h1>
