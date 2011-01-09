@@ -12,20 +12,6 @@
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
   
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-  
 </head>
 <body>
   <div class="container">
@@ -52,7 +38,7 @@ you might be facing a weird performance issue when dealing with images with thum
 <div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
 <span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
 <span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
-<span class="n">LIMIT</span> <span class="mi">1</span>
+<span class="k">LIMIT</span> <span class="mi">1</span>
 </code></pre>
 </div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
 <p>So, let&#8217;s assume the following models:</p>
@@ -138,15 +124,15 @@ you might be facing a weird performance issue when dealing with images with thum
   <h1>Related Posts</h1>
   <ul class="archives">
 
+  <li><span><b>13 Aug 2010</b></span> &raquo; <a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></li>
+
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>14 Dec 2010</b></span> &raquo; <a href="/2010/12/14/create-your-own-dsl-for-callbacks.html">Create your own DSL for callbacks in ruby</a></li>
 
   <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
 
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
-
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x & 3)</a></li>
-
-  <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
 
   </ul>
 </div>

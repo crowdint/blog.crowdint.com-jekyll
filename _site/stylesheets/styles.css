@@ -113,10 +113,17 @@ body {
   color: #175057;
 }
 
-.post .body blockquote {
-  background-color: black;
-  color: green;
+.post .body  blockquote {
   padding: 5px;
+  border : 2px solid #000;
+  background-color: #ccc;
+  quotes: "\201C" "\201C";
+}
+
+.post .body  blockquote:before { 
+  padding: 5px;
+  content: open-quote; 
+  font-weight: bold;
 }
 
 .right-side a {

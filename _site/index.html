@@ -12,20 +12,6 @@
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
   
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-  
 </head>
 <body>
   <div class="container">
@@ -39,6 +25,310 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           
+<div class="post prepend-1">
+  <h1><a href="/2010/12/14/create-your-own-dsl-for-callbacks.html">Create your own DSL for callbacks in ruby</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 14</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
+    <p>In this article I'll guide you through the proccess of building a custom DSL to
+create callbacks for your methods in the Ruby language.</p>
+
+<h1>What is a DSL?</h1>
+
+<p>Wikipedia says:</p>
+
+<blockquote><p>In software development and domain engineering, a domain-specific
+language (DSL) is a programming language or specification language dedicated
+to a particular problem domain, a particular problem representation
+technique, and/or a particular solution technique.</p></blockquote>
+
+<h1>What is a callback?</h1>
+
+<p>Wikipedia says:</p>
+
+<blockquote><p>In computer programming, a callback is a reference to executable code, or a
+piece of executable code, that is passed as an argument to other code. This
+allows a lower-level software layer to call a subroutine (or function)
+defined in a higher-level layer.</p></blockquote>
+
+<h1>What are we going to do?</h1>
+
+<p>We will create a <em>wrap</em> method which will be able to call other methods before
+and after an <em>original</em> method.</p>
+
+<h1>Usage example</h1>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="c1"># This module contains the whole functionality</span>
+      <span class="kp">include</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">before</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">after</span>
+        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+        <span class="n">before_run</span> <span class="ss">:before</span>
+        <span class="n">after_run</span> <span class="ss">:after</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
+</code></pre>
+</div>
+
+
+<p>I want the <em>before</em> and <em>after</em> methods internally invoked around the
+<em>original</em> call. The script output should be the following:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
+    Before method
+    Original method     
+    After method
+</code></pre>
+</div>
+
+
+<h1>Writing the callback step by step</h1>
+
+<p>In order to build the whole example let's start by listing what we require
+to do, after that, we'll code the example from scratch.</p>
+
+<h2>The requirements</h2>
+
+<p>Consider the script fragment where <em>wrap</em> is invoked:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+      <span class="n">before_run</span> <span class="ss">:before</span>
+      <span class="n">after_run</span> <span class="ss">:after</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This means:</p>
+
+<ul>
+<li><strong>Step 1</strong>, we need a class method called wrap. The <em>wrap</em> method has two
+parameters: First the symbol representing the name of the method that will
+be wrapped and second is a block.</li>
+<li><strong>Step 2</strong>, the block parameter contains two method calls which configure
+what methods should be invoked <em>before_run</em> and <em>after_run</em>. Each method
+receives one parameter as symbol representing the name of the method will be
+invoked respectively.</li>
+<li><strong>Step 3</strong>, create the wrap behavior. This step involves creating a new
+method that will eventually call the <em>original</em>, <em>before</em> and <em>after</em>
+methods and implies that we need to <em>alias</em> the <em>original</em> method so it
+don't overwrite it.</li>
+</ul>
+
+
+<h2>Step 1</h2>
+
+<p>What we are going to do is:
+* Create a <em>Wrappable</em> module with an empty <em>wrap</em> method and its two
+  parameters.
+* Add the <em>Wrappable</em> module methods to the <em>CallbackTest</em> metaclass
+  (adding static methods).
+* Invoking the <em>Wrappable</em>'s <em>wrap</em> method inside <em>CallbackTest</em> class.</p>
+
+<p>Now, save the following snippet as <em>callback_test.rb</em>:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="kp">extend</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
+</code></pre>
+</div>
+
+
+<p>Now execute it:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
+    Original method
+</code></pre>
+</div>
+
+
+<h2>Step 2</h2>
+
+<p>What we are going to do is:
+* Invoke <em>before_run</em> and <em>after_run</em> inside the <em>wrap</em>'s parameter block.
+* Create a <strong>WrapperOptions</strong> class.
+  * This way we will namespace the <em>before_run</em> and <em>after_run</em> methods.
+  * I want the <em>wrap</em>'s parameter block to be evaluated inside this</p>
+
+<pre><code>**WrapperOptions** class.
+</code></pre>
+
+<ul>
+<li>By using this class we can handle all options parsing in just one place.</li>
+</ul>
+
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">class</span> <span class="nc">WrapperOptions</span>
+        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="k">end</span>
+        <span class="kp">private</span>
+        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="kp">extend</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">before</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">after</span>
+        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+        <span class="n">before_run</span> <span class="ss">:before</span>
+        <span class="n">after_run</span> <span class="ss">:after</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
+</code></pre>
+</div>
+
+
+<p>Now, verify that your script still works:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
+    Original method
+</code></pre>
+</div>
+
+
+<h2>Step 3</h2>
+
+<p>Our <strong>CallbackTest</strong> remains unchanged, we are going to rework and complete
+the <strong>Wrappable</strong> module. What we are going to do is:</p>
+
+<ul>
+<li><em>Alias</em> the <em>original</em> method so I don't overwrite it.</li>
+<li>Create <em>accessors</em> to our <em>wrapped</em> method names in the <strong>WrapperOptions</strong>
+class.</li>
+<li>Create a new method that will eventually call the <em>original</em>, <em>before</em> and
+<em>after</em> methods .</li>
+</ul>
+
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">class</span> <span class="nc">WrapperOptions</span>
+        <span class="kp">attr_reader</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span>
+        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="k">end</span>
+        <span class="kp">private</span>
+        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">alias_method</span> <span class="ss">:old_method</span><span class="p">,</span> <span class="n">original_method</span>
+        <span class="n">define_method</span> <span class="n">original_method</span> <span class="k">do</span>
+          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">before</span><span class="p">)</span>
+          <span class="nb">send</span><span class="p">(</span><span class="ss">:old_method</span><span class="p">)</span>
+          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">after</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And finally test that the whole this script works:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
+    Before method
+    Original method     
+    After method
+</code></pre>
+</div>
+
+
+<h1>Conclusion</h1>
+
+<p>This was a simple way to build a custom DSL, there are many DSL examples all
+around the web one of them is <strong>RSpec</strong>.</p>
+
+<p>Note that this implementation only supports method names as parameters, if
+you want to view an example of transparently supporting <em>blocks</em> as wrappers
+then look at the <a href="https://gist.github.com/762214">complete exercise gist</a>.</p>
+
+<p>If you really need to implement callbacks then I recommend you to look at the
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html"><strong>ActiveSupport::Callbacks</strong> package</a>.</p>
+
+<p>Thank you for reading.</p>
+
+<p>Regards</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/14/create-your-own-dsl-for-callbacks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
 <div class="post prepend-1">
   <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
   <p class="author">
@@ -536,188 +826,10 @@ The last example tests the <em>:new</em> method in the controller, again we <em>
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 24</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <p>During the days I was working for a project called <a href="http://creativeallies.com">Creative Allies</a>, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.</p>
-
-<p>After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.</p>
-
-<h2>What I did the first time</h2>
-
-<p>The feature included uploading a file, validating it using <a href="http://rmagick.rubyforge.org/">RMagick</a> and if validation passed, creating thumbnails and a watermarked preview.</p>
-
-<p>For this post's purposes I will only re-create such functionality specifying a fixed path to file so I we can compare benchmark outcome. Ready?</p>
-
-<h3>Opening the file</h3>
-
-<p>We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name <a href="/images/wallpaper_original.jpg">"wallpaper_original.jpg"</a> (the file is 1.1 Mb)</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">example_image_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_original.jpg&quot;</span>
-
- <span class="c1"># Let&#39;s also specify the file path for our watermarked image</span>
-<span class="n">example_image_output_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_watermarked.jpg&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Image dimensions are: 1800 x 1200 pixels (big enough)</p>
-
-<p>Also, we have the <a href="/images/watermark.png">watermark stamp</a> in our images folder.
-Watermark dimensions are: 250 x 250 pixels</p>
-
-<h3>Stamping the watermark</h3>
-
-<p>I used a method called <em>apply_watermark</em> that will receive the path to our image as a string and the path of the watermarked image, like this:</p>
-
-<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span> <span class="c1"># great idea to fire up the garbage collector here, it&#39;s a good practice</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Now we just have to call our <em>apply_watermark</em> method passing the <em>example_image_path</em> string as the <em>image_path</em> and the <em>new_filename_path</em> arguments:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">apply_watermark</span><span class="p">(</span><span class="n">example_image_path</span><span class="p">,</span> <span class="n">example_image_output_path</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>Now let's add some code to our <em>apply_watermark</em> method to perform <a href="http://ruby-doc.org/core/classes/Benchmark.html">benchmarking</a>:</p>
-
-<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
-          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-        <span class="p">}</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>I entered the console, picked our image's file path, called the method, grabbed a cup of coffee and relaxed... you can see the console output <a href="https://gist.github.com/661883">here</a></p>
-
-<h3>Here's what happened</h3>
-
-<p>The code in our <em>apply_watermark</em> method iterated as many times our watermark file could fit into our original wallpaper image, stamped the watermark once and again until iterations were completed. This demanded memory and processing power and took longer than any user out there would expect. Sometimes our app just hung.</p>
-
-<p>You can see the result here: <a href="/images/wallpaper_watermarked.jpg">wallpaper_watermarked.jpg</a></p>
-
-<h2>How I fixed it</h2>
-
-<p>Sometimes users would upload HUGE files that were about 8000 x 5000 pixels and everything would just fall apart. We needed to find a way to reduce the number of iterations regardless the dimensions of the images; so I created an additional method that would pick a watermark stamp depending on how big the new image was and then using it in the iterations. Results just rocked!</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">pick_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-  <span class="n">image_width</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">columns</span> <span class="o">/</span> <span class="mi">250</span>
-  <span class="k">case</span> <span class="n">image_width</span><span class="o">.</span><span class="n">to_i</span>
-  <span class="k">when</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span> <span class="mi">2</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span>
-  <span class="k">when</span> <span class="mi">3</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark3.png&quot;</span>
-  <span class="k">when</span> <span class="mi">6</span><span class="o">.</span><span class="n">.</span><span class="mi">11</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark6.png&quot;</span>
-  <span class="k">when</span> <span class="mi">12</span><span class="o">.</span><span class="n">.</span><span class="mi">17</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark12.png&quot;</span>
-  <span class="k">when</span> <span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark18.png&quot;</span>
-  <span class="k">else</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark24.png&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pick_watermark</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
-          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-        <span class="p">}</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Here's the output from our tweaked code (I couldn't even grab another cup of coffee):</p>
-
-<script src="https://gist.github.com/661917.js?file=gistfile1.rb"></script>
-
-
-<p>Pretty amazing, uh?</p>
-
-<p>We saved memory and processor power by 'pre-processing' the watermark stamps and putting them together in separate files so we could pick the one that would demand the lowest number of iterations in our code. After this tweak, our app was ready for the next move...</p>
-
-<h2>Enjoy!</h2>
-
-    <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/24/watermarking-images.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>14 Dec 2010</b></span> &raquo; <a href="/2010/12/14/create-your-own-dsl-for-callbacks.html">Create your own DSL for callbacks in ruby</a></li>
 
   <li><span><b>07 Dec 2010</b></span> &raquo; <a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></li>
 
@@ -756,8 +868,6 @@ Watermark dimensions are: 250 x 250 pixels</p>
   <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
   <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
-
-  <li><span><b>17 Aug 2010</b></span> &raquo; <a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></li>
 
   </ul>
 </div>
