@@ -113,18 +113,22 @@ body {
   color: #175057;
 }
 
-.post .body  blockquote {
-  padding: 5px;
-  border : 2px solid #000;
-  background-color: #ccc;
-  quotes: "\201C" "\201C";
-}
-
-.post .body  blockquote:before { 
-  padding: 5px;
-  content: open-quote; 
-  font-weight: bold;
-}
+.post .body blockquote {
+  font: 14px/20px;
+  padding-left: 70px;
+  padding-top: 18px;
+  padding-bottom: 0px;
+  padding-right: 10px;
+  background-color: #dadada;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 5px auto 20px;
+  background-image: url(/images/openquote4.gif);
+  background-position: middle left;
+  background-repeat: no-repeat;
+  text-indent: 23px;
+  color: #353535;
+} 
 
 .right-side a {
   color: #175057;

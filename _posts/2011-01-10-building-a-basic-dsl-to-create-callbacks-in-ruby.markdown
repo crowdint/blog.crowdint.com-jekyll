@@ -1,36 +1,44 @@
 ---
 layout: post
-title: Create your own DSL for callbacks in ruby
+title: Building a basic DSL to create callbacks in Ruby
 author: Emmanuel Delgado
 email: emmanuel.delgado@crowdint.com
 avatar: a302e7dd208f335dc67761a6db911561
 published: true
 ---
 
-In this article I'll guide you through the proccess of building a custom DSL to
-create callbacks for your methods in the Ruby language.
+Callbacks are useful when you want to perform certain actions *around* existing
+objects, one example is [ActiveRecord Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 
-# What is a DSL? #
-Wikipedia says: 
+In this article we are going to build **Wrappable**, a simple custom DSL to 
+*wrap* a method with *callbacks* using the Ruby language.
+
+
+## What is a DSL? ##
+[Wikipedia says](http://en.wikipedia.org/wiki/Domain-specific_language):
+
 > In software development and domain engineering, a domain-specific 
 > language (DSL) is a programming language or specification language dedicated
 > to a particular problem domain, a particular problem representation
 > technique, and/or a particular solution technique.
 
 
-# What is a callback? #
-Wikipedia says:
+## What is a callback? ##
+[Wikipedia says](http://en.wikipedia.org/wiki/Callback_%28computer_programming%29):
 > In computer programming, a callback is a reference to executable code, or a
 > piece of executable code, that is passed as an argument to other code. This
 > allows a lower-level software layer to call a subroutine (or function)
 > defined in a higher-level layer.
 
 
-# What are we going to do? #
-We will create a *wrap* method which will be able to call other methods before
-and after an *original* method.
+## What are we going to do? ##
+We are going to build step by step a *wrap* method that will be able to call 
+the methods *before* and *after* an *original* method.
 
-# Usage example #
+
+## Usage example ##
+We will end up the example with the following **CallbackTest** class:
+
 {% highlight ruby %}
     class CallbackTest
 
@@ -59,8 +67,7 @@ and after an *original* method.
     CallbackTest.new.original
 {% endhighlight %}
 
-I want the *before* and *after* methods internally invoked around the 
-*original* call. The script output should be the following:
+The script output should be as follows:
 
 {% highlight bash %}
     ...$ ruby my_test.rb
@@ -70,11 +77,12 @@ I want the *before* and *after* methods internally invoked around the
 {% endhighlight %}
 
 
-# Writing the callback step by step #
+## Writing the callback step by step ##
 In order to build the whole example let's start by listing what we require
-to do, after that, we'll code the example from scratch.
+to do and then we will code the example from scratch.
 
-## The requirements ##
+
+### The requirements ###
 Consider the script fragment where *wrap* is invoked:
 
 {% highlight ruby %}
@@ -86,25 +94,26 @@ Consider the script fragment where *wrap* is invoked:
 
 This means:
 
-* **Step 1**, we need a class method called wrap. The *wrap* method has two
-  parameters: First the symbol representing the name of the method that will
-  be wrapped and second is a block.
-* **Step 2**, the block parameter contains two method calls which configure
-  what methods should be invoked *before_run* and *after_run*. Each method
-  receives one parameter as symbol representing the name of the method will be
-  invoked respectively.
-* **Step 3**, create the wrap behavior. This step involves creating a new
+* **Step 1**, we need a class method called *wrap*. The *wrap* method has two
+  parameters: The first is the *symbol representing the name of the method that 
+  will be wrapped and the second is a block.
+* **Step 2**, the block parameter contains two method calls that configure
+  what methods should be invoked: *before_run* and *after_run*. Each method
+  receives one parameter as symbol that represents the name of the method 
+  that will be invoked respectively.
+* **Step 3**, create the *wrap* behavior. This step involves creating a new
   method that will eventually call the *original*, *before* and *after* 
-  methods and implies that we need to *alias* the *original* method so it 
-  don't overwrite it.
+  methods and implies that we need to keep a reference to the *original* 
+  method so we do not overwrite it.
 
-## Step 1 ##
-What we are going to do is:
-* Create a *Wrappable* module with an empty *wrap* method and its two
+
+### Step 1 ###
+What we are going to do here is:
+* Create a **Wrappable** module with an empty *wrap* method and its two
   parameters.
-* Add the *Wrappable* module methods to the *CallbackTest* metaclass
+* Add the **Wrappable** module methods to the **CallbackTest** metaclass
   (adding static methods).
-* Invoking the *Wrappable*'s *wrap* method inside *CallbackTest* class.
+* Invoking the **Wrappable**'s *wrap* method inside *CallbackTest* class.
 
 Now, save the following snippet as *callback_test.rb*:
 
@@ -138,14 +147,18 @@ Now execute it:
     Original method
 {% endhighlight %}
 
-## Step 2 ##
-What we are going to do is:
-* Invoke *before_run* and *after_run* inside the *wrap*'s parameter block.
+
+### Step 2 ###
+What we are going to do here is:
+
+* Invoke the *before_run* and *after_run* inside the *wrap*'s parameter block.
 * Create a **WrapperOptions** class. 
-  * This way we will namespace the *before_run* and *after_run* methods. 
+  * This class will namespace the *before_run* and *after_run* methods. 
   * I want the *wrap*'s parameter block to be evaluated inside this 
     **WrapperOptions** class.
   * By using this class we can handle all options parsing in just one place.
+
+Update *callback_test.rb* with the following:
 
 {% highlight ruby %}
 
@@ -194,22 +207,23 @@ What we are going to do is:
     CallbackTest.new.original
 {% endhighlight %}
 
-Now, verify that your script still works: 
+And verify that your script still works: 
 
 {% highlight bash %}
     ...$ ruby callback_test.rb
     Original method
 {% endhighlight %}
 
-## Step 3 ##
-Our **CallbackTest** remains unchanged, we are going to rework and complete
-the **Wrappable** module. What we are going to do is:
 
-* *Alias* the *original* method so I don't overwrite it.
+### Step 3 ###
+Our **CallbackTest** remains unchanged. Let's improve and complete the
+**Wrappable** module. What we are going to do here is:
+
+* *Alias* the *original* method so we don't overwrite it.
 * Create *accessors* to our *wrapped* method names in the **WrapperOptions**
   class.
 * Create a new method that will eventually call the *original*, *before* and
-  *after* methods .
+  *after* methods.
 
 {% highlight ruby %}
 
@@ -250,7 +264,10 @@ And finally test that the whole this script works:
     After method
 {% endhighlight %}
 
-# Conclusion #
+That's it.
+
+
+## Conclusion ##
 This was a simple way to build a custom DSL, there are many DSL examples all
 around the web one of them is **RSpec**. 
 

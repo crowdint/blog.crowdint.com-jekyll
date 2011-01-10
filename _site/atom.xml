@@ -4,42 +4,47 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-09T02:31:33-06:00</updated>
+ <updated>2011-01-09T21:46:30-06:00</updated>
  <id>http://blog.crowdint.com</id>
  
  
  <entry>
-   <title>Create your own DSL for callbacks in ruby</title>
-   <link href="http://blog.crowdint.com/2010/12/14/create-your-own-dsl-for-callbacks.html"/>
-   <updated>2010-12-14T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/12/14/create-your-own-dsl-for-callbacks</id>
-   <content type="html">&lt;p&gt;In this article I'll guide you through the proccess of building a custom DSL to
-create callbacks for your methods in the Ruby language.&lt;/p&gt;
+   <title>Building a basic DSL to create callbacks in Ruby</title>
+   <link href="http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
+   <updated>2011-01-10T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
+   <content type="html">&lt;p&gt;Callbacks are useful when you want to perform certain actions &lt;em&gt;around&lt;/em&gt; existing
+objects, one example is &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html&quot;&gt;ActiveRecord Callbacks&lt;/a&gt;&lt;/p&gt;
 
-&lt;h1&gt;What is a DSL?&lt;/h1&gt;
+&lt;p&gt;In this article we are going to build &lt;strong&gt;Wrappable&lt;/strong&gt;, a simple custom DSL to
+&lt;em&gt;wrap&lt;/em&gt; a method with &lt;em&gt;callbacks&lt;/em&gt; using the Ruby language.&lt;/p&gt;
 
-&lt;p&gt;Wikipedia says:&lt;/p&gt;
+&lt;h2&gt;What is a DSL?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Domain-specific_language&quot;&gt;Wikipedia says&lt;/a&gt;:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;In software development and domain engineering, a domain-specific
 language (DSL) is a programming language or specification language dedicated
 to a particular problem domain, a particular problem representation
 technique, and/or a particular solution technique.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;h1&gt;What is a callback?&lt;/h1&gt;
+&lt;h2&gt;What is a callback?&lt;/h2&gt;
 
-&lt;p&gt;Wikipedia says:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Callback_%28computer_programming%29&quot;&gt;Wikipedia says&lt;/a&gt;:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;In computer programming, a callback is a reference to executable code, or a
 piece of executable code, that is passed as an argument to other code. This
 allows a lower-level software layer to call a subroutine (or function)
 defined in a higher-level layer.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;h1&gt;What are we going to do?&lt;/h1&gt;
+&lt;h2&gt;What are we going to do?&lt;/h2&gt;
 
-&lt;p&gt;We will create a &lt;em&gt;wrap&lt;/em&gt; method which will be able to call other methods before
-and after an &lt;em&gt;original&lt;/em&gt; method.&lt;/p&gt;
+&lt;p&gt;We are going to build step by step a &lt;em&gt;wrap&lt;/em&gt; method that will be able to call
+the methods &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; an &lt;em&gt;original&lt;/em&gt; method.&lt;/p&gt;
 
-&lt;h1&gt;Usage example&lt;/h1&gt;
+&lt;h2&gt;Usage example&lt;/h2&gt;
+
+&lt;p&gt;We will end up the example with the following &lt;strong&gt;CallbackTest&lt;/strong&gt; class:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
 
@@ -70,8 +75,7 @@ and after an &lt;em&gt;original&lt;/em&gt; method.&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;I want the &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; methods internally invoked around the
-&lt;em&gt;original&lt;/em&gt; call. The script output should be the following:&lt;/p&gt;
+&lt;p&gt;The script output should be as follows:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby my_test.rb
     Before method
@@ -81,12 +85,12 @@ and after an &lt;em&gt;original&lt;/em&gt; method.&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;h1&gt;Writing the callback step by step&lt;/h1&gt;
+&lt;h2&gt;Writing the callback step by step&lt;/h2&gt;
 
 &lt;p&gt;In order to build the whole example let's start by listing what we require
-to do, after that, we'll code the example from scratch.&lt;/p&gt;
+to do and then we will code the example from scratch.&lt;/p&gt;
 
-&lt;h2&gt;The requirements&lt;/h2&gt;
+&lt;h3&gt;The requirements&lt;/h3&gt;
 
 &lt;p&gt;Consider the script fragment where &lt;em&gt;wrap&lt;/em&gt; is invoked:&lt;/p&gt;
 
@@ -101,28 +105,28 @@ to do, after that, we'll code the example from scratch.&lt;/p&gt;
 &lt;p&gt;This means:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Step 1&lt;/strong&gt;, we need a class method called wrap. The &lt;em&gt;wrap&lt;/em&gt; method has two
-parameters: First the symbol representing the name of the method that will
-be wrapped and second is a block.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Step 2&lt;/strong&gt;, the block parameter contains two method calls which configure
-what methods should be invoked &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt;. Each method
-receives one parameter as symbol representing the name of the method will be
-invoked respectively.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Step 3&lt;/strong&gt;, create the wrap behavior. This step involves creating a new
+&lt;li&gt;&lt;strong&gt;Step 1&lt;/strong&gt;, we need a class method called &lt;em&gt;wrap&lt;/em&gt;. The &lt;em&gt;wrap&lt;/em&gt; method has two
+parameters: The first is the *symbol representing the name of the method that
+will be wrapped and the second is a block.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Step 2&lt;/strong&gt;, the block parameter contains two method calls that configure
+what methods should be invoked: &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt;. Each method
+receives one parameter as symbol that represents the name of the method
+that will be invoked respectively.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Step 3&lt;/strong&gt;, create the &lt;em&gt;wrap&lt;/em&gt; behavior. This step involves creating a new
 method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt;
-methods and implies that we need to &lt;em&gt;alias&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method so it
-don't overwrite it.&lt;/li&gt;
+methods and implies that we need to keep a reference to the &lt;em&gt;original&lt;/em&gt;
+method so we do not overwrite it.&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;h2&gt;Step 1&lt;/h2&gt;
+&lt;h3&gt;Step 1&lt;/h3&gt;
 
-&lt;p&gt;What we are going to do is:
-* Create a &lt;em&gt;Wrappable&lt;/em&gt; module with an empty &lt;em&gt;wrap&lt;/em&gt; method and its two
+&lt;p&gt;What we are going to do here is:
+* Create a &lt;strong&gt;Wrappable&lt;/strong&gt; module with an empty &lt;em&gt;wrap&lt;/em&gt; method and its two
   parameters.
-* Add the &lt;em&gt;Wrappable&lt;/em&gt; module methods to the &lt;em&gt;CallbackTest&lt;/em&gt; metaclass
+* Add the &lt;strong&gt;Wrappable&lt;/strong&gt; module methods to the &lt;strong&gt;CallbackTest&lt;/strong&gt; metaclass
   (adding static methods).
-* Invoking the &lt;em&gt;Wrappable&lt;/em&gt;'s &lt;em&gt;wrap&lt;/em&gt; method inside &lt;em&gt;CallbackTest&lt;/em&gt; class.&lt;/p&gt;
+* Invoking the &lt;strong&gt;Wrappable&lt;/strong&gt;'s &lt;em&gt;wrap&lt;/em&gt; method inside &lt;em&gt;CallbackTest&lt;/em&gt; class.&lt;/p&gt;
 
 &lt;p&gt;Now, save the following snippet as &lt;em&gt;callback_test.rb&lt;/em&gt;:&lt;/p&gt;
 
@@ -157,21 +161,25 @@ don't overwrite it.&lt;/li&gt;
 &lt;/div&gt;
 
 
-&lt;h2&gt;Step 2&lt;/h2&gt;
+&lt;h3&gt;Step 2&lt;/h3&gt;
 
-&lt;p&gt;What we are going to do is:
-* Invoke &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; inside the &lt;em&gt;wrap&lt;/em&gt;'s parameter block.
-* Create a &lt;strong&gt;WrapperOptions&lt;/strong&gt; class.
-  * This way we will namespace the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; methods.
-  * I want the &lt;em&gt;wrap&lt;/em&gt;'s parameter block to be evaluated inside this&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;**WrapperOptions** class.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What we are going to do here is:&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;Invoke the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; inside the &lt;em&gt;wrap&lt;/em&gt;'s parameter block.&lt;/li&gt;
+&lt;li&gt;Create a &lt;strong&gt;WrapperOptions&lt;/strong&gt; class.
+
+&lt;ul&gt;
+&lt;li&gt;This class will namespace the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; methods.&lt;/li&gt;
+&lt;li&gt;I want the &lt;em&gt;wrap&lt;/em&gt;'s parameter block to be evaluated inside this
+&lt;strong&gt;WrapperOptions&lt;/strong&gt; class.&lt;/li&gt;
 &lt;li&gt;By using this class we can handle all options parsing in just one place.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 
+
+&lt;p&gt;Update &lt;em&gt;callback_test.rb&lt;/em&gt; with the following:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WrapperOptions&lt;/span&gt;
@@ -220,7 +228,7 @@ don't overwrite it.&lt;/li&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;Now, verify that your script still works:&lt;/p&gt;
+&lt;p&gt;And verify that your script still works:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby callback_test.rb
     Original method
@@ -228,17 +236,17 @@ don't overwrite it.&lt;/li&gt;
 &lt;/div&gt;
 
 
-&lt;h2&gt;Step 3&lt;/h2&gt;
+&lt;h3&gt;Step 3&lt;/h3&gt;
 
-&lt;p&gt;Our &lt;strong&gt;CallbackTest&lt;/strong&gt; remains unchanged, we are going to rework and complete
-the &lt;strong&gt;Wrappable&lt;/strong&gt; module. What we are going to do is:&lt;/p&gt;
+&lt;p&gt;Our &lt;strong&gt;CallbackTest&lt;/strong&gt; remains unchanged. Let's improve and complete the
+&lt;strong&gt;Wrappable&lt;/strong&gt; module. What we are going to do here is:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;em&gt;Alias&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method so I don't overwrite it.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Alias&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method so we don't overwrite it.&lt;/li&gt;
 &lt;li&gt;Create &lt;em&gt;accessors&lt;/em&gt; to our &lt;em&gt;wrapped&lt;/em&gt; method names in the &lt;strong&gt;WrapperOptions&lt;/strong&gt;
 class.&lt;/li&gt;
 &lt;li&gt;Create a new method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and
-&lt;em&gt;after&lt;/em&gt; methods .&lt;/li&gt;
+&lt;em&gt;after&lt;/em&gt; methods.&lt;/li&gt;
 &lt;/ul&gt;
 
 
@@ -281,7 +289,9 @@ class.&lt;/li&gt;
 &lt;/div&gt;
 
 
-&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;That's it.&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;This was a simple way to build a custom DSL, there are many DSL examples all
 around the web one of them is &lt;strong&gt;RSpec&lt;/strong&gt;.&lt;/p&gt;
