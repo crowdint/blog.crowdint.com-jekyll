@@ -4,14 +4,434 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-05T21:56:42-07:00</updated>
+ <updated>2011-01-14T14:10:47-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
+   <title>Building a basic DSL to create callbacks in Ruby</title>
+   <link href="http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
+   <updated>2011-01-14T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
+   <photo>a302e7dd208f335dc67761a6db911561</photo>
+   <content type="html">&lt;h2&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Do you know what a &lt;strong&gt;Domain Specific Language(DSL)&lt;/strong&gt; is and how to
+implement one in Ruby?. This article aims to provide a slight introduction
+to this topic. It is divided in 3 sections, first we'll define what a DSL is,
+second we'll see some examples of DSL implementations, and third we'll build
+a DSL.&lt;/p&gt;
+
+&lt;h2&gt;What is a DSL?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Domain-specific_language&quot;&gt;According wikipedia&lt;/a&gt; a
+DSL is defined as:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;In software development and domain engineering, a domain-specific
+language (DSL) is a programming language or specification language dedicated
+to a particular problem domain, a particular problem representation
+technique, and/or a particular solution technique.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;To clarify, we'll see some examples. As you read through them take into account
+the following points:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://rubylearning.com/satishtalim/ruby_blocks.html&quot;&gt;Ruby blocks&lt;/a&gt;
+are used everywhere. They are the bare minimum construction element.&lt;/li&gt;
+&lt;li&gt;Though the used structures are not part of the Ruby core, all of
+them use valid Ruby constructs.&lt;/li&gt;
+&lt;li&gt;The main purpose of creating new code structure is to provide a more
+&lt;em&gt;human readable code&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;This implies that the following DSL examples(codes) are build with
+sentences like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Given&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Be aware, its respective gems may not define each DSL as I did, but it helps
+to show different possible ways to do it.&lt;/p&gt;
+
+&lt;p&gt;Let's start with the examples.&lt;/p&gt;
+
+&lt;h2&gt;DSL implementations&lt;/h2&gt;
+
+&lt;p&gt;If you are doing Ruby then you probably have already used DSL's. Gems like
+RSpec, Cucumber and Sinatra are good examples of DSL implementations. Let's
+see their syntax and put special attention to the structures they use.&lt;/p&gt;
+
+&lt;p&gt;First, let's see three snippets from these languages.&lt;/p&gt;
+
+&lt;h3&gt;Rspec snippet&lt;/h3&gt;
+
+&lt;p&gt;In RSpec when you want to test if some object responds to a method call
+you usually write something like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyObject&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;should respond to a method call&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:method_call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Cucumber snippet&lt;/h3&gt;
+
+&lt;p&gt;In Cucumber when you write step definitions you do things like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;no&quot;&gt;Given&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt; /^I click link &amp;quot;([^&amp;quot;&amp;quot;]*)&amp;quot;$/&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;click&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Sinatra snippet&lt;/h3&gt;
+
+&lt;p&gt;In Sinatra when you whant to write a route/controller you do something
+like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi there&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now let's write our own DSL.&lt;/p&gt;
+
+&lt;h2&gt;Writing a DSL&lt;/h2&gt;
+
+&lt;p&gt;The following technique intention is similar to that from
+&lt;a href=&quot;http://guides.rubyonrails.org/action_controller_overview.html#filters&quot;&gt;Rails Controller Filters&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let's build a DSL called &lt;strong&gt;Wrappable&lt;/strong&gt;. &lt;strong&gt;Wrappable&lt;/strong&gt; will be a simple custom DSL that
+&lt;em&gt;wrap&lt;/em&gt;'s' a method  with &lt;em&gt;callbacks&lt;/em&gt; using the Ruby language.&lt;/p&gt;
+
+&lt;p&gt;Let me clarify what I mean by &lt;em&gt;wrap&lt;/em&gt; using the following snippet:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Wrappable&lt;/strong&gt; will &lt;em&gt;wrap&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method. Whenever &lt;em&gt;original&lt;/em&gt; is
+invoked, the &lt;em&gt;before&lt;/em&gt; method will be  automatically invoked first, second it
+will invoke the &lt;em&gt;original&lt;/em&gt; method and finally it will invoke the &lt;em&gt;after&lt;/em&gt;
+method.&lt;/p&gt;
+
+&lt;p&gt;The way the &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; methods behave is known as a
+&lt;a href=&quot;http://en.wikipedia.org/wiki/Callback_%28computer_programming%29&quot;&gt;Callback&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This behavior can also be achieved with something like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# original sentences&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;after&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;But, I want to do this dynamically, using a &lt;em&gt;wrap&lt;/em&gt; method that will be
+able to setup the calls to the methods &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; programatically.&lt;/p&gt;
+
+&lt;h3&gt;Usage example&lt;/h3&gt;
+
+&lt;p&gt;We will end up the example with the following &lt;strong&gt;CallbackTest&lt;/strong&gt; class:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
+
+      &lt;span class=&quot;c1&quot;&gt;# This module contains the whole functionality&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Before method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;After method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The script output should be as follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby my_test.rb
+    Before method
+    Original method     
+    After method
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Writing the callback step by step&lt;/h3&gt;
+
+&lt;p&gt;In order to build the whole example let's start by listing what we require
+to do and then we will code the example from scratch.&lt;/p&gt;
+
+&lt;h4&gt;The requirements&lt;/h4&gt;
+
+&lt;p&gt;Consider the script fragment where &lt;em&gt;wrap&lt;/em&gt; is invoked:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This means:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Step 1&lt;/strong&gt;, we need a class method called &lt;em&gt;wrap&lt;/em&gt;. The &lt;em&gt;wrap&lt;/em&gt; method has two
+parameters: The first is the *symbol representing the name of the method that
+will be wrapped and the second is a block.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Step 2&lt;/strong&gt;, the block parameter contains two method calls that configure
+what methods should be invoked: &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt;. Each method
+receives one parameter as symbol that represents the name of the method
+that will be invoked respectively.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Step 3&lt;/strong&gt;, create the &lt;em&gt;wrap&lt;/em&gt; behavior. This step involves creating a new
+method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt;
+methods and implies that we need to keep a reference to the &lt;em&gt;original&lt;/em&gt;
+method so we do not overwrite it.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h4&gt;Step 1&lt;/h4&gt;
+
+&lt;p&gt;What we are going to do here is:
+* Create a &lt;strong&gt;Wrappable&lt;/strong&gt; module with an empty &lt;em&gt;wrap&lt;/em&gt; method and its two
+  parameters.
+* Add the &lt;strong&gt;Wrappable&lt;/strong&gt; module methods to the &lt;strong&gt;CallbackTest&lt;/strong&gt; metaclass
+  (adding static methods).
+* Invoking the &lt;strong&gt;Wrappable&lt;/strong&gt;'s &lt;em&gt;wrap&lt;/em&gt; method inside &lt;em&gt;CallbackTest&lt;/em&gt; class.&lt;/p&gt;
+
+&lt;p&gt;Now, save the following snippet as &lt;em&gt;callback_test.rb&lt;/em&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
+
+      &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now execute it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby callback_test.rb
+    Original method
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h4&gt;Step 2&lt;/h4&gt;
+
+&lt;p&gt;What we are going to do here is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Invoke the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; inside the &lt;em&gt;wrap&lt;/em&gt;'s parameter block.&lt;/li&gt;
+&lt;li&gt;Create a &lt;strong&gt;WrapperOptions&lt;/strong&gt; class.
+
+&lt;ul&gt;
+&lt;li&gt;This class will namespace the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; methods.&lt;/li&gt;
+&lt;li&gt;I want the &lt;em&gt;wrap&lt;/em&gt;'s parameter block to be evaluated inside this
+&lt;strong&gt;WrapperOptions&lt;/strong&gt; class.&lt;/li&gt;
+&lt;li&gt;By using this class we can handle all options parsing in just one place.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Update &lt;em&gt;callback_test.rb&lt;/em&gt; with the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WrapperOptions&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;instance_eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@before&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;WrapperOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
+
+      &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Before method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;After method&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And verify that your script still works:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby callback_test.rb
+    Original method
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h4&gt;Step 3&lt;/h4&gt;
+
+&lt;p&gt;Our &lt;strong&gt;CallbackTest&lt;/strong&gt; remains unchanged. Let's improve and complete the
+&lt;strong&gt;Wrappable&lt;/strong&gt; module. What we are going to do here is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Alias&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method so we don't overwrite it.&lt;/li&gt;
+&lt;li&gt;Create &lt;em&gt;accessors&lt;/em&gt; to our &lt;em&gt;wrapped&lt;/em&gt; method names in the &lt;strong&gt;WrapperOptions&lt;/strong&gt;
+class.&lt;/li&gt;
+&lt;li&gt;Create a new method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and
+&lt;em&gt;after&lt;/em&gt; methods.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WrapperOptions&lt;/span&gt;
+        &lt;span class=&quot;kp&quot;&gt;attr_reader&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;instance_eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@before&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;WrapperOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;alias_method&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:old_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;define_method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:old_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And finally test that the whole this script works:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby my_test.rb
+    Before method
+    Original method     
+    After method
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;That's it.&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This was a simple way to build a custom DSL, there are many DSL examples all
+around the web for example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;At &lt;a href=&quot;http://deadprogrammersociety.blogspot.com/2006/11/ruby-domain-specific-languages-basics.html&quot;&gt;Ron Evan's blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;At &lt;a href=&quot;http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval/&quot;&gt;rubylearning.org's blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;At &lt;a href=&quot;http://obiefernandez.com/presentations/obie_fernandez-agile_dsl_development_in_ruby.pdf&quot;&gt;Obie Fernandez's blog&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Note that this implementation only supports method names as parameters, if
+you want to view an example of transparently supporting &lt;em&gt;blocks&lt;/em&gt; as wrappers
+then look at the &lt;a href=&quot;https://gist.github.com/762214&quot;&gt;complete exercise gist&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally, if you really need to implement callbacks then I recommend you to look at the
+&lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html&quot;&gt;&lt;strong&gt;ActiveSupport::Callbacks&lt;/strong&gt; package&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Thank you for reading.&lt;/p&gt;
+
+&lt;p&gt;Regards&lt;/p&gt;
+</content>
+   <author>
+     <name>Emmanuel Delgado</name>
+     <email>emmanuel.delgado@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Custom Sorting with Ruby</title>
    <link href="http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby.html"/>
-   <updated>2011-01-05T00:00:00-07:00</updated>
+   <updated>2011-01-05T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Sometimes, sorting the elements in an array depend on something more
@@ -193,7 +613,7 @@ Module, or an external class to reuse them.&lt;/p&gt;
  <entry>
    <title>Happy Holidays, your friends from Crowd Interactive</title>
    <link href="http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive.html"/>
-   <updated>2010-12-25T00:00:00-07:00</updated>
+   <updated>2010-12-25T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive</id>
    <photo>43c0c5387a923d62b0060291c5c297f4</photo>
    <content type="html">&lt;br /&gt;
@@ -228,7 +648,7 @@ Module, or an external class to reuse them.&lt;/p&gt;
  <entry>
    <title>Cool date formatting in Rails</title>
    <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
-   <updated>2010-12-21T00:00:00-07:00</updated>
+   <updated>2010-12-21T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
    <photo>d3177da7794ac3ce603d65b33bf4a981</photo>
    <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
@@ -322,7 +742,7 @@ Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
  <entry>
    <title>Always Think RESTful</title>
    <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
-   <updated>2010-12-15T00:00:00-07:00</updated>
+   <updated>2010-12-15T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
@@ -506,7 +926,7 @@ them.&lt;/p&gt;
  <entry>
    <title>Improving your development life with Ruby Enterprise Edition</title>
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
-   <updated>2010-12-07T00:00:00-07:00</updated>
+   <updated>2010-12-07T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
    <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
@@ -848,7 +1268,7 @@ Total:         84 4391 760.0   4473    5830
  <entry>
    <title>RSpec for really newbies</title>
    <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
-   <updated>2010-11-30T00:00:00-07:00</updated>
+   <updated>2010-11-30T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
@@ -986,7 +1406,7 @@ The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, a
  <entry>
    <title>Watermarking images minimizing the overhead</title>
    <link href="http://blog.crowdint.com/2010/11/24/watermarking-images.html"/>
-   <updated>2010-11-24T00:00:00-07:00</updated>
+   <updated>2010-11-24T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/24/watermarking-images</id>
    <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;p&gt;During the days I was working for a project called &lt;a href=&quot;http://creativeallies.com&quot;&gt;Creative Allies&lt;/a&gt;, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.&lt;/p&gt;
@@ -1158,7 +1578,7 @@ Watermark dimensions are: 250 x 250 pixels&lt;/p&gt;
  <entry>
    <title>Rack Basics - A Rack Introduction</title>
    <link href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html"/>
-   <updated>2010-11-17T00:00:00-07:00</updated>
+   <updated>2010-11-17T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full stack
@@ -1529,7 +1949,7 @@ look forward to them.&lt;/p&gt;
  <entry>
    <title>Subdomains in Rails (2.3.x &amp; 3)</title>
    <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-07:00</updated>
+   <updated>2010-11-11T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
    <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
@@ -1827,7 +2247,7 @@ current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.su
  <entry>
    <title>Controller responders in Rails 3</title>
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-07:00</updated>
+   <updated>2010-11-05T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
    <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
@@ -2080,7 +2500,7 @@ end
  <entry>
    <title>Ignoring files with Git</title>
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
-   <updated>2010-11-01T00:00:00-07:00</updated>
+   <updated>2010-11-01T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
    <photo>554ca5879badb8dfd61f5ea7e54aef9e</photo>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
@@ -2127,7 +2547,7 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-06:00</updated>
+   <updated>2010-10-27T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
    <photo>44db71cea383d8a2203162ed1ecbec35</photo>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
@@ -2263,7 +2683,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-06:00</updated>
+   <updated>2010-10-22T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
    <photo>0a34cf6219c554ee75506e544473aea1</photo>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
@@ -2343,7 +2763,7 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-06:00</updated>
+   <updated>2010-10-18T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
@@ -2364,29 +2784,6 @@ So this will create a user with database and user creation permissions with a de
 &lt;p&gt;Thanks again to everyone involved.&lt;/p&gt;
 
 &lt;p&gt;Hope to see you next year!&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Magma Rails is just around the corner!</title>
-   <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
-   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
-   <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
-
-&lt;p&gt;Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.&lt;/p&gt;
-
-&lt;div style=&quot;text-align:center&quot;&gt;
-  &lt;a href=&quot;http://www.magmarails.com&quot;&gt;&lt;img src=&quot;/images/2010/10/07/bluetooth.png&quot; /&gt;&lt;/a&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;More info on the site: &lt;a href=&quot;http://www.magmarails.com&quot;&gt;http://www.magmarails.com&lt;/a&gt;&lt;/p&gt;
 </content>
    <author>
      <name>David Padilla</name>

@@ -12,6 +12,20 @@
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
   
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  
 </head>
 <body>
   <div class="container">
@@ -156,7 +170,7 @@ not be exactly defined inside a class but, in the end they will get either inher
 
 <p>Running this script we see:</p>
 
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
 <span class="s2">&quot;1. Current receiver is main&quot;</span>
 <span class="s2">&quot;2. Current receiver is A&quot;</span>
 <span class="s2">&quot;4. Current receiver is A&quot;</span>
@@ -180,7 +194,7 @@ not be exactly defined inside a class but, in the end they will get either inher
 
 <p>Running this script we see:</p>
 
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
 <span class="o">[</span><span class="s2">&quot;@b&quot;</span>, <span class="s2">&quot;@a&quot;</span><span class="o">]</span>
 </code></pre>
 </div>
@@ -216,7 +230,7 @@ to write code that writes code lets see some examples:</p>
 
 <p>Which throws:</p>
 
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
 <span class="o">[</span><span class="s2">&quot;method1&quot;</span><span class="o">]</span>
 70312385439840
 <span class="o">[</span><span class="s2">&quot;method2&quot;</span>, <span class="s2">&quot;method1&quot;</span><span class="o">]</span>
@@ -259,7 +273,7 @@ of <em>A</em> would have.</p>
 
 <p>Which throws:</p>
 
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
 <span class="s2">&quot;Unknown method&quot;</span>
 <span class="s2">&quot;Hello&quot;</span>
 <span class="s2">&quot;Bye&quot;</span>
@@ -314,9 +328,7 @@ suggest you start with:</p>
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
-
-  <li><span><b>10 Jan 2011</b></span> &raquo; <a href="/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
@@ -325,8 +337,6 @@ suggest you start with:</p>
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   </ul>
 </div>
