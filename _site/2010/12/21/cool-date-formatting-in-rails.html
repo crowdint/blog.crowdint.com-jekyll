@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Instant blog using Jekyll and Heroku</title>
+  <title>Crowd Interactive Tech Blog :: Cool date formatting in Rails</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -11,6 +11,20 @@
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+  
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   
 </head>
 <body>
@@ -25,157 +39,96 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Instant blog using Jekyll and Heroku</h1>  
+  <h1>Cool date formatting in Rails</h1>  
   <p class="author">
-    <span class="date"><b>Aug 02</b><br />2010</span>
+    <span class="date"><b>Dec 21</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
 
-<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
+<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
 
-<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
-
-<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
-
-<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
-
-<h2>Setup jekyll</h2>
-
-<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
-all you have to do is run:</p>
-
-<div class="highlight"><pre><code class="bash">gem install jekyll
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
 </code></pre>
 </div>
 
 
-<h2>Create the site structure</h2>
+<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
+In fact, this looks like old C/PHP code</p>
 
-<p>Create a folder wherever you want to put your blog files.</p>
+<h2>The "cool" way</h2>
 
-<div class="highlight"><pre><code class="bash">mkdir my_blog
+<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
+
+<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
+
+<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
+By default, Rails comes with a few ones that you can use:</p>
+
+<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
+- :long          #&lt;- December 19, 2010 22:42
+- :db            #&lt;- 2010-12-19 22:42:43
+- :short         #&lt;- 19 Dec 22:42
+- :time          #&lt;- 22:42
+- :number        #&lt;- 20101219224243
+- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
+</code></pre>
+
+<p>So, you can execute for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
 </code></pre>
 </div>
 
 
-<p>and create the following files:</p>
+<p>Much better now, isn't it?</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
-touch _config.yml
-touch index.html
-mkdir _posts
-mkdir _layouts
-touch _layouts/default.html
+<h2>Custom formats</h2>
+
+<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
+
+<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
+
+<p><em>config/initizers/time_formats.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
+<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
+<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
+<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
+<span class="c1"># datetime argument as the value.</span>
+
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
 </code></pre>
 </div>
 
 
-<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
+<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
 
-<h2>"Hello World" Jekyll</h2>
+<p>Let's see how different and clean the code is:</p>
 
-<h3>_layouts/default.html</h3>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
 
-<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
-
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<span class="c1"># the old school way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
 </code></pre>
 </div>
 
 
-<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
+<p><em>Cool, isn't it?</em></p>
 
-<div class="highlight"><pre><code class="html">---
-layout: default
----
-</code></pre>
-</div>
+<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
 
-
-<p>What we're telling the index page is to use the default layout we created earlier.</p>
-
-<p>Run:</p>
-
-<div class="highlight"><pre><code class="bash">jekyll--server --auto
-</code></pre>
-</div>
-
-
-<p>Open your browser and go to http://127.0.0.1:4000</p>
-
-<p>You should now see "Hello World"</p>
-
-<h2>Deploying to Heroku</h2>
-
-<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
-
-<p>You can read the documentation on the gem page, the basic steps are:</p>
-
-<p>First, install the Heroku gem</p>
-
-<div class="highlight"><pre><code class="bash">gem install heroku
-</code></pre>
-</div>
-
-
-<p>Create a config.ru file:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
-
-<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
-</code></pre>
-</div>
-
-
-<p>Add the rack-jekyll gem to the heroku manifest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
-</code></pre>
-</div>
-
-
-<p>Create a git repo and an initial commit:</p>
-
-<div class="highlight"><pre><code class="bash">git init
-git add .
-git commit -m <span class="s2">&quot;First commit&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Create a Heroku app:</p>
-
-<div class="highlight"><pre><code class="bash">heroku create
-</code></pre>
-</div>
-
-
-<p>And, deploy!</p>
-
-<div class="highlight"><pre><code class="bash">git push heroku master
-</code></pre>
-</div>
-
-
-<p>Check out how it looks:</p>
-
-<div class="highlight"><pre><code class="bash">heroku open
-</code></pre>
-</div>
-
-
-<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
-
-<p>Cheers!</p>
+<p>Hope this help...<br/>
+Thanks for reading<br/>
+Gonzalo "aka Chalo" Fernandez</p>
 
     <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -198,10 +151,10 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/07/28/getting-started-with-rvm.html"><< Getting started with Ruby Version Manager (RVM)</a></div>
+      <div class="previous span-8"><a href="/2010/12/15/always-think-restful.html"><< Always Think RESTful</a></div>
     
     
-      <div class="next span-8 last"><a href="/2010/08/06/our-git-workflow.html">Our git workflow >></a></div>
+      <div class="next span-8 last"><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive >></a></div>
     
   </div>
 </div>
@@ -209,17 +162,15 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>02 Aug 2010</b></span> &raquo; <a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></li>
-
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>06 Sep 2010</b></span> &raquo; <a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></li>
 
   </ul>
 </div>

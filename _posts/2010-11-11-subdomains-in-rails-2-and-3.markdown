@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Subdomains in Rails (2.3.x & 3)
+title: Subdomains in Rails (2.3.x &amp; 3)
 author: Francisco Guzm&aacute;n
 email: francisco.guzman@crowdint.com
 avatar: c000ffd0c4ed3e23d09cae624d24b525

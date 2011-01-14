@@ -4,434 +4,511 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-14T13:05:39-06:00</updated>
- <id>http://blog.crowdint.com</id>
+ <updated>2011-01-05T21:56:42-07:00</updated>
+ <id>http://blog.crowdint.com/</id>
  
  
  <entry>
-   <title>Building a basic DSL to create callbacks in Ruby</title>
-   <link href="http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
-   <updated>2011-01-10T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
-   <content type="html">&lt;h2&gt;Introduction&lt;/h2&gt;
+   <title>Custom Sorting with Ruby</title>
+   <link href="http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby.html"/>
+   <updated>2011-01-05T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;Sometimes, sorting the elements in an array depend on something more
+complex than just alphabetical order or numerical order.&lt;/p&gt;
 
-&lt;p&gt;Do you know what a &lt;strong&gt;Domain Specific Language(DSL)&lt;/strong&gt; is and how to
-implement one in Ruby?. This article aims to provide a slight introduction
-to this topic. It is divided in 3 sections, first we'll define what a DSL is,
-second we'll see some examples of DSL implementations, and third we'll build
-a DSL.&lt;/p&gt;
+&lt;p&gt;From my experience, take for example shoe sizes for little kids.
+For some of the vedors I've worked with you have shoes in size 10.5
+through 13.5, then, the count is restarted to 1 through 9.&lt;/p&gt;
 
-&lt;h2&gt;What is a DSL?&lt;/h2&gt;
+&lt;p&gt;So, in order, the size array would look like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Domain-specific_language&quot;&gt;According wikipedia&lt;/a&gt; a
-DSL is defined as:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;In software development and domain engineering, a domain-specific
-language (DSL) is a programming language or specification language dedicated
-to a particular problem domain, a particular problem representation
-technique, and/or a particular solution technique.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;To clarify, we'll see some examples. As you read through them take into account
-the following points:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://rubylearning.com/satishtalim/ruby_blocks.html&quot;&gt;Ruby blocks&lt;/a&gt;
-are used everywhere. They are the bare minimum construction element.&lt;/li&gt;
-&lt;li&gt;Though the used structures are not part of the Ruby core, all of
-them use valid Ruby constructs.&lt;/li&gt;
-&lt;li&gt;The main purpose of creating new code structure is to provide a more
-&lt;em&gt;human readable code&lt;/em&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;This implies that the following DSL examples(codes) are build with
-sentences like:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Given&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;51&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;Be aware, its respective gems may not define each DSL as I did, but it helps
-to show different possible ways to do it.&lt;/p&gt;
+&lt;h2&gt;The problem&lt;/h2&gt;
 
-&lt;p&gt;Let's start with the examples.&lt;/p&gt;
+&lt;p&gt;Imagine we have those values on a sorted array:&lt;/p&gt;
 
-&lt;h2&gt;DSL implementations&lt;/h2&gt;
-
-&lt;p&gt;If you are doing Ruby then you probably have already used DSL's. Gems like
-RSpec, Cucumber and Sinatra are good examples of DSL implementations. Let's
-see their syntax and put special attention to the structures they use.&lt;/p&gt;
-
-&lt;p&gt;First, let's see three snippets from these languages.&lt;/p&gt;
-
-&lt;h3&gt;Rspec snippet&lt;/h3&gt;
-
-&lt;p&gt;In RSpec when you want to test if some object responds to a method call
-you usually write something like:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyObject&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;should respond to a method call&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:method_call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-&lt;h3&gt;Cucumber snippet&lt;/h3&gt;
-
-&lt;p&gt;In Cucumber when you write step definitions you do things like:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;no&quot;&gt;Given&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt; /^I click link &amp;quot;([^&amp;quot;&amp;quot;]*)&amp;quot;$/&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;click&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Sinatra snippet&lt;/h3&gt;
-
-&lt;p&gt;In Sinatra when you whant to write a route/controller you do something
-like:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi there&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now let's write our own DSL.&lt;/p&gt;
-
-&lt;h2&gt;Writing a DSL&lt;/h2&gt;
-
-&lt;p&gt;The following technique intention is similar to that from
-&lt;a href=&quot;http://guides.rubyonrails.org/action_controller_overview.html#filters&quot;&gt;Rails Controller Filters&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let's build a DSL called &lt;strong&gt;Wrappable&lt;/strong&gt;. &lt;strong&gt;Wrappable&lt;/strong&gt; will be a simple custom DSL that
-&lt;em&gt;wrap&lt;/em&gt;'s' a method  with &lt;em&gt;callbacks&lt;/em&gt; using the Ruby language.&lt;/p&gt;
-
-&lt;p&gt;Let me clarify what I mean by &lt;em&gt;wrap&lt;/em&gt; using the following snippet:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;Wrappable&lt;/strong&gt; will &lt;em&gt;wrap&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method. Whenever &lt;em&gt;original&lt;/em&gt; is
-invoked, the &lt;em&gt;before&lt;/em&gt; method will be  automatically invoked first, second it
-will invoke the &lt;em&gt;original&lt;/em&gt; method and finally it will invoke the &lt;em&gt;after&lt;/em&gt;
+&lt;p&gt;How would we properly sort it? Well the answer is kinda simple. Extending ruby's sort
 method.&lt;/p&gt;
 
-&lt;p&gt;The way the &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; methods behave is known as a
-&lt;a href=&quot;http://en.wikipedia.org/wiki/Callback_%28computer_programming%29&quot;&gt;Callback&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For the sake of legibility, let's make a short version of the array.&lt;/p&gt;
 
-&lt;p&gt;This behavior can also be achieved with something like:&lt;/p&gt;
+&lt;p&gt;Let's pretend for a moment that if we had this array&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# original sentences&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;after&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's sorted version should look like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In Ruby, all Enumerables (mostly array and hashes) have a sort method.
+An example on how to use it would be:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This code would sort the array in numerical order. The first thime I saw
+this code, one thing came to my mind: What is that &lt;em&gt;&amp;lt;=&gt;&lt;/em&gt; operator?&lt;/p&gt;
+
+&lt;p&gt;To understand that, let's first figure out how the &lt;em&gt;sort&lt;/em&gt; method works.&lt;/p&gt;
+
+&lt;h2&gt;The sort method&lt;/h2&gt;
+
+&lt;p&gt;The sort method takes the elements on the enumerable in pairs,
+receives a block, and expects the result of the block to be:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+    &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+    &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Based on the result of that block, the sort method returns the
+array in order.&lt;/p&gt;
+
+&lt;h2&gt;The &amp;lt;=&gt; operator&lt;/h2&gt;
+
+&lt;p&gt;That means the &lt;em&gt;&amp;lt;=&gt;&lt;/em&gt; operator, compares both elements on its sides
+and returns &lt;em&gt;-1, 0, 1&lt;/em&gt; depending on the values.&lt;/p&gt;
+
+&lt;p&gt;An example of how it works for the Fixnum class:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; -1&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; 0 &lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; 1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Go on, try that on &lt;em&gt;irb&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;In our case, we will use a custom function to return &lt;em&gt;-1, 0, 1&lt;/em&gt; depending
+on the value of &lt;em&gt;a&lt;/em&gt; and &lt;em&gt;b&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;For this example, let's just put it on a Comparison class:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comparison&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;little_kid_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;But, I want to do this dynamically, using a &lt;em&gt;wrap&lt;/em&gt; method that will be
-able to setup the calls to the methods &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt; programatically.&lt;/p&gt;
+&lt;p&gt;So, the way we'll use this method will be:&lt;/p&gt;
 
-&lt;h3&gt;Usage example&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Comparison&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;little_kid_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;We will end up the example with the following &lt;strong&gt;CallbackTest&lt;/strong&gt; class:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
+&lt;p&gt;To solve this problem, first thing we need to do is assign a weight to
+the two sets of sizes: -1 to [12, 12.5, 13, 13.5] and 1 to [1, 1.5, 2,
+2.5, 3].&lt;/p&gt;
 
-      &lt;span class=&quot;c1&quot;&gt;# This module contains the whole functionality&lt;/span&gt;
-      &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comparison&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;little_kid_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;little_kid_size_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Before method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;After method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;p&gt;Now, we'll use that weight calculation to determine the sort order of
+the elements.&lt;/p&gt;
 
-      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comparison&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;little_kid_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# If the weights are the same, compare them numerically&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;little_kid_size_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;little_kid_size_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
 
+    &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# If the weights are different, just return the weight of a&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;little_kid_size_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;little_kid_size_weight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;The script output should be as follows:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby my_test.rb
-    Before method
-    Original method     
-    After method
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Writing the callback step by step&lt;/h3&gt;
-
-&lt;p&gt;In order to build the whole example let's start by listing what we require
-to do and then we will code the example from scratch.&lt;/p&gt;
-
-&lt;h4&gt;The requirements&lt;/h4&gt;
-
-&lt;p&gt;Consider the script fragment where &lt;em&gt;wrap&lt;/em&gt; is invoked:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This means:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Step 1&lt;/strong&gt;, we need a class method called &lt;em&gt;wrap&lt;/em&gt;. The &lt;em&gt;wrap&lt;/em&gt; method has two
-parameters: The first is the *symbol representing the name of the method that
-will be wrapped and the second is a block.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Step 2&lt;/strong&gt;, the block parameter contains two method calls that configure
-what methods should be invoked: &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt;. Each method
-receives one parameter as symbol that represents the name of the method
-that will be invoked respectively.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Step 3&lt;/strong&gt;, create the &lt;em&gt;wrap&lt;/em&gt; behavior. This step involves creating a new
-method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and &lt;em&gt;after&lt;/em&gt;
-methods and implies that we need to keep a reference to the &lt;em&gt;original&lt;/em&gt;
-method so we do not overwrite it.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h4&gt;Step 1&lt;/h4&gt;
-
-&lt;p&gt;What we are going to do here is:
-* Create a &lt;strong&gt;Wrappable&lt;/strong&gt; module with an empty &lt;em&gt;wrap&lt;/em&gt; method and its two
-  parameters.
-* Add the &lt;strong&gt;Wrappable&lt;/strong&gt; module methods to the &lt;strong&gt;CallbackTest&lt;/strong&gt; metaclass
-  (adding static methods).
-* Invoking the &lt;strong&gt;Wrappable&lt;/strong&gt;'s &lt;em&gt;wrap&lt;/em&gt; method inside &lt;em&gt;CallbackTest&lt;/em&gt; class.&lt;/p&gt;
-
-&lt;p&gt;Now, save the following snippet as &lt;em&gt;callback_test.rb&lt;/em&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
-
-      &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now execute it:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby callback_test.rb
-    Original method
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h4&gt;Step 2&lt;/h4&gt;
-
-&lt;p&gt;What we are going to do here is:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Invoke the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; inside the &lt;em&gt;wrap&lt;/em&gt;'s parameter block.&lt;/li&gt;
-&lt;li&gt;Create a &lt;strong&gt;WrapperOptions&lt;/strong&gt; class.
-
-&lt;ul&gt;
-&lt;li&gt;This class will namespace the &lt;em&gt;before_run&lt;/em&gt; and &lt;em&gt;after_run&lt;/em&gt; methods.&lt;/li&gt;
-&lt;li&gt;I want the &lt;em&gt;wrap&lt;/em&gt;'s parameter block to be evaluated inside this
-&lt;strong&gt;WrapperOptions&lt;/strong&gt; class.&lt;/li&gt;
-&lt;li&gt;By using this class we can handle all options parsing in just one place.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Update &lt;em&gt;callback_test.rb&lt;/em&gt; with the following:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WrapperOptions&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;instance_eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;vi&quot;&gt;@before&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;vi&quot;&gt;@after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;WrapperOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CallbackTest&lt;/span&gt;
-
-      &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wrappable&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;original&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Original method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Before method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;After method&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;wrap&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:original&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;before_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;after_run&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;no&quot;&gt;CallbackTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And verify that your script still works:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby callback_test.rb
-    Original method
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h4&gt;Step 3&lt;/h4&gt;
-
-&lt;p&gt;Our &lt;strong&gt;CallbackTest&lt;/strong&gt; remains unchanged. Let's improve and complete the
-&lt;strong&gt;Wrappable&lt;/strong&gt; module. What we are going to do here is:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;Alias&lt;/em&gt; the &lt;em&gt;original&lt;/em&gt; method so we don't overwrite it.&lt;/li&gt;
-&lt;li&gt;Create &lt;em&gt;accessors&lt;/em&gt; to our &lt;em&gt;wrapped&lt;/em&gt; method names in the &lt;strong&gt;WrapperOptions&lt;/strong&gt;
-class.&lt;/li&gt;
-&lt;li&gt;Create a new method that will eventually call the &lt;em&gt;original&lt;/em&gt;, &lt;em&gt;before&lt;/em&gt; and
-&lt;em&gt;after&lt;/em&gt; methods.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Wrappable&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WrapperOptions&lt;/span&gt;
-        &lt;span class=&quot;kp&quot;&gt;attr_reader&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:after&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;instance_eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;vi&quot;&gt;@before&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after_run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;vi&quot;&gt;@after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method_name&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;WrapperOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;alias_method&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:old_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;define_method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;original_method&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:old_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper_options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And finally test that the whole this script works:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    ...&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ruby my_test.rb
-    Before method
-    Original method     
-    After method
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;That's it.&lt;/p&gt;
+&lt;p&gt;And that's it, you can try it on irb as it is.&lt;/p&gt;
 
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 
-&lt;p&gt;This was a simple way to build a custom DSL, there are many DSL examples all
-around the web for example:&lt;/p&gt;
+&lt;p&gt;All you have to remember is to make the result of the sort block
+return -1, 0, 1 depending on how you want to sort the values.&lt;/p&gt;
 
-&lt;ul&gt;
-&lt;li&gt;At &lt;a href=&quot;http://deadprogrammersociety.blogspot.com/2006/11/ruby-domain-specific-languages-basics.html&quot;&gt;Ron Evan's blog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;At &lt;a href=&quot;http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval/&quot;&gt;rubylearning.org's blog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;At &lt;a href=&quot;http://obiefernandez.com/presentations/obie_fernandez-agile_dsl_development_in_ruby.pdf&quot;&gt;Obie Fernandez's blog&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;If the sizes were stored, for example, on a ShoeSize model, the best
+thing to do is override the ShoeSize class &lt;em&gt;&amp;lt;=&gt;&lt;/em&gt; operator. That would
+actually look much better, but you can always implement the sort methods on a
+Module, or an external class to reuse them.&lt;/p&gt;
 
-
-&lt;p&gt;Note that this implementation only supports method names as parameters, if
-you want to view an example of transparently supporting &lt;em&gt;blocks&lt;/em&gt; as wrappers
-then look at the &lt;a href=&quot;https://gist.github.com/762214&quot;&gt;complete exercise gist&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Finally, if you really need to implement callbacks then I recommend you to look at the
-&lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html&quot;&gt;&lt;strong&gt;ActiveSupport::Callbacks&lt;/strong&gt; package&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Thank you for reading.&lt;/p&gt;
-
-&lt;p&gt;Regards&lt;/p&gt;
+&lt;p&gt;Hope this helps you somehow.&lt;/p&gt;
 </content>
    <author>
-     <name>Emmanuel Delgado</name>
-     <email>emmanuel.delgado@crowdint.com</email>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Happy Holidays, your friends from Crowd Interactive</title>
+   <link href="http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive.html"/>
+   <updated>2010-12-25T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive</id>
+   <photo>43c0c5387a923d62b0060291c5c297f4</photo>
+   <content type="html">&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;br /&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/2010/12/30/holidays.jpg&quot; alt=&quot;Happy Holidays&quot; /&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>Crowd Interactive</name>
+     <email>info@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Cool date formatting in Rails</title>
+   <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
+   <updated>2010-12-21T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
+   <photo>d3177da7794ac3ce603d65b33bf4a981</photo>
+   <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
+
+&lt;p&gt;That's why the &lt;em&gt;strftime&lt;/em&gt; function exists, and you can customize the output to meet your needs to something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%Y %l:%M %P&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;12/19/2010 10:45 pm&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This is very customizable, but unfortunately, is hard to mantain and definitly... &lt;em&gt;not cool&lt;/em&gt; ;)&lt;br/&gt;
+In fact, this looks like old C/PHP code&lt;/p&gt;
+
+&lt;h2&gt;The &quot;cool&quot; way&lt;/h2&gt;
+
+&lt;p&gt;Rails is a cool framework that follows DRY and Convention over Configuration.&lt;/p&gt;
+
+&lt;p&gt;So that's why we need to use the &lt;em&gt;to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This works with Rails 3 and is compatible with Rails 2.x&lt;/em&gt;!
+By default, Rails comes with a few ones that you can use:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- :long_ordinal  #&amp;lt;- December 19th, 2010 22:42
+- :long          #&amp;lt;- December 19, 2010 22:42
+- :db            #&amp;lt;- 2010-12-19 22:42:43
+- :short         #&amp;lt;- 19 Dec 22:42
+- :time          #&amp;lt;- 22:42
+- :number        #&amp;lt;- 20101219224243
+- :rfc822        #&amp;lt;- Sun, 19 Dec 2010 22:42:43 +0000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, you can execute for example:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:short&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;19 Dec 16:27&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Much better now, isn't it?&lt;/p&gt;
+
+&lt;h2&gt;Custom formats&lt;/h2&gt;
+
+&lt;p&gt;The problem is that Rails doesn't provide an obvious way to do that...&lt;/p&gt;
+
+&lt;p&gt;So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that &lt;em&gt;you could create an initializer in your Rails project and add your own custom formats&lt;/em&gt; there:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;config/initizers/time_formats.rb&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# == Adding your own datetime formats to to_formatted_s&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# DateTime formats are shared with Time. You can add your own to the&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Time::DATE_FORMATS hash. Use the format name as the hash key and&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# either a strftime string or Proc instance that takes a time or&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# datetime argument as the value.&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:month_and_year&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;%B %Y&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;So here I'm creating 2 new date/time formats to use with the to_s method.&lt;/p&gt;
+
+&lt;p&gt;Let's see how different and clean the code is:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# the &amp;quot;cool&amp;quot; way&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# the old school way&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Cool, isn't it?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;And after several reuses of the format, you will start noticing the adventages... especially &lt;em&gt;when you need a change in the format: with this aproach is only one change&lt;/em&gt; (versus search the whole project for strftime usages).&lt;/p&gt;
+
+&lt;p&gt;Hope this help...&lt;br/&gt;
+Thanks for reading&lt;br/&gt;
+Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
+</content>
+   <author>
+     <name>Gonzalo Fernandez</name>
+     <email>gonzalo.fernandez@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Always Think RESTful</title>
+   <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
+   <updated>2010-12-15T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.&lt;/p&gt;
+
+&lt;p&gt;I, at least, personally had a problem getting it when I first started
+using Rails.&lt;/p&gt;
+
+&lt;h2&gt;REST&lt;/h2&gt;
+
+&lt;p&gt;REST stands for &lt;em&gt;Representational State Transfer&lt;/em&gt;.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.&lt;/p&gt;
+
+&lt;h3&gt;The wrong way&lt;/h3&gt;
+
+&lt;p&gt;I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.&lt;/p&gt;
+
+&lt;p&gt;So, with that thought on your mind, you end up with a controller like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;review&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;remove_review&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cancel&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pay&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;return_order&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;What's wrong here?&lt;/h3&gt;
+
+&lt;p&gt;If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.&lt;/p&gt;
+
+&lt;p&gt;Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have &lt;em&gt;resources&lt;/em&gt; and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.&lt;/p&gt;
+
+&lt;p&gt;A resource is not necesarily a model, it's just &lt;em&gt;something&lt;/em&gt; that has a
+state or that can be altered.&lt;/p&gt;
+
+&lt;h3&gt;How to make it right?&lt;/h3&gt;
+
+&lt;p&gt;So, if we go back to our example, the right thing to do, is to think
+about those &lt;em&gt;bad&lt;/em&gt; actions as a resource.&lt;/p&gt;
+
+&lt;p&gt;If you're going to review an order, then, you need a &lt;em&gt;OrderReview&lt;/em&gt;
+controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderReviewController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;See? Now we're thinking of the review as a &lt;em&gt;resource&lt;/em&gt;, a resource that
+can receive all the &lt;em&gt;CRUD&lt;/em&gt; actions. In this specific case we &lt;em&gt;SHOULD&lt;/em&gt; have
+a &lt;em&gt;OrderReview&lt;/em&gt; model and whatnot, but I just wanted to make an example
+out of it.&lt;/p&gt;
+
+&lt;p&gt;A most common mistake... an action that actually alters the state of an
+object like the cancel action.&lt;/p&gt;
+
+&lt;p&gt;I know you're, just changing some field from '&lt;em&gt;active&lt;/em&gt;' to '&lt;em&gt;enabled&lt;/em&gt;' or
+something, but still, this looks much better:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;OrderCancellationsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In case you're wondering, the &lt;em&gt;delete&lt;/em&gt; action would be used to cancel the
+cancellation (it can happen).&lt;/p&gt;
+
+&lt;p&gt;You could now refactor all the other actions to their respective
+controller: &lt;em&gt;PaymentsController&lt;/em&gt;, &lt;em&gt;ReturnsController&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Associations&lt;/h2&gt;
+
+&lt;p&gt;In terms of REST, &lt;em&gt;everything is a resource&lt;/em&gt;. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.&lt;/p&gt;
+
+&lt;p&gt;For example, if you had a User that can add other User objects as its
+friends, instead of creating a &lt;em&gt;add_friend&lt;/em&gt; or something action, you'd add
+a &lt;em&gt;Friendship&lt;/em&gt; controller, with &lt;em&gt;create&lt;/em&gt; and &lt;em&gt;delete&lt;/em&gt; actions.&lt;/p&gt;
+
+&lt;p&gt;By the way, I've seen relationships like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;has_and_belongs_to_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Plus a lot of weird code to make this work&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Always remember to think restful&lt;/em&gt;, probably the user should:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friendships&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friends&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:through&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:friendships&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# This actually requires more code to make it work, but, you get the&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# point, right?&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Think about it. Way better.&lt;/p&gt;
+
+&lt;h3&gt;But, why? You have to write all this &quot;unnecesary&quot; code&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Mantainability&lt;/em&gt; and &lt;em&gt;Readability&lt;/em&gt; mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.&lt;/p&gt;
+
+&lt;p&gt;Also, Rails its all about love and following conventions. This is one of
+them.&lt;/p&gt;
+
+&lt;p&gt;Hope this guide helps you in some way, cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
    </author>
  </entry>
  
  <entry>
    <title>Improving your development life with Ruby Enterprise Edition</title>
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
-   <updated>2010-12-07T00:00:00-06:00</updated>
+   <updated>2010-12-07T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
+   <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
 Are you tired of waiting for rspec to finish?
 Is your rails application eating more and more memory and you have to restart your app once in a while?&lt;/p&gt;
@@ -771,8 +848,9 @@ Total:         84 4391 760.0   4473    5830
  <entry>
    <title>RSpec for really newbies</title>
    <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
-   <updated>2010-11-30T00:00:00-06:00</updated>
+   <updated>2010-11-30T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
+   <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
 
 &lt;h2&gt;What is RSpec?&lt;/h2&gt;
@@ -908,8 +986,9 @@ The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, a
  <entry>
    <title>Watermarking images minimizing the overhead</title>
    <link href="http://blog.crowdint.com/2010/11/24/watermarking-images.html"/>
-   <updated>2010-11-24T00:00:00-06:00</updated>
+   <updated>2010-11-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/24/watermarking-images</id>
+   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;p&gt;During the days I was working for a project called &lt;a href=&quot;http://creativeallies.com&quot;&gt;Creative Allies&lt;/a&gt;, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.&lt;/p&gt;
 
 &lt;p&gt;After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.&lt;/p&gt;
@@ -1079,8 +1158,9 @@ Watermark dimensions are: 250 x 250 pixels&lt;/p&gt;
  <entry>
    <title>Rack Basics - A Rack Introduction</title>
    <link href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html"/>
-   <updated>2010-11-17T00:00:00-06:00</updated>
+   <updated>2010-11-17T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction</id>
+   <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;Rack provides a minimal interface between web servers supporting &lt;strong&gt;Ruby&lt;/strong&gt;. It contains a full stack
 of middleware components. Using &lt;strong&gt;Rack&lt;/strong&gt; middleware you can build applications that directly interact
 with a HTTP requests environment and can be plugged in Rails, Sinatra and many other &lt;strong&gt;Rack based frameworks&lt;/strong&gt;.&lt;/p&gt;
@@ -1447,10 +1527,11 @@ look forward to them.&lt;/p&gt;
  </entry>
  
  <entry>
-   <title>Subdomains in Rails (2.3.x & 3)</title>
+   <title>Subdomains in Rails (2.3.x &amp; 3)</title>
    <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-06:00</updated>
+   <updated>2010-11-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
+   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
    <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
 
 &lt;p&gt;Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having &lt;a href=&quot;http://www.facebook.com/j.francisco.guzman&quot;&gt;Facebook-like urls =&gt;  http://www.facebook.com/j.francisco.guzman&lt;/a&gt;, you may want to have something like &lt;a href=&quot;http://francisco.expensd.com&quot;&gt;http://francisco.expensd.com&lt;/a&gt;.&lt;/p&gt;
@@ -1746,8 +1827,9 @@ current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.su
  <entry>
    <title>Controller responders in Rails 3</title>
    <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-06:00</updated>
+   <updated>2010-11-05T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
+   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
 
 &lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
@@ -1998,8 +2080,9 @@ end
  <entry>
    <title>Ignoring files with Git</title>
    <link href="http://blog.crowdint.com/2010/11/01/ignoring-files-with-git.html"/>
-   <updated>2010-11-01T00:00:00-06:00</updated>
+   <updated>2010-11-01T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2010/11/01/ignoring-files-with-git</id>
+   <photo>554ca5879badb8dfd61f5ea7e54aef9e</photo>
    <content type="html">&lt;p&gt;When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)&lt;/p&gt;
 
 &lt;p&gt;Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name &quot;.gitignore&quot;&lt;/p&gt;
@@ -2044,8 +2127,9 @@ public/images/system/**/*
  <entry>
    <title>Working with PostgreSQL and Rails3</title>
    <link href="http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3.html"/>
-   <updated>2010-10-27T00:00:00-05:00</updated>
+   <updated>2010-10-27T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/27/working-with-postgresql-and-rails3</id>
+   <photo>44db71cea383d8a2203162ed1ecbec35</photo>
    <content type="html">&lt;p&gt;Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.&lt;/p&gt;
 
 &lt;p&gt;It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.&lt;/p&gt;
@@ -2179,8 +2263,9 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Improve your SEO with a sitemap</title>
    <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-05:00</updated>
+   <updated>2010-10-22T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
+   <photo>0a34cf6219c554ee75506e544473aea1</photo>
    <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
 
 &lt;p&gt;There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.&lt;/p&gt;
@@ -2258,8 +2343,9 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails 2010, a success!</title>
    <link href="http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success.html"/>
-   <updated>2010-10-18T00:00:00-05:00</updated>
+   <updated>2010-10-18T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/18/magmarails-2010-was-a-success</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;And it's all thanks to &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;We will be posting all the pictures, slides and videos in the &lt;a href=&quot;http://www.magmarails.com&quot;&gt;official Magma Rails site&lt;/a&gt; as soon as we're done organizing and encoding everything.&lt;/p&gt;
@@ -2288,8 +2374,9 @@ So this will create a user with database and user creation permissions with a de
  <entry>
    <title>Magma Rails is just around the corner!</title>
    <link href="http://blog.crowdint.com/2010/10/07/magma-rails.html"/>
-   <updated>2010-10-07T00:00:00-05:00</updated>
+   <updated>2010-10-07T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/10/07/magma-rails</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.&lt;/p&gt;
 
 &lt;p&gt;Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.&lt;/p&gt;
@@ -2300,294 +2387,6 @@ So this will create a user with database and user creation permissions with a de
 
 
 &lt;p&gt;More info on the site: &lt;a href=&quot;http://www.magmarails.com&quot;&gt;http://www.magmarails.com&lt;/a&gt;&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Negative Code</title>
-   <link href="http://blog.crowdint.com/2010/09/28/negative-code.html"/>
-   <updated>2010-09-28T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/09/28/negative-code</id>
-   <content type="html">&lt;p&gt;Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was &quot;negative code&quot;. &quot;What is it?&quot; I thought.&lt;/p&gt;
-
-&lt;p&gt;As astonished as I was at that time, I took a few seconds to ask my old fellow (&lt;a href=&quot;http://www.google.com&quot;&gt;G...&lt;/a&gt;) &quot;what is negative code?&quot;. Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found &lt;a href=&quot;http://stackoverflow.com/questions/3800707/what-is-negative-code&quot;&gt;this&lt;/a&gt; discussion at &lt;a href=&quot;http://stackoverflow.com&quot;&gt;stackoverflow&lt;/a&gt;. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:&lt;/p&gt;
-
-&lt;p&gt;  &quot;...reducing lines of code, by removing redundancies or using more concise constructs&quot;.&lt;/p&gt;
-
-&lt;p&gt;Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, &quot;Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!&quot;.&lt;/p&gt;
-
-&lt;p&gt;A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:&lt;/p&gt;
-
-&lt;p&gt;  &quot;When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put &quot;-2000&quot; on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied.&quot;&lt;/p&gt;
-
-&lt;p&gt;Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:&lt;/p&gt;
-
-&lt;p&gt;&quot;Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!&quot;.&lt;/p&gt;
-
-&lt;p&gt;Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.&lt;/p&gt;
-
-&lt;p&gt;Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?&lt;/p&gt;
-
-&lt;p&gt;Well, there are two solutions.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.&lt;/li&gt;
-&lt;li&gt;Or we just simply throw away that old code and we remake it. Writing lean code, &quot;same result less code&quot;.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;All those LOC we &quot;saved&quot;, or that we didn't write, that is negative code.&lt;/p&gt;
-
-&lt;p&gt;We usually fall in a hole when someone says &quot;do not re-invent the wheel, re-use&quot;. That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.&lt;/p&gt;
-
-&lt;p&gt;Remember, the less code you use, the less code you maintain!&lt;/p&gt;
-
-&lt;p&gt;I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.&lt;/p&gt;
-</content>
-   <author>
-     <name>Luis Galaviz</name>
-     <email>luis.galaviz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>First contact with regular expressions</title>
-   <link href="http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions.html"/>
-   <updated>2010-09-22T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/09/22/first-contact-with-regular-expressions</id>
-   <content type="html">&lt;p&gt;If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.&lt;/p&gt;
-
-&lt;p&gt;They are built within forward slashes and they even have their own class&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; Regexp&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Taxonomy of a Regular Expression&lt;/h2&gt;
-
-&lt;p&gt;If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/expression/o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Also, in Ruby you can express a regular expression in two alternate ways:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;%r{expression}o&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptions&lt;/span&gt;
-
-&lt;span class=&quot;no&quot;&gt;Regexp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;pattern&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;The &lt;em&gt;match&lt;/em&gt; method and the operator &lt;em&gt;=~&lt;/em&gt; can be used to verify if a string matches a regular expression:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/Example/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Example of a Regexp&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;Example&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;match1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; MatchData&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;When using the &lt;em&gt;match&lt;/em&gt; method, the returned value is the matched string or &lt;em&gt;nil&lt;/em&gt; if no match was found. The class of the object that received the assignment is &lt;em&gt;MatchData&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Building regular expressions&lt;/h2&gt;
-
-&lt;p&gt;To start building our own regular expressions, there is a couple of lists we have to become familiar with:&lt;/p&gt;
-
-&lt;h3&gt;1. Special Characters&lt;/h3&gt;
-
-&lt;p&gt;Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is &lt;strong&gt;\&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h4&gt;Special characters list&lt;/h4&gt;
-
-&lt;p&gt;^&lt;br/&gt;
-$&lt;br/&gt;
-?&lt;br/&gt;
-.&lt;br/&gt;
-/&lt;br/&gt;
-\&lt;br/&gt;
-[&lt;br/&gt;
-]&lt;br/&gt;
-{&lt;br/&gt;
-}&lt;br/&gt;
-(&lt;br/&gt;
-)&lt;br/&gt;
-+&lt;br/&gt;
-*&lt;/p&gt;
-
-&lt;h3&gt;2. Types of expressions&lt;/h3&gt;
-
-&lt;p&gt;The most common patterns we can specify in a regular expressions are included in the following table:&lt;/p&gt;
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;th&gt;expression&lt;/th&gt;
-        &lt;th&gt;meaning&lt;/th&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;.&lt;/td&gt;
-        &lt;td&gt;any character&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;[ ]&lt;/td&gt;
-        &lt;td&gt;specify a range (e.g. [a-z] means a letter from a to z)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\w&lt;/td&gt;
-        &lt;td&gt;letter or digit; same as [0-9A-Za-z]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\W&lt;/td&gt;
-        &lt;td&gt;any character but letter or a number&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-        &lt;td&gt;\s&lt;/td&gt;
-        &lt;td&gt;space character; same as [ \t\n\r\f]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\S&lt;/td&gt;
-      &lt;td&gt;any character but a space space char&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\d&lt;/td&gt;
-      &lt;td&gt;a number; same as [0-9]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\D&lt;/td&gt;
-      &lt;td&gt;any character but a number&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\b&lt;/td&gt;
-      &lt;td&gt;backspace (0x08), only within a range&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\b&lt;/td&gt;
-      &lt;td&gt;word limit, if NOT within a range&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;\B&lt;/td&gt;
-      &lt;td&gt;not word limit&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;*&lt;/td&gt;
-      &lt;td&gt;zero or more matches of the preceding&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;+&lt;/td&gt;
-      &lt;td&gt;one or more matches of the preceding&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;^&lt;/td&gt;
-      &lt;td&gt;matches the beginning of a line&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;$&lt;/td&gt;
-      &lt;td&gt;matches the end of a line&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;\A&lt;/td&gt;
-        &lt;td&gt;matches the beginning of the string&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;\z&lt;/td&gt;
-        &lt;td&gt;matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')&lt;/td&gt;
-  &lt;tr&gt;
-      &lt;td&gt;{m[,n]}&lt;/td&gt;
-      &lt;td&gt;at least 'm', topping 'n' matches of the preceeding ('n' is optional)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;?&lt;/td&gt;
-      &lt;td&gt;at least one match of the preceeding (same as {1})&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;tr&gt;
-      &lt;td&gt;( )&lt;/td&gt;
-      &lt;td&gt;group expressions&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;|&lt;/td&gt;
-        &lt;td&gt;logical operator 'or', in [a|b] looks for a OR b&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-
-&lt;h2&gt;Common examples&lt;/h2&gt;
-
-&lt;h3&gt;The e-mail address&lt;/h3&gt;
-
-&lt;p&gt;This is a very common pattern example (it's the one that you get by default in &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;).&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;First, '\A' makes sure to match the string against the start of string; then ([&lt;sup&gt;@\s]+)&lt;/sup&gt; groups the recipient's name, avoiding @ character and space characters.&lt;/p&gt;
-
-&lt;p&gt;After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.&lt;/p&gt;
-
-&lt;p&gt;Finally, the '\Z' makes sure to match the end of line&lt;/p&gt;
-
-&lt;h3&gt;The phone number&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sr&quot;&gt;/\((\d{3})\)\s+(\d{3})-(\d{4})/&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.&lt;/p&gt;
-
-&lt;h2&gt;Where to look for more information&lt;/h2&gt;
-
-&lt;p&gt;The star of these links is &lt;a href=&quot;&quot; title=&quot;http://rubular.com&quot;&gt;Rubular&lt;/a&gt;
-but there are some few more useful links to look at:
-&lt;a href=&quot;http://www.regular-expressions.info/ruby.html&quot;&gt;http://www.regular-expressions.info/ruby.html&lt;/a&gt;
-&lt;a href=&quot;http://www.rubyist.net/~slagell/ruby/regexp.html&quot;&gt;http://www.rubyist.net/~slagell/ruby/regexp.html&lt;/a&gt;
-&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ&lt;/a&gt;
-&lt;a href=&quot;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&quot;&gt;http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new&lt;/a&gt;
-&lt;a href=&quot;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&quot;&gt;http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-</content>
-   <author>
-     <name>Francisco Guzm&amp;aacute;n</name>
-     <email>francisco.guzman@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Installing gems skipping RDoc and RI</title>
-   <link href="http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri.html"/>
-   <updated>2010-09-17T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2010/09/17/installing-gems-skipping-rdoc-and-ri</id>
-   <content type="html">&lt;p&gt;Because, let's be honest, these days, we're always connected to the internet.&lt;/p&gt;
-
-&lt;p&gt;Personally, I've never used the RDoc included on gem installations.&lt;/p&gt;
-
-&lt;p&gt;If I need info about a class, method, module, I ask uncle &lt;em&gt;Google&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.&lt;/p&gt;
-
-&lt;p&gt;So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.&lt;/p&gt;
-
-&lt;p&gt;It is as simple as, opening or creating a &lt;em&gt;.gemrc&lt;/em&gt; file in your home directory, and adding the following line:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;gem: --no-rdoc --no-ri
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.&lt;/p&gt;
-
-&lt;p&gt;There you go, enjoy!&lt;/p&gt;
 </content>
    <author>
      <name>David Padilla</name>
