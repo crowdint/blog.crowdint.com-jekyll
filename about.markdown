@@ -4,15 +4,22 @@ title: About Crowd Interactive
 avatar: 43c0c5387a923d62b0060291c5c297f4
 ---
 
-Crowd Interactive is an American web design and development company that happens to work in Colima, Mexico. We develop awesome applications for commerce and social sites using Ruby on Rails. In the future (and the future is now), all important apps will be social apps. It's not that there will be a million Facebooks, but that the features found on Facebook - tagging, comments, newsfeeds - will appear on millions of sites. If you want the power of the crowd, work with the experts at Crowd Interactive
+Crowd Interactive is a Ruby on Rails consultancy firm powered by a team of enthusiast engineers that love programming.We turn your ideas into web applications, and usually like challenges. We also have a lot of experience in retail, so
+it doesn't matter if your idea is just something you'd like to sell, we can help you.
+
+Our services range from the design of your image and development of your application to using SEO to improve your presence on the web.
+
+We have different price offerings since we can work both off shore or on site depending on your needs. Call us now to get a quote.
 
 ## Our site
 
 [http://www.crowdint.com](http://www.crowdint.com)
 
-## Phone
+## Phone Numbers
 
-+1 (347) 284-6256
+*New York:* +1 (347) 284-6256
+
+*San Francisco:* +1 (415) 269-7132
 
 ## Twitter
 
