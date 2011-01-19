@@ -31,36 +31,141 @@
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <p>Callbacks are useful when you want to perform certain actions <em>around</em> existing
-objects, one example is <a href="http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html">ActiveRecord Callbacks</a></p>
-
-<p>In this article we are going to build <strong>Wrappable</strong>, a simple custom DSL to
-<em>wrap</em> a method with <em>callbacks</em> using the Ruby language.</p>
+    <p>Do you know what a <strong>Domain Specific Language(DSL)</strong> is and how to
+implement one in Ruby?. This article aims to provide a slight introduction
+to this topic. It is divided in 3 sections, first we'll define what a DSL is,
+second we'll see some examples of DSL implementations, and third we'll build
+a DSL.</p>
 
 <h2>What is a DSL?</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/Domain-specific_language">Wikipedia says</a>:</p>
+<p><a href="http://en.wikipedia.org/wiki/Domain-specific_language">According wikipedia</a> a
+DSL is defined as:</p>
 
 <blockquote><p>In software development and domain engineering, a domain-specific
 language (DSL) is a programming language or specification language dedicated
 to a particular problem domain, a particular problem representation
 technique, and/or a particular solution technique.</p></blockquote>
 
-<h2>What is a callback?</h2>
+<p>To clarify, we'll see some examples. As you read through them take into account
+the following points:</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Callback_%28computer_programming%29">Wikipedia says</a>:</p>
+<ul>
+<li><a href="http://rubylearning.com/satishtalim/ruby_blocks.html">Ruby blocks</a>
+are used everywhere. They are the bare minimum construction element.</li>
+<li>Though the used structures are not part of the Ruby core, all of
+them use valid Ruby constructs.</li>
+<li>The main purpose of creating new code structure is to provide a more
+<em>human readable code</em>.</li>
+</ul>
 
-<blockquote><p>In computer programming, a callback is a reference to executable code, or a
-piece of executable code, that is passed as an argument to other code. This
-allows a lower-level software layer to call a subroutine (or function)
-defined in a higher-level layer.</p></blockquote>
 
-<h2>What are we going to do?</h2>
+<p>This implies that the following DSL examples(codes) are build with
+sentences like:</p>
 
-<p>We are going to build step by step a <em>wrap</em> method that will be able to call
-the methods <em>before</em> and <em>after</em> an <em>original</em> method.</p>
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
 
-<h2>Usage example</h2>
+  <span class="k">def</span> <span class="nf">Given</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Be aware, its respective gems may not define each DSL as I did, but it helps
+to show different possible ways to do it.</p>
+
+<p>Let's start with the examples.</p>
+
+<h2>DSL implementations</h2>
+
+<p>If you are doing Ruby then you probably have already used DSL's. Gems like
+RSpec, Cucumber and Sinatra are good examples of DSL implementations. Let's
+see their syntax and put special attention to the structures they use.</p>
+
+<p>First, let's see three snippets from these languages.</p>
+
+<h3>Rspec snippet</h3>
+
+<p>In RSpec when you want to test if some object responds to a method call
+you usually write something like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">describe</span> <span class="no">MyObject</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s1">&#39;should respond to a method call&#39;</span> <span class="k">do</span>
+      <span class="n">subject</span><span class="o">.</span><span class="n">should</span> <span class="n">respond_to</span><span class="p">(</span><span class="ss">:method_call</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>Cucumber snippet</h3>
+
+<p>In Cucumber when you write step definitions you do things like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="no">Given</span><span class="sr"> /^I click link &quot;([^&quot;&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">link</span><span class="o">|</span>
+    <span class="n">find</span><span class="p">(</span><span class="ss">:css</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>Sinatra snippet</h3>
+
+<p>In Sinatra when you whant to write a route/controller you do something
+like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">get</span> <span class="s2">&quot;/&quot;</span> <span class="k">do</span>
+    <span class="s2">&quot;Hi there&quot;</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now let's write our own DSL.</p>
+
+<h2>Writing a DSL</h2>
+
+<p>The following technique intention is similar to that from
+<a href="http://guides.rubyonrails.org/action_controller_overview.html#filters">Rails Controller Filters</a>.</p>
+
+<p>Let's build a DSL called <strong>Wrappable</strong>. <strong>Wrappable</strong> will be a simple custom DSL that
+<em>wrap</em>'s' a method  with <em>callbacks</em> using the Ruby language.</p>
+
+<p>Let me clarify what I mean by <em>wrap</em> using the following snippet:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">original</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><strong>Wrappable</strong> will <em>wrap</em> the <em>original</em> method. Whenever <em>original</em> is
+invoked, the <em>before</em> method will be  automatically invoked first, second it
+will invoke the <em>original</em> method and finally it will invoke the <em>after</em>
+method.</p>
+
+<p>The way the <em>before</em> and <em>after</em> methods behave is known as a
+<a href="http://en.wikipedia.org/wiki/Callback_%28computer_programming%29">Callback</a>.</p>
+
+<p>This behavior can also be achieved with something like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">original</span>
+    <span class="n">before</span>
+    <span class="c1"># original sentences</span>
+    <span class="n">after</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>But, I want to do this dynamically, using a <em>wrap</em> method that will be
+able to setup the calls to the methods <em>before</em> and <em>after</em> programatically.</p>
+
+<h3>Usage example</h3>
 
 <p>We will end up the example with the following <strong>CallbackTest</strong> class:</p>
 
@@ -103,12 +208,12 @@ the methods <em>before</em> and <em>after</em> an <em>original</em> method.</p>
 </div>
 
 
-<h2>Writing the callback step by step</h2>
+<h3>Writing the callback step by step</h3>
 
 <p>In order to build the whole example let's start by listing what we require
 to do and then we will code the example from scratch.</p>
 
-<h3>The requirements</h3>
+<h4>The requirements</h4>
 
 <p>Consider the script fragment where <em>wrap</em> is invoked:</p>
 
@@ -137,7 +242,7 @@ method so we do not overwrite it.</li>
 </ul>
 
 
-<h3>Step 1</h3>
+<h4>Step 1</h4>
 
 <p>What we are going to do here is:
 * Create a <strong>Wrappable</strong> module with an empty <em>wrap</em> method and its two
@@ -179,7 +284,7 @@ method so we do not overwrite it.</li>
 </div>
 
 
-<h3>Step 2</h3>
+<h4>Step 2</h4>
 
 <p>What we are going to do here is:</p>
 
@@ -254,7 +359,7 @@ method so we do not overwrite it.</li>
 </div>
 
 
-<h3>Step 3</h3>
+<h4>Step 3</h4>
 
 <p>Our <strong>CallbackTest</strong> remains unchanged. Let's improve and complete the
 <strong>Wrappable</strong> module. What we are going to do here is:</p>
@@ -312,13 +417,20 @@ class.</li>
 <h2>Conclusion</h2>
 
 <p>This was a simple way to build a custom DSL, there are many DSL examples all
-around the web one of them is <strong>RSpec</strong>.</p>
+around the web for example:</p>
+
+<ul>
+<li>At <a href="http://deadprogrammersociety.blogspot.com/2006/11/ruby-domain-specific-languages-basics.html">Ron Evan's blog</a></li>
+<li>At <a href="http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval/">rubylearning.org's blog</a></li>
+<li>At <a href="http://obiefernandez.com/presentations/obie_fernandez-agile_dsl_development_in_ruby.pdf">Obie Fernandez's blog</a></li>
+</ul>
+
 
 <p>Note that this implementation only supports method names as parameters, if
 you want to view an example of transparently supporting <em>blocks</em> as wrappers
 then look at the <a href="https://gist.github.com/762214">complete exercise gist</a>.</p>
 
-<p>If you really need to implement callbacks then I recommend you to look at the
+<p>Finally, if you really need to implement callbacks then I recommend you to look at the
 <a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html"><strong>ActiveSupport::Callbacks</strong> package</a>.</p>
 
 <p>Thank you for reading.</p>
@@ -360,9 +472,9 @@ then look at the <a href="https://gist.github.com/762214">complete exercise gist
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
-
   <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
 
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x & 3)</a></li>
 
