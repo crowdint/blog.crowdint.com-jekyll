@@ -7,7 +7,6 @@ avatar: a302e7dd208f335dc67761a6db911561
 published: true
 ---
 
-## Introduction ##
 Do you know what a **Domain Specific Language(DSL)** is and how to 
 implement one in Ruby?. This article aims to provide a slight introduction 
 to this topic. It is divided in 3 sections, first we'll define what a DSL is, 

@@ -4,19 +4,16 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-14T14:10:47-06:00</updated>
- <id>http://blog.crowdint.com/</id>
+ <updated>2011-01-19T11:57:58-06:00</updated>
+ <id>http://blog.crowdint.com</id>
  
  
  <entry>
    <title>Building a basic DSL to create callbacks in Ruby</title>
-   <link href="http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
-   <updated>2011-01-14T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
-   <photo>a302e7dd208f335dc67761a6db911561</photo>
-   <content type="html">&lt;h2&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;Do you know what a &lt;strong&gt;Domain Specific Language(DSL)&lt;/strong&gt; is and how to
+   <link href="http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
+   <updated>2011-01-10T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/01/10/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
+   <content type="html">&lt;p&gt;Do you know what a &lt;strong&gt;Domain Specific Language(DSL)&lt;/strong&gt; is and how to
 implement one in Ruby?. This article aims to provide a slight introduction
 to this topic. It is divided in 3 sections, first we'll define what a DSL is,
 second we'll see some examples of DSL implementations, and third we'll build
