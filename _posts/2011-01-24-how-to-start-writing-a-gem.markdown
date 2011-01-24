@@ -75,6 +75,8 @@ information.
 The only things that is not explicitily given is a place to define
 dependencies.
 
+Also, you have to declare your gem's dependencies to other gems, if any.
+
 Let's say your gem heavily depends on *rails*. Then, you have to add a
 line to state so:
 
@@ -130,6 +132,9 @@ $ bundler install
   Using shoulda (2.11.3)
   ...
 {% endhighlight %}
+
+For more information on what should be on this file, you can read the
+[specification here](http://docs.rubygems.org/read/chapter/20).
 
 ### The code
 
