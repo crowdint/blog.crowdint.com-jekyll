@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Crowd Interactive Tech Blog :: How to start writing a ruby gem</title>
+  <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+  
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  
+</head>
+<body>
+  <div class="container">
+    <div id="empty-header">
+      <a href="/"><img src="/images/logo_03.png" id="logoHead" width="227" height="74" alt="LogoHead" /></a>
+    </div>
+    <div class="span-24 append-bottom testGlow">
+      <div class="round-top span-24">
+        &nbsp;
+      </div>
+      <div id="white-body" class="span-24">
+        <div class="left-side span-17">
+          <div class="post prepend-1">
+  <h1>How to start writing a ruby gem</h1>  
+  <p class="author">
+    <span class="date"><b>Jan 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>If you are a Ruby developer, by now, you have probably used tons of
+gems in your apps.</p>
+
+<p>That's one of the best things of using Ruby, a lot of people writes
+repeatable code that you can easily integrate into your own apps.</p>
+
+<p>In this brief tutorial, I will try to explain the basic things you need
+to know in order to start writing your own gems, you know, just in case
+you have something to share with the world.</p>
+
+<h2>Setting up the folders</h2>
+
+<p>We'll start by creating the gem folder structure using Bundler.</p>
+
+<p>First thing you have to do is, install bundler itself. Easy.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install bundler
+</code></pre>
+</div>
+
+
+<p>Now, bundler comes with a handy command to generate the basic files to
+start writing a gem.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">bundler</span> <span class="n">gem</span> <span class="n">awesome_gem</span>
+
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Gemfile</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Rakefile</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/.</span><span class="n">gitignore</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">gemspec</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">rb</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">rb</span>
+</code></pre>
+</div>
+
+
+<h2>The Gemspec</h2>
+
+<p>All gems have a <em>.gemspec</em> file. This files contains all the info on your
+gem. The name, a description, dependencies. Let's open it and see how it
+looks.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
+
+<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your name&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your email address&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{TODO: Write a gem summary}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{TODO: Write a gem description}</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now, all you have to do is replace some of the fields here with your own
+information.</p>
+
+<p>The only things that is not explicitily given is a place to define
+dependencies.</p>
+
+<p>Also, you have to declare your gem's dependencies to other gems, if any.</p>
+
+<p>Let's say your gem heavily depends on <em>rails</em>. Then, you have to add a
+line to state so:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>You use shoulda or mocha? Since you use them only to test it while
+developing, you define it as a <em>development dependency</em>.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>So, our .gemspec file ends up loking like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
+
+<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;David Padilla&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;david@crowdint.com&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{A gem that will change the world}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{A long description for a gem that will change the world}</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>The best thing about this is that now, you can just run the <em>bundler
+install</em> command, and you will get the gem dependencies installed on your
+computer.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundler install
+
+  Installing rails <span class="o">(</span>3.0.0<span class="o">)</span>
+  Using mocha <span class="o">(</span>0.9.10<span class="o">)</span>
+  Using shoulda <span class="o">(</span>2.11.3<span class="o">)</span>
+  ...
+</code></pre>
+</div>
+
+
+<p>For more information on what should be on this file, you can read the
+<a href="http://docs.rubygems.org/read/chapter/20">specification here</a>.</p>
+
+<h3>The code</h3>
+
+<p>By definition, you have a file called <em>lib/THE_NAME_OF_YOUR_GEM.rb</em> that
+will be called when you require your gem on any piece of ruby code.</p>
+
+<p>Usually, your gem will have a lot of code spread in Modules and Classes.
+This file should only work as the glue to put everything together.</p>
+
+<p>Let's say your gem introduces a new class called <em>Mushroom</em>. You will
+have to create a <em>lib/mushroom.rb</em> file with the class definition:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Mushroom</span>
+  <span class="c1"># Some code</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And then, require it on <em>lib/awesome_gem.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;mushroom&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And so on. Obviously, you will probably want to put the classes and
+their files on a namespace hierarchy. Create folders for each namespace.</p>
+
+<p>So, if for example, you had some classes that are used to access
+different stuff, you want to create an Accessor namespace and put all
+the classes on the <em>lib/accessors</em> folder.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Accessor</span><span class="o">::</span><span class="no">TextFileAccessor</span>
+
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>From here on, you have to rely on <em>Ruby Metaprogramming</em>, but I'll leave
+that for another post.</p>
+
+<h2>Unit tests</h2>
+
+<p>To include some rake tasks to test your gem, add the following lines to
+<em>Rakefile</em>.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;rake/testtask&#39;</span>
+<span class="no">Rake</span><span class="o">::</span><span class="no">TestTask</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:test</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">test</span><span class="o">|</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">libs</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;lib&#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;test&#39;</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;test/**/test_*.rb&#39;</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This will add a <em>rake test</em> rake task that will run all the tests that
+you define on the <em>test</em> folder.</p>
+
+<p>You can also install rspec, bacon, minitest or any test framework of
+your choice. Read each of their documentation to find out how to add
+them to your gem.</p>
+
+<h2>Testing your code on an existing app</h2>
+
+<p>Obviously, to test your gem, you'd use something like <em>rspec</em> or
+<em>minitest</em>, but, just in case you want to see how it will end up working
+on an existing app that uses Bundler, you can add it to the other's app
+Gemfile and specify the local path to use the local version of the gem
+instead of downloading it from a repo:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;awesome_gem&#39;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s1">&#39;/Users/some_path/awesome_gem&#39;</span>
+</code></pre>
+</div>
+
+
+<p>This way, any change you make on the gem will be immediately reflected
+on the app where you installed it.</p>
+
+<h2>Deploying to rubygems.org</h2>
+
+<p>Once you are done writing some awesome ruby code, it's time to deploy
+your app for everyone to use.</p>
+
+<p>All you have to do is run</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake release
+</code></pre>
+</div>
+
+
+<p>And this will publish your gem to rubygems.org.</p>
+
+<h2>Version</h2>
+
+<p>To have control over hav your gem changes overtime, you want to use a
+version.</p>
+
+<p>Your gem's version is defined on the <em>lib/awesome_gem/version.rb</em> file.</p>
+
+<p>If you open it, you'll see that there's only one line on the file:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">AwesomeGem</span>
+  <span class="no">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Remember this line on the gemspec?</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+</code></pre>
+</div>
+
+
+<p>This means that, the version defined on the gemspec is being pulled from
+this file.</p>
+
+<p>It also means that you can access the version of the gem from anywhere
+in the code, even on the code where you are using the gem.</p>
+
+<p>So, you can do things like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span> <span class="o">==</span> <span class="s1">&#39;1.0.0&#39;</span>
+  <span class="c1"># Do it this way for verision 1.0.0</span>
+<span class="k">else</span>
+  <span class="c1"># For all the other versions do it that way</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This, of course, is not recommended and should be only used in case
+where there's no other solution, or, to display deprecation messages.</p>
+
+<h2>Conclusion</h2>
+
+<p>Before writing a gem, make sure you google around and browse github for
+the behavior that you are looking for. Most of the times, someone already
+thought of a generic solution for your problem. Sometimes you won't
+like that solution and you'll end up writing your own gem, sometimes
+you will like it and use it.</p>
+
+<p>Contributing is what keeps the community alive, write lots of gems!</p>
+
+<p>Hope this points you in the right direction.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  <div class="nav_links span-16">
+    
+      <div class="previous span-8"><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html"><< Building a basic DSL to create callbacks in Ruby</a></div>
+    
+    
+  </div>
+</div>
+<div class="post prepend-1">
+  <h1>Related Posts</h1>
+  <ul class="archives">
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+
+  </ul>
+</div>
+        </div>
+        <div class="right-side span-5 last prepend-1">
+          <h1><a href="/">Blog Home</a></h1>
+<h1>About Crowd Interactive</h1>
+<p class="append-1 about">Crowd Interactive is a Ruby on Rails
+consultancy firm powered by a team of enthusiast engineers that love
+programming.We turn your ideas into web applications...<br/><a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
+<h1>Our Favorite Sites</h1>
+<ul>
+  <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
+  <li><a href="http://www.magmarails.com">MagmaRails</a></li>
+  <li><a href="http://rubyonrails.org">Ruby on Rails</a></li>
+  <li><a href="http://ruby-lang.org">Ruby-Lang</a></li>
+  <li><a href="http://github.com/crowdint">Github</a></li>
+</ul>
+<h1>Stuff we've built</h1>
+<ul>
+  <li><a href="http://www.modcloth.com">ModCloth</a></li>
+  <li><a href="http://www.creativeallies.com">Creative Allies</a></li>
+  <li><a href="http://www.nameframe.com">Nameframe</a></li>
+  <li><a href="http://github.com/crowdint/rails3-jquery-autocomplete">Rails3-jQuery-Autocomplete</a></li>
+  <li><a href="http://github.com/crowdint/rankstar">rankstar</a></li>
+  <li><a href="http://github.com/crowdint/blog.crowdint.com">This site's source code</a></li>
+</ul>
+<h1>Older Posts</h1>
+<ul>
+  <li><a href="/archive.html">Archive</a></li>
+</ul>
+
+Site Powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+
+        </div>
+      </div>
+      <div class="round-bottom span-24">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    <div class="copyContent" >
+      <p class="copy">Copyright &copy; 2010, Crowd Interactive. All rights reserved.</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var disqus_shortname = 'crowdinttech';
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'http://disqus.com/forums/crowdinttech/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+  </script>
+</body>
+</html>
