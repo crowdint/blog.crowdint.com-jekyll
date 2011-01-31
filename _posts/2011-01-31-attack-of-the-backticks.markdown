@@ -9,7 +9,7 @@ avatar: d32b52ec6403614b1adf3e648cbbe584
 It all started because I was getting some weird warning while running
 the specs on one of my apps.
 
-I know that, as a developer, I am suppposed to ignore the warning, but
+I know that, as a developer, I am suppposed to ignore all warnings, but,
 this one felt ackward, so I had to track it down.
 
 {% highlight bash %}

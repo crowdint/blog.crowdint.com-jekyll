@@ -40,6 +40,123 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 31</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>It all started because I was getting some weird warning while running
+the specs on one of my apps.</p>
+
+<p>I know that, as a developer, I am suppposed to ignore all warnings, but,
+this one felt ackward, so I had to track it down.</p>
+
+<div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found:
+</code></pre>
+</div>
+
+
+<p>What? Why is activerecord trying to run some command? what command? and
+why it isn't finding that command?</p>
+
+<p>Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
+something like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">convert_number_column_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">false</span>
+    <span class="mi">0</span>
+  <span class="k">elsif</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">true</span>
+    <span class="mi">1</span>
+  <span class="k">elsif</span> <span class="n">value</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="n">blank?</span>
+    <span class="kp">nil</span>
+  <span class="k">else</span>
+    <span class="n">value</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Nothing useful there, line 1838 was just doing some if thing. So, what's
+going on?</p>
+
+<p>I went through lots of source files, trying to narrow down the
+posibilites. But I just couldn't find anything unusual. If there was a
+syntax error, why is the code not breaking completely, it's just a
+warning on STDOUT.</p>
+
+<p>I ended up doing the worst thing ever (for me, anyway) to figure out this
+one, run the code with <em>ruby-debug</em>, put a couple of breakpoints. I feel
+dirty just by admiting that.</p>
+
+<p>Anyway, the problem was caused by some unintentional mistake:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">items_returned</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">cancelled?</span><span class="sb">``</span>
+</code></pre>
+</div>
+
+
+<p>How could I have missed that? the <em>backticks</em> at the end of the line, of
+course.</p>
+
+<p>In ruby, the backtick method returns the standard output of running the string encompassed
+by the backticks in a subshell.</p>
+
+<p>Yes, it is a method, like almost every operator in Ruby.</p>
+
+<p>A few examples:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">hey</span> <span class="o">=</span> <span class="sb">`echo hey`</span> <span class="c1"># =&gt; &quot;hey\n&quot;</span>
+<span class="n">list_of_files</span> <span class="o">=</span> <span class="sb">`ls`</span> <span class="c1"># =&gt; &quot;file1\nfile2\nfile3\n&quot;</span>
+</code></pre>
+</div>
+
+
+<p>It also sets a special variable $? with a Process::Status object with
+the PID of that subshell.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="sb">`exit 99`</span>
+<span class="vg">$?</span>           <span class="c1">#  =&gt; # &lt;Process::Status: pid 7781 exit 99&gt;</span>
+<span class="vg">$.</span><span class="n">exitstatus</span> <span class="c1">#  =&gt; 99</span>
+</code></pre>
+</div>
+
+
+<p>So, I guess what was happening is that, the <em>cancelled?</em> method was
+taking the result of `` as a parameter, in this case, a string, printing the result of that to
+STDOUT and just ignoring the value of the parameter.</p>
+
+<p>In other words, I was calling <em>cancelled?</em> like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">cancelled?</span><span class="p">(</span><span class="sb">``</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>But, since cancelled wasn't expecting a parameter at all, it just
+ignored the input. That's why I wasn't getting a syntax error or a
+runtime error.</p>
+
+<p>Probably nothing useful on my experience, since this is such a weird
+problem to have, yet I just felt like explaining the power of the backticks.</p>
+
+<p>Cheers</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/31/attack-of-the-backticks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
   <p class="author">
     <span class="date"><b>Jan 24</b><br />2011</span>
@@ -772,198 +889,10 @@ then look at the <a href="https://gist.github.com/762214">complete exercise gist
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 05</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Sometimes, sorting the elements in an array depend on something more
-complex than just alphabetical order or numerical order.</p>
-
-<p>From my experience, take for example shoe sizes for little kids.
-For some of the vedors I've worked with you have shoes in size 10.5
-through 13.5, then, the count is restarted to 1 through 9.</p>
-
-<p>So, in order, the size array would look like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">51</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<h2>The problem</h2>
-
-<p>Imagine we have those values on a sorted array:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
-<span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>How would we properly sort it? Well the answer is kinda simple. Extending ruby's sort
-method.</p>
-
-<p>For the sake of legibility, let's make a short version of the array.</p>
-
-<p>Let's pretend for a moment that if we had this array</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>It's sorted version should look like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>In Ruby, all Enumerables (mostly array and hashes) have a sort method.
-An example on how to use it would be:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
-  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span><span class="p">}</span>
-</code></pre>
-</div>
-
-
-<p>This code would sort the array in numerical order. The first thime I saw
-this code, one thing came to my mind: What is that <em>&lt;=></em> operator?</p>
-
-<p>To understand that, let's first figure out how the <em>sort</em> method works.</p>
-
-<h2>The sort method</h2>
-
-<p>The sort method takes the elements on the enumerable in pairs,
-receives a block, and expects the result of the block to be:</p>
-
-<div class="highlight"><pre><code class="ruby">   <span class="o">-</span><span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
-
-    <span class="mi">0</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
-
-    <span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
-</code></pre>
-</div>
-
-
-<p>Based on the result of that block, the sort method returns the
-array in order.</p>
-
-<h2>The &lt;=> operator</h2>
-
-<p>That means the <em>&lt;=></em> operator, compares both elements on its sides
-and returns <em>-1, 0, 1</em> depending on the values.</p>
-
-<p>An example of how it works for the Fixnum class:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">1</span> <span class="o">&lt;=&gt;</span> <span class="mi">2</span> <span class="c1"># =&gt; -1</span>
-<span class="mi">3</span> <span class="o">&lt;=&gt;</span> <span class="mi">3</span> <span class="c1"># =&gt; 0 </span>
-<span class="mi">4</span> <span class="o">&lt;=&gt;</span> <span class="mi">1</span> <span class="c1"># =&gt; 1</span>
-</code></pre>
-</div>
-
-
-<p>Go on, try that on <em>irb</em>.</p>
-
-<p>In our case, we will use a custom function to return <em>-1, 0, 1</em> depending
-on the value of <em>a</em> and <em>b</em>.</p>
-
-<p>For this example, let's just put it on a Comparison class:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>So, the way we'll use this method will be:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
-  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="no">Comparison</span><span class="o">.</span><span class="n">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">}</span> <span class="c1">#=&gt; [12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3]</span>
-</code></pre>
-</div>
-
-
-<p>To solve this problem, first thing we need to do is assign a weight to
-the two sets of sizes: -1 to [12, 12.5, 13, 13.5] and 1 to [1, 1.5, 2,
-2.5, 3].</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Now, we'll use that weight calculation to determine the sort order of
-the elements.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="c1">#</span>
-    <span class="c1"># If the weights are the same, compare them numerically</span>
-    <span class="c1">#</span>
-    <span class="k">if</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-      <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span>
-
-    <span class="c1">#</span>
-    <span class="c1"># If the weights are different, just return the weight of a</span>
-    <span class="c1">#</span>
-    <span class="k">else</span>
-      <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>And that's it, you can try it on irb as it is.</p>
-
-<h2>Conclusion</h2>
-
-<p>All you have to remember is to make the result of the sort block
-return -1, 0, 1 depending on how you want to sort the values.</p>
-
-<p>If the sizes were stored, for example, on a ShoeSize model, the best
-thing to do is override the ShoeSize class <em>&lt;=></em> operator. That would
-actually look much better, but you can always implement the sort methods on a
-Module, or an external class to reuse them.</p>
-
-<p>Hope this helps you somehow.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/05/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
@@ -1002,8 +931,6 @@ Module, or an external class to reuse them.</p>
   <li><span><b>28 Sep 2010</b></span> &raquo; <a href="/2010/09/28/negative-code.html">Negative Code</a></li>
 
   <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
-
-  <li><span><b>17 Sep 2010</b></span> &raquo; <a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></li>
 
   </ul>
 </div>

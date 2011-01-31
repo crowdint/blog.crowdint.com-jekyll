@@ -4,9 +4,118 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-01-24T14:25:29-08:00</updated>
+ <updated>2011-01-30T23:32:53-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Attack of the backtick</title>
+   <link href="http://blog.crowdint.com/2011/01/31/attack-of-the-backticks.html"/>
+   <updated>2011-01-31T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2011/01/31/attack-of-the-backticks</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;It all started because I was getting some weird warning while running
+the specs on one of my apps.&lt;/p&gt;
+
+&lt;p&gt;I know that, as a developer, I am suppposed to ignore all warnings, but,
+this one felt ackward, so I had to track it down.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;not found:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;What? Why is activerecord trying to run some command? what command? and
+why it isn't finding that command?&lt;/p&gt;
+
+&lt;p&gt;Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
+something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;convert_number_column_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+    &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_a?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Nothing useful there, line 1838 was just doing some if thing. So, what's
+going on?&lt;/p&gt;
+
+&lt;p&gt;I went through lots of source files, trying to narrow down the
+posibilites. But I just couldn't find anything unusual. If there was a
+syntax error, why is the code not breaking completely, it's just a
+warning on STDOUT.&lt;/p&gt;
+
+&lt;p&gt;I ended up doing the worst thing ever (for me, anyway) to figure out this
+one, run the code with &lt;em&gt;ruby-debug&lt;/em&gt;, put a couple of breakpoints. I feel
+dirty just by admiting that.&lt;/p&gt;
+
+&lt;p&gt;Anyway, the problem was caused by some unintentional mistake:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;items_returned&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cancelled?&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;``&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;How could I have missed that? the &lt;em&gt;backticks&lt;/em&gt; at the end of the line, of
+course.&lt;/p&gt;
+
+&lt;p&gt;In ruby, the backtick method returns the standard output of running the string encompassed
+by the backticks in a subshell.&lt;/p&gt;
+
+&lt;p&gt;Yes, it is a method, like almost every operator in Ruby.&lt;/p&gt;
+
+&lt;p&gt;A few examples:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;hey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`echo hey`&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;quot;hey\n&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;list_of_files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`ls`&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;quot;file1\nfile2\nfile3\n&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It also sets a special variable $? with a Process::Status object with
+the PID of that subshell.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sb&quot;&gt;`exit 99`&lt;/span&gt;
+&lt;span class=&quot;vg&quot;&gt;$?&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;#  =&amp;gt; # &amp;lt;Process::Status: pid 7781 exit 99&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;vg&quot;&gt;$.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exitstatus&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#  =&amp;gt; 99&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;So, I guess what was happening is that, the &lt;em&gt;cancelled?&lt;/em&gt; method was
+taking the result of `` as a parameter, in this case, a string, printing the result of that to
+STDOUT and just ignoring the value of the parameter.&lt;/p&gt;
+
+&lt;p&gt;In other words, I was calling &lt;em&gt;cancelled?&lt;/em&gt; like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;cancelled?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;``&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;But, since cancelled wasn't expecting a parameter at all, it just
+ignored the input. That's why I wasn't getting a syntax error or a
+runtime error.&lt;/p&gt;
+
+&lt;p&gt;Probably nothing useful on my experience, since this is such a weird
+problem to have, yet I just felt like explaining the power of the backticks.&lt;/p&gt;
+
+&lt;p&gt;Cheers&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>How to start writing a ruby gem</title>
@@ -2973,86 +3082,6 @@ So this will create a user with database and user creation permissions with a de
    <author>
      <name>Luis Velasco</name>
      <email>luis.velasco@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Improve your SEO with a sitemap</title>
-   <link href="http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap.html"/>
-   <updated>2010-10-22T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2010/10/22/improve-your-seo-with-a-sitemap</id>
-   <photo>0a34cf6219c554ee75506e544473aea1</photo>
-   <content type="html">&lt;p&gt;Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.&lt;/p&gt;
-
-&lt;p&gt;There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.&lt;/p&gt;
-
-&lt;p&gt;Let's use Rails to dynamically generate a sitemap on request.&lt;/p&gt;
-
-&lt;p&gt;In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sitemap&lt;/span&gt;
-    &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;ss&quot;&gt;:select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;path, updated_at&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-        &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;active = ?&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-        &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;updated_at DESC&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;layouts/sitemap&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instruct!&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urlset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:xmlns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://www.sitemaps.org/schemas/sitemap/0.9&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;http://www.mywebsite.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xmlschema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;changefreq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;weekly&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;0.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    
-    &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;URI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:only_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lastmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xmlschema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;changefreq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;weekly&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;0.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter &lt;em&gt;:only_path =&gt; false&lt;/em&gt; is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.&lt;/p&gt;
-
-&lt;p&gt;The parameters of the xml are straightforward:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;loc&lt;/em&gt; is the url&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;lastmod&lt;/em&gt; is the last modified date of that url&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;changefreq&lt;/em&gt; is how often this url is updated&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;priority&lt;/em&gt; is the importance of this url compared to the rest of the urls in our website&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;As a final step, we add the route to the sitemap in &lt;em&gt;config/routes.rb&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sitemap&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.&lt;/p&gt;
-
-&lt;p&gt;If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.&lt;/p&gt;
-
-&lt;p&gt;Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!&lt;/p&gt;
-</content>
-   <author>
-     <name>Roberto Sanchez</name>
-     <email>roberto.sanchez@crowdint.com</email>
    </author>
  </entry>
  

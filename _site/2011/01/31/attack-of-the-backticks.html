@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Magma Rails is just around the corner!</title>
+  <title>Crowd Interactive Tech Blog :: Attack of the backtick</title>
   <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
@@ -39,22 +39,108 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Magma Rails is just around the corner!</h1>  
+  <h1>Attack of the backtick</h1>  
   <p class="author">
-    <span class="date"><b>Oct 07</b><br />2010</span>
+    <span class="date"><b>Jan 31</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
+    <p>It all started because I was getting some weird warning while running
+the specs on one of my apps.</p>
 
-<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
+<p>I know that, as a developer, I am suppposed to ignore all warnings, but,
+this one felt ackward, so I had to track it down.</p>
 
-<div style="text-align:center">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
+<div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found:
+</code></pre>
 </div>
 
 
-<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
+<p>What? Why is activerecord trying to run some command? what command? and
+why it isn't finding that command?</p>
+
+<p>Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
+something like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">convert_number_column_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">false</span>
+    <span class="mi">0</span>
+  <span class="k">elsif</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">true</span>
+    <span class="mi">1</span>
+  <span class="k">elsif</span> <span class="n">value</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="n">blank?</span>
+    <span class="kp">nil</span>
+  <span class="k">else</span>
+    <span class="n">value</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Nothing useful there, line 1838 was just doing some if thing. So, what's
+going on?</p>
+
+<p>I went through lots of source files, trying to narrow down the
+posibilites. But I just couldn't find anything unusual. If there was a
+syntax error, why is the code not breaking completely, it's just a
+warning on STDOUT.</p>
+
+<p>I ended up doing the worst thing ever (for me, anyway) to figure out this
+one, run the code with <em>ruby-debug</em>, put a couple of breakpoints. I feel
+dirty just by admiting that.</p>
+
+<p>Anyway, the problem was caused by some unintentional mistake:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">items_returned</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">cancelled?</span><span class="sb">``</span>
+</code></pre>
+</div>
+
+
+<p>How could I have missed that? the <em>backticks</em> at the end of the line, of
+course.</p>
+
+<p>In ruby, the backtick method returns the standard output of running the string encompassed
+by the backticks in a subshell.</p>
+
+<p>Yes, it is a method, like almost every operator in Ruby.</p>
+
+<p>A few examples:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">hey</span> <span class="o">=</span> <span class="sb">`echo hey`</span> <span class="c1"># =&gt; &quot;hey\n&quot;</span>
+<span class="n">list_of_files</span> <span class="o">=</span> <span class="sb">`ls`</span> <span class="c1"># =&gt; &quot;file1\nfile2\nfile3\n&quot;</span>
+</code></pre>
+</div>
+
+
+<p>It also sets a special variable $? with a Process::Status object with
+the PID of that subshell.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="sb">`exit 99`</span>
+<span class="vg">$?</span>           <span class="c1">#  =&gt; # &lt;Process::Status: pid 7781 exit 99&gt;</span>
+<span class="vg">$.</span><span class="n">exitstatus</span> <span class="c1">#  =&gt; 99</span>
+</code></pre>
+</div>
+
+
+<p>So, I guess what was happening is that, the <em>cancelled?</em> method was
+taking the result of `` as a parameter, in this case, a string, printing the result of that to
+STDOUT and just ignoring the value of the parameter.</p>
+
+<p>In other words, I was calling <em>cancelled?</em> like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">cancelled?</span><span class="p">(</span><span class="sb">``</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>But, since cancelled wasn't expecting a parameter at all, it just
+ignored the input. That's why I wasn't getting a syntax error or a
+runtime error.</p>
+
+<p>Probably nothing useful on my experience, since this is such a weird
+problem to have, yet I just felt like explaining the power of the backticks.</p>
+
+<p>Cheers</p>
 
     <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -80,10 +166,8 @@
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/09/28/negative-code.html"><< Negative Code</a></div>
+      <div class="previous span-8"><a href="/2011/01/24/how-to-start-writing-a-gem.html"><< How to start writing a ruby gem</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success! >></a></div>
     
   </div>
 </div>
@@ -91,15 +175,15 @@
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
-
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
+
+  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
 
   </ul>
 </div>
