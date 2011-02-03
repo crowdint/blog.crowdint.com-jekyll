@@ -77,7 +77,7 @@ rails g cucumber:install
 rails g rspec:install
 {% endhighlight %}
 
-Then, just add these lines to our '~/application.erb'
+Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)
 
 {% highlight bash %}
 config.generators do |g|
