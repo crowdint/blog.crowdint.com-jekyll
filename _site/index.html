@@ -40,6 +40,111 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 05</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <p>Recently, we've been working recently in a very interesting project here at Crowd Interactive. We needed to audit some models
+in order to keep track of their changes, among other things. We researched for options (you know, plugins, gems, etc.)
+to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
+were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
+create a new solution named <a href="http://github.com/crowdint/auditrail">auditrail</a>.</p>
+
+<p>Auditrail is a gem that provides a highly configurable solution to audit your models. It provides two generators.
+The first one creates the Audit model with a couple of methods that helps you use it, and the second creates the migration for its table.</p>
+
+<h2>How is it used?</h2>
+
+<p>Quite simple. You just need to install the <em>auditrail</em> gem, and then, run the generators provided
+(<em>auditrail:migrations</em> and <em>auditrail:model</em>). Then you just need to call the method <em>auditable</em>
+in the models you want to audit, and, that's it!</p>
+
+<h2>How does it work?</h2>
+
+<p>Auditrail was built to make it easily and readable. So, if you take a quick look at the source code
+you can identify all the components.</p>
+
+<ul>
+<li><p>Auditrail keeps track of the changes in the audited models through the Audit model. Here, you can configure your own methods to manipulate those changes, or, you can place your filters or special actions.</p></li>
+<li><p>Auditrail is a module that extends <em>ActiveRecord::Base</em>, so you can use it just by calling the <em>auditable</em>
+method on the models you want to Audit. Simple, isn't it?</p></li>
+<li><p>In order to manipulate the plugin requests auditrail uses a basic DSL to handle the method calls.
+Those methods where built to specify a list of the attributes that you want to audit
+and/or include the actor that is making the changes to the audited model.</p></li>
+<li><p>It extends the ActiveSupport::Concern to facilitate the manipulation of the instance methods and the
+class methods in the same module, dealing with the necessity to include an extend for the ActiveRecord::Base. Example:</p></li>
+</ul>
+
+
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Auditrail</span>
+  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
+
+    <span class="k">def</span> <span class="nf">some_method</span>
+      <span class="c1"># Include some code for your class method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
+
+    <span class="k">def</span> <span class="nf">track_changes</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span>
+      <span class="c1"># Include some code for your instance method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">Auditrail</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<ul>
+<li><p>Auditrail uses ActiveRecord <em>callbacks</em> to trigger the methods that actually audit the models.</p></li>
+<li><p>Once auditrail knows when an object is modified it will track the changes using <em>ActiveModel::Dirty</em>.</p></li>
+<li><p>ActiveModel::Dirty returns a hash that we serialize in order to save them in our Audit model.</p></li>
+<li><p>All these changes will be stored in the <em>dumped_changes</em> field on the audits table.</p></li>
+</ul>
+
+
+<p>*The dumped_changes fields is generated with type <strong>string</strong> by default, in case you're planing to track big models,
+you should change its type to <strong>text</strong>.</p>
+
+<p>Here you can find a list with the attributes on the Audit model:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">==============</span>  <span class="o">====</span>      <span class="o">===========================================================================</span>
+<span class="no">Attribute</span>         <span class="no">Type</span>      <span class="no">Usage</span>
+<span class="o">--------------</span>  <span class="o">----</span>      <span class="o">---------------------------------------------------------------------------</span>
+<span class="ss">:dumped_changes</span>    <span class="n">text</span>      <span class="no">Keep</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">serialized</span><span class="o">.</span>
+<span class="ss">:action</span>            <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">whether</span> <span class="n">was</span> <span class="n">creation</span> <span class="p">(</span><span class="s2">&quot;creating&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">update</span> <span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:model_changed</span>     <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">that</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:element_id</span>        <span class="n">integer</span>   <span class="no">Indicates</span> <span class="n">the</span> <span class="n">element</span> <span class="n">from</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">that</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:invoker</span>           <span class="n">string</span>    <span class="no">Optional</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">chose</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">action</span> <span class="n">invoker</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:timestamps</span>                  <span class="no">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">timestamps</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">when</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="o">==============</span>  <span class="o">=======</span>   <span class="o">===========================================================================</span>
+</code></pre>
+</div>
+
+
+<p>As with all open source projects, feel free to collaborate with this
+gem by forking it on github.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
   <p class="author">
     <span class="date"><b>Jan 31</b><br />2011</span>
@@ -463,434 +568,10 @@ you will like it and use it.</p>
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 14</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <p>Do you know what a <strong>Domain Specific Language(DSL)</strong> is and how to
-implement one in Ruby?. This article aims to provide a slight introduction
-to this topic. It is divided in 3 sections, first we'll define what a DSL is,
-second we'll see some examples of DSL implementations, and third we'll build
-a DSL.</p>
-
-<h2>What is a DSL?</h2>
-
-<p><a href="http://en.wikipedia.org/wiki/Domain-specific_language">According wikipedia</a> a
-DSL is defined as:</p>
-
-<blockquote><p>In software development and domain engineering, a domain-specific
-language (DSL) is a programming language or specification language dedicated
-to a particular problem domain, a particular problem representation
-technique, and/or a particular solution technique.</p></blockquote>
-
-<p>To clarify, we'll see some examples. As you read through them take into account
-the following points:</p>
-
-<ul>
-<li><a href="http://rubylearning.com/satishtalim/ruby_blocks.html">Ruby blocks</a>
-are used everywhere. They are the bare minimum construction element.</li>
-<li>Though the used structures are not part of the Ruby core, all of
-them use valid Ruby constructs.</li>
-<li>The main purpose of creating new code structure is to provide a more
-<em>human readable code</em>.</li>
-</ul>
-
-
-<p>This implies that the following DSL examples(codes) are build with
-sentences like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">Given</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Be aware, its respective gems may not define each DSL as I did, but it helps
-to show different possible ways to do it.</p>
-
-<p>Let's start with the examples.</p>
-
-<h2>DSL implementations</h2>
-
-<p>If you are doing Ruby then you probably have already used DSL's. Gems like
-RSpec, Cucumber and Sinatra are good examples of DSL implementations. Let's
-see their syntax and put special attention to the structures they use.</p>
-
-<p>First, let's see three snippets from these languages.</p>
-
-<h3>Rspec snippet</h3>
-
-<p>In RSpec when you want to test if some object responds to a method call
-you usually write something like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">describe</span> <span class="no">MyObject</span> <span class="k">do</span>
-    <span class="n">it</span> <span class="s1">&#39;should respond to a method call&#39;</span> <span class="k">do</span>
-      <span class="n">subject</span><span class="o">.</span><span class="n">should</span> <span class="n">respond_to</span><span class="p">(</span><span class="ss">:method_call</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h3>Cucumber snippet</h3>
-
-<p>In Cucumber when you write step definitions you do things like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="no">Given</span><span class="sr"> /^I click link &quot;([^&quot;&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">link</span><span class="o">|</span>
-    <span class="n">find</span><span class="p">(</span><span class="ss">:css</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h3>Sinatra snippet</h3>
-
-<p>In Sinatra when you whant to write a route/controller you do something
-like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">get</span> <span class="s2">&quot;/&quot;</span> <span class="k">do</span>
-    <span class="s2">&quot;Hi there&quot;</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Now let's write our own DSL.</p>
-
-<h2>Writing a DSL</h2>
-
-<p>The following technique intention is similar to that from
-<a href="http://guides.rubyonrails.org/action_controller_overview.html#filters">Rails Controller Filters</a>.</p>
-
-<p>Let's build a DSL called <strong>Wrappable</strong>. <strong>Wrappable</strong> will be a simple custom DSL that
-<em>wrap</em>'s' a method  with <em>callbacks</em> using the Ruby language.</p>
-
-<p>Let me clarify what I mean by <em>wrap</em> using the following snippet:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
-  <span class="k">def</span> <span class="nf">original</span><span class="p">;</span> <span class="k">end</span>
-  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong>Wrappable</strong> will <em>wrap</em> the <em>original</em> method. Whenever <em>original</em> is
-invoked, the <em>before</em> method will be  automatically invoked first, second it
-will invoke the <em>original</em> method and finally it will invoke the <em>after</em>
-method.</p>
-
-<p>The way the <em>before</em> and <em>after</em> methods behave is known as a
-<a href="http://en.wikipedia.org/wiki/Callback_%28computer_programming%29">Callback</a>.</p>
-
-<p>This behavior can also be achieved with something like:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
-  <span class="k">def</span> <span class="nf">original</span>
-    <span class="n">before</span>
-    <span class="c1"># original sentences</span>
-    <span class="n">after</span>
-  <span class="k">end</span>
-  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>But, I want to do this dynamically, using a <em>wrap</em> method that will be
-able to setup the calls to the methods <em>before</em> and <em>after</em> programatically.</p>
-
-<h3>Usage example</h3>
-
-<p>We will end up the example with the following <strong>CallbackTest</strong> class:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">class</span> <span class="nc">CallbackTest</span>
-
-      <span class="c1"># This module contains the whole functionality</span>
-      <span class="kp">include</span> <span class="no">Wrappable</span>
-
-      <span class="k">def</span> <span class="nf">original</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">before</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">after</span>
-        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
-        <span class="n">before_run</span> <span class="ss">:before</span>
-        <span class="n">after_run</span> <span class="ss">:after</span>
-      <span class="k">end</span>
-
-    <span class="k">end</span>
-
-    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
-</code></pre>
-</div>
-
-
-<p>The script output should be as follows:</p>
-
-<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
-    Before method
-    Original method     
-    After method
-</code></pre>
-</div>
-
-
-<h3>Writing the callback step by step</h3>
-
-<p>In order to build the whole example let's start by listing what we require
-to do and then we will code the example from scratch.</p>
-
-<h4>The requirements</h4>
-
-<p>Consider the script fragment where <em>wrap</em> is invoked:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
-      <span class="n">before_run</span> <span class="ss">:before</span>
-      <span class="n">after_run</span> <span class="ss">:after</span>
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>This means:</p>
-
-<ul>
-<li><strong>Step 1</strong>, we need a class method called <em>wrap</em>. The <em>wrap</em> method has two
-parameters: The first is the *symbol representing the name of the method that
-will be wrapped and the second is a block.</li>
-<li><strong>Step 2</strong>, the block parameter contains two method calls that configure
-what methods should be invoked: <em>before_run</em> and <em>after_run</em>. Each method
-receives one parameter as symbol that represents the name of the method
-that will be invoked respectively.</li>
-<li><strong>Step 3</strong>, create the <em>wrap</em> behavior. This step involves creating a new
-method that will eventually call the <em>original</em>, <em>before</em> and <em>after</em>
-methods and implies that we need to keep a reference to the <em>original</em>
-method so we do not overwrite it.</li>
-</ul>
-
-
-<h4>Step 1</h4>
-
-<p>What we are going to do here is:
-* Create a <strong>Wrappable</strong> module with an empty <em>wrap</em> method and its two
-  parameters.
-* Add the <strong>Wrappable</strong> module methods to the <strong>CallbackTest</strong> metaclass
-  (adding static methods).
-* Invoking the <strong>Wrappable</strong>'s <em>wrap</em> method inside <em>CallbackTest</em> class.</p>
-
-<p>Now, save the following snippet as <em>callback_test.rb</em>:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
-      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-
-    <span class="k">class</span> <span class="nc">CallbackTest</span>
-
-      <span class="kp">extend</span> <span class="no">Wrappable</span>
-
-      <span class="k">def</span> <span class="nf">original</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
-      <span class="k">end</span>
-
-    <span class="k">end</span>
-
-    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
-</code></pre>
-</div>
-
-
-<p>Now execute it:</p>
-
-<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
-    Original method
-</code></pre>
-</div>
-
-
-<h4>Step 2</h4>
-
-<p>What we are going to do here is:</p>
-
-<ul>
-<li>Invoke the <em>before_run</em> and <em>after_run</em> inside the <em>wrap</em>'s parameter block.</li>
-<li>Create a <strong>WrapperOptions</strong> class.
-
-<ul>
-<li>This class will namespace the <em>before_run</em> and <em>after_run</em> methods.</li>
-<li>I want the <em>wrap</em>'s parameter block to be evaluated inside this
-<strong>WrapperOptions</strong> class.</li>
-<li>By using this class we can handle all options parsing in just one place.</li>
-</ul>
-</li>
-</ul>
-
-
-<p>Update <em>callback_test.rb</em> with the following:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
-      <span class="k">class</span> <span class="nc">WrapperOptions</span>
-        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="k">end</span>
-        <span class="kp">private</span>
-        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
-          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
-        <span class="k">end</span>
-        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
-          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
-        <span class="k">end</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-
-    <span class="k">class</span> <span class="nc">CallbackTest</span>
-
-      <span class="kp">extend</span> <span class="no">Wrappable</span>
-
-      <span class="k">def</span> <span class="nf">original</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">before</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">after</span>
-        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
-      <span class="k">end</span>
-
-      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
-        <span class="n">before_run</span> <span class="ss">:before</span>
-        <span class="n">after_run</span> <span class="ss">:after</span>
-      <span class="k">end</span>
-
-    <span class="k">end</span>
-
-    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
-</code></pre>
-</div>
-
-
-<p>And verify that your script still works:</p>
-
-<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
-    Original method
-</code></pre>
-</div>
-
-
-<h4>Step 3</h4>
-
-<p>Our <strong>CallbackTest</strong> remains unchanged. Let's improve and complete the
-<strong>Wrappable</strong> module. What we are going to do here is:</p>
-
-<ul>
-<li><em>Alias</em> the <em>original</em> method so we don't overwrite it.</li>
-<li>Create <em>accessors</em> to our <em>wrapped</em> method names in the <strong>WrapperOptions</strong>
-class.</li>
-<li>Create a new method that will eventually call the <em>original</em>, <em>before</em> and
-<em>after</em> methods.</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
-      <span class="k">class</span> <span class="nc">WrapperOptions</span>
-        <span class="kp">attr_reader</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span>
-        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="k">end</span>
-        <span class="kp">private</span>
-        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
-          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
-        <span class="k">end</span>
-        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
-          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
-        <span class="k">end</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="n">alias_method</span> <span class="ss">:old_method</span><span class="p">,</span> <span class="n">original_method</span>
-        <span class="n">define_method</span> <span class="n">original_method</span> <span class="k">do</span>
-          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">before</span><span class="p">)</span>
-          <span class="nb">send</span><span class="p">(</span><span class="ss">:old_method</span><span class="p">)</span>
-          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">after</span><span class="p">)</span>
-        <span class="k">end</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>And finally test that the whole this script works:</p>
-
-<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
-    Before method
-    Original method     
-    After method
-</code></pre>
-</div>
-
-
-<p>That's it.</p>
-
-<h2>Conclusion</h2>
-
-<p>This was a simple way to build a custom DSL, there are many DSL examples all
-around the web for example:</p>
-
-<ul>
-<li>At <a href="http://deadprogrammersociety.blogspot.com/2006/11/ruby-domain-specific-languages-basics.html">Ron Evan's blog</a></li>
-<li>At <a href="http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval/">rubylearning.org's blog</a></li>
-<li>At <a href="http://obiefernandez.com/presentations/obie_fernandez-agile_dsl_development_in_ruby.pdf">Obie Fernandez's blog</a></li>
-</ul>
-
-
-<p>Note that this implementation only supports method names as parameters, if
-you want to view an example of transparently supporting <em>blocks</em> as wrappers
-then look at the <a href="https://gist.github.com/762214">complete exercise gist</a>.</p>
-
-<p>Finally, if you really need to implement callbacks then I recommend you to look at the
-<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html"><strong>ActiveSupport::Callbacks</strong> package</a>.</p>
-
-<p>Thank you for reading.</p>
-
-<p>Regards</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
 
   <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
 
@@ -929,8 +610,6 @@ then look at the <a href="https://gist.github.com/762214">complete exercise gist
   <li><span><b>07 Oct 2010</b></span> &raquo; <a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></li>
 
   <li><span><b>28 Sep 2010</b></span> &raquo; <a href="/2010/09/28/negative-code.html">Negative Code</a></li>
-
-  <li><span><b>22 Sep 2010</b></span> &raquo; <a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></li>
 
   </ul>
 </div>

@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Crowd Interactive Tech Blog :: Auditrail, how to play dirty with callbacks.</title>
+  <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+  
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  
+</head>
+<body>
+  <div class="container">
+    <div id="empty-header">
+      <a href="/"><img src="/images/logo_03.png" id="logoHead" width="227" height="74" alt="LogoHead" /></a>
+    </div>
+    <div class="span-24 append-bottom testGlow">
+      <div class="round-top span-24">
+        &nbsp;
+      </div>
+      <div id="white-body" class="span-24">
+        <div class="left-side span-17">
+          <div class="post prepend-1">
+  <h1>Auditrail, how to play dirty with callbacks.</h1>  
+  <p class="author">
+    <span class="date"><b>Feb 05</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <p>Recently, we've been working recently in a very interesting project here at Crowd Interactive. We needed to audit some models
+in order to keep track of their changes, among other things. We researched for options (you know, plugins, gems, etc.)
+to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
+were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
+create a new solution named <a href="http://github.com/crowdint/auditrail">auditrail</a>.</p>
+
+<p>Auditrail is a gem that provides a highly configurable solution to audit your models. It provides two generators.
+The first one creates the Audit model with a couple of methods that helps you use it, and the second creates the migration for its table.</p>
+
+<h2>How is it used?</h2>
+
+<p>Quite simple. You just need to install the <em>auditrail</em> gem, and then, run the generators provided
+(<em>auditrail:migrations</em> and <em>auditrail:model</em>). Then you just need to call the method <em>auditable</em>
+in the models you want to audit, and, that's it!</p>
+
+<h2>How does it work?</h2>
+
+<p>Auditrail was built to make it easily and readable. So, if you take a quick look at the source code
+you can identify all the components.</p>
+
+<ul>
+<li><p>Auditrail keeps track of the changes in the audited models through the Audit model. Here, you can configure your own methods to manipulate those changes, or, you can place your filters or special actions.</p></li>
+<li><p>Auditrail is a module that extends <em>ActiveRecord::Base</em>, so you can use it just by calling the <em>auditable</em>
+method on the models you want to Audit. Simple, isn't it?</p></li>
+<li><p>In order to manipulate the plugin requests auditrail uses a basic DSL to handle the method calls.
+Those methods where built to specify a list of the attributes that you want to audit
+and/or include the actor that is making the changes to the audited model.</p></li>
+<li><p>It extends the ActiveSupport::Concern to facilitate the manipulation of the instance methods and the
+class methods in the same module, dealing with the necessity to include an extend for the ActiveRecord::Base. Example:</p></li>
+</ul>
+
+
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Auditrail</span>
+  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
+
+    <span class="k">def</span> <span class="nf">some_method</span>
+      <span class="c1"># Include some code for your class method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
+
+    <span class="k">def</span> <span class="nf">track_changes</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span>
+      <span class="c1"># Include some code for your instance method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">Auditrail</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<ul>
+<li><p>Auditrail uses ActiveRecord <em>callbacks</em> to trigger the methods that actually audit the models.</p></li>
+<li><p>Once auditrail knows when an object is modified it will track the changes using <em>ActiveModel::Dirty</em>.</p></li>
+<li><p>ActiveModel::Dirty returns a hash that we serialize in order to save them in our Audit model.</p></li>
+<li><p>All these changes will be stored in the <em>dumped_changes</em> field on the audits table.</p></li>
+</ul>
+
+
+<p>*The dumped_changes fields is generated with type <strong>string</strong> by default, in case you're planing to track big models,
+you should change its type to <strong>text</strong>.</p>
+
+<p>Here you can find a list with the attributes on the Audit model:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">==============</span>  <span class="o">====</span>      <span class="o">===========================================================================</span>
+<span class="no">Attribute</span>         <span class="no">Type</span>      <span class="no">Usage</span>
+<span class="o">--------------</span>  <span class="o">----</span>      <span class="o">---------------------------------------------------------------------------</span>
+<span class="ss">:dumped_changes</span>    <span class="n">text</span>      <span class="no">Keep</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">serialized</span><span class="o">.</span>
+<span class="ss">:action</span>            <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">whether</span> <span class="n">was</span> <span class="n">creation</span> <span class="p">(</span><span class="s2">&quot;creating&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">update</span> <span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:model_changed</span>     <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">that</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:element_id</span>        <span class="n">integer</span>   <span class="no">Indicates</span> <span class="n">the</span> <span class="n">element</span> <span class="n">from</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">that</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:invoker</span>           <span class="n">string</span>    <span class="no">Optional</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">chose</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">action</span> <span class="n">invoker</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:timestamps</span>                  <span class="no">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">timestamps</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">when</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="o">==============</span>  <span class="o">=======</span>   <span class="o">===========================================================================</span>
+</code></pre>
+</div>
+
+
+<p>As with all open source projects, feel free to collaborate with this
+gem by forking it on github.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  <div class="nav_links span-16">
+    
+      <div class="previous span-8"><a href="/2011/01/31/attack-of-the-backticks.html"><< Attack of the backtick</a></div>
+    
+    
+  </div>
+</div>
+<div class="post prepend-1">
+  <h1>Related Posts</h1>
+  <ul class="archives">
+
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  </ul>
+</div>
+        </div>
+        <div class="right-side span-5 last prepend-1">
+          <h1><a href="/">Blog Home</a></h1>
+<h1>About Crowd Interactive</h1>
+<p class="append-1 about">Crowd Interactive is a Ruby on Rails
+consultancy firm powered by a team of enthusiast engineers that love
+programming.We turn your ideas into web applications...<br/><a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
+<h1>Our Favorite Sites</h1>
+<ul>
+  <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
+  <li><a href="http://www.magmarails.com">MagmaRails</a></li>
+  <li><a href="http://rubyonrails.org">Ruby on Rails</a></li>
+  <li><a href="http://ruby-lang.org">Ruby-Lang</a></li>
+  <li><a href="http://github.com/crowdint">Github</a></li>
+</ul>
+<h1>Stuff we've built</h1>
+<ul>
+  <li><a href="http://www.modcloth.com">ModCloth</a></li>
+  <li><a href="http://www.creativeallies.com">Creative Allies</a></li>
+  <li><a href="http://www.nameframe.com">Nameframe</a></li>
+  <li><a href="http://github.com/crowdint/rails3-jquery-autocomplete">Rails3-jQuery-Autocomplete</a></li>
+  <li><a href="http://github.com/crowdint/rankstar">rankstar</a></li>
+  <li><a href="http://github.com/crowdint/blog.crowdint.com">This site's source code</a></li>
+</ul>
+<h1>Older Posts</h1>
+<ul>
+  <li><a href="/archive.html">Archive</a></li>
+</ul>
+
+Site Powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+
+        </div>
+      </div>
+      <div class="round-bottom span-24">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    <div class="copyContent" >
+      <p class="copy">Copyright &copy; 2010, Crowd Interactive. All rights reserved.</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var disqus_shortname = 'crowdinttech';
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'http://disqus.com/forums/crowdinttech/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+  </script>
+</body>
+</html>
