@@ -6,8 +6,8 @@ email: luis.galaviz@crowdint.com
 avatar: 1e7f8fb8733b6193cf3bdbc85693f515
 ---
 
-Recently, we've been working recently in a very interesting project here at Crowd Interactive. We needed to audit some models
-in order to keep track of their changes, among other things. We researched for options (you know, plugins, gems, etc.)
+Recently, we've been working recently in a very interesting project here at Crowd Interactive. We needed to audit some of our models
+in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.)
 to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
 were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
 create a new solution named [auditrail](http://github.com/crowdint/auditrail).
