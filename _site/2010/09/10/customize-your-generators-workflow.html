@@ -123,7 +123,7 @@ rails g rspec:install
 </div>
 
 
-<p>Then, just add these lines to our '~/application.erb'</p>
+<p>Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)</p>
 
 <div class="highlight"><pre><code class="bash">config.generators <span class="k">do</span> |g|
   g.test_framework :rspec
@@ -148,7 +148,7 @@ create      spec/helpers/rspec_test_helper_spec.rb
 </div>
 
 
-<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.erb' like this:</p>
+<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.rb' like this:</p>
 
 <div class="highlight"><pre><code class="bash">g.test_framework :rspec, :views <span class="o">=</span>&gt; <span class="nb">false</span>
 </code></pre>
