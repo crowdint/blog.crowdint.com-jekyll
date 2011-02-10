@@ -12,6 +12,10 @@ body {
 
 }
 
+#empty-header a#home-link {
+  float: left;
+}
+
 #empty-header ul#navMenu {
   float: right;
   list-style-type: none;
