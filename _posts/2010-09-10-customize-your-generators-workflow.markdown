@@ -77,7 +77,7 @@ rails g cucumber:install
 rails g rspec:install
 {% endhighlight %}
 
-Then, just add these lines to our '~/application.erb'
+Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)
 
 {% highlight bash %}
 config.generators do |g|
@@ -100,7 +100,7 @@ invoke    rspec
 create      spec/helpers/rspec_test_helper_spec.rb
 {% endhighlight %}
 
-We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.erb' like this:
+We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.rb' like this:
 
 {% highlight bash %}
 g.test_framework :rspec, :views => false

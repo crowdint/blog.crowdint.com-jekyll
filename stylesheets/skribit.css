@@ -1,0 +1,172 @@
+#skribitWidget{
+  margin: 1.7em 0 1.5em;
+  border:1px solid #EEEEEE !important;
+  background-color:#FFFFFF !important;
+  font-size:12px !important;
+  font-family: !important;
+  color:#353535;
+  overflow:hidden !important;
+  -moz-border-radius:3px !important;
+  -webkit-border-radius:3px !important;
+  border-radius:3px !important;
+  text-align:left !important;
+}
+#skribitWidget a:link, #skribitWidget a:visited, #skribitWidget a:active{
+  color:#175057 !important;
+  text-decoration:none !important;
+  border-bottom: none !important;
+}
+#skribitWidget a:hover{
+  text-decoration:underline !important;
+}
+#skribitWorking{
+  background-color:#ffc928 !important;
+  color:#fff !important;
+  padding:2px 5px !important;
+  width:5em !important;
+}
+#skribitError{
+  color:#be0505 !important;
+  font-weight:bold !important;
+  padding:4px !important;
+}
+#skribitWidget .skribitSuggestion{
+  padding:7px 5px !important;
+}
+#skribitWidget .skribitSuggestion span.status-dot{font-size:12px !important;margin:0 1px 0 0 !important;}
+#skribitWidget .skribitSuggestion span.status-dot-undecided{color:#ccc !important;}
+#skribitWidget .skribitSuggestion span.status-dot-green{color:#58c013 !important;}
+#skribitWidget .skribitSuggestion span.status-dot-yellow{color:#e9d212 !important;}
+#skribitWidget .skribitSuggestion span.status-dot-red{color:#e91212 !important;}
+
+#skribitWidget .skribitSuggestionOdd{
+  background-color:#EEEEEE !important;
+}
+.skribitSuggestion .skribitVote{
+  float:right !important;
+  color: #000 !important;
+  background-color: #88BC50 !important;
+}
+.skribitSuggestion .skribitVoted{
+  float:right !important;
+  color: #000 !important;
+  background-color: #175057 !important;
+  cursor:default !important;
+}
+.skribitSuggestion .skribitVote,
+.skribitSuggestion .skribitVoted{
+    -moz-border-radius:3px !important;
+    -webkit-border-radius:3px !important;
+    border-radius:3px !important;
+}
+#skribitAddSuggestion{
+  background-color:#EEEEEE !important;
+  padding:5px !important;
+}
+#skribitAddSuggestion textarea{
+  height: 100%;
+  padding:3px !important;
+  width:95% !important;
+  border:2px solid #CDCDCD !important;
+  -moz-border-radius:4px !important;
+    -webkit-border-radius:4px !important;
+  -moz-border-radius-bottomright:0px !important;
+  -webkit-border-bottom-right-radius:0px !important;
+    border-radius:4px !important;
+  border-bottom-right-radius:4px !important;
+}
+#skribitQuestion{
+  font-size:12px !important;
+  font-weight:bold !important;
+  color:#000 !important;
+  padding:3px 3px 8px 3px !important;
+}
+#skribitCommands{
+  padding-bottom:3px !important;
+  margin-top:-5px !important;
+  margin-right:2% !important;
+  padding:6px 7px 3px 7px !important;
+  float:right !important;
+  text-align:right !important;
+  border:3px solid #CDCDCD !important;
+  background: #CDCDCD !important;
+  -moz-border-radius:4px !important;
+    -webkit-border-radius:4px !important;
+    border-radius:4px !important;
+}
+#skribitCommands a#skribitCancel{ margin-right:5px !important; }
+#skribitCommands input#skribitSuggest{ width: auto !important; }
+#skribitWidget .skribitButton{
+  margin-left:5px !important;
+  width:auto !important;
+  color :#FFF !important;
+  padding:0 3px 2px 3px !important;
+  text-align:center !important;
+  text-transform:uppercase !important;
+  font-size:13px !important;
+  font-weight:bold !important;
+  cursor:pointer !important;
+}
+#skribitLoginInfo{
+  background-color:#EEEEEE !important;
+  padding:6px 0 !important;
+  text-align:center !important;
+}
+#skribitPosterName{ font-style:italic !important; }
+#skribitSplash{
+  margin:2em 0 10px !important;
+  text-align:center !important;
+}
+#skribitWidget .skribitFooter{
+  background-color:#CDCDCD !important;
+  min-height:16px !important;
+  padding:5px 5px !important;
+}
+#skribitWidget .skribitFooter a:link, .skribitFooter a:visited, .skribitFooter a:active{
+  color:#175057 !important;
+}
+#skribitWidget .skribitFooter img{
+  float:right !important;
+}
+#skribitWidget .skribitFooter img.widget_logo{
+  background-color:#FFFFFF !important;
+  padding:1px 2px;
+  -moz-border-radius:3px !important;
+    -webkit-border-radius:3px !important;
+    border-radius:3px !important;
+}
+#skribitWidget .skribitMoreSuggestions a#skribitBlogLink{
+  margin-top:2px !important;
+  display:block !important;
+}
+#skribitWidget a.skribitSuggestionTitle,
+#skribitWidget a.skribitSuggestionTitle:active,
+#skribitWidget a.skribitSuggestionTitle:visited,
+#skribitWidget a.skribitSuggestionTitle:hover{
+  background-color:#FFFFFF !important;
+  color:#353535 !important;
+}
+#skribitWidget .skribitSuggestionOdd a.skribitSuggestionTitle,
+#skribitWidget .skribitSuggestionOdd a.skribitSuggestionTitle:active,
+#skribitWidget .skribitSuggestionOdd a.skribitSuggestionTitle:visited,
+#skribitWidget .skribitSuggestionOdd a.skribitSuggestionTitle:hover{
+  background-color:#EEEEEE !important;
+}
+#skribitNewSuggestion {
+  font-family: !important;
+  font-size:12px !important;
+  width:99% !important;
+}
+#skribitWidget .clearfix:after {
+  visibility: hidden !important;
+  display: block !important;
+  font-size: 0 !important;
+  content: " " !important;
+  clear: both !important;
+  height: 0 !important;
+}
+#skribitWidget .clearfix { display: inline-block !important; }
+/* start commented backslash hack \*/
+* html #skribitWidget .clearfix { height: 1% !important; }
+#skribitWidget .clearfix { display: block !important; }
+/* stop commented backslash hack */ 
