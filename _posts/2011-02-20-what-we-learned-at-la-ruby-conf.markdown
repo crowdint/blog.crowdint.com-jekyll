@@ -7,9 +7,8 @@ avatar: d32b52ec6403614b1adf3e648cbbe584
 ---
 
 Earlier this month I decided to go to [LA Ruby Conf 2011](http://www.larubyconf.com).
-I was already in San Francisco, and, since I think small regional conferences are far better
-than the "big" ones, because of being single tracked and have usually
-have better content, I jumped into a plane and attended the conferences on Saturday.
+I was already in San Francisco, and, since I was just an hour away via
+plane, I jumped into one and attended the conference sessions on Saturday.
 
 As expected, the organization and the conferences were awesome. Kudos to
 the organizators.
@@ -64,12 +63,14 @@ Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior th
 * Completely unombtrusive - no markup whatsoever in your HTML and
 * Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.
 
+Now, that's more like it.
+
 You can see it in action [right here](http://mizugumo-demo.lrdesign.com/products).
 Try using that UI both with your JS enabled and disabled. See what
 happens.
 
-All that is supposed to happen just by dropping the gem and minimal
-configuration.
+You're supposed to get all that sweetness just by dropping the gem and 
+doing some minimal configuration.
 
 Haven't tried it myself, but probably will soon.
 
@@ -190,6 +191,11 @@ this post what I thougt was the most interesting part of the event.
 LARubyconf just made me reassure my thoughts about small regional
 conferences being way better than the big ones.
 
-Looking forward to my next conference.
+Many thanks to Ron Evans of [The Hybrid Group](http://hybridgroup.com/)
+for inviting us to have delicious brunch the next day at his place. Good
+times.
 
-Hope this helps you in any way.
+Looking forward to my next conference. Don't know where or when yet,
+[Ruby Nation](http://www.rubynation.org//)'s lineup looks very promising.
+
+Until the next time.
