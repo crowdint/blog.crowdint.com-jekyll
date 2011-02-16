@@ -97,13 +97,99 @@ It does look like a very good way to learn Rails 3.
 You probably know Ron Evans, he knows everyone. I had already seen this
 talk when he gave it at [MagmaRails](http://www.magmarails.com).
 
-Awesome. Period.
+Awesome. Period. Ron knows how to involve the crowd on his talks.
 
 If you haven't seen this talk, you are out of luck since now he's more
 into [Kids Ruby](http://www.kidsruby.com/). Can't wait to see that
 talk later in the year, Bravo Ron! for thinking of the kids. Someone has
 to.
 
+## Working in Virtual Machines, the Vagrant Way
 
+### Mitchell Hashimoto
 
+[Vagrant](http://vagrantup.com/) is a tool for building and distributing
+virtualized development environments.
 
+I wonder if you can do some funky stuff with vagrant where you create
+Windows virtual machines and run your cucumber features or Selenium
+tests automagically on them.
+
+I will have to play with this eventually.
+
+## Securing Your Rails App
+
+### Jim Weirich, Matt Yoho
+
+Basics on Rails app security. I was sort of expecting something more
+advanced from Jim Weirich, but, it was good.
+
+Learned about the existence of these two papers:
+
+* [Ruby on Rails Security Guide](http://guides.rubyonrails.org/security.html)
+* [OWASP Ruby on Rails Security Guide](https://www.owasp.org/images/8/89/Rails_Security_2.pdf)
+
+No Rails developer should be allowed to send code to production without
+reading those.
+
+Also learned that security holes can slip everywhere, [even to the best
+people out there](http://martinfowler.com/snips/201102031214.html).
+
+No one is safe on the interwebs.
+
+By the way, if you've finally decided to be more serious about security, take
+a look at [Metasploit](http://www.metasploit.com/framework/). A
+framework to perform penetration testing on your Network.
+
+## Twitter Mobile
+
+### Ben Sandofsky
+
+This talk was full of interesting stuff and could easily be it's own
+post by itself.
+
+Ben described how they work at twitter. I'll highlight what I think was the most
+interesting parts of the talk.
+
+* The record of tweets per second was set last New Years eve at 6,939
+  tps.
+* Twitter is heavily Service oriented. They didn't started that way, but
+  they have been transitioning in the last few years. Doesn't sound like
+  an easy task.
+* They created a DSL that allows them to create new Service endpoints
+  with just a few lines of code. Clever.
+* They use YAJL for JSON. Twice the performance just by dropping a gem.
+* They use GD2 for image processing since it's way faster than Image
+  Magick.
+* They use [Typhoeus](https://github.com/dbalatero/typhoeus) for
+  parallel HTTP requests betwen their services.
+* They work in small agile teams
+* Usually composed of 1 PM, 1 Designer, 3 Devs
+* Iterative development
+* They believe in continuous shipping. They usually do 3 deploys a
+  day. The record? 7 in one day.
+* They have a rigorous test suite in place. It runs for 1 hour by
+  itself but they built an awesome fleet of servers that can run it in
+  *2 minutes*.
+* Sadly, no details on how they do that :(
+* They do beleive in Pair programming, but it's up to the teams to do
+  actually do it.
+* They do require code review before pushing something.
+* They deliver the features to small amounts of users before full
+  release.
+* They have no QA team. Every team is responsible of their features and
+  their code. They believe that developers tend to become lazy and
+  careless when there's a QA team in place.
+* Company culture is key to success.
+
+## Conclusion
+
+I missed a review on some of the conferences, but I just included on
+this post what I thougt was the most interesting part of the event.
+
+LARubyconf just made me reassure my thoughts about small regional
+conferences being way better than the big ones.
+
+Looking forward to my next conference.
+
+Hope this helps you in any way.
