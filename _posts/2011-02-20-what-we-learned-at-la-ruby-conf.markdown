@@ -26,6 +26,9 @@ with [Ruby Facets](http://rubyworks.github.com/facets/).
 To be honest, I have never used Facets, but it seems it's worth taking a
 look.
 
+Here's the [API Documentation](http://rubyworks.github.com/facets/learn.html), I've already
+gone through it and I found a lot of interesting things going on there.
+
 Sadly, Bryan was time constrained and he just gave a small part of what
 seems to be a big, interesting talk about those two libraries.
 
@@ -33,6 +36,11 @@ The most interesting part of this talk for me was to learn that Rails 3
 ships with a lot of built-in instrumentation, so, expect a lot of gems
 to measure performance of the applications more acurately in the near
 future.
+
+Tried to google on the subject, and couldn't find a lot on
+Instrumentations, so I went straight to the Rails source code.
+
+[Here you can get an example](http://bit.ly/earFTF) more or less on how it works.
 
 ## NinjaScript: JavaScript so unobtrusive, you won't see it coming.
 
@@ -186,10 +194,11 @@ interesting parts of the talk.
 ## Conclusion
 
 I missed a review on some of the conferences, but I just included on
-this post what I thougt was the most interesting part of the event.
+this post what I personally found as the most interesting part of the event.
 
 LARubyconf just made me reassure my thoughts about small regional
-conferences being way better than the big ones.
+conferences being way better than the big ones, being single tracked and
+with a lot better content.
 
 Many thanks to Ron Evans of [The Hybrid Group](http://hybridgroup.com/)
 for inviting us to have delicious brunch the next day at his place. Good
