@@ -11,7 +11,7 @@ I was already in San Francisco, and, since I was just an hour away via
 plane, I jumped into one and attended the conference sessions on Saturday.
 
 As expected, the organization and the conferences were awesome. Kudos to
-the organizators.
+the organizers.
 
 Now, a small recap of what I learned there.
 
