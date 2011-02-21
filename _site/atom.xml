@@ -4,9 +4,233 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-02-15T12:56:54-08:00</updated>
+ <updated>2011-02-21T11:00:32-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>What we learned at LA Ruby Conf</title>
+   <link href="http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf.html"/>
+   <updated>2011-02-21T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;Earlier this month I decided to go to &lt;a href=&quot;http://www.larubyconf.com&quot;&gt;LA Ruby Conf 2011&lt;/a&gt;.
+I was already in San Francisco, and, since I was just an hour away via
+plane, I jumped into one and attended the conference sessions on Saturday.&lt;/p&gt;
+
+&lt;p&gt;As expected, the organization and the conferences were awesome. Kudos to
+the organizators.&lt;/p&gt;
+
+&lt;p&gt;Now, a small recap of what I learned there.&lt;/p&gt;
+
+&lt;h2&gt;ActiveSupport Three - It is finally getting interesting&lt;/h2&gt;
+
+&lt;h3&gt;Bryan Lyles&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://smartic.us/&quot;&gt;Bryan Liles&lt;/a&gt;, being the Greatest
+Man Alive gave an awesome talk on ActiveSupport and its similarities
+with &lt;a href=&quot;http://rubyworks.github.com/facets/&quot;&gt;Ruby Facets&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To be honest, I have never used Facets, but it seems it's worth taking a
+look.&lt;/p&gt;
+
+&lt;p&gt;Here's the &lt;a href=&quot;http://rubyworks.github.com/facets/learn.html&quot;&gt;API Documentation&lt;/a&gt;, I've already
+gone through it and I found a lot of interesting things going on there.&lt;/p&gt;
+
+&lt;p&gt;Sadly, Bryan was time constrained and he just gave a small part of what
+seems to be a big, interesting talk about those two libraries.&lt;/p&gt;
+
+&lt;p&gt;The most interesting part of this talk for me was to learn that Rails 3
+ships with a lot of built-in instrumentation, so, expect a lot of gems
+to measure performance of the applications more acurately in the near
+future.&lt;/p&gt;
+
+&lt;p&gt;Tried to google on the subject, and couldn't find a lot on
+Instrumentations, so I went straight to the Rails source code.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://bit.ly/earFTF&quot;&gt;Here you can get an example&lt;/a&gt; more or less on how it works.&lt;/p&gt;
+
+&lt;h2&gt;NinjaScript: JavaScript so unobtrusive, you won't see it coming.&lt;/h2&gt;
+
+&lt;h3&gt;Evan Dorn&lt;/h3&gt;
+
+&lt;p&gt;These guys are making an awesome effort of separating the Javascript
+dependency out of the HTML and the CSS.&lt;/p&gt;
+
+&lt;p&gt;So, they wrote &lt;a href=&quot;https://github.com/LRDesign/NinjaScript&quot;&gt;NinjaScript&lt;/a&gt;.
+From their github page:&lt;/p&gt;
+
+&lt;p&gt;NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
+Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
+to apply stylings.
+Additionally, NinjaScript makes it easy to package up useful behaviors and apply
+them quickly to disparate elements, or in different projects.&lt;/p&gt;
+
+&lt;p&gt;Looks promising, but there's still a lot of Javascript involved, and I
+usually try to stay away from Javascript as much as I can, I am old
+school.&lt;/p&gt;
+
+&lt;p&gt;Lucky for me, they also wrote the &lt;a href=&quot;https://github.com/LRDesign/mizugumo&quot;&gt;Mizugumo&lt;/a&gt;
+gem.&lt;/p&gt;
+
+&lt;p&gt;Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Absolutely seamless&lt;/li&gt;
+&lt;li&gt;Completely unombtrusive - no markup whatsoever in your HTML and&lt;/li&gt;
+&lt;li&gt;Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, that's more like it.&lt;/p&gt;
+
+&lt;p&gt;You can see it in action &lt;a href=&quot;http://mizugumo-demo.lrdesign.com/products&quot;&gt;right here&lt;/a&gt;.
+Try using that UI both with your JS enabled and disabled. See what
+happens.&lt;/p&gt;
+
+&lt;p&gt;You're supposed to get all that sweetness just by dropping the gem and
+doing some minimal configuration.&lt;/p&gt;
+
+&lt;p&gt;Haven't tried it myself, but probably will soon.&lt;/p&gt;
+
+&lt;h2&gt;The Rails Tutorial Story&lt;/h2&gt;
+
+&lt;h3&gt;Michael Hartl&lt;/h3&gt;
+
+&lt;p&gt;I have never heard about &lt;a href=&quot;http://ruby.railstutorial.org/&quot;&gt;The Rails Tutorial&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Michael Hartl told us the story behind it, and how he ended up writing
+all of that, and let me tell you something: it was &lt;em&gt;Inspiring&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Talk about perseverance. I won't ruin this story for you, because,
+obviously I can't tell it as good nor accurate as he did.&lt;/p&gt;
+
+&lt;p&gt;All I can tell you is, take a look at the site, do yourself some good,
+buy the screencast / PDF bundle.&lt;/p&gt;
+
+&lt;p&gt;It does look like a very good way to learn Rails 3.&lt;/p&gt;
+
+&lt;h2&gt;How To Jam In Code&lt;/h2&gt;
+
+&lt;h3&gt;Ron Evans&lt;/h3&gt;
+
+&lt;p&gt;You probably know Ron Evans, he knows everyone. I had already seen this
+talk when he gave it at &lt;a href=&quot;http://www.magmarails.com&quot;&gt;MagmaRails&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Awesome. Period. Ron knows how to involve the crowd on his talks.&lt;/p&gt;
+
+&lt;p&gt;If you haven't seen this talk, you are out of luck since now he's more
+into &lt;a href=&quot;http://www.kidsruby.com/&quot;&gt;Kids Ruby&lt;/a&gt;. Can't wait to see that
+talk later in the year, Bravo Ron! for thinking of the kids. Someone has
+to.&lt;/p&gt;
+
+&lt;h2&gt;Working in Virtual Machines, the Vagrant Way&lt;/h2&gt;
+
+&lt;h3&gt;Mitchell Hashimoto&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://vagrantup.com/&quot;&gt;Vagrant&lt;/a&gt; is a tool for building and distributing
+virtualized development environments.&lt;/p&gt;
+
+&lt;p&gt;I wonder if you can do some funky stuff with vagrant where you create
+Windows virtual machines and run your cucumber features or Selenium
+tests automagically on them.&lt;/p&gt;
+
+&lt;p&gt;I will have to play with this eventually.&lt;/p&gt;
+
+&lt;h2&gt;Securing Your Rails App&lt;/h2&gt;
+
+&lt;h3&gt;Jim Weirich, Matt Yoho&lt;/h3&gt;
+
+&lt;p&gt;Basics on Rails app security. I was sort of expecting something more
+advanced from Jim Weirich, but, it was good.&lt;/p&gt;
+
+&lt;p&gt;Learned about the existence of these two papers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://guides.rubyonrails.org/security.html&quot;&gt;Ruby on Rails Security Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.owasp.org/images/8/89/Rails_Security_2.pdf&quot;&gt;OWASP Ruby on Rails Security Guide&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;No Rails developer should be allowed to send code to production without
+reading those.&lt;/p&gt;
+
+&lt;p&gt;Also learned that security holes can slip everywhere, &lt;a href=&quot;http://martinfowler.com/snips/201102031214.html&quot;&gt;even to the best
+people out there&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;No one is safe on the interwebs.&lt;/p&gt;
+
+&lt;p&gt;By the way, if you've finally decided to be more serious about security, take
+a look at &lt;a href=&quot;http://www.metasploit.com/framework/&quot;&gt;Metasploit&lt;/a&gt;. A
+framework to perform penetration testing on your Network.&lt;/p&gt;
+
+&lt;h2&gt;Twitter Mobile&lt;/h2&gt;
+
+&lt;h3&gt;Ben Sandofsky&lt;/h3&gt;
+
+&lt;p&gt;This talk was full of interesting stuff and could easily be it's own
+post by itself.&lt;/p&gt;
+
+&lt;p&gt;Ben described how they work at twitter. I'll highlight what I think was the most
+interesting parts of the talk.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The record of tweets per second was set last New Years eve at 6,939
+tps.&lt;/li&gt;
+&lt;li&gt;Twitter is heavily Service oriented. They didn't started that way, but
+they have been transitioning in the last few years. Doesn't sound like
+an easy task.&lt;/li&gt;
+&lt;li&gt;They created a DSL that allows them to create new Service endpoints
+with just a few lines of code. Clever.&lt;/li&gt;
+&lt;li&gt;They use YAJL for JSON. Twice the performance just by dropping a gem.&lt;/li&gt;
+&lt;li&gt;They use GD2 for image processing since it's way faster than Image
+Magick.&lt;/li&gt;
+&lt;li&gt;They use &lt;a href=&quot;https://github.com/dbalatero/typhoeus&quot;&gt;Typhoeus&lt;/a&gt; for
+parallel HTTP requests betwen their services.&lt;/li&gt;
+&lt;li&gt;They work in small agile teams&lt;/li&gt;
+&lt;li&gt;Usually composed of 1 PM, 1 Designer, 3 Devs&lt;/li&gt;
+&lt;li&gt;Iterative development&lt;/li&gt;
+&lt;li&gt;They believe in continuous shipping. They usually do 3 deploys a
+day. The record? 7 in one day.&lt;/li&gt;
+&lt;li&gt;They have a rigorous test suite in place. It runs for 1 hour by
+itself but they built an awesome fleet of servers that can run it in
+&lt;em&gt;2 minutes&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Sadly, no details on how they do that :(&lt;/li&gt;
+&lt;li&gt;They do beleive in Pair programming, but it's up to the teams to do
+actually do it.&lt;/li&gt;
+&lt;li&gt;They do require code review before pushing something.&lt;/li&gt;
+&lt;li&gt;They deliver the features to small amounts of users before full
+release.&lt;/li&gt;
+&lt;li&gt;They have no QA team. Every team is responsible of their features and
+their code. They believe that developers tend to become lazy and
+careless when there's a QA team in place.&lt;/li&gt;
+&lt;li&gt;Company culture is key to success.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I missed a review on some of the conferences, but I just included on
+this post what I personally found as the most interesting part of the event.&lt;/p&gt;
+
+&lt;p&gt;LARubyconf just made me reassure my thoughts about small regional
+conferences being way better than the big ones, being single tracked and
+with a lot better content.&lt;/p&gt;
+
+&lt;p&gt;Many thanks to Ron Evans of &lt;a href=&quot;http://hybridgroup.com/&quot;&gt;The Hybrid Group&lt;/a&gt;
+for inviting us to have delicious brunch the next day at his place. Good
+times.&lt;/p&gt;
+
+&lt;p&gt;Looking forward to my next conference. Don't know where or when yet,
+&lt;a href=&quot;http://www.rubynation.org//&quot;&gt;Ruby Nation&lt;/a&gt;'s lineup looks very promising.&lt;/p&gt;
+
+&lt;p&gt;Until the next time.&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Internationalizing your Rails application with i18n</title>
@@ -2929,259 +3153,6 @@ current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.su
    <author>
      <name>Francisco Guzm&amp;aacute;n</name>
      <email>francisco.guzman@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Controller responders in Rails 3</title>
-   <link href="http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3.html"/>
-   <updated>2010-11-05T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2010/11/05/controller-responders-in-rails-3</id>
-   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
-   <content type="html">&lt;p&gt;When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept &quot;Convention over configuration&quot;. What can I say? I'm believer!&lt;/p&gt;
-
-&lt;p&gt;Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.&lt;/p&gt;
-
-&lt;p&gt;Imagine you are creating a basic RESTFUL controller, you could start with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-
-  def index
-    @variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all
-  end
-  
-  def new
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new
-  end
-  
-  def create
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @variant.save
-      flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Fortunately it was saved!&amp;quot;&lt;/span&gt;
-      redirect_to variant_path
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;      &lt;/span&gt;render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt;
-    end
-  end
-  .
-  .
-  .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-
-  def index
-    @users &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; User.all
-    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-      format.html
-      format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    end
-  end
-  .
-  .
-  .
-
-  def create
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    respond_to &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
-        flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt;
-        format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; redirect_to variant_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @varian, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :created, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;        &lt;/span&gt;format.html &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;new&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @variant.errors, :status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; :unprocessable_entity &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      end
-    end
-  end
-  .
-  .
-  .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.&lt;/p&gt;
-
-&lt;p&gt;First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-  respond_to :html, :xml
-  .
-  .
-  .
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Then, we will use respond_with to set the response, like follows:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def index
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-
-def new
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-
-def create
-  @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-  flash&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:notice&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fortunately it was saved!&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @user.save
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-.
-.
-.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;So, when do I need to use respond_with?&lt;/h2&gt;
-
-&lt;p&gt;You need to use it when:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).&lt;/li&gt;
-&lt;li&gt;When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;, :location &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; variants_path&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;or, you could specify different actions for each response:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; |format|
-    format.html
-    format.xml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; render :xml &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; @users &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.&lt;/p&gt;
-
-&lt;p&gt;Other tool that plays very well with this new controllers feature is &lt;a href=&quot;http://github.com/plataformatec/responders&quot;&gt;responders&lt;/a&gt;. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install responders
-
-or, in your Gemfile
-
-gem &lt;span class=&quot;s1&quot;&gt;&amp;#39;responders&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and then, configure it through the appropriate generator:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rails generate responders:install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;You will see these changes:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;create  lib/application_responder.rb
-prepend  app/controllers/application_controller.rb
-inject  app/controllers/application_controller.rb
-create  config/locales/responders.en.yml
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;what we will use is the last file &quot;responders.en.yml&quot;, this file contains the messages for each action of the responders, and it looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;en:
-  flash:
-    actions:
-      create:
-        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully created.&amp;#39;&lt;/span&gt;
-      update:
-        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully updated.&amp;#39;&lt;/span&gt;
-      destroy:
-        notice: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} was successfully destroyed.&amp;#39;&lt;/span&gt;
-        alert: &lt;span class=&quot;s1&quot;&gt;&amp;#39;%{resource_name} could not be destroyed.&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.&lt;/p&gt;
-
-&lt;p&gt;Ok, so, back to the controller, yo could define the create action as follows:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;def create
-  respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And this way you get everything, including the flash notice.&lt;/p&gt;
-
-&lt;p&gt;So, in the end, this could be your complete RESTFUL controller:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class VariantsController &amp;lt; ApplicationController
-  respond_to :html
-
-  def index
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.all&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  end
-
-  def new
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.new&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  end
-
-  def create
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.create&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
-  end
-
-  def edit
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
-  end
-
-  def update
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant.update_attributes&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:variant&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt;
-  end
-  
-  def destroy
-    @variant &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Variant.find&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;params&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;:id&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;
-    @variant.destroy
-    respond_with&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;@variant&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  end
-  
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;What else?&lt;/h2&gt;
-
-&lt;p&gt;Well, if you want to define a particular response by default, you could set it in your &quot;routes.rb&quot; like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;resources :variants, :defaults &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:action &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt;, :format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.&lt;/p&gt;
-
-&lt;p&gt;Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit &lt;a href=&quot;http://ryandaigle.com/&quot;&gt;Ryan Daigle's&lt;/a&gt; posts, they are really helpful.&lt;/p&gt;
-</content>
-   <author>
-     <name>Luis Galaviz</name>
-     <email>luis.galaviz@crowdint.com</email>
    </author>
  </entry>
  

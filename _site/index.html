@@ -48,6 +48,238 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 21</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>Earlier this month I decided to go to <a href="http://www.larubyconf.com">LA Ruby Conf 2011</a>.
+I was already in San Francisco, and, since I was just an hour away via
+plane, I jumped into one and attended the conference sessions on Saturday.</p>
+
+<p>As expected, the organization and the conferences were awesome. Kudos to
+the organizators.</p>
+
+<p>Now, a small recap of what I learned there.</p>
+
+<h2>ActiveSupport Three - It is finally getting interesting</h2>
+
+<h3>Bryan Lyles</h3>
+
+<p><a href="http://smartic.us/">Bryan Liles</a>, being the Greatest
+Man Alive gave an awesome talk on ActiveSupport and its similarities
+with <a href="http://rubyworks.github.com/facets/">Ruby Facets</a>.</p>
+
+<p>To be honest, I have never used Facets, but it seems it's worth taking a
+look.</p>
+
+<p>Here's the <a href="http://rubyworks.github.com/facets/learn.html">API Documentation</a>, I've already
+gone through it and I found a lot of interesting things going on there.</p>
+
+<p>Sadly, Bryan was time constrained and he just gave a small part of what
+seems to be a big, interesting talk about those two libraries.</p>
+
+<p>The most interesting part of this talk for me was to learn that Rails 3
+ships with a lot of built-in instrumentation, so, expect a lot of gems
+to measure performance of the applications more acurately in the near
+future.</p>
+
+<p>Tried to google on the subject, and couldn't find a lot on
+Instrumentations, so I went straight to the Rails source code.</p>
+
+<p><a href="http://bit.ly/earFTF">Here you can get an example</a> more or less on how it works.</p>
+
+<h2>NinjaScript: JavaScript so unobtrusive, you won't see it coming.</h2>
+
+<h3>Evan Dorn</h3>
+
+<p>These guys are making an awesome effort of separating the Javascript
+dependency out of the HTML and the CSS.</p>
+
+<p>So, they wrote <a href="https://github.com/LRDesign/NinjaScript">NinjaScript</a>.
+From their github page:</p>
+
+<p>NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
+Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
+to apply stylings.
+Additionally, NinjaScript makes it easy to package up useful behaviors and apply
+them quickly to disparate elements, or in different projects.</p>
+
+<p>Looks promising, but there's still a lot of Javascript involved, and I
+usually try to stay away from Javascript as much as I can, I am old
+school.</p>
+
+<p>Lucky for me, they also wrote the <a href="https://github.com/LRDesign/mizugumo">Mizugumo</a>
+gem.</p>
+
+<p>Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:</p>
+
+<ul>
+<li>Absolutely seamless</li>
+<li>Completely unombtrusive - no markup whatsoever in your HTML and</li>
+<li>Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.</li>
+</ul>
+
+
+<p>Now, that's more like it.</p>
+
+<p>You can see it in action <a href="http://mizugumo-demo.lrdesign.com/products">right here</a>.
+Try using that UI both with your JS enabled and disabled. See what
+happens.</p>
+
+<p>You're supposed to get all that sweetness just by dropping the gem and
+doing some minimal configuration.</p>
+
+<p>Haven't tried it myself, but probably will soon.</p>
+
+<h2>The Rails Tutorial Story</h2>
+
+<h3>Michael Hartl</h3>
+
+<p>I have never heard about <a href="http://ruby.railstutorial.org/">The Rails Tutorial</a>.</p>
+
+<p>Michael Hartl told us the story behind it, and how he ended up writing
+all of that, and let me tell you something: it was <em>Inspiring</em>.</p>
+
+<p>Talk about perseverance. I won't ruin this story for you, because,
+obviously I can't tell it as good nor accurate as he did.</p>
+
+<p>All I can tell you is, take a look at the site, do yourself some good,
+buy the screencast / PDF bundle.</p>
+
+<p>It does look like a very good way to learn Rails 3.</p>
+
+<h2>How To Jam In Code</h2>
+
+<h3>Ron Evans</h3>
+
+<p>You probably know Ron Evans, he knows everyone. I had already seen this
+talk when he gave it at <a href="http://www.magmarails.com">MagmaRails</a>.</p>
+
+<p>Awesome. Period. Ron knows how to involve the crowd on his talks.</p>
+
+<p>If you haven't seen this talk, you are out of luck since now he's more
+into <a href="http://www.kidsruby.com/">Kids Ruby</a>. Can't wait to see that
+talk later in the year, Bravo Ron! for thinking of the kids. Someone has
+to.</p>
+
+<h2>Working in Virtual Machines, the Vagrant Way</h2>
+
+<h3>Mitchell Hashimoto</h3>
+
+<p><a href="http://vagrantup.com/">Vagrant</a> is a tool for building and distributing
+virtualized development environments.</p>
+
+<p>I wonder if you can do some funky stuff with vagrant where you create
+Windows virtual machines and run your cucumber features or Selenium
+tests automagically on them.</p>
+
+<p>I will have to play with this eventually.</p>
+
+<h2>Securing Your Rails App</h2>
+
+<h3>Jim Weirich, Matt Yoho</h3>
+
+<p>Basics on Rails app security. I was sort of expecting something more
+advanced from Jim Weirich, but, it was good.</p>
+
+<p>Learned about the existence of these two papers:</p>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a></li>
+<li><a href="https://www.owasp.org/images/8/89/Rails_Security_2.pdf">OWASP Ruby on Rails Security Guide</a></li>
+</ul>
+
+
+<p>No Rails developer should be allowed to send code to production without
+reading those.</p>
+
+<p>Also learned that security holes can slip everywhere, <a href="http://martinfowler.com/snips/201102031214.html">even to the best
+people out there</a>.</p>
+
+<p>No one is safe on the interwebs.</p>
+
+<p>By the way, if you've finally decided to be more serious about security, take
+a look at <a href="http://www.metasploit.com/framework/">Metasploit</a>. A
+framework to perform penetration testing on your Network.</p>
+
+<h2>Twitter Mobile</h2>
+
+<h3>Ben Sandofsky</h3>
+
+<p>This talk was full of interesting stuff and could easily be it's own
+post by itself.</p>
+
+<p>Ben described how they work at twitter. I'll highlight what I think was the most
+interesting parts of the talk.</p>
+
+<ul>
+<li>The record of tweets per second was set last New Years eve at 6,939
+tps.</li>
+<li>Twitter is heavily Service oriented. They didn't started that way, but
+they have been transitioning in the last few years. Doesn't sound like
+an easy task.</li>
+<li>They created a DSL that allows them to create new Service endpoints
+with just a few lines of code. Clever.</li>
+<li>They use YAJL for JSON. Twice the performance just by dropping a gem.</li>
+<li>They use GD2 for image processing since it's way faster than Image
+Magick.</li>
+<li>They use <a href="https://github.com/dbalatero/typhoeus">Typhoeus</a> for
+parallel HTTP requests betwen their services.</li>
+<li>They work in small agile teams</li>
+<li>Usually composed of 1 PM, 1 Designer, 3 Devs</li>
+<li>Iterative development</li>
+<li>They believe in continuous shipping. They usually do 3 deploys a
+day. The record? 7 in one day.</li>
+<li>They have a rigorous test suite in place. It runs for 1 hour by
+itself but they built an awesome fleet of servers that can run it in
+<em>2 minutes</em>.</li>
+<li>Sadly, no details on how they do that :(</li>
+<li>They do beleive in Pair programming, but it's up to the teams to do
+actually do it.</li>
+<li>They do require code review before pushing something.</li>
+<li>They deliver the features to small amounts of users before full
+release.</li>
+<li>They have no QA team. Every team is responsible of their features and
+their code. They believe that developers tend to become lazy and
+careless when there's a QA team in place.</li>
+<li>Company culture is key to success.</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>I missed a review on some of the conferences, but I just included on
+this post what I personally found as the most interesting part of the event.</p>
+
+<p>LARubyconf just made me reassure my thoughts about small regional
+conferences being way better than the big ones, being single tracked and
+with a lot better content.</p>
+
+<p>Many thanks to Ron Evans of <a href="http://hybridgroup.com/">The Hybrid Group</a>
+for inviting us to have delicious brunch the next day at his place. Good
+times.</p>
+
+<p>Looking forward to my next conference. Don't know where or when yet,
+<a href="http://www.rubynation.org//">Ruby Nation</a>'s lineup looks very promising.</p>
+
+<p>Until the next time.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="post prepend-1">
   <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
   <p class="author">
     <span class="date"><b>Feb 15</b><br />2011</span>
@@ -347,125 +579,10 @@ gem by forking it on github.</p>
 </div>
 
 <div class="post prepend-1">
-  <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 31</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>It all started because I was getting some weird warning while running
-the specs on one of my apps.</p>
-
-<p>I know that, as a developer, I am suppposed to ignore all warnings, but,
-this one felt ackward, so I had to track it down.</p>
-
-<div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found:
-</code></pre>
-</div>
-
-
-<p>What? Why is activerecord trying to run some command? what command? and
-why it isn't finding that command?</p>
-
-<p>Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
-something like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">convert_number_column_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">false</span>
-    <span class="mi">0</span>
-  <span class="k">elsif</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">true</span>
-    <span class="mi">1</span>
-  <span class="k">elsif</span> <span class="n">value</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="n">blank?</span>
-    <span class="kp">nil</span>
-  <span class="k">else</span>
-    <span class="n">value</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Nothing useful there, line 1838 was just doing some if thing. So, what's
-going on?</p>
-
-<p>I went through lots of source files, trying to narrow down the
-posibilites. But I just couldn't find anything unusual. If there was a
-syntax error, why is the code not breaking completely, it's just a
-warning on STDOUT.</p>
-
-<p>I ended up doing the worst thing ever (for me, anyway) to figure out this
-one, run the code with <em>ruby-debug</em>, put a couple of breakpoints. I feel
-dirty just by admiting that.</p>
-
-<p>Anyway, the problem was caused by some unintentional mistake:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">items_returned</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">cancelled?</span><span class="sb">``</span>
-</code></pre>
-</div>
-
-
-<p>How could I have missed that? the <em>backticks</em> at the end of the line, of
-course.</p>
-
-<p>In ruby, the backtick method returns the standard output of running the string encompassed
-by the backticks in a subshell.</p>
-
-<p>Yes, it is a method, like almost every operator in Ruby.</p>
-
-<p>A few examples:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">hey</span> <span class="o">=</span> <span class="sb">`echo hey`</span> <span class="c1"># =&gt; &quot;hey\n&quot;</span>
-<span class="n">list_of_files</span> <span class="o">=</span> <span class="sb">`ls`</span> <span class="c1"># =&gt; &quot;file1\nfile2\nfile3\n&quot;</span>
-</code></pre>
-</div>
-
-
-<p>It also sets a special variable $? with a Process::Status object with
-the PID of that subshell.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sb">`exit 99`</span>
-<span class="vg">$?</span>           <span class="c1">#  =&gt; # &lt;Process::Status: pid 7781 exit 99&gt;</span>
-<span class="vg">$.</span><span class="n">exitstatus</span> <span class="c1">#  =&gt; 99</span>
-</code></pre>
-</div>
-
-
-<p>So, I guess what was happening is that, the <em>cancelled?</em> method was
-taking the result of `` as a parameter, in this case, a string, printing the result of that to
-STDOUT and just ignoring the value of the parameter.</p>
-
-<p>In other words, I was calling <em>cancelled?</em> like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">cancelled?</span><span class="p">(</span><span class="sb">``</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>But, since cancelled wasn't expecting a parameter at all, it just
-ignored the input. That's why I wasn't getting a syntax error or a
-runtime error.</p>
-
-<p>Probably nothing useful on my experience, since this is such a weird
-problem to have, yet I just felt like explaining the power of the backticks.</p>
-
-<p>Cheers</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/31/attack-of-the-backticks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-<div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
   <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
 
@@ -504,8 +621,6 @@ problem to have, yet I just felt like explaining the power of the backticks.</p>
   <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
 
   <li><span><b>18 Oct 2010</b></span> &raquo; <a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></li>
-
-  <li><span><b>07 Oct 2010</b></span> &raquo; <a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></li>
 
   </ul>
 </div>
