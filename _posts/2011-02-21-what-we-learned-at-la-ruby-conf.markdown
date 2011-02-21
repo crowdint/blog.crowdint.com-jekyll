@@ -162,7 +162,7 @@ interesting parts of the talk.
 
 * The record of tweets per second was set last New Years eve at 6,939
   tps.
-* Twitter is heavily Service oriented. They didn't started that way, but
+* Twitter is heavily Service oriented. They didn't start that way, but
   they have been transitioning in the last few years. Doesn't sound like
   an easy task.
 * They created a DSL that allows them to create new Service endpoints
