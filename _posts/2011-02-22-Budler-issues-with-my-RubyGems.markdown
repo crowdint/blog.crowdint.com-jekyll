@@ -66,3 +66,9 @@ gem update
 And voila! I was ready to rock with **bundler 1.0.10**.
 
 Well, this worked for me, and I hope it works for you as well.
+
+By the way. If you have problems running your cucumber tests because of the builder version. You could try rather to uninstalling the newest builder version (3.0.0) or run this command:
+
+{% highlight bash %}
+bundle exec cucumber features
+{% endhighlight %}
