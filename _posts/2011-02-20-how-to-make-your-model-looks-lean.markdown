@@ -168,31 +168,3 @@ Great! Now our models looks more Lean. Even tough our models still has the same 
 {% highlight ruby %}
 Dir[Rails.root.join("lib", "*.rb")].each {|f| require f}
 {% endhighlight %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
