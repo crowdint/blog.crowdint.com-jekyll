@@ -8,7 +8,7 @@ layout: nil
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>http://blog.crowdint.com</id>
+ <id>http://blog.crowdint.com/</id>
  
  {% for post in site.posts limit:15 %}
  <entry>
@@ -16,6 +16,7 @@ layout: nil
    <link href="http://blog.crowdint.com{{ post.url }}"/>
    <updated>{{ post.date | date_to_xmlschema }}</updated>
    <id>http://blog.crowdint.com{{ post.id }}</id>
+   <photo>{{ post.avatar }}</photo>
    <content type="html">{{ post.content | xml_escape }}</content>
    <author>
      <name>{{ post.author | xml_escape }}</name>

@@ -11,6 +11,38 @@ body {
   height: 230px;
 
 }
+
+#empty-header a#home-link {
+  float: left;
+}
+
+#empty-header ul#navMenu {
+  float: right;
+  list-style-type: none;
+  margin: 204px 0 0 0;
+}
+
+#empty-header ul#navMenu li {
+  float:left;
+  font-size: 11px;
+  margin: 0 23px 0 -4px;
+}
+
+#empty-header ul#navMenu li.selected {
+  color: #879E1C;
+  text-decoration: underline;
+}
+
+
+#empty-header ul#navMenu li a{
+  color: #879E1C;
+  text-decoration: none;
+}
+
+#empty-header ul#navMenu li a:hover{
+  color: #FFFFFF;
+}
+
 .testGlow{
   -webkit-box-shadow:0px 0px 13px #3c3c3c;
   -moz-box-shadow: 0px 0px 13px #3c3c3c;
@@ -114,10 +146,21 @@ body {
 }
 
 .post .body blockquote {
-  background-color: black;
-  color: green;
-  padding: 5px;
-}
+  font: 14px/20px;
+  padding-left: 70px;
+  padding-top: 18px;
+  padding-bottom: 0px;
+  padding-right: 10px;
+  background-color: #dadada;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 5px auto 20px;
+  background-image: url(/images/openquote4.gif);
+  background-position: middle left;
+  background-repeat: no-repeat;
+  text-indent: 23px;
+  color: #353535;
+} 
 
 .right-side a {
   color: #175057;
