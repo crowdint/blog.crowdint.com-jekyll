@@ -292,3 +292,45 @@ em {
   text-align: left;
   font-size: 12pt;
 }
+
+.pagination{
+    color: black;
+    font-size: 1.3em;
+    margin-bottom: 40px;
+    text-align: center;
+    margin-top: -10px;
+}
+.pagination .page_number{
+    padding: 0 30px;
+  }
+.previous{
+ color: gray;
+ 
+}
+.next{
+  color: gray;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
