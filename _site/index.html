@@ -48,6 +48,195 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/02/25/why-ruby.html">Why ruby?</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 25</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
+    <p>We have been seeing a lot of posts about different Rails and Ruby topics,
+such as  benchmarks, ways to develop ,implementations and more. But if you
+are a n00b in the ruby world or if you are thinking in change to ruby, but you
+are not sure about it, I will try to give some answers for the most common
+questions that I think you may have.
+Like PHP vs Ruby? or thoose sorts of things...</p>
+
+<h2>PHP, .net, flex or ruby??</h2>
+
+<h3>PHP advantage</h3>
+
+<p>Well PHP is one of the most common and widely used languages for
+ coding dynamic webpages. You can write code inserted directly in HTML,
+ it's secure, stable an open source.</p>
+
+<p>I have to said that it is easy to use, I've started to write webpages
+in PHP and it was easy to understand 'cause, when I began using it I knew C,
+and PHP is C based.  It runs in almost all systems (UNIX, Windows and MAC OSX).<br/>
+Beginning to use it is as simple as installing Apache and add the PHP module,
+ then you’re set.</p>
+
+<p>PHP has a wide community and a lot of useful libraries.
+There are a lot of books to learn from, and also PHP.net is awesome.</p>
+
+<h3>PHP disadvantages</h3>
+
+<p>First of all, not everything in PHP is a piece of cake, when I was coding in it,
+I got some issues when I tried doing some more "complex" things, like making a
+file upload feature and things like that.</p>
+
+<p>PHP is not a 100% Object oriented, it's trying to implement it in the newest version, but is not as good as others.
+The error handling is very poor in PHP.</p>
+
+<p>Sometimes, you will get messy code because of  the lack of good practices.</p>
+
+<p>You have to take care of some security flaws on your own.</p>
+
+<h3>.net framework advantages</h3>
+
+<p>I really don’t like to talk about it, but, I have to say that it's easy and it has a
+very complete documentation.  It's an event language, so it is easy for n00b developers.
+C# is powerful, binding and a couple of more features.</p>
+
+<h3>.net framework disadvantages</h3>
+
+<p>With this framework you have to work in Windows and within this enviroment, you will get a
+lot of issues trying to connect to other DB instead of to a SQL Server. And it is heavy as hell!
+Also, you have to pay for everything.</p>
+
+<h3>Flex advantages</h3>
+
+<p>I really don’t know much about it, so I ask to a friend of mine whom is nicknamed <em>Chicken</em>(Adrian Castillo). <br/>
+He told me that Flex had a lot of positive points, like:
+* Cross-browser.
+* Multiplatform.
+* Multimedia content.
+* Authorship, you can create digital signs for you projects.
+* And it is extensible.</p>
+
+<h3>Flex disadvantages</h3>
+
+<p>The bad things about Flex are:
+when you create a project you have to choose a flash version, and you will
+have to use that version only. If you want the edgy stuff, It will be not available
+for everyone. There’s not to many docs and examples.</p>
+
+<p>It's a event language, so if you are not careful, you will get a mess</p>
+
+<h3>Ruby advantages</h3>
+
+<p>Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
+it has been amazing time. Everything is so easy, you dont have to worry in write
+common methods, you have to worry about solving the problem that you have, not in trivial
+stuff.</p>
+
+<p>The guy who wrote it <a href="http://en.wikipedia.org/wiki/Yukihiro_Matsumoto"><em>Yukihiro Matsumoto</em></a> wants to have simple code
+not so complex, something with the developers feel free and happy.</p>
+
+<p>It's also fast to learn, just take a look at the documentation and that’s all you have to do, besides practicing it.</p>
+
+<p>In ruby everything is an object, an example.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="nb">puts</span> <span class="s2">&quot;hello world&quot;</span><span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>Take a look at the code and you will see that "10" is an object with the method "times", and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.</p>
+
+<p>Another plus is that ruby has an excellent error handler.</p>
+
+<p>The community is huge now, and you have a lot of gems and plugins to help in your projects.</p>
+
+<p>The community is huge now, and you have a lot of gems and plugins to help in your projects.</p>
+
+<p>When we are talking of ruby and PHP, we have to talk about <a href="http://rubyonrails.org"><em>Ruby on Rails</em></a> an
+awesome framework for ruby, there are other out there(like sinatra), but
+right now is the one I like the most.</p>
+
+<p>So, What can I say about it?. Well you can create a web site in minutes...
+I really meant that, with the <em>scaffold</em> function you will have a template
+in a second(not recommended for important projects).
+Theres a lot of cool functions, like time methods:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+ <span class="c1">#2010-12-19 23:55:57 -0600</span>
+<span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
+ <span class="c1">#2010-12-20 23:56:06 -0600</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">ago</span>
+ <span class="c1">#Sat, 18 Dec 2010 05:57:15 UTC +00:00</span>
+</code></pre>
+</div>
+
+
+<p>It's a simple stuff but so usefull.</p>
+
+<p>In ruby on rails, you will write a lot less code,
+ easy configuration, it has an integrated testing framework.</p>
+
+<p>And more and more and more.....</p>
+
+<h3>Ruby disadvantages</h3>
+
+<p>Like all the languages it has disadvantages, not everything is beatiful.
+ Ok now a couple of them:</p>
+
+<p>The documentation is mostly complete, but it doesn't have method examples or stuff
+like PHP.net</p>
+
+<p>If you don't have the money to pay the hosting it will be difficult to get your app
+online, there's a solution <a href="http://www.heroku.com"><em>heroku</em></a>. Heroku is a free web  hosting company, but only free startups.
+So I have to say that it's expensive to host apps.</p>
+
+<p>Another thing is when ruby sites grow they will need a
+robust infraestructure, it's heavy.</p>
+
+<h2>My coworkers opinion</h2>
+
+<p>I've asked to some of my co-workers about the things that they like about ruby,
+and the things they don't. And I got the next anwsers about their likes:</p>
+
+<p>They love the way you can change everything, like opening the methods and rewritting
+them.
+They said that everything is so easy to do, the sintax, write methods, the blocks,
+etc.
+Also, it's amazing how everything is an object, you can create methods for
+that object, and access them so quickly.
+It's really easy to learn.</p>
+
+<p>On the other hand, I ask about the things that they don't like about it.</p>
+
+<p>It's not multithread.multitask
+It's so easy that sometimes it turns you into a lazy developer.
+It's perfect. (I know i now I'm just telling you what they said).
+It's heavier than PHP.</p>
+
+<h2>Final thoughts</h2>
+
+<p>This are a couple of things, just to get an idea across. If you dig more I am sure,
+that you will find more things, good and bad ones, and it's the same in every
+language, you have to try it by yourself and see what can you do with ruby.</p>
+
+<p>If you have another question or if you want to say that this post it's pure
+crap, don't hesitate on telling. I am open to any kind of feedback.</p>
+
+<p>I hope this help you a little bit to take a step into ruby or maybe to keep
+outside of it.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/25/why-ruby.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
   <p class="author">
     <span class="date"><b>Feb 21</b><br />2011</span>
@@ -279,6 +468,7 @@ times.</p>
   </div>
 </div>
 
+
 <div class="post prepend-1">
   <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
   <p class="author">
@@ -473,114 +663,27 @@ Well it’s easy, you just need to put the tags in the right order to obtain the
   </div>
 </div>
 
-<div class="post prepend-1">
-  <h1><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 05</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models
-in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.)
-to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
-were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
-create a new solution named <a href="http://github.com/crowdint/auditrail">auditrail</a>.</p>
 
-<p>Auditrail is a gem that provides a highly configurable solution to audit your models. It provides two generators.
-The first one creates the Audit model with a couple of methods that helps you use it, and the second creates the migration for its table.</p>
-
-<h2>How is it used?</h2>
-
-<p>Quite simple. You just need to install the <em>auditrail</em> gem, and then, run the generators provided
-(<em>auditrail:migrations</em> and <em>auditrail:model</em>). Then you just need to call the method <em>auditable</em>
-in the models you want to audit, and, that's it!</p>
-
-<h2>How does it work?</h2>
-
-<p>Auditrail was built to make it easily and readable. So, if you take a quick look at the source code
-you can identify all the components.</p>
-
-<ul>
-<li><p>Auditrail keeps track of the changes in the audited models through the Audit model. Here, you can configure your own methods to manipulate those changes, or, you can place your filters or special actions.</p></li>
-<li><p>Auditrail is a module that extends <em>ActiveRecord::Base</em>, so you can use it just by calling the <em>auditable</em>
-method on the models you want to Audit. Simple, isn't it?</p></li>
-<li><p>In order to manipulate the plugin requests auditrail uses a basic DSL to handle the method calls.
-Those methods where built to specify a list of the attributes that you want to audit
-and/or include the actor that is making the changes to the audited model.</p></li>
-<li><p>It extends the ActiveSupport::Concern to facilitate the manipulation of the instance methods and the
-class methods in the same module, dealing with the necessity to include an extend for the ActiveRecord::Base. Example:</p></li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Auditrail</span>
-  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
-
-  <span class="k">module</span> <span class="nn">ClassMethods</span>
-
-    <span class="k">def</span> <span class="nf">some_method</span>
-      <span class="c1"># Include some code for your class method...</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">module</span> <span class="nn">InstanceMethods</span>
-
-    <span class="k">def</span> <span class="nf">track_changes</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span>
-      <span class="c1"># Include some code for your instance method...</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">Auditrail</span><span class="p">)</span>
-</code></pre>
+<div class="pagination prepend-1">
+  
+    <span class="previous">Previous</span>
+  
+  <span class="page_number ">Page: 1 of 13</span>
+  
+    <a href="/page2" class="next ">Next</a>
+  
 </div>
 
 
-<ul>
-<li><p>Auditrail uses ActiveRecord <em>callbacks</em> to trigger the methods that actually audit the models.</p></li>
-<li><p>Once auditrail knows when an object is modified it will track the changes using <em>ActiveModel::Dirty</em>.</p></li>
-<li><p>ActiveModel::Dirty returns a hash that we serialize in order to save them in our Audit model.</p></li>
-<li><p>All these changes will be stored in the <em>dumped_changes</em> field on the audits table.</p></li>
-</ul>
 
 
-<p>*The dumped_changes fields is generated with type <strong>string</strong> by default, in case you're planing to track big models,
-you should change its type to <strong>text</strong>.</p>
 
-<p>Here you can find a list with the attributes on the Audit model:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">==============</span>  <span class="o">====</span>      <span class="o">===========================================================================</span>
-<span class="no">Attribute</span>         <span class="no">Type</span>      <span class="no">Usage</span>
-<span class="o">--------------</span>  <span class="o">----</span>      <span class="o">---------------------------------------------------------------------------</span>
-<span class="ss">:dumped_changes</span>    <span class="n">text</span>      <span class="no">Keep</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">serialized</span><span class="o">.</span>
-<span class="ss">:action</span>            <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">whether</span> <span class="n">was</span> <span class="n">creation</span> <span class="p">(</span><span class="s2">&quot;creating&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">update</span> <span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span><span class="o">.</span>
-<span class="ss">:model_changed</span>     <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">that</span> <span class="n">changed</span><span class="o">.</span>
-<span class="ss">:element_id</span>        <span class="n">integer</span>   <span class="no">Indicates</span> <span class="n">the</span> <span class="n">element</span> <span class="n">from</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">that</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
-<span class="ss">:invoker</span>           <span class="n">string</span>    <span class="no">Optional</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">chose</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">action</span> <span class="n">invoker</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span>
-<span class="ss">:timestamps</span>                  <span class="no">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">timestamps</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">when</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
-<span class="o">==============</span>  <span class="o">=======</span>   <span class="o">===========================================================================</span>
-</code></pre>
-</div>
-
-
-<p>As with all open source projects, feel free to collaborate with this
-gem by forking it on github.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
 
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
   <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
@@ -619,8 +722,6 @@ gem by forking it on github.</p>
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
   <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
-
-  <li><span><b>18 Oct 2010</b></span> &raquo; <a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></li>
 
   </ul>
 </div>

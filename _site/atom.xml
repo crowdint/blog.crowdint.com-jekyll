@@ -4,9 +4,189 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-02-21T11:00:32-08:00</updated>
+ <updated>2011-02-25T13:39:20-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Why ruby?</title>
+   <link href="http://blog.crowdint.com/2011/02/25/why-ruby.html"/>
+   <updated>2011-02-25T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2011/02/25/why-ruby</id>
+   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
+   <content type="html">&lt;p&gt;We have been seeing a lot of posts about different Rails and Ruby topics,
+such as  benchmarks, ways to develop ,implementations and more. But if you
+are a n00b in the ruby world or if you are thinking in change to ruby, but you
+are not sure about it, I will try to give some answers for the most common
+questions that I think you may have.
+Like PHP vs Ruby? or thoose sorts of things...&lt;/p&gt;
+
+&lt;h2&gt;PHP, .net, flex or ruby??&lt;/h2&gt;
+
+&lt;h3&gt;PHP advantage&lt;/h3&gt;
+
+&lt;p&gt;Well PHP is one of the most common and widely used languages for
+ coding dynamic webpages. You can write code inserted directly in HTML,
+ it's secure, stable an open source.&lt;/p&gt;
+
+&lt;p&gt;I have to said that it is easy to use, I've started to write webpages
+in PHP and it was easy to understand 'cause, when I began using it I knew C,
+and PHP is C based.  It runs in almost all systems (UNIX, Windows and MAC OSX).&lt;br/&gt;
+Beginning to use it is as simple as installing Apache and add the PHP module,
+ then you’re set.&lt;/p&gt;
+
+&lt;p&gt;PHP has a wide community and a lot of useful libraries.
+There are a lot of books to learn from, and also PHP.net is awesome.&lt;/p&gt;
+
+&lt;h3&gt;PHP disadvantages&lt;/h3&gt;
+
+&lt;p&gt;First of all, not everything in PHP is a piece of cake, when I was coding in it,
+I got some issues when I tried doing some more &quot;complex&quot; things, like making a
+file upload feature and things like that.&lt;/p&gt;
+
+&lt;p&gt;PHP is not a 100% Object oriented, it's trying to implement it in the newest version, but is not as good as others.
+The error handling is very poor in PHP.&lt;/p&gt;
+
+&lt;p&gt;Sometimes, you will get messy code because of  the lack of good practices.&lt;/p&gt;
+
+&lt;p&gt;You have to take care of some security flaws on your own.&lt;/p&gt;
+
+&lt;h3&gt;.net framework advantages&lt;/h3&gt;
+
+&lt;p&gt;I really don’t like to talk about it, but, I have to say that it's easy and it has a
+very complete documentation.  It's an event language, so it is easy for n00b developers.
+C# is powerful, binding and a couple of more features.&lt;/p&gt;
+
+&lt;h3&gt;.net framework disadvantages&lt;/h3&gt;
+
+&lt;p&gt;With this framework you have to work in Windows and within this enviroment, you will get a
+lot of issues trying to connect to other DB instead of to a SQL Server. And it is heavy as hell!
+Also, you have to pay for everything.&lt;/p&gt;
+
+&lt;h3&gt;Flex advantages&lt;/h3&gt;
+
+&lt;p&gt;I really don’t know much about it, so I ask to a friend of mine whom is nicknamed &lt;em&gt;Chicken&lt;/em&gt;(Adrian Castillo). &lt;br/&gt;
+He told me that Flex had a lot of positive points, like:
+* Cross-browser.
+* Multiplatform.
+* Multimedia content.
+* Authorship, you can create digital signs for you projects.
+* And it is extensible.&lt;/p&gt;
+
+&lt;h3&gt;Flex disadvantages&lt;/h3&gt;
+
+&lt;p&gt;The bad things about Flex are:
+when you create a project you have to choose a flash version, and you will
+have to use that version only. If you want the edgy stuff, It will be not available
+for everyone. There’s not to many docs and examples.&lt;/p&gt;
+
+&lt;p&gt;It's a event language, so if you are not careful, you will get a mess&lt;/p&gt;
+
+&lt;h3&gt;Ruby advantages&lt;/h3&gt;
+
+&lt;p&gt;Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
+it has been amazing time. Everything is so easy, you dont have to worry in write
+common methods, you have to worry about solving the problem that you have, not in trivial
+stuff.&lt;/p&gt;
+
+&lt;p&gt;The guy who wrote it &lt;a href=&quot;http://en.wikipedia.org/wiki/Yukihiro_Matsumoto&quot;&gt;&lt;em&gt;Yukihiro Matsumoto&lt;/em&gt;&lt;/a&gt; wants to have simple code
+not so complex, something with the developers feel free and happy.&lt;/p&gt;
+
+&lt;p&gt;It's also fast to learn, just take a look at the documentation and that’s all you have to do, besides practicing it.&lt;/p&gt;
+
+&lt;p&gt;In ruby everything is an object, an example.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hello world&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Take a look at the code and you will see that &quot;10&quot; is an object with the method &quot;times&quot;, and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.&lt;/p&gt;
+
+&lt;p&gt;Another plus is that ruby has an excellent error handler.&lt;/p&gt;
+
+&lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
+
+&lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
+
+&lt;p&gt;When we are talking of ruby and PHP, we have to talk about &lt;a href=&quot;http://rubyonrails.org&quot;&gt;&lt;em&gt;Ruby on Rails&lt;/em&gt;&lt;/a&gt; an
+awesome framework for ruby, there are other out there(like sinatra), but
+right now is the one I like the most.&lt;/p&gt;
+
+&lt;p&gt;So, What can I say about it?. Well you can create a web site in minutes...
+I really meant that, with the &lt;em&gt;scaffold&lt;/em&gt; function you will have a template
+in a second(not recommended for important projects).
+Theres a lot of cool functions, like time methods:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#2010-12-19 23:55:57 -0600&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#2010-12-20 23:56:06 -0600&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#Sat, 18 Dec 2010 05:57:15 UTC +00:00&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's a simple stuff but so usefull.&lt;/p&gt;
+
+&lt;p&gt;In ruby on rails, you will write a lot less code,
+ easy configuration, it has an integrated testing framework.&lt;/p&gt;
+
+&lt;p&gt;And more and more and more.....&lt;/p&gt;
+
+&lt;h3&gt;Ruby disadvantages&lt;/h3&gt;
+
+&lt;p&gt;Like all the languages it has disadvantages, not everything is beatiful.
+ Ok now a couple of them:&lt;/p&gt;
+
+&lt;p&gt;The documentation is mostly complete, but it doesn't have method examples or stuff
+like PHP.net&lt;/p&gt;
+
+&lt;p&gt;If you don't have the money to pay the hosting it will be difficult to get your app
+online, there's a solution &lt;a href=&quot;http://www.heroku.com&quot;&gt;&lt;em&gt;heroku&lt;/em&gt;&lt;/a&gt;. Heroku is a free web  hosting company, but only free startups.
+So I have to say that it's expensive to host apps.&lt;/p&gt;
+
+&lt;p&gt;Another thing is when ruby sites grow they will need a
+robust infraestructure, it's heavy.&lt;/p&gt;
+
+&lt;h2&gt;My coworkers opinion&lt;/h2&gt;
+
+&lt;p&gt;I've asked to some of my co-workers about the things that they like about ruby,
+and the things they don't. And I got the next anwsers about their likes:&lt;/p&gt;
+
+&lt;p&gt;They love the way you can change everything, like opening the methods and rewritting
+them.
+They said that everything is so easy to do, the sintax, write methods, the blocks,
+etc.
+Also, it's amazing how everything is an object, you can create methods for
+that object, and access them so quickly.
+It's really easy to learn.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, I ask about the things that they don't like about it.&lt;/p&gt;
+
+&lt;p&gt;It's not multithread.multitask
+It's so easy that sometimes it turns you into a lazy developer.
+It's perfect. (I know i now I'm just telling you what they said).
+It's heavier than PHP.&lt;/p&gt;
+
+&lt;h2&gt;Final thoughts&lt;/h2&gt;
+
+&lt;p&gt;This are a couple of things, just to get an idea across. If you dig more I am sure,
+that you will find more things, good and bad ones, and it's the same in every
+language, you have to try it by yourself and see what can you do with ruby.&lt;/p&gt;
+
+&lt;p&gt;If you have another question or if you want to say that this post it's pure
+crap, don't hesitate on telling. I am open to any kind of feedback.&lt;/p&gt;
+
+&lt;p&gt;I hope this help you a little bit to take a step into ruby or maybe to keep
+outside of it.&lt;/p&gt;
+</content>
+   <author>
+     <name>Hector Bustillos</name>
+     <email>hector.bustillos@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>What we learned at LA Ruby Conf</title>
@@ -19,7 +199,7 @@ I was already in San Francisco, and, since I was just an hour away via
 plane, I jumped into one and attended the conference sessions on Saturday.&lt;/p&gt;
 
 &lt;p&gt;As expected, the organization and the conferences were awesome. Kudos to
-the organizators.&lt;/p&gt;
+the organizers.&lt;/p&gt;
 
 &lt;p&gt;Now, a small recap of what I learned there.&lt;/p&gt;
 
@@ -177,7 +357,7 @@ interesting parts of the talk.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The record of tweets per second was set last New Years eve at 6,939
 tps.&lt;/li&gt;
-&lt;li&gt;Twitter is heavily Service oriented. They didn't started that way, but
+&lt;li&gt;Twitter is heavily Service oriented. They didn't start that way, but
 they have been transitioning in the last few years. Doesn't sound like
 an easy task.&lt;/li&gt;
 &lt;li&gt;They created a DSL that allows them to create new Service endpoints
@@ -2855,304 +3035,6 @@ look forward to them.&lt;/p&gt;
    <author>
      <name>Emmanuel Delgado</name>
      <email>emmanuel.delgado@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Subdomains in Rails (2.3.x &amp; 3)</title>
-   <link href="http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3.html"/>
-   <updated>2010-11-11T00:00:00-08:00</updated>
-   <id>http://blog.crowdint.com/2010/11/11/subdomains-in-rails-2-and-3</id>
-   <photo>c000ffd0c4ed3e23d09cae624d24b525</photo>
-   <content type="html">&lt;h2&gt;Why?&lt;/h2&gt;
-
-&lt;p&gt;Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having &lt;a href=&quot;http://www.facebook.com/j.francisco.guzman&quot;&gt;Facebook-like urls =&gt;  http://www.facebook.com/j.francisco.guzman&lt;/a&gt;, you may want to have something like &lt;a href=&quot;http://francisco.expensd.com&quot;&gt;http://francisco.expensd.com&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This can be particularly useful and shiny in two cases:&lt;/p&gt;
-
-&lt;p&gt;● You want to have subdomains such as: admin, blog, mail, etc. &lt;br /&gt;
-● You want to provide your users with a subdomain they can come up with &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;Want to give it a shot?&lt;/p&gt;
-
-&lt;h2&gt;Sounds cool, but I still use Rails 2.3.x&lt;/h2&gt;
-
-&lt;p&gt;Well, your best friend then is &lt;a href=&quot;http://github.com/mbleigh/subdomain-fu&quot;&gt;SubdomainFu&lt;/a&gt;; according to its &lt;a href=&quot;http://github.com/mbleigh/subdomain-fu&quot;&gt;GitHub&lt;/a&gt; resource, it &quot;&lt;em&gt;provides a modern implementation of subdomain handling in Rails. It takes aspects from account_location, request_routing, and other snippets found around the web and combines them to provide a single, simple solution for subdomain-based route and url management.&lt;/em&gt;&quot;&lt;/p&gt;
-
-&lt;p&gt;You can either install it as an 'old school' plugin or a more fashion-like gem:&lt;/p&gt;
-
-&lt;h3&gt;Plugin&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;script/plugin install git://github.com/mbleigh/subdomain-fu.git
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Gem (no Bundle) -- add it to your config/environment.rb file&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;subdomain-fu&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and then...&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;rake gems:install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Gem (Bundle) -- add it to your Gemfile&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;subdomain-fu&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and then...&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;bundle install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Settings (we're still working with subdomains in Rails 2.3.x)&lt;/h2&gt;
-
-&lt;p&gt;What SubdomainFu provides is an extension for the URL Rewriting engine provided with Rails. This means we will be able to use it anywhere we normally generate URLs: &lt;em&gt;url_for&lt;/em&gt;, named routes, etc. So here's the basic configuration (with default values):&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# in environment.rb&lt;/span&gt;
-  
-&lt;span class=&quot;c1&quot;&gt;# These are the sizes of the domain (i.e. 0 for localhost, 1 for something.com)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# for each of your environments&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;SubdomainFu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tld_sizes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                          &lt;span class=&quot;ss&quot;&gt;:test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                          &lt;span class=&quot;ss&quot;&gt;:production&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# These are the subdomains that will be equivalent to no subdomain&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;SubdomainFu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mirrors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;www&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# This is the &amp;quot;preferred mirror&amp;quot; if you would rather show this subdomain&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# in the URL than no subdomain at all.&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;SubdomainFu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;preferred_mirror&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;www&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;What about local dev environment???&lt;/h3&gt;
-
-&lt;p&gt;There are two different ways to set up your local environment to work with subdomain:&lt;/p&gt;
-
-&lt;p&gt;● Editing your hosts file (usually located in /etc/hosts) and add each subdomain you will need (I know it doesn't sound like a great idea)&lt;/p&gt;
-
-&lt;p&gt;● Using &lt;a href=&quot;http://tbaggery.com/2010/03/04/smack-a-ho-st.html&quot;&gt;Tim Pope's&lt;/a&gt; awsome contributon to work with subdomains in our local environments; doing so, will allow us to use &lt;a href=&quot;&quot;&gt;http://lvh.me:3000&lt;/a&gt; with subdomains&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;&quot;&gt;http://cool.lvh.me:3000&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Been there, done that... now what???&lt;/h2&gt;
-
-&lt;p&gt;Now you can take advantage of two awesome features: the &lt;em&gt;current_subdomain&lt;/em&gt; method which will return (of course) the current subdomain or &lt;em&gt;nil&lt;/em&gt; if there is no subdomain or the current subdomain is a mirror:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# http://admin.killerapp.com/&lt;/span&gt;
-current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;admin&amp;quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# http://www.killerapp.com/ or http://killerapp.com/&lt;/span&gt;
-current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; nil&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# http://other.subdomain.killerapp.com&lt;/span&gt;
-current_subdomain &lt;span class=&quot;c&quot;&gt;# =&amp;gt; &amp;quot;other.subdomain&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and the-now-extended URL rewriting features passing the &lt;strong&gt;:subdomain&lt;/strong&gt; option to an URL generating method:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;url_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;da_controller&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-  &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;cool_feature&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-  &lt;span class=&quot;ss&quot;&gt;:subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; http://admin.mykillerapp.com/da_controller/cool_feature&lt;/span&gt;
-  
-&lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; http://mykillerapp.com/users&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# The full URL will be generated if the subdomain is not the same as the&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# current subdomain, regardless of whether _path or _url is used.&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;users_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; http://admin.mykillerapp.com/users&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;users_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; /users&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Generating subdomains&lt;/h2&gt;
-
-&lt;p&gt;You have two options (again): reserving yourself the right to create them manually or else, giving your users the ability to choose their own subdomain, checking availability and storing the value to a document or db table... you now have the tool, how to use it is up to you.&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;h2&gt;Enjoy??? Wait!!! What about Rails 3???&lt;/h2&gt;
-
-&lt;h2&gt;For our edgy Rails 3 users&lt;/h2&gt;
-
-&lt;p&gt;It is a real blessing the guys who worked on Rails 3 decided to incorporate this feature so we can use it out-of-the-box taking advantage of the new routing DSL. A great example we can use is a multiple blog app, where we can have blogs (subdomains), articles and comments:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;in config/routes.rb&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;MyKillerApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:articles&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:blogs&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:to&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;blogs#index&amp;quot;&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;In this example, our root_path will land in &lt;strong&gt;blogs#index&lt;/strong&gt;. We would want this only if no subdomain has been specified, otherwise we want to perform the action &lt;strong&gt;blogs#show&lt;/strong&gt;. Rails 3 makes it really easy by adding a restriction:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;MyKillerApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:articles&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:blogs&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;blogs#show&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:constraints&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/.+/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:to&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;blogs#index&amp;quot;&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This setting demands our attention in two details: the &lt;em&gt;id&lt;/em&gt; that will be passed to the &lt;em&gt;show_path&lt;/em&gt; and the &lt;em&gt;subdomain&lt;/em&gt; &lt;strong&gt;:constraint&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;To pass the id we just need to use a finder like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;
-  &lt;span class=&quot;vi&quot;&gt;@blog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;voilà&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;As for the subdomain, we will only pass it in our request when we need it; that simple!&lt;/p&gt;
-
-&lt;h2&gt;Mirrors (the 'www' case)&lt;/h2&gt;
-
-&lt;p&gt;In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit of a complex way, but not way too complex...&lt;/p&gt;
-
-&lt;p&gt;First, we turn the subdomain constraints into a &lt;em&gt;block&lt;/em&gt; in our &lt;strong&gt;config/routes.rb&lt;/strong&gt; file&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;MyKillerApp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;routes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:articles&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:blogs&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;constraints&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;blogs#show&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:to&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;blogs#index&amp;quot;&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and we pass a new class called &lt;strong&gt;Subdomain&lt;/strong&gt;, which we'll define in our &lt;strong&gt;lib&lt;/strong&gt; folder (&lt;strong&gt;lib/subdomain.rb&lt;/strong&gt;)&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Subdomain&lt;/span&gt;  
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;matches?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;present?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;www&amp;#39;&lt;/span&gt;  
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;done!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3&gt;Links&lt;/h3&gt;
-
-&lt;p&gt;To use subdomains in our links, we can not just pass a &lt;strong&gt;:subdomain&lt;/strong&gt; option like we can with &lt;em&gt;SubdomainFu&lt;/em&gt;; instead, we must build the host name from scratch and adding the subdomain. This is accomplished using the &lt;em&gt;subdomain&lt;/em&gt; attribute in our &lt;strong&gt;blog&lt;/strong&gt; object + the request domain + the request port:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;This won't work...&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Blogs&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@blogs&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;lt;div&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;h2&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/h2&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;div class=&amp;quot;actions&amp;quot;&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Edit&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;edit_blog_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; |   &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Destroy&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:confirm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Are you sure?&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:delete&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;/div&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;but this will...&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Blogs&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@blogs&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;lt;div&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;h2&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:host&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port_string&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/h2&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;div class=&amp;quot;actions&amp;quot;&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Edit&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;edit_blog_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; |   &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Destroy&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:confirm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Are you sure?&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:delete&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;    &amp;lt;/div&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;... we just need to make it look cleaner... with a helper!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;h2&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:host&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;with_subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/h2&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;the helper must be located in&lt;/em&gt;&lt;/strong&gt; &lt;strong&gt;app/helpers/url_helper.rb&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;UrlHelper&lt;/span&gt;  
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;with_subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;empty?&lt;/span&gt;  
-    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subdomain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;port_string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;  
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;and include this module in&lt;/em&gt;&lt;/strong&gt; &lt;strong&gt;ApplicationController&lt;/strong&gt; &lt;strong&gt;&lt;em&gt;to make it available to all controllers in our app...&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActionController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;UrlHelper&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#other includes, protect_from_forgery, layout, etc.&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;That should be enough to get you started&lt;/h2&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;h2&gt;Resources&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Rails 2.3.x&lt;/strong&gt; &lt;br /&gt;
-&lt;a href=&quot;http://github.com/mbleigh/subdomain-fu&quot;&gt;SubdomainFu&lt;/a&gt; &lt;br /&gt;
-&lt;a href=&quot;http://railscasts.com/episodes/123-subdomains&quot;&gt;Railscasts&lt;/a&gt; &lt;br /&gt;
-&lt;a href=&quot;http://intridea.com/2008/6/23/subdomainfu-a-new-way-to-tame-the-subdomain&quot;&gt;Intridea&lt;/a&gt; &lt;em&gt;the guys who created SubdomainFu&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Rails 3&lt;/strong&gt; &lt;br /&gt;
-&lt;a href=&quot;http://railscasts.com/episodes/221-subdomains-in-rails-3&quot;&gt;Railscasts&lt;/a&gt; &lt;br /&gt;
-&lt;a href=&quot;http://asciicasts.com/episodes/221-subdomains-in-rails-3&quot;&gt;Asciicasts&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Local Virtual Host&lt;/strong&gt; &lt;br /&gt;
-&lt;a href=&quot;http://tbaggery.com/2010/03/04/smack-a-ho-st.html&quot;&gt;Post&lt;/a&gt;&lt;/p&gt;
-</content>
-   <author>
-     <name>Francisco Guzm&amp;aacute;n</name>
-     <email>francisco.guzman@crowdint.com</email>
    </author>
  </entry>
  

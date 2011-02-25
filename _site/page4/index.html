@@ -1,0 +1,813 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Crowd Interactive Tech Blog :: Blog</title>
+  <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/stylesheets/styles.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+  
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  
+</head>
+<body>
+  <div class="container">
+    <div id="empty-header">
+      <a href="/" id="home-link"><img src="/images/logo_03.png" id="logoHead" width="227" height="74" alt="LogoHead" /></a>
+      <ul id="navMenu">
+        <li><a href="http://www.crowdint.com/"><span>HOME</span></a></li>
+        <li><a href="http://www.crowdint.com/en/projects"><span>PROJECTS</span></a></li>
+        <li><a href="http://www.crowdint.com/en/services"><span>SERVICES</span></a></li>
+        <li class="selected"><span>BLOG</span></li>
+        <li><a href="http://www.crowdint.com/en/about_us"><span>ABOUT</span></a></li>
+        <li><a href="http://www.crowdint.com/"><span>CONTACT</span></a></li>
+      </ul>
+    </div>
+    <div class="span-24 append-bottom testGlow">
+      <div class="round-top span-24">
+        &nbsp;
+      </div>
+      <div id="white-body" class="span-24">
+        <div class="left-side span-17">
+          
+<div class="post prepend-1">
+  <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 21</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
+
+<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+</code></pre>
+</div>
+
+
+<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
+In fact, this looks like old C/PHP code</p>
+
+<h2>The "cool" way</h2>
+
+<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
+
+<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
+
+<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
+By default, Rails comes with a few ones that you can use:</p>
+
+<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
+- :long          #&lt;- December 19, 2010 22:42
+- :db            #&lt;- 2010-12-19 22:42:43
+- :short         #&lt;- 19 Dec 22:42
+- :time          #&lt;- 22:42
+- :number        #&lt;- 20101219224243
+- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
+</code></pre>
+
+<p>So, you can execute for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Much better now, isn't it?</p>
+
+<h2>Custom formats</h2>
+
+<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
+
+<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
+
+<p><em>config/initizers/time_formats.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
+<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
+<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
+<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
+<span class="c1"># datetime argument as the value.</span>
+
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+
+<p>Let's see how different and clean the code is:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
+
+<span class="c1"># the old school way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p><em>Cool, isn't it?</em></p>
+
+<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
+
+<p>Hope this help...<br/>
+Thanks for reading<br/>
+Gonzalo "aka Chalo" Fernandez</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/21/cool-date-formatting-in-rails.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 15</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.</p>
+
+<p>I, at least, personally had a problem getting it when I first started
+using Rails.</p>
+
+<h2>REST</h2>
+
+<p>REST stands for <em>Representational State Transfer</em>.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.</p>
+
+<h3>The wrong way</h3>
+
+<p>I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.</p>
+
+<p>So, with that thought on your mind, you end up with a controller like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">remove_review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">cancel</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">pay</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>What's wrong here?</h3>
+
+<p>If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
+
+<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have <em>resources</em> and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.</p>
+
+<p>A resource is not necesarily a model, it's just <em>something</em> that has a
+state or that can be altered.</p>
+
+<h3>How to make it right?</h3>
+
+<p>So, if we go back to our example, the right thing to do, is to think
+about those <em>bad</em> actions as a resource.</p>
+
+<p>If you're going to review an order, then, you need a <em>OrderReview</em>
+controller.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
+can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
+a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
+out of it.</p>
+
+<p>A most common mistake... an action that actually alters the state of an
+object like the cancel action.</p>
+
+<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
+something, but still, this looks much better:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
+cancellation (it can happen).</p>
+
+<p>You could now refactor all the other actions to their respective
+controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
+
+<h2>Associations</h2>
+
+<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.</p>
+
+<p>For example, if you had a User that can add other User objects as its
+friends, instead of creating a <em>add_friend</em> or something action, you'd add
+a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
+
+<p>By the way, I've seen relationships like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
+
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><em>Always remember to think restful</em>, probably the user should:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
+<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
+
+<span class="c1"># This actually requires more code to make it work, but, you get the</span>
+<span class="c1"># point, right?</span>
+</code></pre>
+</div>
+
+
+<p>Think about it. Way better.</p>
+
+<h3>But, why? You have to write all this "unnecesary" code</h3>
+
+<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.</p>
+
+<p>Also, Rails its all about love and following conventions. This is one of
+them.</p>
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 07</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <p>Have you ever wondered if you can do something to make your ruby development even faster?
+Are you tired of waiting for rspec to finish?
+Is your rails application eating more and more memory and you have to restart your app once in a while?</p>
+
+<p>Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.</p>
+
+<h2>What is REE?</h2>
+
+<p>As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "<a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep">mark-and-sweep</a>".</p>
+
+<p>Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.</p>
+
+<p>Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "<a href="http://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">tweak the garbage collector</a> via environment variables.</p>
+
+<p>Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.</p>
+
+<h2>Installing REE</h2>
+
+<p>I'll guide you through this post assuming that you already have <a href="http://rvm.beginrescueend.com/rvm/install/">rvm</a> installed on your computer.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm install ree
+<span class="c">#go and grab a drink, preferably coffee or beer</span>
+<span class="c">#some output</span>
+<span class="c">#done.</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm use ree
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm list
+
+rvm <span class="nv">rubies</span>
+
+<span class="o">=</span>&gt; ree-1.8.7-2010.02 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.8.7-p302 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.9.1-p378 <span class="o">[</span> x86_64 <span class="o">]</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-04-19 patchlevel 253<span class="o">)</span> <span class="o">[</span>i686-darwin10.4.0<span class="o">]</span>, MBARI 0x6770, Ruby Enterprise Edition 2010.02
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Hint: go to this <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">post</a> and make rvm always use your desired gemset@ruby</p>
+
+<p>Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+... in 62.33s
+
+SLOW SPEC: 5.9991  Test A
+SLOW SPEC: 5.3510  Test B
+SLOW SPEC: 7.8485  Test C
+SLOW SPEC: 7.6710  Test D
+SLOW SPEC: 5.8465  Test E
+SLOW SPEC: 5.9972  Test F
+SLOW SPEC: 5.9707  Test G
+SLOW SPEC: 5.4557  Test H
+SLOW SPEC: 6.0631  Test I
+SLOW SPEC: 5.4861  Test J
+1763/1763:     100% |##########################################| Time: 00:10:43
+
+Finished in 643.211296 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  13m45.186s
+user  11m0.745s
+sys   0m20.082s
+</code></pre>
+</div>
+
+
+<p>Mmhm, that was... 'fast', I wonder how previous numbers performed.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use 1.8.7
+Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+...
+in 84.92s
+
+SLOW SPEC: 8.6082  Test A
+SLOW SPEC: 10.3736 Test B
+SLOW SPEC: 11.3856 Test C
+SLOW SPEC: 7.4864  Test D
+SLOW SPEC: 6.5998  Test E
+SLOW SPEC: 8.8307  Test F
+SLOW SPEC: 8.8013  Test G
+SLOW SPEC: 8.8126  Test H
+SLOW SPEC: 8.9622  Test I
+SLOW SPEC: 8.9033  Test J
+1763/1763:     100% |##########################################| Time: 00:15:30
+
+Finished in 930.143889 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  19m40.629s
+user  16m13.691s
+sys   0m21.632s
+</code></pre>
+</div>
+
+
+<p>Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!</p>
+
+<p>Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">Garbage Collector Performance Tunning</a>. Twitter has published their production settings, let's see what we can get.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use ree
+Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span><span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span>500000 <span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span>250000 <span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span>1 <span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span>50000000 rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+...in 44.06s
+SLOW SPEC: 6.2397  Test C
+SLOW SPEC: 8.4131  Test D
+SLOW SPEC: 5.6498  Test E
+1763/1763:     100% |##########################################| Time: 00:06:53
+
+Finished in 413.352603 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  9m26.457s
+user  6m46.696s
+sys   0m20.475s
+</code></pre>
+</div>
+
+
+<p>You should've seen my face when I came back and saw the results, that meant 2.2x faster!</p>
+
+<p>My next thought was: I have to make this a permanent change in my system, so it was easy:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_MIN_SLOTS=500000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_INCREMENT=250000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_GC_MALLOC_LIMIT=50000000&quot;</span> &gt;&gt; ~/.bash_profile
+</code></pre>
+</div>
+
+
+<p>After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:</p>
+
+<h3>Using Standard Ruby 1.8.7</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   56.476 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360264 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    17.71 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       5647.631 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       56.476 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1683.51 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       6
+Processing:    89 5378 899.5   5653    6163
+Waiting:       88 5377 899.5   5652    6162
+Total:         92 5378 898.9   5653    6165
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   45.212 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360134 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    22.12 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4521.241 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       45.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2102.92 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0       5
+Processing:    83 4285 706.4   4456    5027
+Waiting:       82 4284 706.4   4455    5026
+Total:         88 4286 705.5   4456    5028
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with twitter settings</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.348 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360048 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    31.90 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3134.784 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.348 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          3033.01 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:   210 2962 562.4   3074    3873
+Waiting:      210 2961 562.4   3073    3872
+Total:        215 2963 561.6   3074    3873
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with 37signals settings</h3>
+
+<p>37signals has published their production settings too, and I tried to apply them in my project and I got:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   46.230 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360135 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    21.63 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4622.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       46.230 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2056.64 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:    79 4390 760.8   4473    5830
+Waiting:       78 4390 760.8   4472    5829
+Total:         84 4391 760.0   4473    5830
+</code></pre>
+</div>
+
+
+<p>For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.</p>
+
+<p>*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/07/improving-your-dev-life-with-ree.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="pagination prepend-1">
+  
+    <a href="/page3" class="previous">Previous</a>
+  
+  <span class="page_number ">Page: 4 of 13</span>
+  
+    <a href="/page5" class="next ">Next</a>
+  
+</div>
+
+
+
+
+
+
+<div class="post prepend-1">
+  <h1>Recent Posts</h1>
+  <ul class="archives">
+
+  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
+
+  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
+
+  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
+
+  <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
+
+  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+
+  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
+
+  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
+
+  <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
+
+  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
+
+  <li><span><b>07 Dec 2010</b></span> &raquo; <a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></li>
+
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+
+  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
+
+  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
+
+  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
+
+  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
+
+  </ul>
+</div>
+
+        </div>
+        <div class="right-side span-5 last prepend-1">
+          <h1><a href="/">Blog Home</a></h1>
+<h1>About Crowd Interactive</h1>
+<p class="append-1 about">Crowd Interactive is a Ruby on Rails
+consultancy firm powered by a team of enthusiast engineers that love
+programming.We turn your ideas into web applications...<br/><a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
+<h1>Our Favorite Sites</h1>
+<ul>
+  <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
+  <li><a href="http://www.magmarails.com">MagmaRails</a></li>
+  <li><a href="http://rubyonrails.org">Ruby on Rails</a></li>
+  <li><a href="http://ruby-lang.org">Ruby-Lang</a></li>
+  <li><a href="http://github.com/crowdint">Github</a></li>
+</ul>
+<h1>Stuff we've built</h1>
+<ul>
+  <li><a href="http://www.modcloth.com">ModCloth</a></li>
+  <li><a href="http://www.creativeallies.com">Creative Allies</a></li>
+  <li><a href="http://www.nameframe.com">Nameframe</a></li>
+  <li><a href="http://github.com/crowdint/rails3-jquery-autocomplete">Rails3-jQuery-Autocomplete</a></li>
+  <li><a href="http://github.com/crowdint/rankstar">rankstar</a></li>
+  <li><a href="http://github.com/crowdint/blog.crowdint.com">This site's source code</a></li>
+</ul>
+<h1>Older Posts</h1>
+<ul>
+  <li><a href="/archive.html">Archive</a></li>
+</ul>
+
+Site Powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+
+        </div>
+      </div>
+      <div class="round-bottom span-24">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    <div class="copyContent" >
+      <p class="copy">Copyright &copy; 2010, Crowd Interactive. All rights reserved.</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var disqus_shortname = 'crowdinttech';
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'http://disqus.com/forums/crowdinttech/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+  </script>
+</body>
+</html>
