@@ -97,8 +97,6 @@ Take a look at the code and you will see that "10" is an object with the method 
 Another plus is that ruby has an excellent error handler.
 
 The community is huge now, and you have a lot of gems and plugins to help in your projects.
-
-The community is huge now, and you have a lot of gems and plugins to help in your projects.
  
 When we are talking of ruby and PHP, we have to talk about [*Ruby on Rails*](http://rubyonrails.org) an
 awesome framework for ruby, there are other out there(like sinatra), but
