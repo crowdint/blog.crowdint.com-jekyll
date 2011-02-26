@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-02-25T13:39:20-08:00</updated>
+ <updated>2011-02-25T19:44:29-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -104,8 +104,6 @@ not so complex, something with the developers feel free and happy.&lt;/p&gt;
 &lt;p&gt;Take a look at the code and you will see that &quot;10&quot; is an object with the method &quot;times&quot;, and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.&lt;/p&gt;
 
 &lt;p&gt;Another plus is that ruby has an excellent error handler.&lt;/p&gt;
-
-&lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
 
 &lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
 
