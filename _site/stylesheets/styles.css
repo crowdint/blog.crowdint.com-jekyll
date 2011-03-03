@@ -87,15 +87,16 @@ body {
 
 .post .body h2 { margin-bottom:0; font-size:20px }
 
+.date b {
+    background:none;
+    font-style: bold;
+    color: white;
+}
+
 b, em, dfn {
     /* background: #CCCCCC;*/
     font-style: normal;
     color: #175057;
-}
-
-.date b {
-    background:none;
-    font-style: bold;
 }
 
 .post h1 a:hover {
