@@ -4,6 +4,7 @@ title: Bundler issues with my RubyGems
 author: Luis Galaviz
 email: luis.galaviz@crowdint.com
 avatar: 1e7f8fb8733b6193cf3bdbc85693f515
+published: false
 ---
 
 Last night I was writing some code for a gem I'm building.
