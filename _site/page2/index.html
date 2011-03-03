@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -45,6 +46,201 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           
+<div class="post prepend-1">
+  <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 15</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
+    <p>In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business,  projects or simply our ideas in other countries.</p>
+
+<p>So let’s say you have your company’s web page in a Rails application, and you want it to be available in three different languages: English (default), Spanish and French.</p>
+
+<p>Well, there's good news! Setting these options is piece of cake with Rails! Since it includes the i18n API, (a.k.a Rails internationalization).
+With this API you only need to split your contents into .yml or .rb files, which we will be calling dictionaries, one for each language you want in your page, for example: en.yml, es.yml, fr.yml
+You have to save them in the config/locales folder in your app.</p>
+
+<p>The ‘tricky’ thing is that you must follow a order in your files, they must have the exact same structure for the labels, so you just need to add the translation, the examples of the dictionaries will be done in .yml:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+<p>To set up the app you just need to add the following into your <em>Application Controller</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">before_filter</span> <span class="ss">:set_locale</span>
+
+<span class="k">def</span> <span class="nf">set_locale</span>
+ <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">extract_locale_from_tld</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">extract_locale_from_tld</span>
+ <span class="n">parsed_locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span>
+ <span class="no">I18n</span><span class="o">.</span><span class="n">available_locales</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">parsed_locale</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span> <span class="p">?</span> <span class="n">parsed_locale</span>  <span class="p">:</span> <span class="kp">nil</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And you will need to create a scope in your routes files in order for your routes to work:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">match</span> <span class="s1">&#39;/:locale&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;home#index&#39;</span>
+
+<span class="n">scope</span> <span class="s2">&quot;(:locale)&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="sr">/en|es|fr/</span> <span class="k">do</span>
+ <span class="n">resources</span> <span class="ss">:contact</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>With the <em>exctract_locale_from_tld</em> method in the ApplicationController the locale will be passed to the URL in the params, but you will get a not-so-nice url, like this: www.yourpage.com/contact?locale=en, so if you prefer to have more readable url, like for example www.yourpage.com/en/contact, you should use instead these methods:</p>
+
+<div class="highlight"><pre><code class="ruby"> <span class="n">before_filter</span> <span class="ss">:set_locale</span>
+
+ <span class="k">def</span> <span class="nf">set_locale</span>
+   <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:locale</span><span class="o">]</span>
+ <span class="k">end</span>
+
+ <span class="k">def</span> <span class="nf">default_url_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+   <span class="p">{</span><span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span><span class="p">}</span>
+ <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In order to switch language in your application you will probably need a menu with the supported languages, and your menu will need to pass the ##:locale of the selected language, to do it you can do something like this</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">menu</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;English&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;en&quot;</span><span class="p">)</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Française&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;fr&quot;</span><span class="p">)</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Español&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;es&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Now you need to tell rails where it is going to look for the dictionaries, and which language will be the default, usually (if you haven’t removed them) you will have this lines commented in the application.rb file.</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;my&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="ss">:en</span>
+</code></pre>
+</div>
+
+
+<p>If you have a lot of sections in your page, and you would like to have your dictionaries in separate folders depending on their section, you can save the folders in config/locales,  and have something like this, config/locales/views/home and save in there all the dictionaries for the home page.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+<p>And of course you will need to change the path you set in the application.rb file to something like this</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<p>And finally, how do we get the text we want from our dictionaries files?
+Well it’s easy, you just need to put the tags in the right order to obtain the text, for example, with:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
+  <span class="o">%</span><span class="n">h1</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
+  <span class="o">%</span><span class="nb">p</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Something cool about this, is that in your dictionaries you can use HTML to give your text some style or format</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+<span class="n">views</span><span class="p">:</span>
+  <span class="n">home</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="no">Crowd</span> <span class="no">Interactive</span><span class="o">&lt;</span><span class="sr">/b&gt;”</span>
+</code></pre>
+</div>
+
+
+<p>If you do this, you will need to use ‘raw’ to escape the HTML...</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
+  <span class="o">%</span><span class="n">h1</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
+  <span class="o">%</span><span class="nb">p</span>
+    <span class="o">=</span> <span class="n">raw</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Well, as you can see, it is pretty easy to set up i18n, and I hope this small guide help you through the internationalization process of your site!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Ana Rosas | ana.rosas@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/15/internationalizing-your-rails-app.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
 <div class="post prepend-1">
   <h1><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></h1>
   <p class="author">
@@ -269,313 +465,6 @@ problem to have, yet I just felt like explaining the power of the backticks.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>If you are a Ruby developer, by now, you have probably used tons of
-gems in your apps.</p>
-
-<p>That's one of the best things of using Ruby, a lot of people writes
-repeatable code that you can easily integrate into your own apps.</p>
-
-<p>In this brief tutorial, I will try to explain the basic things you need
-to know in order to start writing your own gems, you know, just in case
-you have something to share with the world.</p>
-
-<h2>Setting up the folders</h2>
-
-<p>We'll start by creating the gem folder structure using Bundler.</p>
-
-<p>First thing you have to do is, install bundler itself. Easy.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install bundler
-</code></pre>
-</div>
-
-
-<p>Now, bundler comes with a handy command to generate the basic files to
-start writing a gem.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">bundler</span> <span class="n">gem</span> <span class="n">awesome_gem</span>
-
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Gemfile</span>
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Rakefile</span>
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/.</span><span class="n">gitignore</span>
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">gemspec</span>
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">rb</span>
-  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">rb</span>
-</code></pre>
-</div>
-
-
-<h2>The Gemspec</h2>
-
-<p>All gems have a <em>.gemspec</em> file. This files contains all the info on your
-gem. The name, a description, dependencies. Let's open it and see how it
-looks.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
-
-<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your name&quot;</span><span class="o">]</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your email address&quot;</span><span class="o">]</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{TODO: Write a gem summary}</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{TODO: Write a gem description}</span>
-
-  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
-
-  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Now, all you have to do is replace some of the fields here with your own
-information.</p>
-
-<p>The only things that is not explicitily given is a place to define
-dependencies.</p>
-
-<p>Also, you have to declare your gem's dependencies to other gems, if any.</p>
-
-<p>Let's say your gem heavily depends on <em>rails</em>. Then, you have to add a
-line to state so:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>You use shoulda or mocha? Since you use them only to test it while
-developing, you define it as a <em>development dependency</em>.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>So, our .gemspec file ends up loking like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
-
-<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;David Padilla&quot;</span><span class="o">]</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;david@crowdint.com&quot;</span><span class="o">]</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{A gem that will change the world}</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{A long description for a gem that will change the world}</span>
-
-  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
-
-  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
-
-  <span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
-  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>The best thing about this is that now, you can just run the <em>bundler
-install</em> command, and you will get the gem dependencies installed on your
-computer.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundler install
-
-  Installing rails <span class="o">(</span>3.0.0<span class="o">)</span>
-  Using mocha <span class="o">(</span>0.9.10<span class="o">)</span>
-  Using shoulda <span class="o">(</span>2.11.3<span class="o">)</span>
-  ...
-</code></pre>
-</div>
-
-
-<p>For more information on what should be on this file, you can read the
-<a href="http://docs.rubygems.org/read/chapter/20">specification here</a>.</p>
-
-<h3>The code</h3>
-
-<p>By definition, you have a file called <em>lib/THE_NAME_OF_YOUR_GEM.rb</em> that
-will be called when you require your gem on any piece of ruby code.</p>
-
-<p>Usually, your gem will have a lot of code spread in Modules and Classes.
-This file should only work as the glue to put everything together.</p>
-
-<p>Let's say your gem introduces a new class called <em>Mushroom</em>. You will
-have to create a <em>lib/mushroom.rb</em> file with the class definition:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Mushroom</span>
-  <span class="c1"># Some code</span>
-  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>And then, require it on <em>lib/awesome_gem.rb</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;mushroom&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And so on. Obviously, you will probably want to put the classes and
-their files on a namespace hierarchy. Create folders for each namespace.</p>
-
-<p>So, if for example, you had some classes that are used to access
-different stuff, you want to create an Accessor namespace and put all
-the classes on the <em>lib/accessors</em> folder.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Accessor</span><span class="o">::</span><span class="no">TextFileAccessor</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>From here on, you have to rely on <em>Ruby Metaprogramming</em>, but I'll leave
-that for another post.</p>
-
-<h2>Unit tests</h2>
-
-<p>To include some rake tasks to test your gem, add the following lines to
-<em>Rakefile</em>.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;rake/testtask&#39;</span>
-<span class="no">Rake</span><span class="o">::</span><span class="no">TestTask</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:test</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">test</span><span class="o">|</span>
-  <span class="nb">test</span><span class="o">.</span><span class="n">libs</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;lib&#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;test&#39;</span>
-  <span class="nb">test</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;test/**/test_*.rb&#39;</span>
-  <span class="nb">test</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>This will add a <em>rake test</em> rake task that will run all the tests that
-you define on the <em>test</em> folder.</p>
-
-<p>You can also install rspec, bacon, minitest or any test framework of
-your choice. Read each of their documentation to find out how to add
-them to your gem.</p>
-
-<h2>Testing your code on an existing app</h2>
-
-<p>Obviously, to test your gem, you'd use something like <em>rspec</em> or
-<em>minitest</em>, but, just in case you want to see how it will end up working
-on an existing app that uses Bundler, you can add it to the other's app
-Gemfile and specify the local path to use the local version of the gem
-instead of downloading it from a repo:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;awesome_gem&#39;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s1">&#39;/Users/some_path/awesome_gem&#39;</span>
-</code></pre>
-</div>
-
-
-<p>This way, any change you make on the gem will be immediately reflected
-on the app where you installed it.</p>
-
-<h2>Deploying to rubygems.org</h2>
-
-<p>Once you are done writing some awesome ruby code, it's time to deploy
-your app for everyone to use.</p>
-
-<p>All you have to do is run</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake release
-</code></pre>
-</div>
-
-
-<p>And this will publish your gem to rubygems.org.</p>
-
-<h2>Version</h2>
-
-<p>To have control over hav your gem changes overtime, you want to use a
-version.</p>
-
-<p>Your gem's version is defined on the <em>lib/awesome_gem/version.rb</em> file.</p>
-
-<p>If you open it, you'll see that there's only one line on the file:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">AwesomeGem</span>
-  <span class="no">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Remember this line on the gemspec?</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
-</code></pre>
-</div>
-
-
-<p>This means that, the version defined on the gemspec is being pulled from
-this file.</p>
-
-<p>It also means that you can access the version of the gem from anywhere
-in the code, even on the code where you are using the gem.</p>
-
-<p>So, you can do things like:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span> <span class="o">==</span> <span class="s1">&#39;1.0.0&#39;</span>
-  <span class="c1"># Do it this way for verision 1.0.0</span>
-<span class="k">else</span>
-  <span class="c1"># For all the other versions do it that way</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>This, of course, is not recommended and should be only used in case
-where there's no other solution, or, to display deprecation messages.</p>
-
-<h2>Conclusion</h2>
-
-<p>Before writing a gem, make sure you google around and browse github for
-the behavior that you are looking for. Most of the times, someone already
-thought of a generic solution for your problem. Sometimes you won't
-like that solution and you'll end up writing your own gem, sometimes
-you will like it and use it.</p>
-
-<p>Contributing is what keeps the community alive, write lots of gems!</p>
-
-<p>Hope this points you in the right direction.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/24/how-to-start-writing-a-gem.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <a href="/page1" class="previous">Previous</a>
@@ -594,6 +483,8 @@ you will like it and use it.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
@@ -632,8 +523,6 @@ you will like it and use it.</p>
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
-  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
 
   </ul>
 </div>

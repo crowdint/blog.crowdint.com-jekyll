@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -45,6 +46,112 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           
+<div class="post prepend-1">
+  <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 06</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
+
+<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
+
+<p>Let's say we have our first commit A.</p>
+
+<p><img src="/images/2010/08/09/a.jpg" alt="A" /></p>
+
+<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
+
+<div class="highlight"><pre><code class="bash">git branch feature1
+git branch feature2
+</code></pre>
+</div>
+
+
+<p>Now, Team Feature 1 works hard and commits B and C.</p>
+
+<p>Now, our tree looks a bit like this:</p>
+
+<p><img src="/images/2010/08/09/b.jpg" alt="B" /></p>
+
+<p>Team Feature 2 catches up and creates commit D</p>
+
+<p><img src="/images/2010/08/09/c.jpg" alt="C" /></p>
+
+<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
+
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature2
+
+Updating 04511b4..ed6d1fb
+Fast-forward
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/d.jpg" alt="D" /></p>
+
+<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
+
+<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature1
+git merge master
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/e.jpg" alt="E" /></p>
+
+<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
+
+<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature1
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/f.jpg" alt="F" /></p>
+
+<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature2
+git merge master
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+</code></pre>
+</div>
+
+
+<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
+
+<p><img src="/images/2010/08/09/h.jpg" alt="H" /></p>
+
+<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
+
+<p>Cheers!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/06/our-git-workflow.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
 <div class="post prepend-1">
   <h1><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></h1>
   <p class="author">
@@ -362,157 +469,6 @@ or
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 18</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/56839e737258faa963847dd7269a8059" class="avatar" alt="Avatar" /></div>
-    <p>Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.</p>
-
-<p>Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.</p>
-
-<h2>Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails</h2>
-
-<p>First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:</p>
-
-<div class="highlight"><pre><code class="bash">gem install rspec-rails
-</code></pre>
-</div>
-
-
-<p>You can type <em>spec --help</em> to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:</p>
-
-<div class="highlight"><pre><code class="bash">spec spec/
-</code></pre>
-</div>
-
-
-<p>It's time to install cucumber gem like this:</p>
-
-<div class="highlight"><pre><code class="bash">gem install cucumber-rails
-</code></pre>
-</div>
-
-
-<p>It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:</p>
-
-<div class="highlight"><pre><code class="bash">gem install gherkin
-</code></pre>
-</div>
-
-
-<p>After that, try to install cucumber gem again, and if there is no problem, you may see cucumber help:</p>
-
-<div class="highlight"><pre><code class="bash">cucumber --help
-</code></pre>
-</div>
-
-
-<p>In order to run your cucumber scenarios, you use this command:</p>
-
-<div class="highlight"><pre><code class="bash">cucumber features/
-</code></pre>
-</div>
-
-
-<p>Just as a note here, when you write your features and describe your steps for a web application it is a handy to make use of the webrat gem which includes some useful steps:</p>
-
-<div class="highlight"><pre><code class="bash">gem install webrat
-</code></pre>
-</div>
-
-
-<h2>Installing ZenTest, Autotest-Rails y Autotest-Growl</h2>
-
-<p>At this point we are ready to start writing our features, but before we do that, we want to go a little bit further and install autotest, which will allow us to write our features and rspec scenarios while autotest will handle to run tests every time it detects a change in our code, really cool eh?</p>
-
-<p>We need to include gemcutter as a repository in case we don't have it already:</p>
-
-<div class="highlight"><pre><code class="bash">gem sources -add http://gemcutter.org
-</code></pre>
-</div>
-
-
-<p>After that we go for the Gems we need for autotest:</p>
-
-<div class="highlight"><pre><code class="bash">gem install autotest-rails
-</code></pre>
-</div>
-
-
-<p>You may need to install before ZenTest, in case autotest didn't do it previously:</p>
-
-<div class="highlight"><pre><code class="bash">gem install ZenTest
-</code></pre>
-</div>
-
-
-<p>And for MacOS users we can even "beautify" it a more using Growl to show us notifications about the status of our tests. So let's keep going.</p>
-
-<p>In order to do that, now you have to install the autotest/growl gem:</p>
-
-<div class="highlight"><pre><code class="bash">gem install autotest-growl
-</code></pre>
-</div>
-
-
-<p>Now create a  file ~/.autotest where you need to require it:</p>
-
-<div class="highlight"><pre><code class="ruby"> 
-<span class="nb">require</span> <span class="s1">&#39;autotest/growl&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Once you have written  your features, and rspec tests, you can use autospec for rspec and it will be waiting for you to make changes and rerun automatically your tests every time, you just have to use this command:</p>
-
-<div class="highlight"><pre><code class="bash">autospec
-</code></pre>
-</div>
-
-
-<p>And you can do so to include cucumber scenarios in you autotest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">AUTOFEATURE</span><span class="o">=</span><span class="nb">true </span>autospec
-</code></pre>
-</div>
-
-
-<p>You'll be getting a nice Growl notification every time you change your code and you can be aware of the status of your tests at any time.</p>
-
-<p>In the case you include cucumber, it may be running the tests indefinitely which can be  a little bit annoying, also could be a memory hazard, so I encourage you to add a new file .autotest in your application root directory and write this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">Autotest</span><span class="o">.</span><span class="n">add_hook</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">at</span><span class="o">|</span>
-    <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^\.git}</span>  <span class="c1"># ignore Version Control System</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^./tmp}</span>  <span class="c1"># ignore temp files, lest autotest will run again, and again...</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="s2">&quot;rerun.txt&quot;</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_mapping</span><span class="p">(</span><span class="sr">%r{^lib/.*\.rb$}</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
-          <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;spec/**/*.rb&#39;</span><span class="o">]</span>
-     <span class="k">end</span>
-     <span class="kp">nil</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>After this you are now good to go, and you can start using cucumber and rspec to "bddify" your app development!!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Roberto Cataneo | roberto.cataneo@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <a href="/page11" class="previous">Previous</a>
@@ -531,6 +487,8 @@ or
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
@@ -569,8 +527,6 @@ or
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
-  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
 
   </ul>
 </div>

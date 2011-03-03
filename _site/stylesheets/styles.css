@@ -80,6 +80,23 @@ body {
 
 }
 
+.post .body h2, .post .body h3 {
+    font-family:'Arvo', arial, sans-serif;
+    color: #CC3300;
+}
+
+.post .body h2 { margin-bottom:0; font-size:20px }
+
+b, em, dfn {
+    background:#FFF000;
+    font-style: normal;
+}
+
+.date b {
+    background:none;
+    font-style: bold;
+}
+
 .post h1 a:hover {
   text-decoration: underline;
 }
@@ -137,12 +154,10 @@ body {
 
 .post .body h2 {
   font-size: 18px;
-  color: #175057;
 }
 
 .post .body h3 {
   font-size: 16px;
-  color: #175057;
 }
 
 .post .body blockquote {

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -45,6 +46,90 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           
+<div class="post prepend-1">
+  <h1><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></h1>
+  <p class="author">
+    <span class="date"><b>Sep 06</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
+
+<h2>Setting up the class</h2>
+
+<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
+</code></pre>
+</div>
+
+
+<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
+<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
+</code></pre>
+</div>
+
+
+<p>The class' attributes will be available as a hash:</p>
+
+<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;app_name&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;My application name&quot;</span>
+
+AppConfig<span class="o">[</span><span class="s1">&#39;base_domain&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;myapp.com&quot;</span>
+</code></pre>
+</div>
+
+
+<p>You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
+<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
+<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
+
+<span class="n">development</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
+
+<span class="n">production</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
+  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
+  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
+</code></pre>
+</div>
+
+
+<p>Now your class has some hashes values like this:</p>
+
+<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app key&quot;</span>
+
+AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s1">&#39;twitter_prod_secret&#39;</span><span class="o">]</span>
+<span class="c">#=&gt; &quot;Your app secret&quot;</span>
+</code></pre>
+</div>
+
+
+<h2>Enjoy!</h2>
+
+    <div class="author_box">
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
 <div class="post prepend-1">
   <h1><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></h1>
   <p class="author">
@@ -550,275 +635,6 @@ Mac OS X: 10.6.3
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 20</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <h2>Motivation</h2>
-
-<p>Everytime I'm learning a new language, the first thing I try to learn is how this new language
-implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
-years; then I first heard about Ruby being a fully OOP language I got really excited, and
-when I got hands-on some existing Ruby code, things got confusing.</p>
-
-<p>I would've liked to know all of this before looking at any Ruby code:</p>
-
-<h2>First things first: Ruby Objects</h2>
-
-<p>Things that we must know:</p>
-
-<ul>
-<li>And object is formed by: State + Behavior = Object</li>
-<li>Everything in Ruby is an object, even nil which is <em>NilClass</em>, false <em>FalseClass</em>, true <em>TrueClass</em> and modules</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="nb">String</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">NilClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">false</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">FalseClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">true</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">TrueClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="k">module</span> <span class="nn">B</span> <span class="k">end</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Module</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
-</code></pre>
-</div>
-
-
-<ul>
-<li>Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
-and when I say objects, I really mean it. Consider the following code stored in test.rb file:</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">outside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">inside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Let's play with it using irb:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;./test&#39;</span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;A:0x7ffc94046f58&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
-</code></pre>
-</div>
-
-
-<p>As you can see both are <em>A</em> objects whose type is <em>Class</em></p>
-
-<ul>
-<li>Those class names are constants containing references to objects:</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Class:0x7f8fdec83230&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span> <span class="o">=</span> <span class="n">clazz</span>
- <span class="o">=&gt;</span> <span class="no">Blabla</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Blabla:0x7f8fdec77a70&gt; </span>
-</code></pre>
-</div>
-
-
-<h2>Self</h2>
-
-<p>When I first met Ruby I thought "self" was the same as <em>this</em> (like in many other languages), and I was wrong, so lets
-see what it is:</p>
-
-<h4>Default receiver of method calls</h4>
-
-<p>Since everything in Ruby are objects, then all the function definitions we find defined all around
-and all those functions we call like <a href="http://ruby-doc.org/core/classes/Kernel.html#M005961">p</a>,
-<a href="http://ruby-doc.org/core/classes/Kernel.html#M005954">puts</a>, def, etc are method calls. Some may
-not be exactly defined inside a class but, in the end they will get either inherited or mixed in.</p>
-
-<p>Look at following example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">p</span> <span class="s2">&quot;1. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="nb">p</span> <span class="s2">&quot;2. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="nb">p</span> <span class="s2">&quot;3. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">end</span> 
-  <span class="nb">p</span> <span class="s2">&quot;4. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">end</span>
-<span class="nb">p</span> <span class="s2">&quot;5. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Running this script we see:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="s2">&quot;1. Current receiver is main&quot;</span>
-<span class="s2">&quot;2. Current receiver is A&quot;</span>
-<span class="s2">&quot;4. Current receiver is A&quot;</span>
-<span class="s2">&quot;5. Current receiver is main&quot;</span>
-</code></pre>
-</div>
-
-
-<h4>Where instance variables are found</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="vi">@a</span><span class="p">,</span> <span class="vi">@b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">instance_variables</span>
-</code></pre>
-</div>
-
-
-<p>Running this script we see:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="o">[</span><span class="s2">&quot;@b&quot;</span>, <span class="s2">&quot;@a&quot;</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<h2>Metaprogramming</h2>
-
-<p>This is why I fell in love with ruby, it is a huge topic which I won't cover, but it allows you
-to write code that writes code lets see some examples:</p>
-
-<h4>Create a <em>A Class</em>, re-open it and see how it is the same object</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method1</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method one&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method2</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method two&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-</code></pre>
-</div>
-
-
-<p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="o">[</span><span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-<span class="o">[</span><span class="s2">&quot;method2&quot;</span>, <span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-</code></pre>
-</div>
-
-
-<p>As you saw the object id remains the same after re-open a class in order to add a second method, also,
-we got all instance methods that one <a href="http://ruby-doc.org/core/classes/Object.html#M000350">class</a>
-of <em>A</em> would have.</p>
-
-<h4>Call all instance methods of a certain class whenever you call a method whose name matches</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">hello</span>
-    <span class="nb">p</span> <span class="s2">&quot;Hello&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">bye</span> 
-    <span class="nb">p</span> <span class="s2">&quot;Bye&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">welcome</span>
-    <span class="nb">p</span> <span class="s1">&#39;Welcome&#39;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-    <span class="n">method_to_call</span> <span class="o">=</span> <span class="nb">methods</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="nb">name</span> <span class="o">=~</span> <span class="sr">/</span><span class="si">#{</span><span class="n">method_name</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="sr">/</span><span class="p">}</span>
-    <span class="nb">send</span><span class="p">(</span><span class="n">method_to_call</span><span class="p">)</span> <span class="k">if</span> <span class="n">method_to_call</span>
-    <span class="nb">p</span> <span class="s1">&#39;Unknown method&#39;</span> <span class="k">unless</span> <span class="n">method_to_call</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
-
-<span class="n">instance</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">els</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">hel</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">by</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">wel</span>
-</code></pre>
-</div>
-
-
-<p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby <span class="nb">test</span>.rb 
-<span class="s2">&quot;Unknown method&quot;</span>
-<span class="s2">&quot;Hello&quot;</span>
-<span class="s2">&quot;Bye&quot;</span>
-<span class="s2">&quot;Welcome&quot;</span>
-</code></pre>
-</div>
-
-
-<p>That's it. I hope this gives you some good overview and if you are ready for the whole package I
-suggest you start with:</p>
-
-<ul>
-<li>Some good metaprogramming screencasts <a href="http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming">Pragmatic Programmers screencasts</a></li>
-<li>An in deep look at <a href="http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/">Rafa Maga&ntilde;a's presentation</a> on Ruby object model</li>
-</ul>
-
-
-<p>Happy programming!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <a href="/page9" class="previous">Previous</a>
@@ -837,6 +653,8 @@ suggest you start with:</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
@@ -875,8 +693,6 @@ suggest you start with:</p>
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
-
-  <li><span><b>22 Oct 2010</b></span> &raquo; <a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></li>
 
   </ul>
 </div>
