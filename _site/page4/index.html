@@ -47,6 +47,197 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 05</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>Sometimes, sorting the elements in an array depend on something more
+complex than just alphabetical order or numerical order.</p>
+
+<p>From my experience, take for example shoe sizes for little kids.
+For some of the vedors I've worked with you have shoes in size 10.5
+through 13.5, then, the count is restarted to 1 through 9.</p>
+
+<p>So, in order, the size array would look like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">51</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<h2>The problem</h2>
+
+<p>Imagine we have those values on a sorted array:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+<span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<p>How would we properly sort it? Well the answer is kinda simple. Extending ruby's sort
+method.</p>
+
+<p>For the sake of legibility, let's make a short version of the array.</p>
+
+<p>Let's pretend for a moment that if we had this array</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<p>It's sorted version should look like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<p>In Ruby, all Enumerables (mostly array and hashes) have a sort method.
+An example on how to use it would be:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span><span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>This code would sort the array in numerical order. The first thime I saw
+this code, one thing came to my mind: What is that <em>&lt;=></em> operator?</p>
+
+<p>To understand that, let's first figure out how the <em>sort</em> method works.</p>
+
+<h2>The sort method</h2>
+
+<p>The sort method takes the elements on the enumerable in pairs,
+receives a block, and expects the result of the block to be:</p>
+
+<div class="highlight"><pre><code class="ruby">   <span class="o">-</span><span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
+
+    <span class="mi">0</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
+
+    <span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
+</code></pre>
+</div>
+
+
+<p>Based on the result of that block, the sort method returns the
+array in order.</p>
+
+<h2>The &lt;=> operator</h2>
+
+<p>That means the <em>&lt;=></em> operator, compares both elements on its sides
+and returns <em>-1, 0, 1</em> depending on the values.</p>
+
+<p>An example of how it works for the Fixnum class:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">1</span> <span class="o">&lt;=&gt;</span> <span class="mi">2</span> <span class="c1"># =&gt; -1</span>
+<span class="mi">3</span> <span class="o">&lt;=&gt;</span> <span class="mi">3</span> <span class="c1"># =&gt; 0 </span>
+<span class="mi">4</span> <span class="o">&lt;=&gt;</span> <span class="mi">1</span> <span class="c1"># =&gt; 1</span>
+</code></pre>
+</div>
+
+
+<p>Go on, try that on <em>irb</em>.</p>
+
+<p>In our case, we will use a custom function to return <em>-1, 0, 1</em> depending
+on the value of <em>a</em> and <em>b</em>.</p>
+
+<p>For this example, let's just put it on a Comparison class:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>So, the way we'll use this method will be:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="no">Comparison</span><span class="o">.</span><span class="n">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">}</span> <span class="c1">#=&gt; [12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3]</span>
+</code></pre>
+</div>
+
+
+<p>To solve this problem, first thing we need to do is assign a weight to
+the two sets of sizes: -1 to [12, 12.5, 13, 13.5] and 1 to [1, 1.5, 2,
+2.5, 3].</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now, we'll use that weight calculation to determine the sort order of
+the elements.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="c1"># If the weights are the same, compare them numerically</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+      <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># If the weights are different, just return the weight of a</span>
+    <span class="c1">#</span>
+    <span class="k">else</span>
+      <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And that's it, you can try it on irb as it is.</p>
+
+<h2>Conclusion</h2>
+
+<p>All you have to remember is to make the result of the sort block
+return -1, 0, 1 depending on how you want to sort the values.</p>
+
+<p>If the sizes were stored, for example, on a ShoeSize model, the best
+thing to do is override the ShoeSize class <em>&lt;=></em> operator. That would
+actually look much better, but you can always implement the sort methods on a
+Module, or an external class to reuse them.</p>
+
+<p>Hope this helps you somehow.</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/05/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
   <p class="author">
     <span class="date"><b>Dec 25</b><br />2010</span>
@@ -193,199 +384,6 @@ Gonzalo "aka Chalo" Fernandez</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 15</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>What I am about to describe in this post is probably something obvious to the
-advanced Rails developer. Yet, it's sometimes hard to get the concept
-when you come from other frameworks or technology.</p>
-
-<p>I, at least, personally had a problem getting it when I first started
-using Rails.</p>
-
-<h2>REST</h2>
-
-<p>REST stands for <em>Representational State Transfer</em>.
-What does that mean anyway? well, a lot of things, but, for now, I'll
-just focus on what it means when designing a Rails app.</p>
-
-<h3>The wrong way</h3>
-
-<p>I've seen it a lot of times. It's just easy to think that, let's say, a
-OrderController, must always be tied to a Order model, and that,
-all actions performed on the Order objects should be done via that controller.</p>
-
-<p>So, with that thought on your mind, you end up with a controller like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">new</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">index</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">update</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">remove_review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">cancel</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">pay</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">return_order</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h3>What's wrong here?</h3>
-
-<p>If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay,
-return_order.</p>
-
-<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
-means that you have <em>resources</em> and that with every request you are
-creating, updating, deleting or retrieving for display that resource or
-many of them.</p>
-
-<p>A resource is not necesarily a model, it's just <em>something</em> that has a
-state or that can be altered.</p>
-
-<h3>How to make it right?</h3>
-
-<p>So, if we go back to our example, the right thing to do, is to think
-about those <em>bad</em> actions as a resource.</p>
-
-<p>If you're going to review an order, then, you need a <em>OrderReview</em>
-controller.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
-can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
-a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
-out of it.</p>
-
-<p>A most common mistake... an action that actually alters the state of an
-object like the cancel action.</p>
-
-<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
-something, but still, this looks much better:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
-cancellation (it can happen).</p>
-
-<p>You could now refactor all the other actions to their respective
-controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
-
-<h2>Associations</h2>
-
-<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
-how models relate to each other is by thiking that their relationship is
-a resource.</p>
-
-<p>For example, if you had a User that can add other User objects as its
-friends, instead of creating a <em>add_friend</em> or something action, you'd add
-a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
-
-<p>By the way, I've seen relationships like:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-
-  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><em>Always remember to think restful</em>, probably the user should:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
-<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
-
-<span class="c1"># This actually requires more code to make it work, but, you get the</span>
-<span class="c1"># point, right?</span>
-</code></pre>
-</div>
-
-
-<p>Think about it. Way better.</p>
-
-<h3>But, why? You have to write all this "unnecesary" code</h3>
-
-<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
-these two while writing your code, you're being rude to your collegues
-or yourself.</p>
-
-<p>Also, Rails its all about love and following conventions. This is one of
-them.</p>
-
-<p>Hope this guide helps you in some way, cheers!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <a href="/page3" class="previous">Previous</a>
@@ -404,6 +402,8 @@ them.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
@@ -442,8 +442,6 @@ them.</p>
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
-
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
   </ul>
 </div>

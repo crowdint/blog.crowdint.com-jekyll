@@ -47,6 +47,99 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></h1>
+  <p class="author">
+    <span class="date"><b>Mar 08</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
+    <p>Perhaps by reading this you may be wondering what is Processing.js?
+Well, <a href="http://processingjs.org/">Processing.js</a> is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by <a href="http://ejohn.org">John Resig</a>, the creator of jQuery.</p>
+
+<h3>First, a little history about p5.</h3>
+
+<p>  It was developed by Ben Fry and Casey Reas and it was intended to help electronic arts and visual design communities learn the basis of computer programming in a visual context.</p>
+
+<p>And... what about Processing.js?</p>
+
+<p>  Processing.js is the little sister project of the popular Processing visual programming language, but designed for the web.
+  <strong>Processing.js helps you to make your data visualizations, digital art, interactive animations, educational graphs, video games, etc. work using web standards and without any plug-ins.</strong> You only write code using the Processing language, include it in your web page, and Processing.js does the rest. <em>It's not magic, but almost</em>.</p>
+
+<p>  Originally developed by Ben Fry and Casey Reas, Processing started as an open source programming language based on Java to help the electronic arts and visual design communities learn the basics of computer programming in a visual context.
+  <strong>Processing.js takes this to the next level</strong>, allowing Processing code to be run by <strong>any HTML5 compatible browser</strong>, including current versions of Firefox, Safari, Chrome, Opera, and even the upcoming Internet Explorer 9. <em>Processing.js brings the best of visual programming to the web, both for Processing and web developers</em>.</p>
+
+<p>  Ok, so when or where could I use processing?, It's simple, for example: when you need to implement some animation or visual interaction without using Adobe's Flash, or when you want to make new interfaces (like using Arduino) or maybe if you want to put multimedia. That's why I like Processing.js.</p>
+
+<p>  Well, first of all <strong>you'll need the Processing.js</strong> (which could be <a href="http://processingjs.org/content/download/processing-js-1.0.0/processing-1.0.0.min.js">downloaded here</a>), and <strong>include it on your page</strong>:</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;processing-1.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre>
+</div>
+
+
+<p>  Then, wherever you want to use it just put it inside a canvas element (note: of course it has to be HTML5 canvas, which I will speak on my next post).</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;canvas</span> <span class="na">data-processing-sources=</span><span class="s">&quot;MySuperDuperInteractionFile.pjs.&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+</code></pre>
+</div>
+
+
+<p>  <strong>Load your web page, and it will parse, translate, and run your sketch in the browser</strong>... Tadaaaa! =)</p>
+
+<p>  In my experience, I've always hated those basic HELLO WORLD examples so here is a little example which you can try.
+  I won't explain all the Processing language, this will just show you a little bouncing ball, nothing great because out there you can find lots of more complex examples.</p>
+
+<div class="highlight"><pre><code class="javascript">  <span class="kr">float</span> <span class="nx">frame</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>         <span class="c1">// we start at frame 0</span>
+  <span class="kr">float</span> <span class="nx">framerate</span> <span class="o">=</span> <span class="mi">24</span><span class="p">;</span>    <span class="c1">// our &quot;sketch&quot; will have a framerate of 24 frames per second.</span>
+
+  <span class="kr">int</span> <span class="nx">ball_x</span><span class="p">;</span>              <span class="c1">// ball x coordinate</span>
+  <span class="kr">int</span> <span class="nx">ball_y</span><span class="p">;</span>              <span class="c1">// ball y coordinate</span>
+  <span class="kr">int</span> <span class="nx">ball_radius</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>    <span class="c1">// ball radius</span>
+
+  <span class="k">void</span> <span class="nx">setup</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">size</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">);</span>         <span class="c1">// set draw area size</span>
+    <span class="nx">frameRate</span><span class="p">(</span><span class="nx">framerate</span><span class="p">);</span>  <span class="c1">// set animation framerate</span>
+    <span class="nx">ball_x</span> <span class="o">=</span> <span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>      <span class="c1">// set the initial ball coordinates</span>
+    <span class="nx">ball_y</span> <span class="o">=</span> <span class="nx">ball_radius</span><span class="p">;</span>  <span class="c1">// set the initial ball coordinates</span>
+    <span class="nx">stroke</span><span class="p">(</span><span class="err">#</span><span class="mi">003300</span><span class="p">);</span>       <span class="c1">// set the default shape outline colour</span>
+    <span class="nx">fill</span><span class="p">(</span><span class="err">#</span><span class="mi">0000</span><span class="nx">FF</span><span class="p">);</span>         <span class="c1">// set the default shape fill colour</span>
+  <span class="p">}</span>
+
+  <span class="k">void</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">frame</span><span class="o">++</span><span class="p">;</span>                       <span class="c1">// note that we&#39;re one frame further than last time</span>
+    <span class="kr">float</span> <span class="nx">bounce_height</span> <span class="o">=</span> <span class="nx">height</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">abs</span><span class="p">(</span><span class="nx">sin</span><span class="p">(</span><span class="nx">PI</span><span class="o">*</span><span class="nx">frame</span><span class="o">/</span><span class="nx">framerate</span><span class="p">));</span>  <span class="c1">// compute the ball height for this frame</span>
+    <span class="kr">float</span> <span class="nx">ball_height</span> <span class="o">=</span> <span class="nx">height</span> <span class="o">-</span> <span class="p">(</span><span class="nx">bounce_height</span><span class="o">+</span><span class="nx">ball_radius</span><span class="p">);</span>       <span class="c1">// because the top of the screen is 0, and the bottom is &quot;height&quot;,</span>
+    <span class="nx">background</span><span class="p">(</span><span class="err">#</span><span class="nx">FFFFEE</span><span class="p">);</span>           <span class="c1">// clear the drawing area</span>
+    <span class="nx">ball_y</span> <span class="o">=</span> <span class="p">(</span><span class="kr">int</span><span class="p">)</span> <span class="p">(</span><span class="nx">ball_height</span><span class="p">);</span>  <span class="c1">// set the new ball y position</span>
+    <span class="nx">ellipse</span><span class="p">(</span><span class="nx">ball_x</span><span class="p">,</span><span class="nx">ball_y</span><span class="p">,</span><span class="nx">ball_radius</span><span class="p">,</span><span class="nx">ball_radius</span><span class="p">);</span>                 <span class="c1">// draw the ball</span>
+  <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>  What can we see here? If you noticed, we have three main sections, the global variables (nothing to say), the setup method which sets the configuration that will be used in our sketch and the draw method which well... will draw our sketch.</p>
+
+<p>  Wait a minute, Sketch?, yeap... <em>sketches are the main way to use processing</em>.
+  If you remember Adobe Flash you'll easy understand a sketch because it works similar, they are like small scenes which together make a movie, and just as happens in Processing, you can use several sketches to make more complex things.</p>
+
+<p>  That's all folks! (for now).
+  Hope you have enjoyed this small change, as someone said before: Ruby is not the first nor will be the last programming language, it is always good to have alternatives...</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> Carlos Muñiz | carlos.muniz@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></h1>
   <p class="author">
     <span class="date"><b>Mar 02</b><br />2011</span>
@@ -449,239 +542,6 @@ outside of it.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 21</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Earlier this month I decided to go to <a href="http://www.larubyconf.com">LA Ruby Conf 2011</a>.
-I was already in San Francisco, and, since I was just an hour away via
-plane, I jumped into one and attended the conference sessions on Saturday.</p>
-
-<p>As expected, the organization and the conferences were awesome. Kudos to
-the organizers.</p>
-
-<p>Now, a small recap of what I learned there.</p>
-
-<h2>ActiveSupport Three - It is finally getting interesting</h2>
-
-<h3>Bryan Lyles</h3>
-
-<p><a href="http://smartic.us/">Bryan Liles</a>, being the Greatest
-Man Alive gave an awesome talk on ActiveSupport and its similarities
-with <a href="http://rubyworks.github.com/facets/">Ruby Facets</a>.</p>
-
-<p>To be honest, I have never used Facets, but it seems it's worth taking a
-look.</p>
-
-<p>Here's the <a href="http://rubyworks.github.com/facets/learn.html">API Documentation</a>, I've already
-gone through it and I found a lot of interesting things going on there.</p>
-
-<p>Sadly, Bryan was time constrained and he just gave a small part of what
-seems to be a big, interesting talk about those two libraries.</p>
-
-<p>The most interesting part of this talk for me was to learn that Rails 3
-ships with a lot of built-in instrumentation, so, expect a lot of gems
-to measure performance of the applications more acurately in the near
-future.</p>
-
-<p>Tried to google on the subject, and couldn't find a lot on
-Instrumentations, so I went straight to the Rails source code.</p>
-
-<p><a href="http://bit.ly/earFTF">Here you can get an example</a> more or less on how it works.</p>
-
-<h2>NinjaScript: JavaScript so unobtrusive, you won't see it coming.</h2>
-
-<h3>Evan Dorn</h3>
-
-<p>These guys are making an awesome effort of separating the Javascript
-dependency out of the HTML and the CSS.</p>
-
-<p>So, they wrote <a href="https://github.com/LRDesign/NinjaScript">NinjaScript</a>.
-From their github page:</p>
-
-<p>NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
-Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
-to apply stylings.
-Additionally, NinjaScript makes it easy to package up useful behaviors and apply
-them quickly to disparate elements, or in different projects.</p>
-
-<p>Looks promising, but there's still a lot of Javascript involved, and I
-usually try to stay away from Javascript as much as I can, I am old
-school.</p>
-
-<p>Lucky for me, they also wrote the <a href="https://github.com/LRDesign/mizugumo">Mizugumo</a>
-gem.</p>
-
-<p>Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:</p>
-
-<ul>
-<li>Absolutely seamless</li>
-<li>Completely unombtrusive - no markup whatsoever in your HTML and</li>
-<li>Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.</li>
-</ul>
-
-
-<p>Now, that's more like it.</p>
-
-<p>You can see it in action <a href="http://mizugumo-demo.lrdesign.com/products">right here</a>.
-Try using that UI both with your JS enabled and disabled. See what
-happens.</p>
-
-<p>You're supposed to get all that sweetness just by dropping the gem and
-doing some minimal configuration.</p>
-
-<p>Haven't tried it myself, but probably will soon.</p>
-
-<h2>The Rails Tutorial Story</h2>
-
-<h3>Michael Hartl</h3>
-
-<p>I have never heard about <a href="http://ruby.railstutorial.org/">The Rails Tutorial</a>.</p>
-
-<p>Michael Hartl told us the story behind it, and how he ended up writing
-all of that, and let me tell you something: it was <em>Inspiring</em>.</p>
-
-<p>Talk about perseverance. I won't ruin this story for you, because,
-obviously I can't tell it as good nor accurate as he did.</p>
-
-<p>All I can tell you is, take a look at the site, do yourself some good,
-buy the screencast / PDF bundle.</p>
-
-<p>It does look like a very good way to learn Rails 3.</p>
-
-<h2>How To Jam In Code</h2>
-
-<h3>Ron Evans</h3>
-
-<p>You probably know Ron Evans, he knows everyone. I had already seen this
-talk when he gave it at <a href="http://www.magmarails.com">MagmaRails</a>.</p>
-
-<p>Awesome. Period. Ron knows how to involve the crowd on his talks.</p>
-
-<p>If you haven't seen this talk, you are out of luck since now he's more
-into <a href="http://www.kidsruby.com/">Kids Ruby</a>. Can't wait to see that
-talk later in the year, Bravo Ron! for thinking of the kids. Someone has
-to.</p>
-
-<h2>Working in Virtual Machines, the Vagrant Way</h2>
-
-<h3>Mitchell Hashimoto</h3>
-
-<p><a href="http://vagrantup.com/">Vagrant</a> is a tool for building and distributing
-virtualized development environments.</p>
-
-<p>I wonder if you can do some funky stuff with vagrant where you create
-Windows virtual machines and run your cucumber features or Selenium
-tests automagically on them.</p>
-
-<p>I will have to play with this eventually.</p>
-
-<h2>Securing Your Rails App</h2>
-
-<h3>Jim Weirich, Matt Yoho</h3>
-
-<p>Basics on Rails app security. I was sort of expecting something more
-advanced from Jim Weirich, but, it was good.</p>
-
-<p>Learned about the existence of these two papers:</p>
-
-<ul>
-<li><a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a></li>
-<li><a href="https://www.owasp.org/images/8/89/Rails_Security_2.pdf">OWASP Ruby on Rails Security Guide</a></li>
-</ul>
-
-
-<p>No Rails developer should be allowed to send code to production without
-reading those.</p>
-
-<p>Also learned that security holes can slip everywhere, <a href="http://martinfowler.com/snips/201102031214.html">even to the best
-people out there</a>.</p>
-
-<p>No one is safe on the interwebs.</p>
-
-<p>By the way, if you've finally decided to be more serious about security, take
-a look at <a href="http://www.metasploit.com/framework/">Metasploit</a>. A
-framework to perform penetration testing on your Network.</p>
-
-<h2>Twitter Mobile</h2>
-
-<h3>Ben Sandofsky</h3>
-
-<p>This talk was full of interesting stuff and could easily be it's own
-post by itself.</p>
-
-<p>Ben described how they work at twitter. I'll highlight what I think was the most
-interesting parts of the talk.</p>
-
-<ul>
-<li>The record of tweets per second was set last New Years eve at 6,939
-tps.</li>
-<li>Twitter is heavily Service oriented. They didn't start that way, but
-they have been transitioning in the last few years. Doesn't sound like
-an easy task.</li>
-<li>They created a DSL that allows them to create new Service endpoints
-with just a few lines of code. Clever.</li>
-<li>They use YAJL for JSON. Twice the performance just by dropping a gem.</li>
-<li>They use GD2 for image processing since it's way faster than Image
-Magick.</li>
-<li>They use <a href="https://github.com/dbalatero/typhoeus">Typhoeus</a> for
-parallel HTTP requests betwen their services.</li>
-<li>They work in small agile teams</li>
-<li>Usually composed of 1 PM, 1 Designer, 3 Devs</li>
-<li>Iterative development</li>
-<li>They believe in continuous shipping. They usually do 3 deploys a
-day. The record? 7 in one day.</li>
-<li>They have a rigorous test suite in place. It runs for 1 hour by
-itself but they built an awesome fleet of servers that can run it in
-<em>2 minutes</em>.</li>
-<li>Sadly, no details on how they do that :(</li>
-<li>They do beleive in Pair programming, but it's up to the teams to do
-actually do it.</li>
-<li>They do require code review before pushing something.</li>
-<li>They deliver the features to small amounts of users before full
-release.</li>
-<li>They have no QA team. Every team is responsible of their features and
-their code. They believe that developers tend to become lazy and
-careless when there's a QA team in place.</li>
-<li>Company culture is key to success.</li>
-</ul>
-
-
-<h2>Conclusion</h2>
-
-<p>I missed a review on some of the conferences, but I just included on
-this post what I personally found as the most interesting part of the event.</p>
-
-<p>LARubyconf just made me reassure my thoughts about small regional
-conferences being way better than the big ones, being single tracked and
-with a lot better content.</p>
-
-<p>Many thanks to Ron Evans of <a href="http://hybridgroup.com/">The Hybrid Group</a>
-for inviting us to have delicious brunch the next day at his place. Good
-times.</p>
-
-<p>Looking forward to my next conference. Don't know where or when yet,
-<a href="http://www.rubynation.org//">Ruby Nation</a>'s lineup looks very promising.</p>
-
-<p>Until the next time.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
@@ -700,6 +560,8 @@ times.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
@@ -738,8 +600,6 @@ times.</p>
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
-
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
   </ul>
 </div>

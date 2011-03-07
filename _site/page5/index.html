@@ -47,6 +47,199 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 15</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.</p>
+
+<p>I, at least, personally had a problem getting it when I first started
+using Rails.</p>
+
+<h2>REST</h2>
+
+<p>REST stands for <em>Representational State Transfer</em>.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.</p>
+
+<h3>The wrong way</h3>
+
+<p>I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.</p>
+
+<p>So, with that thought on your mind, you end up with a controller like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">remove_review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">cancel</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">pay</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>What's wrong here?</h3>
+
+<p>If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
+
+<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have <em>resources</em> and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.</p>
+
+<p>A resource is not necesarily a model, it's just <em>something</em> that has a
+state or that can be altered.</p>
+
+<h3>How to make it right?</h3>
+
+<p>So, if we go back to our example, the right thing to do, is to think
+about those <em>bad</em> actions as a resource.</p>
+
+<p>If you're going to review an order, then, you need a <em>OrderReview</em>
+controller.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
+can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
+a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
+out of it.</p>
+
+<p>A most common mistake... an action that actually alters the state of an
+object like the cancel action.</p>
+
+<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
+something, but still, this looks much better:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
+cancellation (it can happen).</p>
+
+<p>You could now refactor all the other actions to their respective
+controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
+
+<h2>Associations</h2>
+
+<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.</p>
+
+<p>For example, if you had a User that can add other User objects as its
+friends, instead of creating a <em>add_friend</em> or something action, you'd add
+a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
+
+<p>By the way, I've seen relationships like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
+
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><em>Always remember to think restful</em>, probably the user should:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
+<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
+
+<span class="c1"># This actually requires more code to make it work, but, you get the</span>
+<span class="c1"># point, right?</span>
+</code></pre>
+</div>
+
+
+<p>Think about it. Way better.</p>
+
+<h3>But, why? You have to write all this "unnecesary" code</h3>
+
+<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.</p>
+
+<p>Also, Rails its all about love and following conventions. This is one of
+them.</p>
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
+    <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+  </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
   <p class="author">
     <span class="date"><b>Dec 07</b><br />2010</span>
@@ -544,187 +737,6 @@ The last example tests the <em>:new</em> method in the controller, again we <em>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 24</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <p>During the days I was working for a project called <a href="http://creativeallies.com">Creative Allies</a>, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.</p>
-
-<p>After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.</p>
-
-<h2>What I did the first time</h2>
-
-<p>The feature included uploading a file, validating it using <a href="http://rmagick.rubyforge.org/">RMagick</a> and if validation passed, creating thumbnails and a watermarked preview.</p>
-
-<p>For this post's purposes I will only re-create such functionality specifying a fixed path to file so I we can compare benchmark outcome. Ready?</p>
-
-<h3>Opening the file</h3>
-
-<p>We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name <a href="/images/wallpaper_original.jpg">"wallpaper_original.jpg"</a> (the file is 1.1 Mb)</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">example_image_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_original.jpg&quot;</span>
-
- <span class="c1"># Let&#39;s also specify the file path for our watermarked image</span>
-<span class="n">example_image_output_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_watermarked.jpg&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Image dimensions are: 1800 x 1200 pixels (big enough)</p>
-
-<p>Also, we have the <a href="/images/watermark.png">watermark stamp</a> in our images folder.
-Watermark dimensions are: 250 x 250 pixels</p>
-
-<h3>Stamping the watermark</h3>
-
-<p>I used a method called <em>apply_watermark</em> that will receive the path to our image as a string and the path of the watermarked image, like this:</p>
-
-<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span> <span class="c1"># great idea to fire up the garbage collector here, it&#39;s a good practice</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Now we just have to call our <em>apply_watermark</em> method passing the <em>example_image_path</em> string as the <em>image_path</em> and the <em>new_filename_path</em> arguments:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">apply_watermark</span><span class="p">(</span><span class="n">example_image_path</span><span class="p">,</span> <span class="n">example_image_output_path</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>Now let's add some code to our <em>apply_watermark</em> method to perform <a href="http://ruby-doc.org/core/classes/Benchmark.html">benchmarking</a>:</p>
-
-<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
-          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-        <span class="p">}</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>I entered the console, picked our image's file path, called the method, grabbed a cup of coffee and relaxed... you can see the console output <a href="https://gist.github.com/661883">here</a></p>
-
-<h3>Here's what happened</h3>
-
-<p>The code in our <em>apply_watermark</em> method iterated as many times our watermark file could fit into our original wallpaper image, stamped the watermark once and again until iterations were completed. This demanded memory and processing power and took longer than any user out there would expect. Sometimes our app just hung.</p>
-
-<p>You can see the result here: <a href="/images/wallpaper_watermarked.jpg">wallpaper_watermarked.jpg</a></p>
-
-<h2>How I fixed it</h2>
-
-<p>Sometimes users would upload HUGE files that were about 8000 x 5000 pixels and everything would just fall apart. We needed to find a way to reduce the number of iterations regardless the dimensions of the images; so I created an additional method that would pick a watermark stamp depending on how big the new image was and then using it in the iterations. Results just rocked!</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">pick_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-  <span class="n">image_width</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">columns</span> <span class="o">/</span> <span class="mi">250</span>
-  <span class="k">case</span> <span class="n">image_width</span><span class="o">.</span><span class="n">to_i</span>
-  <span class="k">when</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span> <span class="mi">2</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span>
-  <span class="k">when</span> <span class="mi">3</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark3.png&quot;</span>
-  <span class="k">when</span> <span class="mi">6</span><span class="o">.</span><span class="n">.</span><span class="mi">11</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark6.png&quot;</span>
-  <span class="k">when</span> <span class="mi">12</span><span class="o">.</span><span class="n">.</span><span class="mi">17</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark12.png&quot;</span>
-  <span class="k">when</span> <span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark18.png&quot;</span>
-  <span class="k">else</span>
-    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark24.png&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
-  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
-  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
-  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pick_watermark</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span><span class="o">.</span><span class="n">first</span>
-  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
-  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
-  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
-  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
-  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
-  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
-  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
-    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
-      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
-          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
-        <span class="p">}</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
-  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
-  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Here's the output from our tweaked code (I couldn't even grab another cup of coffee):</p>
-
-<script src="https://gist.github.com/661917.js?file=gistfile1.rb"></script>
-
-
-<p>Pretty amazing, uh?</p>
-
-<p>We saved memory and processor power by 'pre-processing' the watermark stamps and putting them together in separate files so we could pick the one that would demand the lowest number of iterations in our code. After this tweak, our app was ready for the next move...</p>
-
-<h2>Enjoy!</h2>
-
-    <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/24/watermarking-images.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <a href="/page4" class="previous">Previous</a>
@@ -743,6 +755,8 @@ Watermark dimensions are: 250 x 250 pixels</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
@@ -781,8 +795,6 @@ Watermark dimensions are: 250 x 250 pixels</p>
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
-
-  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
 
   </ul>
 </div>

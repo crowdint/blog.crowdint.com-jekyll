@@ -7,10 +7,8 @@ avatar: 89c6420fb99cb01bcf2e3502a7851da2
 published: true
 ---
 
-##Processing.js
-
-  Perhaps by reading this you may be wondering what is Processing.js?  
-  Well, [Processing.js](http://processingjs.org/) is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by [John Resig](http://ejohn.org), the creator of jQuery.
+Perhaps by reading this you may be wondering what is Processing.js?
+Well, [Processing.js](http://processingjs.org/) is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by [John Resig](http://ejohn.org), the creator of jQuery.
 
 ###First, a little history about p5.
 
