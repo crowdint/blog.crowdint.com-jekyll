@@ -11,7 +11,23 @@ title: Blog
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ post.avatar }}" class="avatar" alt="Avatar" /></div>
-    {{ post.content }}
+    <div id='main'>
+    {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+    {% capture month %}{{ post.date | date: '%b' }}{% endcapture %}
+    {% capture day %}{{ post.date | date: '%d' }}{% endcapture %}
+    {% if year == '2010' %}
+      {{ post.content }}
+    {% else %}
+      {% if month == 'Jan' or month == 'Feb' or month == 'Mar' and year == '2011' %}
+          {{ post.content  | split_truncate | truncatewords: 61}}
+      {% else %}
+         {{ post.content  | split_truncate | truncatewords: 90}}
+      {% endif %}
+    {% endif %}
+<!--      {{ post.content  | split_truncate | truncatewords: 61}} this works but I thinks is to short -->
+    </div>
+  
+    <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
     <div class="author_box">
       <p><b>Author:</b> {{ post.author }} | {{ post.email }}</p>
     </div>
@@ -28,7 +44,11 @@ title: Blog
 {% endfor %}
 <div class="pagination prepend-1">
   {% if paginator.previous_page %}
-    <a href="/page{{paginator.previous_page}}" class="previous">Previous</a>
+    {% if paginator.previous_page == 1 %}
+      <a href="../index.html" class="previous">Previous</a>
+    {% else %}
+      <a href="/page{{paginator.previous_page}}" class="previous">Previous</a>
+    {% endif %}
   {% else %}
     <span class="previous">Previous</span>
   {% endif %}

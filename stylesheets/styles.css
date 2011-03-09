@@ -327,7 +327,10 @@ em {
 .next{
   color: gray;
 }
-
+.continue_reading {
+  text-align: right;
+  margin-bottom: 10px;
+}
 
 
 
