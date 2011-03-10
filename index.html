@@ -26,19 +26,18 @@ title: Blog
     {% endif %}
 <!--      {{ post.content  | split_truncate | truncatewords: 61}} this works but I thinks is to short -->
     </div>
-  
     <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
-    <div class="author_box">
-      <p><b>Author:</b> {{ post.author }} | {{ post.email }}</p>
+    <div class="comments">
+      <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> {{ post.author }} | {{ post.email }}</p>
+    </div>
 </div>
 
 {% endfor %}
