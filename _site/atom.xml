@@ -4,14 +4,158 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-07T15:34:11-08:00</updated>
+ <updated>2011-03-14T14:28:22-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
+   <title>Sinatra, the green way</title>
+   <link href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html"/>
+   <updated>2011-03-14T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way</id>
+   <photo>433031df4018635dfb177f4066c37a3b</photo>
+   <content type="html">&lt;p&gt;Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests.
+Together they are a quick and efficient way to create web applications.&lt;/p&gt;
+
+&lt;p&gt;In this post we'll create our first Sinatra application using 'outside-in' development with
+Cucumber or how I like to call it, &lt;em&gt;the green way&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;First Sinatra application.&lt;/h2&gt;
+
+&lt;p&gt;First of all, we need to create our basic environment. Personally, I like to use a gemset per project.&lt;/p&gt;
+
+&lt;p&gt;Then we need to create our application's directory. Let’s call it ‘greenway’. Inside the ‘greenway’ directory,
+call bundle init (assuming you already installed bundler) and then edit the Gemfile so that it looks
+like the example below:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://rubygems.org&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-sinatra&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;blockquote&gt;&lt;p&gt;With rvm you can use diferents rubies and gemsets for each project. If you don't know rvm. What are you waiting for?
+go to &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;.
+For more info on gemsets and RVM check out these posts: &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;getting started with rvm&lt;/a&gt; &lt;a href=&quot;http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html&quot;&gt;Use a project specific Ruby version&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Now we can install our gems, with this command&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you haven’t installed Bundler, you can do so with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install bundler
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now we need to create our Sinatra application, set the configuration for Cucumber, define the web steps and so on.
+To start we have to install the cucumber-sinatra gem, it does most of the configuration work for us.
+For more info visit &lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;cucumber-sinatra&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber-sinatra init --app Hello src/hello.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Writing tests&lt;/h3&gt;
+
+&lt;p&gt;Now we can write our cucumber test... yes, I said test.&lt;/p&gt;
+
+&lt;p&gt;Inside the features directory create a new file called hello.feature.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;no&quot;&gt;Feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Cucumber&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;web&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;
+          &lt;span class=&quot;no&quot;&gt;In&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Order&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;verify&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;works&lt;/span&gt;
+          &lt;span class=&quot;no&quot;&gt;As&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;developer&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;want&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+
+          &lt;span class=&quot;no&quot;&gt;Scenario&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;Given&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;am&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;Then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
+    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then run the test:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_red_tests.jpg&quot; alt=&quot;Red tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And... it Fails! But don’t worry, that was expected. Now we are ready to write the code we need to make that test pass.&lt;/p&gt;
+
+&lt;h3&gt;Writing Code&lt;/h3&gt;
+
+&lt;p&gt;This is the moment to write the code to pass the test. Open the file src/hello.rb and edit it to look like the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra/base&amp;#39;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And now, run the test again&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_green_tests.jpg&quot; alt=&quot;Green tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we're green. If you want to see your web application, you can do it with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup -p 4567
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And you just have to go to &quot;localhost:4567/&quot; in your browser&lt;/p&gt;
+
+&lt;p&gt;Congrats for your first &quot;green way&quot; Sinatra application! To celebrate, I’ll leave you with &lt;a href=&quot;http://www.youtube.com/watch?v=Aht9hcDFyVw&quot;&gt;Frank&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://cukes.info/&quot;&gt;Cucumber&lt;/a&gt; Behavior Driven Development tool.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;Siantra&lt;/a&gt; a DSL for quickly creating web applications in Ruby.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;Cucumber-Sinatra&lt;/a&gt; helpful gem to initialize a cucumber environment for a sinatra application.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; Command line tool to easily install, manage and work with multiple ruby environments.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://gembundler.com/&quot;&gt;Bundler&lt;/a&gt; a tool that manages gem dependencies for your ruby application.&lt;/p&gt;
+</content>
+   <author>
+     <name>Omar Vargas</name>
+     <email>omar@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>As Monty Python said... "And Now For Something Completly Different"</title>
    <link href="http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html"/>
-   <updated>2011-03-08T00:00:00-08:00</updated>
+   <updated>2011-03-08T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different</id>
    <photo>89c6420fb99cb01bcf2e3502a7851da2</photo>
    <content type="html">&lt;p&gt;Perhaps by reading this you may be wondering what is Processing.js?
@@ -95,7 +239,7 @@ Well, &lt;a href=&quot;http://processingjs.org/&quot;&gt;Processing.js&lt;/a&gt;
  <entry>
    <title>How to make your Models look lean</title>
    <link href="http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean.html"/>
-   <updated>2011-03-02T00:00:00-08:00</updated>
+   <updated>2011-03-02T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean</id>
    <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;Rails is strongly based in the MVC concept, that means each part of
@@ -302,7 +446,7 @@ development environment loads the classes in a lazy mode!.&lt;/p&gt;
  <entry>
    <title>Why ruby?</title>
    <link href="http://blog.crowdint.com/2011/02/25/why-ruby.html"/>
-   <updated>2011-02-25T00:00:00-08:00</updated>
+   <updated>2011-02-25T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/02/25/why-ruby</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;We have been seeing a lot of posts about different Rails and Ruby topics,
@@ -480,7 +624,7 @@ outside of it.&lt;/p&gt;
  <entry>
    <title>What we learned at LA Ruby Conf</title>
    <link href="http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf.html"/>
-   <updated>2011-02-21T00:00:00-08:00</updated>
+   <updated>2011-02-21T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Earlier this month I decided to go to &lt;a href=&quot;http://www.larubyconf.com&quot;&gt;LA Ruby Conf 2011&lt;/a&gt;.
@@ -704,7 +848,7 @@ times.&lt;/p&gt;
  <entry>
    <title>Internationalizing your Rails application with i18n</title>
    <link href="http://blog.crowdint.com/2011/02/15/internationalizing-your-rails-app.html"/>
-   <updated>2011-02-15T00:00:00-08:00</updated>
+   <updated>2011-02-15T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/02/15/internationalizing-your-rails-app</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business,  projects or simply our ideas in other countries.&lt;/p&gt;
@@ -890,7 +1034,7 @@ Well it’s easy, you just need to put the tags in the right order to obtain the
  <entry>
    <title>Auditrail, how to play dirty with callbacks.</title>
    <link href="http://blog.crowdint.com/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html"/>
-   <updated>2011-02-05T00:00:00-08:00</updated>
+   <updated>2011-02-05T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/02/05/auditrail-how-to-play-dirty-with-callbacks</id>
    <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models
@@ -987,7 +1131,7 @@ gem by forking it on github.&lt;/p&gt;
  <entry>
    <title>Attack of the backtick</title>
    <link href="http://blog.crowdint.com/2011/01/31/attack-of-the-backticks.html"/>
-   <updated>2011-01-31T00:00:00-08:00</updated>
+   <updated>2011-01-31T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/01/31/attack-of-the-backticks</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;It all started because I was getting some weird warning while running
@@ -1096,7 +1240,7 @@ problem to have, yet I just felt like explaining the power of the backticks.&lt;
  <entry>
    <title>How to start writing a ruby gem</title>
    <link href="http://blog.crowdint.com/2011/01/24/how-to-start-writing-a-gem.html"/>
-   <updated>2011-01-24T00:00:00-08:00</updated>
+   <updated>2011-01-24T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/01/24/how-to-start-writing-a-gem</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;If you are a Ruby developer, by now, you have probably used tons of
@@ -1394,7 +1538,7 @@ you will like it and use it.&lt;/p&gt;
  <entry>
    <title>Building a basic DSL to create callbacks in Ruby</title>
    <link href="http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html"/>
-   <updated>2011-01-14T00:00:00-08:00</updated>
+   <updated>2011-01-14T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;Do you know what a &lt;strong&gt;Domain Specific Language(DSL)&lt;/strong&gt; is and how to
@@ -1812,7 +1956,7 @@ then look at the &lt;a href=&quot;https://gist.github.com/762214&quot;&gt;comple
  <entry>
    <title>Custom Sorting with Ruby</title>
    <link href="http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby.html"/>
-   <updated>2011-01-05T00:00:00-08:00</updated>
+   <updated>2011-01-05T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/01/05/custom-sorting-with-ruby</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Sometimes, sorting the elements in an array depend on something more
@@ -1994,7 +2138,7 @@ Module, or an external class to reuse them.&lt;/p&gt;
  <entry>
    <title>Happy Holidays, your friends from Crowd Interactive</title>
    <link href="http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive.html"/>
-   <updated>2010-12-25T00:00:00-08:00</updated>
+   <updated>2010-12-25T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/25/happy-holidays-from-crowd-interactive</id>
    <photo>43c0c5387a923d62b0060291c5c297f4</photo>
    <content type="html">&lt;br /&gt;
@@ -2029,7 +2173,7 @@ Module, or an external class to reuse them.&lt;/p&gt;
  <entry>
    <title>Cool date formatting in Rails</title>
    <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
-   <updated>2010-12-21T00:00:00-08:00</updated>
+   <updated>2010-12-21T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
    <photo>d3177da7794ac3ce603d65b33bf4a981</photo>
    <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
@@ -2123,7 +2267,7 @@ Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
  <entry>
    <title>Always Think RESTful</title>
    <link href="http://blog.crowdint.com/2010/12/15/always-think-restful.html"/>
-   <updated>2010-12-15T00:00:00-08:00</updated>
+   <updated>2010-12-15T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/15/always-think-restful</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;What I am about to describe in this post is probably something obvious to the
@@ -2307,7 +2451,7 @@ them.&lt;/p&gt;
  <entry>
    <title>Improving your development life with Ruby Enterprise Edition</title>
    <link href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html"/>
-   <updated>2010-12-07T00:00:00-08:00</updated>
+   <updated>2010-12-07T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree</id>
    <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;Have you ever wondered if you can do something to make your ruby development even faster?
@@ -2643,144 +2787,6 @@ Total:         84 4391 760.0   4473    5830
    <author>
      <name>Edwin Cruz</name>
      <email>edwin.cruz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>RSpec for really newbies</title>
-   <link href="http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies.html"/>
-   <updated>2010-11-30T00:00:00-08:00</updated>
-   <id>http://blog.crowdint.com/2010/11/30/rspec-for-really-newbies</id>
-   <photo>2f2bc78de007915554f49c3ea0fef125</photo>
-   <content type="html">&lt;p&gt;First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.&lt;/p&gt;
-
-&lt;h2&gt;What is RSpec?&lt;/h2&gt;
-
-&lt;p&gt;Well, it’s easy, RSpec is a framework for Ruby that allows us make scenarios for our applications and help us test them.
-The main goal about testing your objects with RSpec, is that you test what your object is going to do, &lt;a href=&quot;http://en.wikipedia.org/wiki/Behavior_driven_development&quot;&gt;Behaviour Driven Development&lt;/a&gt;. The syntax is very simple, and human readable, this way you can read it as if you were having a conversation with your client to determine what exactly they want the project to do. It’s very easy to use, as long as you know exactly what you want to test, and here is where I think most of us usually get stuck...
-So, after this brief introduction, let’s get to the action!&lt;/p&gt;
-
-&lt;h2&gt;How do we start an RSpec test for our rails application?&lt;/h2&gt;
-
-&lt;p&gt;Say you already have a &lt;em&gt;Rails3&lt;/em&gt; project. In your Gemfile add the next lines.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;group :development, :test &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;  &lt;/span&gt;gem &lt;span class=&quot;s2&quot;&gt;&amp;quot;rspec-rails&amp;quot;&lt;/span&gt; , &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;gt;= 2.2.0&amp;quot;&lt;/span&gt;
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Next run the &lt;em&gt;bundle install&lt;/em&gt; command in your console in order to install all your gems in the Gemfile. After the bundle is finished write in your console&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails generate rspec:install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;With this generator we get the necessary files to run the specs and the directory in our app where we are going to save them.
-To finish with this small setup you should run the next commands to make sure everything is running fine in your app!&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake db:migrate
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake db:test:prepare
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake spec
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;After this, every time you generate from the console a new model or controller, RSpec will automatically create the spec file for you... Now you are more than ready to start testing!&lt;/p&gt;
-
-&lt;h2&gt;Let’s begin with Model testing&lt;/h2&gt;
-
-&lt;p&gt; &lt;em&gt;RSpec is all about expectations&lt;/em&gt;. What are you expecting an object to do? That’s what you must be thinking when you start a new test.
-Normally in a Model, what do you do? You basically validate the fields on your tables, or create definitions in order to get new queries, among other things.
-So that’s what you must test, for this you have the following magic words: &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;describe, context, before, it and should&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;describe&lt;/em&gt;, as the word says, it will help you describe what you want the method to do. &lt;br /&gt;
-&lt;em&gt;context&lt;/em&gt;, will help you to describe the environment or the background where your tests will be running at. &lt;br /&gt;
-&lt;em&gt;before&lt;/em&gt;, will help you define stuff you need to be done before you test a method, for example, if you need to simulate an account, a shipping_cart, before is your friend. &lt;br /&gt;
-&lt;em&gt;it&lt;/em&gt;, is meant to be, also, a descriptor for the situation you are testing. &lt;br /&gt;
-&lt;em&gt;should and should&lt;/em&gt;_&lt;em&gt;not&lt;/em&gt;, with this magic word, you will be able to compare if you’ve received what you were expecting. &lt;em&gt;Remember it’s all about expectations&lt;/em&gt;.&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;In the following example, we are going to test the Account Model in an application, the first step is to describe the model. Next we define the context and create some accounts in the before segment.
-Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the second context is meant to search an account by its e-mail address.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;when an account is created it has to have an e-mail address&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;vi&quot;&gt;@account&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Test&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;test@test.com&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;vi&quot;&gt;@account2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Test2&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
-      
-      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;validates the account attributes&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;vi&quot;&gt;@account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_valid&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;doesn&amp;#39;t validates the account attributes&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;vi&quot;&gt;@account2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should_not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_valid&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;when an account is searched by its e-mail address&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-      &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;vi&quot;&gt;@account&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Test Name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;test@test.com&amp;quot;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;should find the account&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test@test.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be_true&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;...Now Controllers&lt;/h2&gt;
-
-&lt;p&gt;It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a POST, GET, PUT or DELETE request from our browser would be. This is done, for example, by typing &lt;em&gt;get :show, :id =&gt; @account.id&lt;/em&gt; in our test file where we say which method we want to use (&lt;em&gt;:show&lt;/em&gt;) and which parameter we want to send (&lt;em&gt;:id&lt;/em&gt;).
-In the next example we test the show method from our Accounts controller, let’s say we want the method to find an account by its id. We go the same way as before, we create two accounts in the before segment, then we describe the method we are testing and what it should do. In this case as our example says, it should find the account by its id. The &lt;em&gt;assigns[:account]&lt;/em&gt; is what the method returns to the call. In this case the id, name and e-mail. &lt;br /&gt;
-The last example tests the &lt;em&gt;:new&lt;/em&gt; method in the controller, again we &lt;em&gt;post&lt;/em&gt; the name and email of the account and then we look for the registered name, if it's found then it has been successfully created.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;AccountsController&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;GET show&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@account&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;test@test.com&amp;#39;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;should find the account by its id&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;assigns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Name&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  
-  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;POST new&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;should register the new account&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:account&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Name 3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;test4@test.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;assigns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:account&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Name 3&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;To finish, I want to talk a little bit about the views, which are not often tested, at least with RSpec, if you want to get into view testing, I think it will be better for you to use &lt;a href=&quot;https://github.com/brynary/webrat&quot;&gt;Webrat&lt;/a&gt;, &lt;a href=&quot;http://cukes.info/&quot;&gt;Cucumber&lt;/a&gt; or &lt;a href=&quot;http://seleniumhq.org/&quot;&gt;Selenium&lt;/a&gt;. I'll just leave this for another post.&lt;/p&gt;
-
-&lt;h2&gt;Hope this will help you start with the long road of BDD!&lt;/h2&gt;
-
-&lt;h2&gt;Resources&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.pragprog.com/titles/achbd/the-rspec-book&quot;&gt;The RSpec Book&lt;/a&gt;&lt;br /&gt;
-&lt;a href=&quot;http://rspec.info/&quot;&gt;RSpec's homepage&lt;/a&gt;&lt;br /&gt;
-&lt;a href=&quot;http://rspec.info/rails/writing/models.html&quot;&gt;Model testing&lt;/a&gt;&lt;br /&gt;
-&lt;a href=&quot;http://rspec.info/rails/writing/controllers.html&quot;&gt;Controller testing&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
-</content>
-   <author>
-     <name>Ana Rosas</name>
-     <email>ana@crowdint.com</email>
    </author>
  </entry>
  

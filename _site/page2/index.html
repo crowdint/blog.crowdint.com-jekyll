@@ -47,430 +47,36 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 21</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Earlier this month I decided to go to <a href="http://www.larubyconf.com">LA Ruby Conf 2011</a>.
-I was already in San Francisco, and, since I was just an hour away via
-plane, I jumped into one and attended the conference sessions on Saturday.</p>
-
-<p>As expected, the organization and the conferences were awesome. Kudos to
-the organizers.</p>
-
-<p>Now, a small recap of what I learned there.</p>
-
-<h2>ActiveSupport Three - It is finally getting interesting</h2>
-
-<h3>Bryan Lyles</h3>
-
-<p><a href="http://smartic.us/">Bryan Liles</a>, being the Greatest
-Man Alive gave an awesome talk on ActiveSupport and its similarities
-with <a href="http://rubyworks.github.com/facets/">Ruby Facets</a>.</p>
-
-<p>To be honest, I have never used Facets, but it seems it's worth taking a
-look.</p>
-
-<p>Here's the <a href="http://rubyworks.github.com/facets/learn.html">API Documentation</a>, I've already
-gone through it and I found a lot of interesting things going on there.</p>
-
-<p>Sadly, Bryan was time constrained and he just gave a small part of what
-seems to be a big, interesting talk about those two libraries.</p>
-
-<p>The most interesting part of this talk for me was to learn that Rails 3
-ships with a lot of built-in instrumentation, so, expect a lot of gems
-to measure performance of the applications more acurately in the near
-future.</p>
-
-<p>Tried to google on the subject, and couldn't find a lot on
-Instrumentations, so I went straight to the Rails source code.</p>
-
-<p><a href="http://bit.ly/earFTF">Here you can get an example</a> more or less on how it works.</p>
-
-<h2>NinjaScript: JavaScript so unobtrusive, you won't see it coming.</h2>
-
-<h3>Evan Dorn</h3>
-
-<p>These guys are making an awesome effort of separating the Javascript
-dependency out of the HTML and the CSS.</p>
-
-<p>So, they wrote <a href="https://github.com/LRDesign/NinjaScript">NinjaScript</a>.
-From their github page:</p>
-
-<p>NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
-Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
-to apply stylings.
-Additionally, NinjaScript makes it easy to package up useful behaviors and apply
-them quickly to disparate elements, or in different projects.</p>
-
-<p>Looks promising, but there's still a lot of Javascript involved, and I
-usually try to stay away from Javascript as much as I can, I am old
-school.</p>
-
-<p>Lucky for me, they also wrote the <a href="https://github.com/LRDesign/mizugumo">Mizugumo</a>
-gem.</p>
-
-<p>Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:</p>
-
-<ul>
-<li>Absolutely seamless</li>
-<li>Completely unombtrusive - no markup whatsoever in your HTML and</li>
-<li>Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.</li>
-</ul>
-
-
-<p>Now, that's more like it.</p>
-
-<p>You can see it in action <a href="http://mizugumo-demo.lrdesign.com/products">right here</a>.
-Try using that UI both with your JS enabled and disabled. See what
-happens.</p>
-
-<p>You're supposed to get all that sweetness just by dropping the gem and
-doing some minimal configuration.</p>
-
-<p>Haven't tried it myself, but probably will soon.</p>
-
-<h2>The Rails Tutorial Story</h2>
-
-<h3>Michael Hartl</h3>
-
-<p>I have never heard about <a href="http://ruby.railstutorial.org/">The Rails Tutorial</a>.</p>
-
-<p>Michael Hartl told us the story behind it, and how he ended up writing
-all of that, and let me tell you something: it was <em>Inspiring</em>.</p>
-
-<p>Talk about perseverance. I won't ruin this story for you, because,
-obviously I can't tell it as good nor accurate as he did.</p>
-
-<p>All I can tell you is, take a look at the site, do yourself some good,
-buy the screencast / PDF bundle.</p>
-
-<p>It does look like a very good way to learn Rails 3.</p>
-
-<h2>How To Jam In Code</h2>
-
-<h3>Ron Evans</h3>
-
-<p>You probably know Ron Evans, he knows everyone. I had already seen this
-talk when he gave it at <a href="http://www.magmarails.com">MagmaRails</a>.</p>
-
-<p>Awesome. Period. Ron knows how to involve the crowd on his talks.</p>
-
-<p>If you haven't seen this talk, you are out of luck since now he's more
-into <a href="http://www.kidsruby.com/">Kids Ruby</a>. Can't wait to see that
-talk later in the year, Bravo Ron! for thinking of the kids. Someone has
-to.</p>
-
-<h2>Working in Virtual Machines, the Vagrant Way</h2>
-
-<h3>Mitchell Hashimoto</h3>
-
-<p><a href="http://vagrantup.com/">Vagrant</a> is a tool for building and distributing
-virtualized development environments.</p>
-
-<p>I wonder if you can do some funky stuff with vagrant where you create
-Windows virtual machines and run your cucumber features or Selenium
-tests automagically on them.</p>
-
-<p>I will have to play with this eventually.</p>
-
-<h2>Securing Your Rails App</h2>
-
-<h3>Jim Weirich, Matt Yoho</h3>
-
-<p>Basics on Rails app security. I was sort of expecting something more
-advanced from Jim Weirich, but, it was good.</p>
-
-<p>Learned about the existence of these two papers:</p>
-
-<ul>
-<li><a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a></li>
-<li><a href="https://www.owasp.org/images/8/89/Rails_Security_2.pdf">OWASP Ruby on Rails Security Guide</a></li>
-</ul>
-
-
-<p>No Rails developer should be allowed to send code to production without
-reading those.</p>
-
-<p>Also learned that security holes can slip everywhere, <a href="http://martinfowler.com/snips/201102031214.html">even to the best
-people out there</a>.</p>
-
-<p>No one is safe on the interwebs.</p>
-
-<p>By the way, if you've finally decided to be more serious about security, take
-a look at <a href="http://www.metasploit.com/framework/">Metasploit</a>. A
-framework to perform penetration testing on your Network.</p>
-
-<h2>Twitter Mobile</h2>
-
-<h3>Ben Sandofsky</h3>
-
-<p>This talk was full of interesting stuff and could easily be it's own
-post by itself.</p>
-
-<p>Ben described how they work at twitter. I'll highlight what I think was the most
-interesting parts of the talk.</p>
-
-<ul>
-<li>The record of tweets per second was set last New Years eve at 6,939
-tps.</li>
-<li>Twitter is heavily Service oriented. They didn't start that way, but
-they have been transitioning in the last few years. Doesn't sound like
-an easy task.</li>
-<li>They created a DSL that allows them to create new Service endpoints
-with just a few lines of code. Clever.</li>
-<li>They use YAJL for JSON. Twice the performance just by dropping a gem.</li>
-<li>They use GD2 for image processing since it's way faster than Image
-Magick.</li>
-<li>They use <a href="https://github.com/dbalatero/typhoeus">Typhoeus</a> for
-parallel HTTP requests betwen their services.</li>
-<li>They work in small agile teams</li>
-<li>Usually composed of 1 PM, 1 Designer, 3 Devs</li>
-<li>Iterative development</li>
-<li>They believe in continuous shipping. They usually do 3 deploys a
-day. The record? 7 in one day.</li>
-<li>They have a rigorous test suite in place. It runs for 1 hour by
-itself but they built an awesome fleet of servers that can run it in
-<em>2 minutes</em>.</li>
-<li>Sadly, no details on how they do that :(</li>
-<li>They do beleive in Pair programming, but it's up to the teams to do
-actually do it.</li>
-<li>They do require code review before pushing something.</li>
-<li>They deliver the features to small amounts of users before full
-release.</li>
-<li>They have no QA team. Every team is responsible of their features and
-their code. They believe that developers tend to become lazy and
-careless when there's a QA team in place.</li>
-<li>Company culture is key to success.</li>
-</ul>
-
-
-<h2>Conclusion</h2>
-
-<p>I missed a review on some of the conferences, but I just included on
-this post what I personally found as the most interesting part of the event.</p>
-
-<p>LARubyconf just made me reassure my thoughts about small regional
-conferences being way better than the big ones, being single tracked and
-with a lot better content.</p>
-
-<p>Many thanks to Ron Evans of <a href="http://hybridgroup.com/">The Hybrid Group</a>
-for inviting us to have delicious brunch the next day at his place. Good
-times.</p>
-
-<p>Looking forward to my next conference. Don't know where or when yet,
-<a href="http://www.rubynation.org//">Ruby Nation</a>'s lineup looks very promising.</p>
-
-<p>Until the next time.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
-<div class="post prepend-1">
   <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
   <p class="author">
     <span class="date"><b>Feb 15</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
-    <p>In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business,  projects or simply our ideas in other countries.</p>
-
-<p>So let’s say you have your company’s web page in a Rails application, and you want it to be available in three different languages: English (default), Spanish and French.</p>
-
-<p>Well, there's good news! Setting these options is piece of cake with Rails! Since it includes the i18n API, (a.k.a Rails internationalization).
-With this API you only need to split your contents into .yml or .rb files, which we will be calling dictionaries, one for each language you want in your page, for example: en.yml, es.yml, fr.yml
-You have to save them in the config/locales folder in your app.</p>
-
-<p>The ‘tricky’ thing is that you must follow a order in your files, they must have the exact same structure for the labels, so you just need to add the translation, the examples of the dictionaries will be done in .yml:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
-  <span class="n">main_page</span><span class="p">:</span>
-    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
-    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
-  <span class="n">main_page</span><span class="p">:</span>
-    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
-    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
-  <span class="n">main_page</span><span class="p">:</span>
-    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
-    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-<p>To set up the app you just need to add the following into your <em>Application Controller</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">before_filter</span> <span class="ss">:set_locale</span>
-
-<span class="k">def</span> <span class="nf">set_locale</span>
- <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">extract_locale_from_tld</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">extract_locale_from_tld</span>
- <span class="n">parsed_locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span>
- <span class="no">I18n</span><span class="o">.</span><span class="n">available_locales</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">parsed_locale</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span> <span class="p">?</span> <span class="n">parsed_locale</span>  <span class="p">:</span> <span class="kp">nil</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>And you will need to create a scope in your routes files in order for your routes to work:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">match</span> <span class="s1">&#39;/:locale&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;home#index&#39;</span>
-
-<span class="n">scope</span> <span class="s2">&quot;(:locale)&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="sr">/en|es|fr/</span> <span class="k">do</span>
- <span class="n">resources</span> <span class="ss">:contact</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>With the <em>exctract_locale_from_tld</em> method in the ApplicationController the locale will be passed to the URL in the params, but you will get a not-so-nice url, like this: www.yourpage.com/contact?locale=en, so if you prefer to have more readable url, like for example www.yourpage.com/en/contact, you should use instead these methods:</p>
-
-<div class="highlight"><pre><code class="ruby"> <span class="n">before_filter</span> <span class="ss">:set_locale</span>
-
- <span class="k">def</span> <span class="nf">set_locale</span>
-   <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:locale</span><span class="o">]</span>
- <span class="k">end</span>
-
- <span class="k">def</span> <span class="nf">default_url_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
-   <span class="p">{</span><span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span><span class="p">}</span>
- <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In order to switch language in your application you will probably need a menu with the supported languages, and your menu will need to pass the ##:locale of the selected language, to do it you can do something like this</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">menu</span>
-  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;English&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;en&quot;</span><span class="p">)</span>
-  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Française&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;fr&quot;</span><span class="p">)</span>
-  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Español&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;es&quot;</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>Now you need to tell rails where it is going to look for the dictionaries, and which language will be the default, usually (if you haven’t removed them) you will have this lines commented in the application.rb file.</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;my&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span>
-  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="ss">:en</span>
-</code></pre>
-</div>
-
-
-<p>If you have a lot of sections in your page, and you would like to have your dictionaries in separate folders depending on their section, you can save the folders in config/locales,  and have something like this, config/locales/views/home and save in there all the dictionaries for the home page.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
- <span class="n">views</span><span class="p">:</span>
-    <span class="n">home</span><span class="p">:</span>
-      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
-      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
- <span class="n">views</span><span class="p">:</span>
-    <span class="n">home</span><span class="p">:</span>
-      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
-      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-
-
-<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
- <span class="n">views</span><span class="p">:</span>
-    <span class="n">home</span><span class="p">:</span>
-      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
-      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
-</code></pre>
-</div>
-
-
-<p>And of course you will need to change the path you set in the application.rb file to something like this</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>And finally, how do we get the text we want from our dictionaries files?
-Well it’s easy, you just need to put the tags in the right order to obtain the text, for example, with:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
-  <span class="o">%</span><span class="n">h1</span>
-    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
-  <span class="o">%</span><span class="nb">p</span>
-    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>Something cool about this, is that in your dictionaries you can use HTML to give your text some style or format</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
-<span class="n">views</span><span class="p">:</span>
-  <span class="n">home</span><span class="p">:</span>
-    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
-    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="no">Crowd</span> <span class="no">Interactive</span><span class="o">&lt;</span><span class="sr">/b&gt;”</span>
-</code></pre>
-</div>
-
-
-<p>If you do this, you will need to use ‘raw’ to escape the HTML...</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
-  <span class="o">%</span><span class="n">h1</span>
-    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
-  <span class="o">%</span><span class="nb">p</span>
-    <span class="o">=</span> <span class="n">raw</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>Well, as you can see, it is pretty easy to set up i18n, and I hope this small guide help you through the internationalization process of your site!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Ana Rosas | ana.rosas@crowdint.com</p>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business, projects or simply our ideas in other countries.</p>...
+            <div class = "continue_reading"><a href="/2011/02/15/internationalizing-your-rails-app.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/15/internationalizing-your-rails-app.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2011/02/15/internationalizing-your-rails-app.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> Ana Rosas | ana.rosas@crowdint.com</p>
+    </div>
 </div>
 
 
@@ -481,110 +87,142 @@ Well it’s easy, you just need to put the tags in the right order to obtain the
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models
-in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.)
-to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
-were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
-create a new solution named <a href="http://github.com/crowdint/auditrail">auditrail</a>.</p>
-
-<p>Auditrail is a gem that provides a highly configurable solution to audit your models. It provides two generators.
-The first one creates the Audit model with a couple of methods that helps you use it, and the second creates the migration for its table.</p>
-
-<h2>How is it used?</h2>
-
-<p>Quite simple. You just need to install the <em>auditrail</em> gem, and then, run the generators provided
-(<em>auditrail:migrations</em> and <em>auditrail:model</em>). Then you just need to call the method <em>auditable</em>
-in the models you want to audit, and, that's it!</p>
-
-<h2>How does it work?</h2>
-
-<p>Auditrail was built to make it easily and readable. So, if you take a quick look at the source code
-you can identify all the components.</p>
-
-<ul>
-<li><p>Auditrail keeps track of the changes in the audited models through the Audit model. Here, you can configure your own methods to manipulate those changes, or, you can place your filters or special actions.</p></li>
-<li><p>Auditrail is a module that extends <em>ActiveRecord::Base</em>, so you can use it just by calling the <em>auditable</em>
-method on the models you want to Audit. Simple, isn't it?</p></li>
-<li><p>In order to manipulate the plugin requests auditrail uses a basic DSL to handle the method calls.
-Those methods where built to specify a list of the attributes that you want to audit
-and/or include the actor that is making the changes to the audited model.</p></li>
-<li><p>It extends the ActiveSupport::Concern to facilitate the manipulation of the instance methods and the
-class methods in the same module, dealing with the necessity to include an extend for the ActiveRecord::Base. Example:</p></li>
-</ul>
-
-
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Auditrail</span>
-  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
-
-  <span class="k">module</span> <span class="nn">ClassMethods</span>
-
-    <span class="k">def</span> <span class="nf">some_method</span>
-      <span class="c1"># Include some code for your class method...</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">module</span> <span class="nn">InstanceMethods</span>
-
-    <span class="k">def</span> <span class="nf">track_changes</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span>
-      <span class="c1"># Include some code for your instance method...</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">Auditrail</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<ul>
-<li><p>Auditrail uses ActiveRecord <em>callbacks</em> to trigger the methods that actually audit the models.</p></li>
-<li><p>Once auditrail knows when an object is modified it will track the changes using <em>ActiveModel::Dirty</em>.</p></li>
-<li><p>ActiveModel::Dirty returns a hash that we serialize in order to save them in our Audit model.</p></li>
-<li><p>All these changes will be stored in the <em>dumped_changes</em> field on the audits table.</p></li>
-</ul>
-
-
-<p>*The dumped_changes fields is generated with type <strong>string</strong> by default, in case you're planing to track big models,
-you should change its type to <strong>text</strong>.</p>
-
-<p>Here you can find a list with the attributes on the Audit model:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="o">==============</span>  <span class="o">====</span>      <span class="o">===========================================================================</span>
-<span class="no">Attribute</span>         <span class="no">Type</span>      <span class="no">Usage</span>
-<span class="o">--------------</span>  <span class="o">----</span>      <span class="o">---------------------------------------------------------------------------</span>
-<span class="ss">:dumped_changes</span>    <span class="n">text</span>      <span class="no">Keep</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">serialized</span><span class="o">.</span>
-<span class="ss">:action</span>            <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">whether</span> <span class="n">was</span> <span class="n">creation</span> <span class="p">(</span><span class="s2">&quot;creating&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">update</span> <span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span><span class="o">.</span>
-<span class="ss">:model_changed</span>     <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">that</span> <span class="n">changed</span><span class="o">.</span>
-<span class="ss">:element_id</span>        <span class="n">integer</span>   <span class="no">Indicates</span> <span class="n">the</span> <span class="n">element</span> <span class="n">from</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">that</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
-<span class="ss">:invoker</span>           <span class="n">string</span>    <span class="no">Optional</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">chose</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">action</span> <span class="n">invoker</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span>
-<span class="ss">:timestamps</span>                  <span class="no">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">timestamps</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">when</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
-<span class="o">==============</span>  <span class="o">=======</span>   <span class="o">===========================================================================</span>
-</code></pre>
-</div>
-
-
-<p>As with all open source projects, feel free to collaborate with this
-gem by forking it on github.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.) to help us accomplish that task. We found a few ones, but eventually we came to a dead end when...
+            <div class = "continue_reading"><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 31</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>It all started because I was getting some weird warning while running the specs on one of my apps.</p> <p>I know that, as a developer, I am suppposed to ignore all warnings, but, this one felt ackward, so I had to track it down.</p> <div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found: </code></pre> </div> <p>What? Why is activerecord trying to run some...
+            <div class = "continue_reading"><a href="/2011/01/31/attack-of-the-backticks.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
     <div class="comments">
-      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/01/31/attack-of-the-backticks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>If you are a Ruby developer, by now, you have probably used tons of gems in your apps.</p> <p>That's one of the best things of using Ruby, a lot of people writes repeatable code that you can easily integrate into your own apps.</p> <p>In this brief tutorial, I will try to explain the basic things you need to know in order...
+            <div class = "continue_reading"><a href="/2011/01/24/how-to-start-writing-a-gem.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/24/how-to-start-writing-a-gem.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 14</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Do you know what a <strong>Domain Specific Language(DSL)</strong> is and how to implement one in Ruby?. This article aims to provide a slight introduction to this topic. It is divided in 3 sections, first we'll define what a DSL is, second we'll see some examples of DSL implementations, and third we'll build a DSL.</p> <h2>What is a DSL?</h2> <p><a href="http://en.wikipedia.org/wiki/Domain-specific_language">According wikipedia</a>...
+            <div class = "continue_reading"><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+    </div>
 </div>
 
 
 <div class="pagination prepend-1">
   
-    <a href="/page1" class="previous">Previous</a>
+    
+      <a href="../index.html" class="previous">Previous</a>
+    
   
-  <span class="page_number ">Page: 2 of 13</span>
+  <span class="page_number ">Page: 2 of 8</span>
   
     <a href="/page3" class="next ">Next</a>
   
@@ -598,6 +236,8 @@ gem by forking it on github.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
 
   <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
@@ -636,8 +276,6 @@ gem by forking it on github.</p>
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
-
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   </ul>
 </div>

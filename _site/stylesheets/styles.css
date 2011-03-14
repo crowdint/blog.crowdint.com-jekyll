@@ -137,16 +137,17 @@ b, em, dfn {
   font-size:14px;
   position:relative;
   top:0px;
-  padding:20px 0 0 100px;
+  padding:10px 0 0 0px;
   height:30px;
-  -moz-border-radius: 0 0 8px 8px;
-  -webkit-border-radius: 0 0 8px 8px;
+  text-align: center;
+  -moz-border-radius: 0 0 20px 20px;
+  -webkit-border-radius: 0 0 20px 20px;
 }
 
 .post .body {
   background-color: #CDCDCD;
   padding-top: 1.5em;
-  padding-bottom: 1.5em;
+  padding-bottom: 2.5em;
   color: #353535;
   /*
   -moz-border-radius: 8px 8px 0 0;
@@ -274,8 +275,10 @@ ul.archives {
 }
 
 .comments {
-  margin-top: 30px;
-  text-align: center;
+  float: right;
+}
+.comments h2 a {
+  font-size: 14px;
 }
 
 .gravatar {
@@ -287,8 +290,10 @@ em {
 }
 
 .tweet {
-  text-align: center;
-  margin: 20px;
+  float: left;
+}
+.right {
+  float: right;
 }
 
 .nav_links {
@@ -327,7 +332,10 @@ em {
 .next{
   color: gray;
 }
-
+.continue_reading {
+  text-align: right;
+  margin-bottom: 10px;
+}
 
 
 

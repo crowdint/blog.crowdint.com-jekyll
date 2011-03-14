@@ -47,173 +47,713 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
+  <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
   <p class="author">
-    <span class="date"><b>Oct 22</b><br />2010</span>
+    <span class="date"><b>Aug 06</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0a34cf6219c554ee75506e544473aea1" class="avatar" alt="Avatar" /></div>
-    <p>Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.</p>
-
-<p>There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.</p>
-
-<p>Let's use Rails to dynamically generate a sitemap on request.</p>
-
-<p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
-    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
-        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
-        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
-        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
-<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
-    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-    <span class="k">end</span>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
     
-    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-        <span class="k">end</span>
-    <span class="k">end</span>  
+    
+    
+    
+      
+        <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
+
+<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
+
+<p>Let's say we have our first commit A.</p>
+
+<p><img src="/images/2010/08/09/a.jpg" alt="A" /></p>
+
+<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
+
+<div class="highlight"><pre><code class="bash">git branch feature1
+git branch feature2
+</code></pre>
+</div>
+
+
+<p>Now, Team Feature 1 works hard and commits B and C.</p>
+
+<p>Now, our tree looks a bit like this:</p>
+
+<p><img src="/images/2010/08/09/b.jpg" alt="B" /></p>
+
+<p>Team Feature 2 catches up and creates commit D</p>
+
+<p><img src="/images/2010/08/09/c.jpg" alt="C" /></p>
+
+<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
+
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature2
+
+Updating 04511b4..ed6d1fb
+Fast-forward
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/d.jpg" alt="D" /></p>
+
+<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
+
+<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature1
+git merge master
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/e.jpg" alt="E" /></p>
+
+<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
+
+<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout master
+git merge feature1
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+</code></pre>
+</div>
+
+
+<p><img src="/images/2010/08/09/f.jpg" alt="F" /></p>
+
+<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
+
+<div class="highlight"><pre><code class="bash">git checkout feature2
+git merge master
+
+Updating ed6d1fb..359c6cf
+Fast-forward
+</code></pre>
+</div>
+
+
+<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
+
+<p><img src="/images/2010/08/09/h.jpg" alt="H" /></p>
+
+<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
+
+<p>Cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/06/our-git-workflow.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 02</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
+
+<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
+
+<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
+
+<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
+
+<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
+
+<h2>Setup jekyll</h2>
+
+<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
+all you have to do is run:</p>
+
+<div class="highlight"><pre><code class="bash">gem install jekyll
+</code></pre>
+</div>
+
+
+<h2>Create the site structure</h2>
+
+<p>Create a folder wherever you want to put your blog files.</p>
+
+<div class="highlight"><pre><code class="bash">mkdir my_blog
+</code></pre>
+</div>
+
+
+<p>and create the following files:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
+touch _config.yml
+touch index.html
+mkdir _posts
+mkdir _layouts
+touch _layouts/default.html
+</code></pre>
+</div>
+
+
+<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
+
+<h2>"Hello World" Jekyll</h2>
+
+<h3>_layouts/default.html</h3>
+
+<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+
+<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
+
+<div class="highlight"><pre><code class="html">---
+layout: default
+---
+</code></pre>
+</div>
+
+
+<p>What we're telling the index page is to use the default layout we created earlier.</p>
+
+<p>Run:</p>
+
+<div class="highlight"><pre><code class="bash">jekyll--server --auto
+</code></pre>
+</div>
+
+
+<p>Open your browser and go to http://127.0.0.1:4000</p>
+
+<p>You should now see "Hello World"</p>
+
+<h2>Deploying to Heroku</h2>
+
+<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
+
+<p>You can read the documentation on the gem page, the basic steps are:</p>
+
+<p>First, install the Heroku gem</p>
+
+<div class="highlight"><pre><code class="bash">gem install heroku
+</code></pre>
+</div>
+
+
+<p>Create a config.ru file:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
+
+<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
+</code></pre>
+</div>
+
+
+<p>Add the rack-jekyll gem to the heroku manifest:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
+</code></pre>
+</div>
+
+
+<p>Create a git repo and an initial commit:</p>
+
+<div class="highlight"><pre><code class="bash">git init
+git add .
+git commit -m <span class="s2">&quot;First commit&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Create a Heroku app:</p>
+
+<div class="highlight"><pre><code class="bash">heroku create
+</code></pre>
+</div>
+
+
+<p>And, deploy!</p>
+
+<div class="highlight"><pre><code class="bash">git push heroku master
+</code></pre>
+</div>
+
+
+<p>Check out how it looks:</p>
+
+<div class="highlight"><pre><code class="bash">heroku open
+</code></pre>
+</div>
+
+
+<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
+
+<p>Cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></h1>
+  <p class="author">
+    <span class="date"><b>Jul 28</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.</p>
+
+<p>With Rails being in a phase where version 3 is in development, you may (and should) want to take a look to its new features, but surely you don't want to touch your perfectly working Rails 2.3.x installation.</p>
+
+<p>Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this version gap.</p>
+
+<h2>Installing RVM</h2>
+
+<p>We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this <a href="/2010/07/11/git-initial-configuration.html">post</a>.</p>
+
+<div class="highlight"><pre><code class="bash">bash &lt; &lt;<span class="o">(</span> curl http://rvm.beginrescueend.com/releases/rvm-install-head <span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>This is the best option to install RVM in your machine and will work in Macintosh and *nix environments, can't promise anything about Windows, though.</p>
+
+<p>There are other two options: from the latest source tarball and as a gem, but the guys from <a href="http://rvm.beginrescueend.com/rvm/install/">BeginRescueEnd</a> recommend to stick to the described method.</p>
+
+<p>After RVM is installed in your system, you need to add this line to your ~/.bashrc and ~/.bash_profile</p>
+
+<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$HOME</span>/.rvm/scripts/rvm <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$HOME</span>/.rvm/scripts/rvm
+</code></pre>
+</div>
+
+
+<h2>Now what?</h2>
+
+<p>Well, you should be ready to start playing around with any Ruby version you want to work with; but before that, it is a good practice to check the Ruby versions that RVM is aware of</p>
+
+<div class="highlight"><pre><code class="bash">rvm list known
+</code></pre>
+</div>
+
+
+<p>To install a specific Ruby version, you just have to:</p>
+
+<div class="highlight"><pre><code class="bash">rvm install &lt;ruby version&gt;
+</code></pre>
+</div>
+
+
+<p>When you already have several 'Rubies', you can make any of them the default version:</p>
+
+<div class="highlight"><pre><code class="bash">rvm --default &lt;ruby version&gt;
+</code></pre>
+</div>
+
+
+<p>If you ever want (or need) to go back to your previously Ruby/Rails installed version, here's the trick:</p>
+
+<div class="highlight"><pre><code class="bash">rvm system
+</code></pre>
+</div>
+
+
+<h2>What about Rails???</h2>
+
+<p>The real awesomeness start when you discover that you can install as many Rails versions as you want; and the 'bestest' part is the ability to mix them up with your installed 'Rubies'!!!</p>
+
+<p>Let's take one step at a time.</p>
+
+<h3>Gemsets</h3>
+
+<p>RVM provides a feature/concept called 'gemset'; which will allows us to install gems to test them with any of the Ruby versions you have installed.</p>
+
+<p>To create a gemset you have to run:</p>
+
+<div class="highlight"><pre><code class="bash">rvm gemset create &lt;name <span class="k">for </span>your gemset&gt;
+</code></pre>
+</div>
+
+
+<p>I like naming my gemsets after the project I will use the Rails version / Gems version; most of the developers will prefer using a naming convention like 'Rails235', 'Rails_3_0_0_beta4', 'Rails3rc' or anything like that.</p>
+
+<p>Now, to mix any of your Ruby version with any of your Rails versions, you'll use:</p>
+
+<div class="highlight"><pre><code class="bash">rvm use &lt;ruby version&gt;@&lt;gemset name&gt; <span class="o">(</span>e.g.<span class="o">)</span> rvm use 1.8.7@rails_300_RC
+</code></pre>
+</div>
+
+
+<p>you can omit the word 'use' and it will work too</p>
+
+<p>Now, install the Rails version you want to try within this gemset:</p>
+
+<div class="highlight"><pre><code class="bash">gem install rails -v 2.3.3
+</code></pre>
+</div>
+
+
+<h3>Forget about sudo to install gems</h3>
+
+<p>This is very important, since you need to install the gems to your current gemset folder, so avoid using sudo or else forget about the magic</p>
+
+<h2>Checking versions</h2>
+
+<p>This is pretty straight forward, but make sure to check your Ruby/Rails version each time you switch:</p>
+
+<div class="highlight"><pre><code class="bash">ruby -v <span class="o">&amp;&amp;</span> rails -v
+</code></pre>
+</div>
+
+
+<h2>What else is important?</h2>
+
+<p>Check on the documentation to become an expert using RVM; you can remove Ruby installations, delete-import-export gemsets and a whole bunch of features that will make your life easier (at least working with RoR versions)</p>
+
+<p>Also, the BeginRescueEnd guys have a section for each OS; stop by and take a look.</p>
+
+<h2>Current Ruby selection in your prompt line</h2>
+
+<p>There is one interesting post in <a href="http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments">RafLabs</a> about the subject and a very simple implementation by typing:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ &quot;</span>
+</code></pre>
+</div>
+
+
+<p>This will allow your prompt to look a little bit like this:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="o">[</span>localhost:ruby-1.8.7-p299@r3rc<span class="o">]</span> home~ 
+
+or
+
+<span class="o">[</span>dab-mac:ruby-1.9.1-p378<span class="o">]</span>~ home<span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<h2>Enjoy!</h2>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/07/28/getting-started-with-rvm.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></h1>
+  <p class="author">
+    <span class="date"><b>Jul 18</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/56839e737258faa963847dd7269a8059" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.</p>
+
+<p>Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.</p>
+
+<h2>Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails</h2>
+
+<p>First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:</p>
+
+<div class="highlight"><pre><code class="bash">gem install rspec-rails
+</code></pre>
+</div>
+
+
+<p>You can type <em>spec --help</em> to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:</p>
+
+<div class="highlight"><pre><code class="bash">spec spec/
+</code></pre>
+</div>
+
+
+<p>It's time to install cucumber gem like this:</p>
+
+<div class="highlight"><pre><code class="bash">gem install cucumber-rails
+</code></pre>
+</div>
+
+
+<p>It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:</p>
+
+<div class="highlight"><pre><code class="bash">gem install gherkin
+</code></pre>
+</div>
+
+
+<p>After that, try to install cucumber gem again, and if there is no problem, you may see cucumber help:</p>
+
+<div class="highlight"><pre><code class="bash">cucumber --help
+</code></pre>
+</div>
+
+
+<p>In order to run your cucumber scenarios, you use this command:</p>
+
+<div class="highlight"><pre><code class="bash">cucumber features/
+</code></pre>
+</div>
+
+
+<p>Just as a note here, when you write your features and describe your steps for a web application it is a handy to make use of the webrat gem which includes some useful steps:</p>
+
+<div class="highlight"><pre><code class="bash">gem install webrat
+</code></pre>
+</div>
+
+
+<h2>Installing ZenTest, Autotest-Rails y Autotest-Growl</h2>
+
+<p>At this point we are ready to start writing our features, but before we do that, we want to go a little bit further and install autotest, which will allow us to write our features and rspec scenarios while autotest will handle to run tests every time it detects a change in our code, really cool eh?</p>
+
+<p>We need to include gemcutter as a repository in case we don't have it already:</p>
+
+<div class="highlight"><pre><code class="bash">gem sources -add http://gemcutter.org
+</code></pre>
+</div>
+
+
+<p>After that we go for the Gems we need for autotest:</p>
+
+<div class="highlight"><pre><code class="bash">gem install autotest-rails
+</code></pre>
+</div>
+
+
+<p>You may need to install before ZenTest, in case autotest didn't do it previously:</p>
+
+<div class="highlight"><pre><code class="bash">gem install ZenTest
+</code></pre>
+</div>
+
+
+<p>And for MacOS users we can even "beautify" it a more using Growl to show us notifications about the status of our tests. So let's keep going.</p>
+
+<p>In order to do that, now you have to install the autotest/growl gem:</p>
+
+<div class="highlight"><pre><code class="bash">gem install autotest-growl
+</code></pre>
+</div>
+
+
+<p>Now create a  file ~/.autotest where you need to require it:</p>
+
+<div class="highlight"><pre><code class="ruby"> 
+<span class="nb">require</span> <span class="s1">&#39;autotest/growl&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Once you have written  your features, and rspec tests, you can use autospec for rspec and it will be waiting for you to make changes and rerun automatically your tests every time, you just have to use this command:</p>
+
+<div class="highlight"><pre><code class="bash">autospec
+</code></pre>
+</div>
+
+
+<p>And you can do so to include cucumber scenarios in you autotest:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">AUTOFEATURE</span><span class="o">=</span><span class="nb">true </span>autospec
+</code></pre>
+</div>
+
+
+<p>You'll be getting a nice Growl notification every time you change your code and you can be aware of the status of your tests at any time.</p>
+
+<p>In the case you include cucumber, it may be running the tests indefinitely which can be  a little bit annoying, also could be a memory hazard, so I encourage you to add a new file .autotest in your application root directory and write this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Autotest</span><span class="o">.</span><span class="n">add_hook</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">at</span><span class="o">|</span>
+    <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^\.git}</span>  <span class="c1"># ignore Version Control System</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^./tmp}</span>  <span class="c1"># ignore temp files, lest autotest will run again, and again...</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="s2">&quot;rerun.txt&quot;</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_mapping</span><span class="p">(</span><span class="sr">%r{^lib/.*\.rb$}</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+          <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;spec/**/*.rb&#39;</span><span class="o">]</span>
+     <span class="k">end</span>
+     <span class="kp">nil</span>
 <span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
+<p>After this you are now good to go, and you can start using cucumber and rspec to "bddify" your app development!!</p>
 
-<p>The parameters of the xml are straightforward:</p>
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Roberto Cataneo | roberto.cataneo@crowdint.com</p>
+    </div>
+</div>
 
-<ul>
-<li><em>loc</em> is the url</li>
-<li><em>lastmod</em> is the last modified date of that url</li>
-<li><em>changefreq</em> is how often this url is updated</li>
-<li><em>priority</em> is the importance of this url compared to the rest of the urls in our website</li>
-</ul>
 
+<div class="post prepend-1">
+  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
+  <p class="author">
+    <span class="date"><b>Jul 11</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
 
-<p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
+<p>The basic steps we recommend are:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
+<h2>Let us know who you are</h2>
+
+<p>You can set up your email and name by using the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
 </code></pre>
 </div>
 
 
-<p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
+<h2>Reduce the risk factor</h2>
 
-<p>If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.</p>
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
 
-<p>Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+</code></pre>
+</div>
 
-    <div class="author_box">
-      <p><b>Author:</b> Roberto Sanchez | roberto.sanchez@crowdint.com</p>
+
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+
+<p>So, we recommend our rookies to use the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
+</div>
+
+
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
+</div>
+
+
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 18</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>And it's all thanks to <em>you</em>.</p>
-
-<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
-
-<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
-
-<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
-
-<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
-
-<div style="text-align:center; margin: 10px">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
-</div>
-
-
-<p>Thanks again to everyone involved.</p>
-
-<p>Hope to see you next year!</p>
-
-    <div class="author_box">
+      <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 07</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
-
-<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
-
-<div style="text-align:center">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
-</div>
-
-
-<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
-
-    <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-  </div>
 </div>
 
 
 <div class="pagination prepend-1">
   
-    <a href="/page7" class="previous">Previous</a>
+    
+      <a href="/page7" class="previous">Previous</a>
+    
   
-  <span class="page_number ">Page: 8 of 13</span>
+  <span class="page_number ">Page: 8 of 8</span>
   
-    <a href="/page9" class="next ">Next</a>
+    <span class="next ">Next</span>
   
 </div>
 
@@ -225,6 +765,8 @@
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
 
   <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
@@ -263,8 +805,6 @@
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
-
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   </ul>
 </div>

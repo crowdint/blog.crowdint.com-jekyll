@@ -47,473 +47,960 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
+  <h1><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></h1>
   <p class="author">
-    <span class="date"><b>Nov 05</b><br />2010</span>
+    <span class="date"><b>Aug 31</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <p>When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
 
-<p>Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.</p>
+<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
 
-<p>Imagine you are creating a basic RESTFUL controller, you could start with:</p>
+<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
 
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
 
-  def index
-    @variants <span class="o">=</span> Variant.all
-  end
-  
-  def new
-    @variant <span class="o">=</span> Variant.new
-  end
-  
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    <span class="k">if</span> @variant.save
-      flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Fortunately it was saved!&quot;</span>
-      redirect_to variant_path
-    <span class="k">else</span>
-<span class="k">      </span>render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span>
-    end
-  end
-  .
-  .
-  .
+<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
 </code></pre>
 </div>
 
 
-<p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
+<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
 
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
 
-  def index
-    @users <span class="o">=</span> User.all
-    respond_to <span class="k">do</span> |format|
-      format.html
-      format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
-    end
-  end
-  .
-  .
-  .
+<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
 
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    respond_to <span class="k">do</span> |format|
-      <span class="k">if</span> @user.save
-        flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span>
-        format.html <span class="o">{</span> redirect_to variant_path<span class="o">)</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @varian, :status <span class="o">=</span>&gt; :created, :location <span class="o">=</span>&gt; @variant <span class="o">}</span>
-      <span class="k">else</span>
-<span class="k">        </span>format.html <span class="o">{</span> render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @variant.errors, :status <span class="o">=</span>&gt; :unprocessable_entity <span class="o">}</span>
-      end
-    end
-  end
-  .
-  .
-  .
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
 </code></pre>
 </div>
 
 
-<p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
+<p>Then you'd get something like this:</p>
 
-<p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
+<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
 
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html, :xml
-  .
-  .
-  .
-  
+<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
+
+<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
+
+<p>Hope this helps you in some way,</p>
+
+<p>Cheers.</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 26</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.</p>
+
+<p>But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.</p>
+
+<p>Let's start with my nginx.conf, it looks like this <a href="/extras/2010/08/26/nginx.conf.txt">nginx.conf</a>:</p>
+
+<p>I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create thin_test
+
+info: Gemset <span class="s1">&#39;thin_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use thin_test
+
+info: Now using gemset <span class="s1">&#39;thin_test&#39;</span>
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+Installing RedCloth <span class="o">(</span>4.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing active_presenter <span class="o">(</span>1.2.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing crack <span class="o">(</span>0.1.8<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing httparty <span class="o">(</span>0.6.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing bitly <span class="o">(</span>0.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing cgi_multipart_eof_fix <span class="o">(</span>2.5.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing columnize <span class="o">(</span>0.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing curb <span class="o">(</span>0.7.7.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing daemons <span class="o">(</span>1.1.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing delayed_job <span class="o">(</span>2.0.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastercsv <span class="o">(</span>1.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastthread <span class="o">(</span>1.0.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing gem_plugin <span class="o">(</span>0.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing handsoap <span class="o">(</span>1.1.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing json <span class="o">(</span>1.4.6<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing linecache <span class="o">(</span>0.43<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing mash <span class="o">(</span>0.1.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mime-types <span class="o">(</span>1.16<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mysql <span class="o">(</span>2.8.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing nokogiri <span class="o">(</span>1.4.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing oauth <span class="o">(</span>0.4.2<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing packet <span class="o">(</span>0.1.15<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing rmagick <span class="o">(</span>2.13.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug-base <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter <span class="o">(</span>0.6.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter_oauth <span class="o">(</span>0.4.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri thin
+Building native extensions.  This could take a <span class="k">while</span>...
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed eventmachine-0.12.10
+Successfully installed thin-1.2.7
+3 gems installed
 </code></pre>
 </div>
 
 
-<p>Then, we will use respond_with to set the response, like follows:</p>
+<p>Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:</p>
 
-<div class="highlight"><pre><code class="bash">def index
-  respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-end
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>i686-darwin10.3.1<span class="o">]</span>
 
-def new
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-end
-
-def create
-  @variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-  flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span> <span class="k">if</span> @user.save
-  respond_with<span class="o">(</span>@variant<span class="o">)</span>
-end
-.
-.
-.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d start
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="err">$</span>
 </code></pre>
 </div>
 
 
-<h2>So, when do I need to use respond_with?</h2>
+<p>It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers</p>
 
-<p>You need to use it when:</p>
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.713 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817362 bytes
+HTML transferred:       813850 bytes
+Requests per second:    14.02 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       713.256 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       71.326 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1119.10 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:   711  712   0.5    713     713
+Waiting:      710  711   0.6    711     712
+Total:        711  713   0.4    713     713
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    713
+  66%    713
+  75%    713
+  80%    713
+  90%    713
+  95%    713
+  98%    713
+  99%    713
+ 100%    713 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!</p>
+
+<p>Now let's work with Unicorn:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create unicorn_test
+
+info: Gemset <span class="s1">&#39;unicorn_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use unicorn_test
+
+info: Now using gemset <span class="s1">&#39;unicorn_test&#39;</span>
+gecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+   <span class="c">#same gems</span>
+   
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri unicorn
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed unicorn-1.1.2
+2 gems installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+</code></pre>
+</div>
+
+
+<p>Done... I love bundler, I really do, OK, let's continue with our tests:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+
+ecruz@ecruz-mbp:~ <span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.737 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817581 bytes
+HTML transferred:       813910 bytes
+Requests per second:    13.56 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       737.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       73.721 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1083.02 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:    47  332 227.5    406     736
+Waiting:       47  332 227.5    406     736
+Total:         48  332 227.4    406     737
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    406
+  66%    436
+  75%    480
+  80%    510
+  90%    737
+  95%    737
+  98%    737
+  99%    737
+ 100%    737 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:</p>
+
+<p>I've adjusted my nginx.conf to support multiples thins</p>
+
+<div class="highlight"><pre><code class="bash">upstream balancer_thin <span class="o">{</span>
+  server 127.0.0.1:3000;
+  server 127.0.0.1:3001;
+  server 127.0.0.1:3002;
+  server 127.0.0.1:3003;
+  server 127.0.0.1:3004;
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>And I started 5 thins listening in ports 3000-3004</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d -s 5 start
+Starting server on 0.0.0.0:3000 ... 
+Starting server on 0.0.0.0:3001 ... 
+Starting server on 0.0.0.0:3002 ... 
+Starting server on 0.0.0.0:3003 ... 
+Starting server on 0.0.0.0:3004 ... 
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.665 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8173616 bytes
+HTML transferred:       8138500 bytes
+Requests per second:    37.53 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       399.706 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.647 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2995.47 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    54  374 227.0    324     918
+Waiting:       51  271 167.3    232     708
+Total:         54  375 227.0    325     919
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    325
+  66%    494
+  75%    528
+  80%    594
+  90%    656
+  95%    858
+  98%    919
+  99%    919
+ 100%    919 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+I, <span class="o">[</span>2010-08-14T20:52:48.684992 <span class="c">#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.685496 <span class="c">#40603]  INFO -- : worker=0 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.686348 <span class="c">#40603]  INFO -- : worker=1 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687000 <span class="c">#40603]  INFO -- : worker=2 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687786 <span class="c">#40603]  INFO -- : worker=3 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.689268 <span class="c">#40603]  INFO -- : worker=4 spawning...</span>
+</code></pre>
+</div>
+
+
+<p>Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.672 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8175813 bytes
+HTML transferred:       8139100 bytes
+Requests per second:    37.42 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       400.860 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.724 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2987.65 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    69  368 165.3    334     642
+Waiting:       69  368 165.3    334     641
+Total:         69  368 165.3    334     642
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    334
+  66%    504
+  75%    523
+  80%    543
+  90%    587
+  95%    614
+  98%    622
+  99%    642
+ 100%    642 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Look at that!!! the difference is minimal, this is a really huge surprise.</p>
+
+<p>Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.030 seconds
+Complete requests:      1000
+Failed requests:        4
+   <span class="o">(</span>Connect: 0, Receive: 0, Length: 4, Exceptions: 0<span class="o">)</span>
+Write errors:           0
+Total transferred:      81736483 bytes
+HTML transferred:       81385312 bytes
+Requests per second:    32.23 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3102.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.030 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2572.39 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0      10
+Processing:    55 3035 1467.6   2880    7831
+Waiting:       54 2433 1276.4   2202    7369
+Total:         55 3036 1468.1   2880    7833
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2880
+  66%   3314
+  75%   3584
+  80%   3794
+  90%   4485
+  95%   6825
+  98%   7073
+  99%   7369
+ 100%   7833 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Wow! my machine survived...</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   27.692 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      81758141 bytes
+HTML transferred:       81391000 bytes
+Requests per second:    36.11 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       2769.227 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       27.692 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2883.18 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       4
+Processing:    81 2639 441.8   2671    3178
+Waiting:       81 2638 441.8   2670    3172
+Total:         86 2639 441.1   2671    3179
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2671
+  66%   2759
+  75%   2868
+  80%   2923
+  90%   2976
+  95%   3008
+  98%   3048
+  99%   3099
+ 100%   3179 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.</p>
+
+<p>Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).</p>
+
+<h2>Machine used:</h2>
+
+<pre><code>Processor: 2.4 GHz Intel Core i5
+Memory: 4GB 1067 MHz DDR3
+Mac OS X: 10.6.3
+</code></pre>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/26/thin-vs-unicorn.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 20</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <h2>Motivation</h2>
+
+<p>Everytime I'm learning a new language, the first thing I try to learn is how this new language
+implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
+years; then I first heard about Ruby being a fully OOP language I got really excited, and
+when I got hands-on some existing Ruby code, things got confusing.</p>
+
+<p>I would've liked to know all of this before looking at any Ruby code:</p>
+
+<h2>First things first: Ruby Objects</h2>
+
+<p>Things that we must know:</p>
 
 <ul>
-<li>You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).</li>
-<li>When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:</li>
+<li>And object is formed by: State + Behavior = Object</li>
+<li>Everything in Ruby is an object, even nil which is <em>NilClass</em>, false <em>FalseClass</em>, true <em>TrueClass</em> and modules</li>
 </ul>
 
 
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
-end
+<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="nb">String</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
+ <span class="o">=&gt;</span> <span class="no">Object</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span>
+ <span class="o">=&gt;</span> <span class="kp">nil</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">NilClass</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">false</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">FalseClass</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">true</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">TrueClass</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="k">module</span> <span class="nn">B</span> <span class="k">end</span>
+ <span class="o">=&gt;</span> <span class="kp">nil</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">Module</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
+ <span class="o">=&gt;</span> <span class="no">Object</span> 
 </code></pre>
 </div>
 
 
-<p>or, you could specify different actions for each response:</p>
+<ul>
+<li>Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
+and when I say objects, I really mean it. Consider the following code stored in test.rb file:</li>
+</ul>
 
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span> <span class="k">do</span> |format|
-    format.html
-    format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
-  end
-end
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">outside</span>
+    <span class="nb">self</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">inside</span>
+    <span class="nb">self</span>
+  <span class="k">end</span> 
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
+<p>Let's play with it using irb:</p>
 
-<p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install responders
-
-or, in your Gemfile
-
-gem <span class="s1">&#39;responders&#39;</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;./test&#39;</span>
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span>
+ <span class="o">=&gt;</span> <span class="n">A</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">Class</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span>
+ <span class="o">=&gt;</span> <span class="c1">#&lt;A:0x7ffc94046f58&gt; </span>
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="n">A</span> 
 </code></pre>
 </div>
 
 
-<p>and then, configure it through the appropriate generator:</p>
+<p>As you can see both are <em>A</em> objects whose type is <em>Class</em></p>
 
-<div class="highlight"><pre><code class="bash">rails generate responders:install
+<ul>
+<li>Those class names are constants containing references to objects:</li>
+</ul>
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span>
+ <span class="o">=&gt;</span> <span class="c1">#&lt;Class:0x7f8fdec83230&gt; </span>
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">Class</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span> <span class="o">=</span> <span class="n">clazz</span>
+ <span class="o">=&gt;</span> <span class="no">Blabla</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">class</span>
+ <span class="o">=&gt;</span> <span class="no">Class</span> 
+<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">new</span>
+ <span class="o">=&gt;</span> <span class="c1">#&lt;Blabla:0x7f8fdec77a70&gt; </span>
 </code></pre>
 </div>
 
 
-<p>You will see these changes:</p>
+<h2>Self</h2>
 
-<div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
-prepend  app/controllers/application_controller.rb
-inject  app/controllers/application_controller.rb
-create  config/locales/responders.en.yml
+<p>When I first met Ruby I thought "self" was the same as <em>this</em> (like in many other languages), and I was wrong, so lets
+see what it is:</p>
+
+<h4>Default receiver of method calls</h4>
+
+<p>Since everything in Ruby are objects, then all the function definitions we find defined all around
+and all those functions we call like <a href="http://ruby-doc.org/core/classes/Kernel.html#M005961">p</a>,
+<a href="http://ruby-doc.org/core/classes/Kernel.html#M005954">puts</a>, def, etc are method calls. Some may
+not be exactly defined inside a class but, in the end they will get either inherited or mixed in.</p>
+
+<p>Look at following example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">p</span> <span class="s2">&quot;1. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">class</span> <span class="nc">A</span>
+  <span class="nb">p</span> <span class="s2">&quot;2. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="nb">p</span> <span class="s2">&quot;3. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="k">end</span> 
+  <span class="nb">p</span> <span class="s2">&quot;4. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">end</span>
+<span class="nb">p</span> <span class="s2">&quot;5. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre>
 </div>
 
 
-<p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
+<p>Running this script we see:</p>
 
-<div class="highlight"><pre><code class="bash">en:
-  flash:
-    actions:
-      create:
-        notice: <span class="s1">&#39;%{resource_name} was successfully created.&#39;</span>
-      update:
-        notice: <span class="s1">&#39;%{resource_name} was successfully updated.&#39;</span>
-      destroy:
-        notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
-        alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<span class="s2">&quot;1. Current receiver is main&quot;</span>
+<span class="s2">&quot;2. Current receiver is A&quot;</span>
+<span class="s2">&quot;4. Current receiver is A&quot;</span>
+<span class="s2">&quot;5. Current receiver is main&quot;</span>
 </code></pre>
 </div>
 
 
-<p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
+<h4>Where instance variables are found</h4>
 
-<p>Ok, so, back to the controller, yo could define the create action as follows:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@a</span><span class="p">,</span> <span class="vi">@b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-end
+<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">instance_variables</span>
 </code></pre>
 </div>
 
 
-<p>And this way you get everything, including the flash notice.</p>
+<p>Running this script we see:</p>
 
-<p>So, in the end, this could be your complete RESTFUL controller:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html
-
-  def index
-    respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-  end
-
-  def new
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-  end
-
-  def create
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
-
-  def edit
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">]))</span>
-  end
-
-  def update
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    respond_with<span class="o">(</span>@variant.update_attributes<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
-  
-  def destroy
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    @variant.destroy
-    respond_with<span class="o">(</span>@variant<span class="o">)</span>
-  end
-  
-end
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<span class="o">[</span><span class="s2">&quot;@b&quot;</span>, <span class="s2">&quot;@a&quot;</span><span class="o">]</span>
 </code></pre>
 </div>
 
 
-<h2>What else?</h2>
+<h2>Metaprogramming</h2>
 
-<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
+<p>This is why I fell in love with ruby, it is a huge topic which I won't cover, but it allows you
+to write code that writes code lets see some examples:</p>
 
-<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
+<h4>Create a <em>A Class</em>, re-open it and see how it is the same object</h4>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nf">method1</span>
+    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method one&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
+<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
+
+<span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nf">method2</span>
+    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method two&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
+<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
 </code></pre>
 </div>
 
 
-<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
+<p>Which throws:</p>
 
-<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<span class="o">[</span><span class="s2">&quot;method1&quot;</span><span class="o">]</span>
+70312385439840
+<span class="o">[</span><span class="s2">&quot;method2&quot;</span>, <span class="s2">&quot;method1&quot;</span><span class="o">]</span>
+70312385439840
+</code></pre>
+</div>
 
-    <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+
+<p>As you saw the object id remains the same after re-open a class in order to add a second method, also,
+we got all instance methods that one <a href="http://ruby-doc.org/core/classes/Object.html#M000350">class</a>
+of <em>A</em> would have.</p>
+
+<h4>Call all instance methods of a certain class whenever you call a method whose name matches</h4>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nf">hello</span>
+    <span class="nb">p</span> <span class="s2">&quot;Hello&quot;</span>
+  <span class="k">end</span> 
+  <span class="k">def</span> <span class="nf">bye</span> 
+    <span class="nb">p</span> <span class="s2">&quot;Bye&quot;</span>
+  <span class="k">end</span> 
+  <span class="k">def</span> <span class="nf">welcome</span>
+    <span class="nb">p</span> <span class="s1">&#39;Welcome&#39;</span>
+  <span class="k">end</span> 
+  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">method_to_call</span> <span class="o">=</span> <span class="nb">methods</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="nb">name</span> <span class="o">=~</span> <span class="sr">/</span><span class="si">#{</span><span class="n">method_name</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="sr">/</span><span class="p">}</span>
+    <span class="nb">send</span><span class="p">(</span><span class="n">method_to_call</span><span class="p">)</span> <span class="k">if</span> <span class="n">method_to_call</span>
+    <span class="nb">p</span> <span class="s1">&#39;Unknown method&#39;</span> <span class="k">unless</span> <span class="n">method_to_call</span>
+  <span class="k">end</span> 
+<span class="k">end</span>
+
+<span class="n">instance</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">els</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">hel</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">by</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">wel</span>
+</code></pre>
+</div>
+
+
+<p>Which throws:</p>
+
+<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
+<span class="s2">&quot;Unknown method&quot;</span>
+<span class="s2">&quot;Hello&quot;</span>
+<span class="s2">&quot;Bye&quot;</span>
+<span class="s2">&quot;Welcome&quot;</span>
+</code></pre>
+</div>
+
+
+<p>That's it. I hope this gives you some good overview and if you are ready for the whole package I
+suggest you start with:</p>
+
+<ul>
+<li>Some good metaprogramming screencasts <a href="http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming">Pragmatic Programmers screencasts</a></li>
+<li>An in deep look at <a href="http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/">Rafa Maga&ntilde;a's presentation</a> on Ruby object model</li>
+</ul>
+
+
+<p>Happy programming!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+    </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></h1>
+  <h1><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></h1>
   <p class="author">
-    <span class="date"><b>Nov 01</b><br />2010</span>
+    <span class="date"><b>Aug 17</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/554ca5879badb8dfd61f5ea7e54aef9e" class="avatar" alt="Avatar" /></div>
-    <p>When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)</p>
-
-<p>Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name ".gitignore"</p>
-
-<div class="highlight"><pre><code class="bash">touch .gitignore
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>If you are using <a href="http://rvm.beginrescueend.com/"><span class="caps">RVM</span></a> in your machine (just as <a href="/2010/07/28/getting-started-with-rvm.html">Francisco showed us</a> the other day) then you should take advantage of the <a href="http://rvm.beginrescueend.com/workflow/rvmrc/#project">project .rvmrc</a> feature.</p>
+<p>Let&#8217;s say your project is in the directory:</p>
+<div class="highlight"><pre><code class="bash">~/repo/myproject
 </code></pre>
-</div>
-
-
-<p>On this file you can include those files you do not want to be tracked by git:</p>
-
-<div class="highlight"><pre><code class="bash">some_file.rb
-*.log
-doc/**/*
-public/images/system/**/*
+</div><p>And you have ruby-1.8.7 and ruby-1.9.2 in <span class="caps">RVM</span> and you want to use 1.9.2 ruby version in that project.</p>
+<p>Then you can put this in your <code>~/repo/myproject/.rvmrc</code> file:</p>
+<div class="highlight"><pre><code class="bash">rvm 1.9.2
 </code></pre>
-</div>
-
-
-<p>As you see, you can include the file name or include wildcards to select several files.</p>
-
-<p>Git by default ignores empty folders, so if your application requires a folder to exist, you just need to create a blank .gitignore file.</p>
-
-<p>But what if you must include a file inside a folder among others you want to ignore? such as config files, or whatever. Then you may want to prevent git from ignoring those files:</p>
-
-<div class="highlight"><pre><code class="bash">config/*
-!config/a_special_file.rb
+</div><p>So, every time you change to that project directory, <strong><span class="caps">RVM</span> will change to the specified ruby version</strong>.</p>
+<div class="highlight"><pre><code class="bash"><span class="lineno"> 1</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
+<span class="lineno"> 2</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
+<span class="lineno"> 3</span> 
+<span class="lineno"> 4</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span><span class="nb">cd </span>myproject/
+<span class="lineno"> 5</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
+<span class="lineno"> 6</span>   ruby 1.9.2dev <span class="o">(</span>2010-07-11 revision 28618<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
+<span class="lineno"> 7</span> 
+<span class="lineno"> 8</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span><span class="nb">cd</span> ..
+<span class="lineno"> 9</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span>ruby --version
+<span class="lineno">10</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
 </code></pre>
-</div>
-
-
-<p>This will tell git to ignore all the files, except for the one that is marked with a bang (!).</p>
-
-<p>I hope this is helpful for someone.</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Daniel Gaytán | daniel@crowdint.com</p>
+</div><p>As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the <code>.rvmrc</code> is used: 1.9.2<br />
+Once you abandon the project directory, your default Ruby version will be used!</p>
+<p>It even <strong>works with gemsets</strong> so you can have something like this in your <code>.rvmrc</code> file:</p>
+<div class="highlight"><pre><code class="bash">rvm 1.9.2@blog
+</code></pre>
+</div><p><strong>And every time you cd into your directory, your ruby version and gemset will be changed :)</strong></p>
+<h2>Final thoughts</h2>
+<p>Whether this file should or shouldn&#8217;t be in your project repo is up to you, but <span class="caps">IMO</span> it should be ignored, creating the possibility to be defined by every user&#8230;</p>
+<p>What do you think about that?</p>
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2010/11/01/ignoring-files-with-git.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
+  <h1><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></h1>
   <p class="author">
-    <span class="date"><b>Oct 27</b><br />2010</span>
+    <span class="date"><b>Aug 13</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
-    <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
-
-<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
-
-<p>OK so, let's begin with our brief trip</p>
-
-<h2>Installing Ruby</h2>
-
-<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>If you are stuck in your project using <a href="http://github.com/technoweenie/attachment_fu"><em><strong>attachment_fu</strong></em></a> and<br />
+<a href="http://github.com/rails/acts_as_list"><em><strong>acts_as_list</strong></em></a> plugins/gems in your project,<br />
+you might be facing a weird performance issue when dealing with images with thumbnails.</p>
+<p>Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:</p>
+<div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
+<span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
+<span class="k">LIMIT</span> <span class="mi">1</span>
 </code></pre>
-</div>
+</div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
+<p>So, let&#8217;s assume the following models:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
+<span class="k">end</span>
 
+<span class="k">class</span> <span class="nc">Image</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:article</span>
+  <span class="n">acts_as_list</span> <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="ss">:article</span>      <span class="c1">#acts_as_list declaration</span>
 
-<p>and switch to that ruby version by running:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
+  <span class="n">has_attachment</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="ss">:image</span><span class="p">,</span>   <span class="c1">#attachment_fu declaration</span>
+    <span class="ss">:storage</span> <span class="o">=&gt;</span> <span class="ss">:file_system</span><span class="p">,</span>
+    <span class="ss">:thumbnails</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="o">]</span><span class="p">,</span> <span class="ss">:tiny</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="o">]</span><span class="p">}</span>
+<span class="k">end</span>
 </code></pre>
-</div>
-
-
-<h2>Installing Rails</h2>
-
-<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em>&lt;gemset_name></em>' and 'rvm gemset use <em>&lt;gemset_name></em>', so after this we do:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
+</div><p>So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.</p>
+<p>If you add an image attachment now&#8230; <strong>the slow query will be executed for each thumbnail</strong>. The reasons are:</p>
+<ol>
+	<li>The image file is uploaded to the server.</li>
+	<li>attachment_fu saves the image and creates a new Image row with article_id established.</li>
+	<li>acts_as_list assigns the position attribute to the parent image.</li>
+	<li>attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = <span class="caps">NULL</span></li>
+	<li>acts_as_list assigns the position attribute to images after the thumbnail created.</li>
+	<li>Repeat step #4 and #5 for each thumbnail to be created.</li>
+</ol>
+<p>The problem with this procedure, if you see the acts_as_list source code:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">scope_condition</span>
+  <span class="k">if</span> <span class="c1">#{configuration[:scope].to_s}.nil?</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> IS NULL&quot;</span>
+  <span class="k">else</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> = </span><span class="se">\#</span><span class="s2">{</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2">}&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre>
-</div>
-
-
-<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
-
-<h2>Installing PostgreSQL with Visual Administrator</h2>
-
-<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
+</div><p>As we configured our Image model to use <code>acts_as_list :scope =&gt; :article!</code>, and in the thumbnails the article_id is <span class="caps">NULL</span>, the condition is generated as &#8220;<strong><span class="caps">WHERE</span> (article_id  IS <span class="caps">NULL</span>)</strong>&#8221;.</p>
+<p>To avoid this, you need to manually <strong>set the article_id value before the thumbnails are saved</strong>. This can be done using a <strong>callback in the Image model</strong> (as suggested in acts_as_list source code):</p>
+<div class="highlight"><pre><code class="ruby"><span class="c1">#Callback before a thumbnail is saved...</span>
+<span class="c1">#Assign the article_id to avoid a HUGE query with IS NULL clause</span>
+<span class="n">before_thumbnail_saved</span> <span class="k">do</span> <span class="o">|</span><span class="n">record</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">|</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
+  <span class="n">record</span><span class="o">.</span><span class="n">article_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">article_id</span> <span class="k">if</span> <span class="n">image</span>
+<span class="k">end</span>
 </code></pre>
-</div>
-
-
-<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
+</div><p>With this callback, after generating a thumbnail each image will have the <code>article_id</code> attribute filled. Thus in the Article model, the has_many relation is defined as:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
 </code></pre>
-</div>
-
-
-<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
- As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And run the bundler:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-</code></pre>
-</div>
-
-
-<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
-
-<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
-</code></pre>
-</div>
-
-
-<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
-So this will create a user with database and user creation permissions with a defined password.</p>
-
-<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
-
-<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
-
-<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-</code></pre>
-</div>
-
-
-<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
-
-<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
-
-    <div class="author_box">
-      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
+</div><p>Now, <strong>only the article images will have thumbnail.nil</strong> and the thumbnails will be hidden in the image.thumbnails relation.</p>
+<h3>Conclusion</h3>
+<p>In our project, we <strong>expected a 570% <span class="caps">SQL</span> improvement</strong> when creating, modifying or deleting image attachments.</p>
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
-    <div class="comments">
-      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
   </div>
+      <div class="author_box">
+      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
 </div>
 
 
 <div class="pagination prepend-1">
   
-    <a href="/page6" class="previous">Previous</a>
+    
+      <a href="/page6" class="previous">Previous</a>
+    
   
-  <span class="page_number ">Page: 7 of 13</span>
+  <span class="page_number ">Page: 7 of 8</span>
   
     <a href="/page8" class="next ">Next</a>
   
@@ -527,6 +1014,8 @@ So this will create a user with database and user creation permissions with a de
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
 
   <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
@@ -565,8 +1054,6 @@ So this will create a user with database and user creation permissions with a de
   <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
-
-  <li><span><b>01 Nov 2010</b></span> &raquo; <a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></li>
 
   </ul>
 </div>
