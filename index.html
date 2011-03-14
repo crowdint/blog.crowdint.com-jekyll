@@ -23,14 +23,14 @@ title: Blog
       {% else %}
         {% if month == 'Jan' or month == 'Feb' or month == 'Mar' and year == '2011' %}
             {{ post.content  | split_truncate | truncatewords: 61}}
+            <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% else %}
            {{ post.content  | split_truncate | truncatewords: 90}}
+           <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% endif %}
       {% endif %}
     {% endif %}
-<!--      {{ post.content  | split_truncate | truncatewords: 61}} this works but I thinks is to short -->
     </div>
-    <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
     <div class="comments">
       <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>

@@ -292,6 +292,9 @@ em {
 .tweet {
   float: left;
 }
+.right {
+  float: right;
+}
 
 .nav_links {
   margin-top: 20px;
