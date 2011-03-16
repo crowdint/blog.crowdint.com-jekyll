@@ -6,12 +6,12 @@ For a quick explanation on how to put a blog online using [Jekyll](http://wiki.g
 
 # Setup
 
-rvm 1.8.7@crowdintblog --create
-gem install bundler;
-jekyll --server --auto;
+- rvm 1.8.7@crowdintblog --create
+- gem install bundler;
+- Add your markdown in /_posts/
+- jekyll --server --auto;
 
-Enjoy,
-http://localhost:4000/
+Enjoy, http://localhost:4000/
 
 # About the Author
 
