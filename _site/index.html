@@ -15,6 +15,15 @@
     <script type="text/javascript">
       var _gaq = _gaq || [];
 
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
     </script>
 </head>
 <body>
@@ -38,9 +47,9 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/03/15/what-is-sinatra.html">What is Sinatra?</a></h1>
+  <h1><a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></h1>
   <p class="author">
-    <span class="date"><b>Mar 15</b><br />2011</span>
+    <span class="date"><b>Mar 18</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
@@ -49,45 +58,36 @@
     
     
     
-      <br>
-
-
-<br>
-
-
-<blockquote><p>In the <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our first test-driven Sinatra app.
+      <p>In our <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our
+first test-driven Sinatra app.
 Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
--- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p></blockquote>
+-- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p>
 
 <p><img src="/images/what_is_sinatra/sinatra.png" alt="Sinatra" /></p>
 
-<h2>So, you heard about Sinatra, and you're excited.</h2>
-
-<h2>but what is it? and what it's for?</h2>
-
-<h2>Just read the answers.</h2>
-
-<p>&nbsp;</p>
+<p>So, you've heard about Sinatra, and you're excited.
+but what is it? and what it's for?
+Just read the answers.</p>
 
 <h2>Sinatra is.</h2>
 
 <hr />
 
 <ul>
-<li><em>Is a Ruby web framework.</em> Use it to develop sites, web apps, services..</li>
-<li><em>It's written in Ruby.</em> And we all love Ruby, isn't?</li>
-<li><em>It's very simple, but yet powerful.</em> Like Frank, but ninja.</li>
-<li><em>It's a Domain Specific Language (DSL).</em> Say no to Controllers, hi to Routes.</li>
-<li><em>It's is RESTful</em>. So it's based in URLs, and HTTP methods (get, post, put, delete, info)</li>
+<li><em>A Ruby web framework.</em> Use it to develop sites, web apps, services..</li>
+<li><em>Written in Ruby.</em> And we all love Ruby, isn't?</li>
+<li><em>Very simple, but yet powerful.</em> Like Frank, but ninja.</li>
+<li><em>A Domain Specific Language (DSL).</em> Say no to Controllers, hi to Routes.</li>
+<li><em>RESTful</em>. So it's based in URLs, and HTTP methods (get, post, put, delete, info)</li>
 </ul>
 
 
 <h3>Advantages</h3>
 
 <ul>
-<li><em>It's simple</em>, you only have what you need.</li>
+<li><em>It's simple</em>, you only get what you need.</li>
 <li><em>No obscure magic involved</em>. You always knows where you are, what you got, how and why.</li>
-<li><em>Better performance than Rails</em>, and without drama.</li>
+<li><em>Better performance than Rails</em>, less drama.</li>
 <li><em>Gems still talks to you</em>. You can use your favorite gems.</li>
 <li><em>Talks templates</em>. The views, supports all of them.</li>
 <li><em>No big-fat app</em>, Your app can be stored in just one file!</li>
@@ -98,23 +98,25 @@ Today, we're going to talk about what is behind Sinatra, the pros and cons, with
 
 <ul>
 <li><em>No Rails mystical magic</em>, forget it.</li>
-<li><em>You have only your needs</em>, sometimes that means everything from scratch.</li>
-<li><em>Isn't MVC framework</em>, No controller/action based.</li>
-<li><em>Not so popular than Rails</em>, remember, there is life beyond Rails.</li>
-<li><em>No builtin helpers</em>, but you can use them, including filters, configs..</li>
+<li><em>You only get the basics</em>, sometimes that means write from scratch.</li>
+<li><em>Not a MVC framework</em>, No controller/action based.</li>
+<li><em>Not as popular as Rails</em>, remember, there is life beyond Rails.</li>
+<li><em>No builtin helpers</em>, but you can use them, including filters, configs.</li>
 </ul>
 
-
-<p>&nbsp;</p>
 
 <h2>Good for?</h2>
 
 <hr />
 
-<p>API implementations, quick demos, minimal applications, widgets, mobile sites implementations, RESTul systems, service-based applications.
-You're  looking for <em>something more like Rails?</em>, check this out: <a href="http://www.padrinorb.com/">The Padrino project</a>.</p>
+<p>API implementations, quick demos, minimal applications, widgets, mobile sites implementations,
+RESTul systems, service-based applications.
+You're  looking for <em>something more like Rails?</em>, check
+this out: <a href="http://www.padrinorb.com/">The Padrino project</a>.</p>
 
-<p>And, that's pretty much Sinatra. Now, you should start with <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's</a> example, or read the <a href="http://www.sinatrarb.com/intro.html">README</a> section on Sinatra's website, you should get your app running after 1 minute.</p>
+<p>And, that's pretty much Sinatra. Now, you should start with <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's</a> example, or read
+the <a href="http://www.sinatrarb.com/intro.html">README</a> section on Sinatra's website, you should
+get your app running after 1 minute.</p>
 
 <h2><a href="http://www.sinatrarb.com/">www.sinatrarb.com</a></h2>
 
@@ -136,7 +138,7 @@ You're  looking for <em>something more like Rails?</em>, check this out: <a href
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/03/15/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/03/18/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -149,11 +151,147 @@ You're  looking for <em>something more like Rails?</em>, check this out: <a href
 </div>
 
 
+<div class="post prepend-1">
+  <h1><a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></h1>
+  <p class="author">
+    <span class="date"><b>Mar 14</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.</p> <p>On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests. Together they are a quick and efficient way to create web applications.</p> <p>In this post we'll create our first Sinatra application using...
+            <div class = "continue_reading"><a href="/2011/03/14/Sinatra-the-green-way.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/03/14/Sinatra-the-green-way.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></h1>
+  <p class="author">
+    <span class="date"><b>Mar 08</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Perhaps by reading this you may be wondering what is Processing.js? Well, <a href="http://processingjs.org/">Processing.js</a> is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by <a href="http://ejohn.org">John Resig</a>, the creator of jQuery.</p> <h3>First, a little history about p5.</h3> <p> It was developed by Ben Fry and Casey Reas and it...
+            <div class = "continue_reading"><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Carlos Muñiz | carlos.muniz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></h1>
+  <p class="author">
+    <span class="date"><b>Mar 02</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Rails is strongly based in the MVC concept, that means each part of this framework is built to work smoothly under this concept. Conceptually, we understand what we have to deliver in each case. With dumb Views, lean RESTful Controllers and FAT Models(?) we can build whatever we want, or more precisely, whatever we need.</p> <p>Views and Controllers rely on the...
+            <div class = "continue_reading"><a href="/2011/03/02/how-to-make-your-models-look-lean.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/03/02/how-to-make-your-models-look-lean.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/02/25/why-ruby.html">Why ruby?</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 25</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>We have been seeing a lot of posts about different Rails and Ruby topics, such as benchmarks, ways to develop ,implementations and more. But if you are a n00b in the ruby world or if you are thinking in change to ruby, but you are not sure about it, I will try to give some answers for the most common questions...
+            <div class = "continue_reading"><a href="/2011/02/25/why-ruby.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/25/why-ruby.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
+    </div>
+</div>
+
+
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
   
-  <span class="page_number ">Page: 1 of 6/5</span>
+  <span class="page_number ">Page: 1 of 9</span>
   
     <a href="/page2" class="next ">Next</a>
   
@@ -168,7 +306,45 @@ You're  looking for <em>something more like Rails?</em>, check this out: <a href
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-  <li><span><b>15 Mar 2011</b></span> &raquo; <a href="/2011/03/15/what-is-sinatra.html">What is Sinatra?</a></li>
+  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
+
+  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
+
+  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
+
+  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
+
+  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
+
+  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
+
+  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
+
+  <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
+
+  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+
+  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
+
+  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
+
+  <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
+
+  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
+
+  <li><span><b>07 Dec 2010</b></span> &raquo; <a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></li>
+
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   </ul>
 </div>
