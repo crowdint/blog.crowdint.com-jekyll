@@ -18,9 +18,9 @@ Well I have a couple Ideas of how the CSS should be coded:
 
 - ### Keep it simple.
 
-  Imagine that everytime you write a '<div>' tag somebody will kick you in the nuts,
+  Imagine that everytime you write a `<div>` tag somebody will kick you in the nuts,
   painfull huh?... Use only the necessary div tags. Think twice before writing a 
-  '<div>' tag, because if you don’t care about it you will get a super complex page.
+  `<div>` tag, because if you don’t care about it you will get a super complex page.
   Always remeber to keep it simple.
 
 - ### Use the tags for their propose
@@ -74,9 +74,28 @@ Well I have a couple Ideas of how the CSS should be coded:
   Try to comment your CSS. It is easier for others to see the comments and 
   know to which part the code corresponds to.
   
-  {% highlight css %}
-    
-  {% endhighlight %}
+{% highlight css %}
+  // Common tags styles
+  a {
+    text-transform: uppercase;
+  }
+ 
+  // Header styles
+  #header{
+    background-color: #FFFFFF; 
+  }
+  #header a{
+    color: black;
+  }
+  //end
+  
+  // Left Menu styles
+  #left-menu{
+    font-size: .8em; 
+  }
+  //end
+
+{% endhighlight %}
 
 - ### Avoid absolute positions
 
@@ -95,10 +114,10 @@ Well I have a couple Ideas of how the CSS should be coded:
 ### Reset your CSS
 
   Did you ever realize the tittle differences between the browser when you put 
-  a text into a `<div>` or inside `<p>` you will see a little margin between 
-  the box and the text in Firefox, but not on IE.
+  a text into a `<div>` or inside `<p>` you will see a couple of differences in
+  how the browser render the elements.
 
-Imagen
+  ![Diferent renders](/images/2011/renders.jpg "Renders")
 
   This happens because the browsers have different ways to render the element 
   of a page. An easy way to avoid this resetting of your CSS,  is a simple 
