@@ -4,97 +4,214 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-15T18:00:54-06:00</updated>
+ <updated>2011-03-24T15:39:50-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
-   <title>What is Sinatra?</title>
-   <link href="http://blog.crowdint.com/2011/03/15/what-is-sinatra.html"/>
-   <updated>2011-03-15T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/15/what-is-sinatra</id>
+   <title>Trying to make your Sinatra more RESTful?</title>
+   <link href="http://blog.crowdint.com/2011/03/23/sinatra-tips.html"/>
+   <updated>2011-03-23T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/23/sinatra-tips</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
-   <content type="html">&lt;br&gt;
+   <content type="html">&lt;blockquote&gt;&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
+Make funny jokes, like &quot;Why this guy wears a Mexican hat?&quot;&lt;/code&gt;&lt;/small&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;No RESTul knowledge at all? &lt;a href=&quot;http://www.b-simple.de/documents&quot;&gt;read this!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;REST URLs should be multi-response&lt;/h3&gt;
+
+&lt;p&gt;In rails we have &lt;a href=&quot;http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/&quot;&gt;&lt;code&gt;respond_to(format)&lt;/code&gt;&lt;/a&gt; to switch between different layouts, and partials.
+So, just create a helper like &lt;code&gt;request_type?&lt;/code&gt; and switch between views!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Route&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/book/:title/chapters&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request_type?&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/layout&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:chapters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# json&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:chapters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;static/layout&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Helper&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request_type?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mobile_request?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xhr?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:normal&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;br&gt;
+&lt;p&gt;Avoid having different routes for the same &lt;code&gt;resource/action&lt;/code&gt;, like &lt;code&gt;/m/register&lt;/code&gt; and &lt;code&gt;/user/new&lt;/code&gt; doing the same thing.
+Create one route than actually makes sense, and just play with the response type.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Or even simpler!
+Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mobile_request?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/layout&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;#39;chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;blockquote&gt;&lt;p&gt;In the &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our first test-driven Sinatra app.
-Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
--- &lt;cite&gt;&lt;a href=&quot;http://twitter.com/mariozaizar&quot;&gt;Mario&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3&gt;&quot;Fat models, skinny &lt;strike&gt;controllers&lt;/strike&gt; routes&quot;&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/what_is_sinatra/sinatra.png&quot; alt=&quot;Sinatra&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Move your ugly controller-based validations &lt;a href=&quot;http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model&quot;&gt;to your models&lt;/a&gt;, like:&lt;/p&gt;
 
-&lt;h2&gt;So, you heard about Sinatra, and you're excited.&lt;/h2&gt;
-
-&lt;h2&gt;but what is it? and what it's for?&lt;/h2&gt;
-
-&lt;h2&gt;Just read the answers.&lt;/h2&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;h2&gt;Sinatra is.&lt;/h2&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;Is a Ruby web framework.&lt;/em&gt; Use it to develop sites, web apps, services..&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;It's written in Ruby.&lt;/em&gt; And we all love Ruby, isn't?&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;It's very simple, but yet powerful.&lt;/em&gt; Like Frank, but ninja.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;It's a Domain Specific Language (DSL).&lt;/em&gt; Say no to Controllers, hi to Routes.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;It's is RESTful&lt;/em&gt;. So it's based in URLs, and HTTP methods (get, post, put, delete, info)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This is wrong&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user/new&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user exists&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;empty email&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h3&gt;Advantages&lt;/h3&gt;
+&lt;p&gt;Use helpers like &lt;a href=&quot;&quot;&gt;&lt;code&gt;error_messages_for(@user)&lt;/code&gt;&lt;/a&gt; with direct model's validates_for:&lt;/p&gt;
 
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;It's simple&lt;/em&gt;, you only have what you need.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No obscure magic involved&lt;/em&gt;. You always knows where you are, what you got, how and why.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Better performance than Rails&lt;/em&gt;, and without drama.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Gems still talks to you&lt;/em&gt;. You can use your favorite gems.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Talks templates&lt;/em&gt;. The views, supports all of them.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No big-fat app&lt;/em&gt;, Your app can be stored in just one file!&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Model&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;validate_uniqueness_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;validate_presence_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Route&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user/name&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error_messages_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;#39;Email can&amp;#39;t be blank and it&amp;#39;s already taken.&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Helpers&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;error_messages_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;capitalize&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;what_is_wrong&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39; and &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;what_is_wrong&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h3&gt;Disadvantages&lt;/h3&gt;
+&lt;h3&gt;Start using route &quot;Filters&quot;&lt;/h3&gt;
 
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;No Rails mystical magic&lt;/em&gt;, forget it.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;You have only your needs&lt;/em&gt;, sometimes that means everything from scratch.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Isn't MVC framework&lt;/em&gt;, No controller/action based.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Not so popular than Rails&lt;/em&gt;, remember, there is life beyond Rails.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No builtin helpers&lt;/em&gt;, but you can use them, including filters, configs..&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;If you are using the same sentence in a several routes, like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# /user/001/ + dash&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/dash&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# /user/001/ + other&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/other&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;Start using &lt;a href=&quot;http://sinatra-book.gittr.com/&quot;&gt;Sinatra's filters&lt;/a&gt; as &lt;code&gt;before&lt;/code&gt; or &lt;code&gt;after&lt;/code&gt;. They also can be string matched! like &lt;code&gt;before '/this/*'&lt;/code&gt; (wildcards) or &lt;code&gt;after /^(this|other)$/&lt;/code&gt; (regex)&lt;/p&gt;
 
-&lt;h2&gt;Good for?&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# /user/001/*&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/*&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-&lt;hr /&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/dash&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/other&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;API implementations, quick demos, minimal applications, widgets, mobile sites implementations, RESTul systems, service-based applications.
-You're  looking for &lt;em&gt;something more like Rails?&lt;/em&gt;, check this out: &lt;a href=&quot;http://www.padrinorb.com/&quot;&gt;The Padrino project&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;And, that's pretty much Sinatra. Now, you should start with &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Omar's&lt;/a&gt; example, or read the &lt;a href=&quot;http://www.sinatrarb.com/intro.html&quot;&gt;README&lt;/a&gt; section on Sinatra's website, you should get your app running after 1 minute.&lt;/p&gt;
+&lt;h3&gt;Better error messaging&lt;/h3&gt;
 
-&lt;h2&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;www.sinatrarb.com&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Improve your multi-response routes, handling the correct messages for.
+&lt;u&gt;For example&lt;/u&gt; use flash/notices for mobiles, json for ajax or jGrowls, and so on...&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Thanks! and happy coding&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/new&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request_type?&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Ups, something goes wrong.&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;redirect&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;back&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Ups, something goes wrong.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;401&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_json&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;h3&gt;Doing the same thing, but using different requests?&lt;/h3&gt;
+
+&lt;p&gt;Are you doing the same code, with the same route but only changing the http-verb?
+I do, and I found this: &lt;a href=&quot;http://nuclearsquid.com/writings/multi-routing.html&quot;&gt;Multi-Routing in Sinatra&lt;/a&gt;
+to use 'any' when you need the same route action for different methods (http verbs).&lt;/p&gt;
+
+&lt;p&gt;For example having this routes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can use:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Be flexible with your route endings&lt;/h3&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I recommend enable your routes with/without last slash &quot;/&quot;,
+but I found that some RESTul projects prefer all urls without slashes.
+So, there is a separate opinions... &lt;a href=&quot;http://www.standardzilla.com/2007/07/09/dont-forget-your-trailing-slash/]&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;http://www.projectzero.org/sMash/1.0.x/docs/zero.devguide.doc/zero.core/REST.html]&quot;&gt;2&lt;/a&gt;
+The true is, adding an extra slash to the end isn't a big deal. Don't think so?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;For example having:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This will rais 404 using &amp;#39;/users/001/friends/&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The solution it’s pretty simple, just add &lt;code&gt;/?&lt;/code&gt; to the end of your routes.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# this will work with: /users/:uid/friends and /users/:uid/friends/&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends/?&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;See you next time!&lt;/h2&gt;
+
+&lt;p&gt;May the Source Be With You.&lt;/p&gt;
 
 &lt;h2&gt;References&lt;/h2&gt;
 
-&lt;hr /&gt;
-
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.sinatrarb.com/documentation&quot;&gt;Sinatra documentation&lt;/a&gt; by Sinatra project&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Sinatra, the green way&lt;/a&gt; by Omar Vargas&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation&quot;&gt;Ruby frameworks&lt;/a&gt; by Craig Jolicoeur&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;rest_rails&quot;&gt;RESTful Rails Development&lt;/a&gt; Excellent tutorial about RESTul and Rails&lt;/li&gt;
 &lt;/ul&gt;
 
 </content>

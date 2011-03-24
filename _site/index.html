@@ -38,9 +38,9 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/03/15/what-is-sinatra.html">What is Sinatra?</a></h1>
+  <h1><a href="/2011/03/23/sinatra-tips.html">Trying to make your Sinatra more RESTful?</a></h1>
   <p class="author">
-    <span class="date"><b>Mar 15</b><br />2011</span>
+    <span class="date"><b>Mar 23</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
@@ -49,94 +49,211 @@
     
     
     
-      <br>
+      <blockquote><p><small><code>TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
+Make funny jokes, like "Why this guy wears a Mexican hat?"</code></small></p></blockquote>
+
+<p>No RESTul knowledge at all? <a href="http://www.b-simple.de/documents">read this!</a></p>
+
+<h3>REST URLs should be multi-response</h3>
+
+<p>In rails we have <a href="http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/"><code>respond_to(format)</code></a> to switch between different layouts, and partials.
+So, just create a helper like <code>request_type?</code> and switch between views!</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># Route</span>
+<span class="n">get</span> <span class="s1">&#39;/book/:title/chapters&#39;</span>
+  <span class="k">case</span> <span class="n">request_type?</span>
+    <span class="k">when</span> <span class="ss">:mobile</span>  <span class="k">then</span> <span class="n">haml</span> <span class="ss">:&#39;mobile/chapters&#39;</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="ss">:&#39;mobile/layout&#39;</span>
+    <span class="k">when</span> <span class="ss">:ajax</span>    <span class="k">then</span> <span class="n">haml</span> <span class="ss">:chapters</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span> <span class="c1"># json</span>
+    <span class="k">else</span> <span class="n">haml</span> <span class="ss">:chapters</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="ss">:&#39;static/layout&#39;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># Helper</span>
+<span class="k">def</span> <span class="nf">request_type?</span>
+  <span class="k">return</span> <span class="ss">:mobile</span>  <span class="k">if</span> <span class="n">mobile_request?</span>
+  <span class="k">return</span> <span class="ss">:ajax</span>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">xhr?</span>
+  <span class="k">return</span> <span class="ss">:normal</span>
+<span class="k">end</span>
+</code></pre>
+</div>
 
 
-<br>
+<p>Avoid having different routes for the same <code>resource/action</code>, like <code>/m/register</code> and <code>/user/new</code> doing the same thing.
+Create one route than actually makes sense, and just play with the response type.</p>
+
+<blockquote><p>Or even simpler!
+Thanks to <a href="http://twitter.com/chischaschos">Emmanuel</a></p></blockquote>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">view</span><span class="p">,</span> <span class="n">layout</span> <span class="o">=</span> <span class="n">mobile_request?</span> <span class="p">?</span> 
+    <span class="o">[</span><span class="ss">:&#39;mobile/chapters&#39;</span><span class="p">,</span> <span class="ss">:&#39;mobile/layout&#39;</span><span class="o">]</span> <span class="p">:</span> 
+    <span class="o">[</span><span class="ss">:&#39;chapters&#39;</span><span class="p">,</span> <span class="kp">false</span><span class="o">]</span>
+<span class="n">haml</span> <span class="n">view</span><span class="p">,</span> <span class="n">layout</span> <span class="o">=&gt;</span> <span class="n">layout</span>
+</code></pre>
+</div>
 
 
-<blockquote><p>In the <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our first test-driven Sinatra app.
-Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
--- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p></blockquote>
+<h3>"Fat models, skinny <strike>controllers</strike> routes"</h3>
 
-<p><img src="/images/what_is_sinatra/sinatra.png" alt="Sinatra" /></p>
+<p>Move your ugly controller-based validations <a href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model">to your models</a>, like:</p>
 
-<h2>So, you heard about Sinatra, and you're excited.</h2>
-
-<h2>but what is it? and what it's for?</h2>
-
-<h2>Just read the answers.</h2>
-
-<p>&nbsp;</p>
-
-<h2>Sinatra is.</h2>
-
-<hr />
-
-<ul>
-<li><em>Is a Ruby web framework.</em> Use it to develop sites, web apps, services..</li>
-<li><em>It's written in Ruby.</em> And we all love Ruby, isn't?</li>
-<li><em>It's very simple, but yet powerful.</em> Like Frank, but ninja.</li>
-<li><em>It's a Domain Specific Language (DSL).</em> Say no to Controllers, hi to Routes.</li>
-<li><em>It's is RESTful</em>. So it's based in URLs, and HTTP methods (get, post, put, delete, info)</li>
-</ul>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># This is wrong</span>
+<span class="n">post</span> <span class="s1">&#39;user/new&#39;</span> <span class="k">do</span>
+  <span class="n">halt</span><span class="p">(</span><span class="s1">&#39;user exists&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="ss">:email</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="n">email</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">halt</span><span class="p">(</span><span class="s1">&#39;empty email&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="n">email</span><span class="o">].</span><span class="n">blank?</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre>
+</div>
 
 
-<h3>Advantages</h3>
+<p>Use helpers like <a href=""><code>error_messages_for(@user)</code></a> with direct model's validates_for:</p>
 
-<ul>
-<li><em>It's simple</em>, you only have what you need.</li>
-<li><em>No obscure magic involved</em>. You always knows where you are, what you got, how and why.</li>
-<li><em>Better performance than Rails</em>, and without drama.</li>
-<li><em>Gems still talks to you</em>. You can use your favorite gems.</li>
-<li><em>Talks templates</em>. The views, supports all of them.</li>
-<li><em>No big-fat app</em>, Your app can be stored in just one file!</li>
-</ul>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># Model</span>
+<span class="k">class</span> <span class="nc">User</span>
+  <span class="n">validate_uniqueness_for</span> <span class="ss">:email</span>
+  <span class="n">validate_presence_for</span> <span class="ss">:email</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+
+<span class="c1"># Route</span>
+<span class="n">post</span> <span class="s1">&#39;user/name&#39;</span> <span class="k">do</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">new</span> <span class="n">params</span>
+  <span class="k">unless</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="n">error_messages_for</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span>
+    <span class="c1"># =&gt; &#39;Email can&#39;t be blank and it&#39;s already taken.&#39;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># Helpers</span>
+<span class="k">def</span> <span class="nf">error_messages_for</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+  <span class="n">all_errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="k">for</span> <span class="n">error</span> <span class="k">in</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">errors</span> <span class="k">do</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">capitalize</span>
+    <span class="n">what_is_wrong</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; and &#39;</span><span class="p">)</span>
+    <span class="n">all_errors</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">what_is_wrong</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+  <span class="k">end</span>
+  <span class="n">all_errors</span>
+<span class="k">end</span>
+</code></pre>
+</div>
 
 
-<h3>Disadvantages</h3>
+<h3>Start using route "Filters"</h3>
 
-<ul>
-<li><em>No Rails mystical magic</em>, forget it.</li>
-<li><em>You have only your needs</em>, sometimes that means everything from scratch.</li>
-<li><em>Isn't MVC framework</em>, No controller/action based.</li>
-<li><em>Not so popular than Rails</em>, remember, there is life beyond Rails.</li>
-<li><em>No builtin helpers</em>, but you can use them, including filters, configs..</li>
-</ul>
+<p>If you are using the same sentence in a several routes, like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># /user/001/ + dash</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/dash&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+<span class="c1"># /user/001/ + other</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/other&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
+</div>
 
 
-<p>&nbsp;</p>
+<p>Start using <a href="http://sinatra-book.gittr.com/">Sinatra's filters</a> as <code>before</code> or <code>after</code>. They also can be string matched! like <code>before '/this/*'</code> (wildcards) or <code>after /^(this|other)$/</code> (regex)</p>
 
-<h2>Good for?</h2>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># /user/001/*</span>
+<span class="n">before</span> <span class="s1">&#39;/user/:uid/*&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+<span class="k">end</span>
 
-<hr />
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/dash&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/other&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
 
-<p>API implementations, quick demos, minimal applications, widgets, mobile sites implementations, RESTul systems, service-based applications.
-You're  looking for <em>something more like Rails?</em>, check this out: <a href="http://www.padrinorb.com/">The Padrino project</a>.</p>
 
-<p>And, that's pretty much Sinatra. Now, you should start with <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's</a> example, or read the <a href="http://www.sinatrarb.com/intro.html">README</a> section on Sinatra's website, you should get your app running after 1 minute.</p>
+<h3>Better error messaging</h3>
 
-<h2><a href="http://www.sinatrarb.com/">www.sinatrarb.com</a></h2>
+<p>Improve your multi-response routes, handling the correct messages for.
+<u>For example</u> use flash/notices for mobiles, json for ajax or jGrowls, and so on...</p>
 
-<p><em>Thanks! and happy coding</em></p>
+<div class="highlight"><pre><code class="ruby"><span class="n">post</span> <span class="s1">&#39;/users/new&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">case</span> <span class="n">request_type?</span>
+    <span class="k">when</span> <span class="ss">:mobile</span>
+      <span class="n">flash</span><span class="o">[</span><span class="ss">:error</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Ups, something goes wrong.&#39;</span>
+      <span class="n">redirect</span> <span class="n">back</span>
+    <span class="k">when</span> <span class="ss">:ajax</span>
+      <span class="p">{</span> <span class="ss">:message</span> <span class="o">=&gt;</span> <span class="s1">&#39;Ups, something goes wrong.&#39;</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="mi">401</span> <span class="p">}</span><span class="o">.</span><span class="n">to_json</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
 
-<p>&nbsp;</p>
+
+<h3>Doing the same thing, but using different requests?</h3>
+
+<p>Are you doing the same code, with the same route but only changing the http-verb?
+I do, and I found this: <a href="http://nuclearsquid.com/writings/multi-routing.html">Multi-Routing in Sinatra</a>
+to use 'any' when you need the same route action for different methods (http verbs).</p>
+
+<p>For example having this routes:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">get</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">post</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">put</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">delete</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>You can use:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">any</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>Be flexible with your route endings</h3>
+
+<blockquote><p>I recommend enable your routes with/without last slash "/",
+but I found that some RESTul projects prefer all urls without slashes.
+So, there is a separate opinions... <a href="http://www.standardzilla.com/2007/07/09/dont-forget-your-trailing-slash/]">1</a>, <a href="http://www.projectzero.org/sMash/1.0.x/docs/zero.devguide.doc/zero.core/REST.html]">2</a>
+The true is, adding an extra slash to the end isn't a big deal. Don't think so?</p></blockquote>
+
+<p>For example having:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># This will rais 404 using &#39;/users/001/friends/&#39;</span>
+<span class="n">get</span> <span class="s1">&#39;/users/:uid/friends&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span> 
+</code></pre>
+</div>
+
+
+<p>The solution it’s pretty simple, just add <code>/?</code> to the end of your routes.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># this will work with: /users/:uid/friends and /users/:uid/friends/</span>
+<span class="n">get</span> <span class="s1">&#39;/users/:uid/friends/?&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h2>See you next time!</h2>
+
+<p>May the Source Be With You.</p>
 
 <h2>References</h2>
 
-<hr />
-
 <ul>
-<li><a href="http://www.sinatrarb.com/documentation">Sinatra documentation</a> by Sinatra project</li>
-<li><a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a> by Omar Vargas</li>
-<li><a href="http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation">Ruby frameworks</a> by Craig Jolicoeur</li>
+<li><a href="rest_rails">RESTful Rails Development</a> Excellent tutorial about RESTul and Rails</li>
 </ul>
 
 
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/03/15/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/03/23/sinatra-tips.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -168,7 +285,7 @@ You're  looking for <em>something more like Rails?</em>, check this out: <a href
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-  <li><span><b>15 Mar 2011</b></span> &raquo; <a href="/2011/03/15/what-is-sinatra.html">What is Sinatra?</a></li>
+  <li><span><b>23 Mar 2011</b></span> &raquo; <a href="/2011/03/23/sinatra-tips.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>
