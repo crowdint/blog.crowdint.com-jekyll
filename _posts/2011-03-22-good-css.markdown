@@ -189,7 +189,9 @@ Well I have a couple Ideas of how the CSS should be coded:
   your CSS and try to clean the code.
   
   > Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
-#### Antoine de Saint-Exupery *French writer (1900 - 1944)*
+  >  
+  >  
+  > #### Antoine de Saint-Exupery *French writer (1900 - 1944)*
     
   There's always a way to make your code look better. If you take care about 
   it you will get a maintainable code, very easy to read.
