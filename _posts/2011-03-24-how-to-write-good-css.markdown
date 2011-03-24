@@ -19,14 +19,14 @@ Well, I have a couple Ideas of how CSS should be coded:
 
 ### Keep it simple.
 
-  Imagine that everytime you write a *<div>* tag somebody kicks you in the nuts,
-  painful huh?... Use only the necessary div tags. Think twice before writing a 
-  one, because if you don’t care about it you will get a super complex page.
-  Always remeber to keep it simple.
+Imagine that everytime you write a `<div>` tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remeber to keep it simple.
 
 ### Use HTML tags for their propose
 
-  I'm always finding some code like this:
+I'm always finding some code like this:
 
   {% highlight css %}
    <table>
@@ -185,9 +185,10 @@ Well if you end up having that, you are doing it completely wrong.
 Take your time to write the CSS, once you get the expected result,
 take a look at your code and try to clean the clean it.
 
-> Perfection is achieved, not when there is nothing more to add, but when there 
-is nothing left to take away.
-#### Antoine de Saint-Exupery *French writer (1900 - 1944)*
+> Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
+>
+>
+> #### Antoine de Saint-Exupery *French writer (1900 - 1944)*
 
 There's always a way to make your code look better. If you take care about 
 it you will get maintainable, very easy to read and understandable code.

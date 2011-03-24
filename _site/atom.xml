@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-24T16:37:57-06:00</updated>
+ <updated>2011-03-24T17:42:02-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -26,14 +26,14 @@ all.&lt;/p&gt;
 
 &lt;h3&gt;Keep it simple.&lt;/h3&gt;
 
-&lt;p&gt;  Imagine that everytime you write a &lt;em&gt;&lt;div&gt;&lt;/em&gt; tag somebody kicks you in the nuts,
-  painful huh?... Use only the necessary div tags. Think twice before writing a
-  one, because if you don’t care about it you will get a super complex page.
-  Always remeber to keep it simple.&lt;/p&gt;
+&lt;p&gt;Imagine that everytime you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remeber to keep it simple.&lt;/p&gt;
 
 &lt;h3&gt;Use HTML tags for their propose&lt;/h3&gt;
 
-&lt;p&gt;  I'm always finding some code like this:&lt;/p&gt;
+&lt;p&gt;I'm always finding some code like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -196,8 +196,7 @@ each one.&lt;/p&gt;
 &lt;p&gt;Take your time to write the CSS, once you get the expected result,
 take a look at your code and try to clean the clean it.&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;Perfection is achieved, not when there is nothing more to add, but when there
-is nothing left to take away.&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.&lt;/p&gt;
 
 &lt;h4&gt;Antoine de Saint-Exupery &lt;em&gt;French writer (1900 - 1944)&lt;/em&gt;&lt;/h4&gt;&lt;/blockquote&gt;
 
