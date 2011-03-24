@@ -47,6 +47,40 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>If you are a Ruby developer, by now, you have probably used tons of gems in your apps.</p> <p>That's one of the best things of using Ruby, a lot of people writes repeatable code that you can easily integrate into your own apps.</p> <p>In this brief tutorial, I will try to explain the basic things you need to know in order...
+            <div class = "continue_reading"><a href="/2011/01/24/how-to-start-writing-a-gem.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/24/how-to-start-writing-a-gem.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></h1>
   <p class="author">
     <span class="date"><b>Jan 14</b><br />2011</span>
@@ -279,208 +313,6 @@ Gonzalo "aka Chalo" Fernandez</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 15</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>What I am about to describe in this post is probably something obvious to the
-advanced Rails developer. Yet, it's sometimes hard to get the concept
-when you come from other frameworks or technology.</p>
-
-<p>I, at least, personally had a problem getting it when I first started
-using Rails.</p>
-
-<h2>REST</h2>
-
-<p>REST stands for <em>Representational State Transfer</em>.
-What does that mean anyway? well, a lot of things, but, for now, I'll
-just focus on what it means when designing a Rails app.</p>
-
-<h3>The wrong way</h3>
-
-<p>I've seen it a lot of times. It's just easy to think that, let's say, a
-OrderController, must always be tied to a Order model, and that,
-all actions performed on the Order objects should be done via that controller.</p>
-
-<p>So, with that thought on your mind, you end up with a controller like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">new</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">index</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">update</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">remove_review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">cancel</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">pay</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">return_order</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h3>What's wrong here?</h3>
-
-<p>If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay,
-return_order.</p>
-
-<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
-means that you have <em>resources</em> and that with every request you are
-creating, updating, deleting or retrieving for display that resource or
-many of them.</p>
-
-<p>A resource is not necesarily a model, it's just <em>something</em> that has a
-state or that can be altered.</p>
-
-<h3>How to make it right?</h3>
-
-<p>So, if we go back to our example, the right thing to do, is to think
-about those <em>bad</em> actions as a resource.</p>
-
-<p>If you're going to review an order, then, you need a <em>OrderReview</em>
-controller.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
-can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
-a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
-out of it.</p>
-
-<p>A most common mistake... an action that actually alters the state of an
-object like the cancel action.</p>
-
-<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
-something, but still, this looks much better:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
-cancellation (it can happen).</p>
-
-<p>You could now refactor all the other actions to their respective
-controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
-
-<h2>Associations</h2>
-
-<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
-how models relate to each other is by thiking that their relationship is
-a resource.</p>
-
-<p>For example, if you had a User that can add other User objects as its
-friends, instead of creating a <em>add_friend</em> or something action, you'd add
-a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
-
-<p>By the way, I've seen relationships like:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-
-  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><em>Always remember to think restful</em>, probably the user should:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
-<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
-
-<span class="c1"># This actually requires more code to make it work, but, you get the</span>
-<span class="c1"># point, right?</span>
-</code></pre>
-</div>
-
-
-<p>Think about it. Way better.</p>
-
-<h3>But, why? You have to write all this "unnecesary" code</h3>
-
-<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
-these two while writing your code, you're being rude to your collegues
-or yourself.</p>
-
-<p>Also, Rails its all about love and following conventions. This is one of
-them.</p>
-
-<p>Hope this guide helps you in some way, cheers!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -501,6 +333,8 @@ them.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
@@ -539,8 +373,6 @@ them.</p>
   <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   </ul>
 </div>
