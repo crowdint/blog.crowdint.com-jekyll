@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-24T17:42:02-06:00</updated>
+ <updated>2011-03-24T18:10:51-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -26,10 +26,10 @@ all.&lt;/p&gt;
 
 &lt;h3&gt;Keep it simple.&lt;/h3&gt;
 
-&lt;p&gt;Imagine that everytime you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
+&lt;p&gt;Imagine that every time you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
 painful huh?... Use only the necessary div tags. Think twice before writing a
 one, because if you don’t care about it you will get a super complex page.
-Always remeber to keep it simple.&lt;/p&gt;
+Always remember to keep it simple.&lt;/p&gt;
 
 &lt;h3&gt;Use HTML tags for their propose&lt;/h3&gt;
 
@@ -37,19 +37,19 @@ Always remeber to keep it simple.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Potatos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
   
@@ -57,12 +57,12 @@ Always remeber to keep it simple.&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;As you see, its a common list an instead of using &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; or &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; its using a &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As you see, it's a common list an instead of using &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; or &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; its using a &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;A better way to do this would be:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
       &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
       &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
       &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -73,7 +73,7 @@ Always remeber to keep it simple.&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;you &lt;strong&gt;must&lt;/strong&gt; use the correct tag, if you are not familiar with all of them
+&lt;p&gt;You &lt;strong&gt;must&lt;/strong&gt; use the correct tag; if you are not familiar with all of them
 take a look at &lt;a href=&quot;http://w3schools.com/tags/default.asp&quot;&gt;w3schools html reference&lt;/a&gt;.
 Here you will find the complete list of tags with examples and everything you need.&lt;/p&gt;
 
@@ -124,24 +124,24 @@ paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/
 
 &lt;h3&gt;Reset your CSS&lt;/h3&gt;
 
-&lt;p&gt;  Did you ever realize the huge differences between the browser when you put
-  a text into a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; or inside &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;? You will always face a couple of differences in
-  how each browser renders the elements.&lt;/p&gt;
+&lt;p&gt;Did you ever realize the huge differences between the browser when you put
+a text into a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; or inside &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;? You will always face a couple of differences in
+how each browser renders the elements.&lt;/p&gt;
 
-&lt;p&gt;  &lt;img src=&quot;/images/2011/renders.jpg&quot; title=&quot;Renders&quot; alt=&quot;Diferent renders&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2011/renders.jpg&quot; title=&quot;Renders&quot; alt=&quot;Diferent renders&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;  This happens because the browsers have different ways to render the elements
-  of a page. An easy way to avoid this is by resetting your CSS, a simple
-  technique where you put all the style to 0/none by default.
-  You can achieve this by applying &lt;a href=&quot;http://meyerweb.com/eric/tools/css/reset/index.html&quot;&gt;Eric Meyer's css reset&lt;/a&gt;,
-  download it and put it on your public folder, or link to the url
-  directly.&lt;/p&gt;
+&lt;p&gt;This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple
+technique where you put all the style to 0/none by default.
+You can achieve this by applying &lt;a href=&quot;http://meyerweb.com/eric/tools/css/reset/index.html&quot;&gt;Eric Meyer's css reset&lt;/a&gt;,
+download it and put it on your public folder, or link to the url
+directly.&lt;/p&gt;
 
 &lt;h3&gt;Styles for tags first&lt;/h3&gt;
 
-&lt;p&gt;  I prefer to write styles for tags first, it’s something like starting from
-  the general to the particular. In other words, make it general, and use
-  exceptions only when it is really necessary.&lt;/p&gt;
+&lt;p&gt;I prefer to write styles for tags first, it’s something like starting from
+the general to the particular. In other words, make it general, and use
+exceptions only when it is really necessary.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -159,11 +159,11 @@ paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/
 &lt;/div&gt;
 
 
-&lt;h3&gt;Be modular:&lt;/h3&gt;
+&lt;h3&gt;Be modular&lt;/h3&gt;
 
-&lt;p&gt; Remember to separate your CSS like modules, first, the body definitions,
- then the header definitions, and so on.
- Also separate them by files like &lt;strong&gt;main.css&lt;/strong&gt; and &lt;strong&gt;form.css&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like &lt;strong&gt;main.css&lt;/strong&gt; and &lt;strong&gt;form.css&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;CSS&lt;/span&gt;
   &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -188,7 +188,7 @@ paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/
 
 &lt;p&gt;Sometimes you start to write CSS and then you get velocity, or you have a
 deadline, then you get yourself coding like a mad man. Tons and tons of CSS
-lines. And you end up with like 10 different files with a thousand lines on
+lines. Then, you end up with like 10 different files with a thousand lines on
 each one.&lt;/p&gt;
 
 &lt;p&gt;Well if you end up having that, you are doing it completely wrong.&lt;/p&gt;
@@ -222,7 +222,7 @@ from the first step. If you wrote 2 lines, verify in all browsers that your
 style is working right. By doing this you will end with clean code and
 compatible with all browsers.&lt;/p&gt;
 
-&lt;h3&gt;Rember the W3C&lt;/h3&gt;
+&lt;h3&gt;Remember the W3C&lt;/h3&gt;
 
 &lt;p&gt;Always keep in mind the standards and validate your site using the
 &lt;a href=&quot;http://jigsaw.w3.org/css-validator/&quot;&gt;CSS&lt;/a&gt; and

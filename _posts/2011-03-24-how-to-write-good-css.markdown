@@ -19,10 +19,10 @@ Well, I have a couple Ideas of how CSS should be coded:
 
 ### Keep it simple.
 
-Imagine that everytime you write a `<div>` tag somebody kicks you in the nuts,
+Imagine that every time you write a `<div>` tag somebody kicks you in the nuts,
 painful huh?... Use only the necessary div tags. Think twice before writing a
 one, because if you don’t care about it you will get a super complex page.
-Always remeber to keep it simple.
+Always remember to keep it simple.
 
 ### Use HTML tags for their propose
 
@@ -31,30 +31,30 @@ I'm always finding some code like this:
   {% highlight css %}
    <table>
     <tr>
-      <td> Potatos</p>
+      <td>Potatoes</p>
     </tr>
     <tr>
-      <td> Apples</p>
+      <td>Apples</p>
     </tr>
     <tr>
-      <td> Watermelons</p>
+      <td>Watermelons</p>
     </tr>
     <tr>
-      <td> Oranges</p>
+      <td>Oranges</p>
     </tr>
     <tr>
-      <td> Cucumbers</p>
+      <td>Cucumbers</p>
     </tr>
    </table>
   {% endhighlight %}
 
-As you see, its a common list an instead of using `<ol>` or `<ul>` its using a `<table>`.
+As you see, it's a common list an instead of using `<ol>` or `<ul>` its using a `<table>`.
 
 A better way to do this would be:
 
   {% highlight css %}
     <ul>
-      <li>Potatos</li>
+      <li>Potatoes</li>
       <li>Apples</li>
       <li>Watermelons</li>
       <li>Oranges</li>
@@ -62,7 +62,7 @@ A better way to do this would be:
     </ul>
   {% endhighlight %}
 
-you **must** use the correct tag, if you are not familiar with all of them
+You **must** use the correct tag; if you are not familiar with all of them
 take a look at [w3schools html reference](http://w3schools.com/tags/default.asp).
 Here you will find the complete list of tags with examples and everything you need.
 
@@ -113,24 +113,24 @@ paddings to do the work.  Always remember [the box model](http://www.w3.org/TR/C
 
 ### Reset your CSS
 
-  Did you ever realize the huge differences between the browser when you put
-  a text into a `<div>` or inside `<p>`? You will always face a couple of differences in
-  how each browser renders the elements.
+Did you ever realize the huge differences between the browser when you put
+a text into a `<div>` or inside `<p>`? You will always face a couple of differences in
+how each browser renders the elements.
 
-  ![Diferent renders](/images/2011/renders.jpg "Renders")
+![Diferent renders](/images/2011/renders.jpg "Renders")
 
-  This happens because the browsers have different ways to render the elements
-  of a page. An easy way to avoid this is by resetting your CSS, a simple 
-  technique where you put all the style to 0/none by default. 
-  You can achieve this by applying [Eric Meyer's css reset](http://meyerweb.com/eric/tools/css/reset/index.html),
-  download it and put it on your public folder, or link to the url
-  directly.
+This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple 
+technique where you put all the style to 0/none by default. 
+You can achieve this by applying [Eric Meyer's css reset](http://meyerweb.com/eric/tools/css/reset/index.html),
+download it and put it on your public folder, or link to the url
+directly.
 
 ### Styles for tags first
 
-  I prefer to write styles for tags first, it’s something like starting from 
-  the general to the particular. In other words, make it general, and use 
-  exceptions only when it is really necessary.
+I prefer to write styles for tags first, it’s something like starting from 
+the general to the particular. In other words, make it general, and use 
+exceptions only when it is really necessary.
 
 {% highlight css %}
   body{
@@ -148,11 +148,11 @@ paddings to do the work.  Always remember [the box model](http://www.w3.org/TR/C
 
 {% endhighlight %}
 
-### Be modular:
+### Be modular
 
- Remember to separate your CSS like modules, first, the body definitions,
- then the header definitions, and so on.
- Also separate them by files like **main.css** and **form.css**.
+Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like **main.css** and **form.css**.
 
 {% highlight css %}
   // Header CSS
@@ -177,7 +177,7 @@ paddings to do the work.  Always remember [the box model](http://www.w3.org/TR/C
 
 Sometimes you start to write CSS and then you get velocity, or you have a 
 deadline, then you get yourself coding like a mad man. Tons and tons of CSS 
-lines. And you end up with like 10 different files with a thousand lines on 
+lines. Then, you end up with like 10 different files with a thousand lines on 
 each one.
 
 Well if you end up having that, you are doing it completely wrong.
@@ -212,7 +212,7 @@ from the first step. If you wrote 2 lines, verify in all browsers that your
 style is working right. By doing this you will end with clean code and 
 compatible with all browsers.
 
-### Rember the W3C
+### Remember the W3C
 
 Always keep in mind the standards and validate your site using the
 [CSS](http://jigsaw.w3.org/css-validator/) and
