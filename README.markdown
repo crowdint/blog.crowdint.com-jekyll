@@ -1,17 +1,21 @@
 # blog.crowdint.com
-
 Our tech blog's source code.
 
-For a quick explanation on how to put a blog online using [Jekyll](http://wiki.github.com/mojombo/jekyll/), check out [this post](http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html).
+For a quick explanation on how to put a blog online using [Jekyll](http://wiki.github.com/mojombo/jekyll/), 
+check out [this post](http://blog.crowdint.com/2010/08/02/instant-blog-using-jekyll-and-heroku.html).
 
 # Setup
+    rvm 1.8.7@crowdintblog --create;
+    gem install bundler;
+    # Reload your .bashrc file, or just restart your terminal
+    bundle install;
 
-- rvm 1.8.7@crowdintblog --create
-- gem install bundler;
-- Add your markdown in /_posts/
-- jekyll --server --auto;
+Add your markdown as `/_posts/yyyy-mm-dd-post-title.markdown`
 
-Enjoy, http://localhost:4000/
+## Running the server:
+    jekyll --server --auto;
+
+Enjoy, `http://localhost:4000/`
 
 # About the Author
 

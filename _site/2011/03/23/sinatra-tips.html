@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Blog</title>
+  <title>Crowd Interactive Tech Blog :: Trying to make your Sinatra more RESTful?</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -14,15 +14,6 @@
   <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     <script type="text/javascript">
       var _gaq = _gaq || [];
-
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
 
     </script>
 </head>
@@ -45,20 +36,14 @@
       </div>
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
-          
-<div class="post prepend-1">
-  <h1><a href="/2011/03/23/sinatra-tips.html">Trying to make your Sinatra more RESTful?</a></h1>
+          <div class="post prepend-1">
+  <h1>Trying to make your Sinatra more RESTful?</h1>  
   <p class="author">
     <span class="date"><b>Mar 23</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      <blockquote><p><small><code>TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
+    <blockquote><p><small><code>TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
 Make funny jokes, like "Why this guy wears a Mexican hat?"</code></small></p></blockquote>
 
 <p>No RESTul knowledge at all? <a href="http://www.b-simple.de/documents">read this!</a></p>
@@ -146,10 +131,6 @@ Thanks to <a href="http://twitter.com/chischaschos">Emmanuel</a></p></blockquote
 </code></pre>
 </div>
 
-  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
-    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="o">//</span><span class="nt">end</span>
 
 <h3>Start using route "Filters"</h3>
 
@@ -262,320 +243,40 @@ The true is, adding an extra slash to the end isn't a big deal. Don't think so?<
 <li><a href="rest_rails">RESTful Rails Development</a> Excellent tutorial about RESTul and Rails</li>
 </ul>
 
-<div class="highlight"><pre><code class="css">  <span class="nt">body</span><span class="p">{</span>
-    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="nt">h1</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="nc">.secondary_pages</span> <span class="nt">h1</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">.</span> <span class="m">1em</span><span class="p">;</span>
-    <span class="k">font-family</span><span class="o">:</span> <span class="n">Verdana</span><span class="p">;</span>
-  <span class="p">}</span>
-</code></pre>
-</div>
 
 
-<h3>Be modular</h3>
-
-<p>Remember to separate your CSS like modules, first, the body definitions,
-then the header definitions, and so on.
-Also separate them by files like <strong>main.css</strong> and <strong>form.css</strong>.</p>
-
-<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">CSS</span>
-  <span class="nf">#header</span><span class="p">{</span>
-    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
-    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span>
-  <span class="nf">#left-menu</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
-  <span class="p">}</span>
-  <span class="nt">a</span><span class="p">{</span>
-    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
-  <span class="p">}</span>
-</code></pre>
-</div>
-
-
-<h3>Do you feel like I am re-writing the whole bible? (Old and new testament!)</h3>
-
-<p>Sometimes you start to write CSS and then you get velocity, or you have a
-deadline, then you get yourself coding like a mad man. Tons and tons of CSS
-lines. Then, you end up with like 10 different files with a thousand lines on
-each one.</p>
-
-<p>Well if you end up having that, you are doing it completely wrong.</p>
-
-<p>Take your time to write the CSS, once you get the expected result,
-take a look at your code and try to clean the clean it.</p>
-
-<blockquote><p>Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</p>
-
-<h4>Antoine de Saint-Exupery <em>French writer (1900 - 1944)</em></h4></blockquote>
-
-<p>There's always a way to make your code look better. If you take care about
-it you will get maintainable, very easy to read and understandable code.</p>
-
-<h3>Cross-browser testing <strong>ALWAYS</strong></h3>
-
-<p>I highlighted "always" with caps and bold, because it is something that we
-forget about very often. We write and write CSS lines, and we test on Firefox or
-Chrome because we love those browsers, and we are very happy about the way
-our site looks, then after a couple of days of coding, you start thinking
-about how it will look on IE... that awfulness all web developers fear to
-see their work on. You test in IE and you realize that the entire
-site is messed up, the whole layout is broken.</p>
-
-<p>You don’t know where to start but you do it anyway.
-Begin making changes here and there and you finish with tons
-of patches or writing a new CSS file just for IE.</p>
-
-<p>That’s not necessary if you take into consideration what you are doing right
-from the first step. If you wrote 2 lines, verify in all browsers that your
-style is working right. By doing this you will end with clean code and
-compatible with all browsers.</p>
-
-<h3>Remember the W3C</h3>
-
-<p>Always keep in mind the standards and validate your site using the
-<a href="http://jigsaw.w3.org/css-validator/">CSS</a> and
-<a href="http://validator.w3.org/">HTML</a> validators. If your code passes the validation, your site will
-be readable for all browsers for sure.</p>
-
-<h3>My final words</h3>
-
-<p>All suggestions regarding good CSS writing, are about taking care of the
-details.  Details make the difference, you only have to put some attention
-and code in the right way.  Remeber that sometimes your code is gonna be
-seen by other developers and you have to make it clear for them and for the
-browsers too.</p>
-
-<p>Also remember the accessibility of your site, think of the people at all
-times... people with some illness or different capacities, like the blind
-people and so on. You can check the <a href="http://www.w3.org/TR/WCAG10/">Web Content Accessibility Guidelines</a>
-and try to at least complete the guides for Level A, the visitors of your
-site will be grateful about this.</p>
-
-<p><strong>And for God’s sake... Code clean!!!!</strong></p>
-
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/23/sinatra-tips.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
+    <div class="tweet right">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
       <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     </div>
   </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 18</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>In our <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our first test-driven Sinatra app. Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding. -- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p> <p><img src="/images/what_is_sinatra/sinatra.png" alt="Sinatra" /></p> <p>So, you've heard about Sinatra, and you're excited. but what is it? and what it's...
-            <div class = "continue_reading"><a href="/2011/03/18/what-is-sinatra.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/18/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+  <div class="author_box">
+    <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
   </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 14</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
+  <div class="nav_links span-16">
     
     
-    
-    
-      
-        
-            <p>Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.</p> <p>On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests. Together they are a quick and efficient way to create web applications.</p> <p>In this post we'll create our first Sinatra application using...
-            <div class = "continue_reading"><a href="/2011/03/14/Sinatra-the-green-way.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/14/Sinatra-the-green-way.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
   </div>
-      <div class="author_box">
-      <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
-    </div>
 </div>
-
-
 <div class="post prepend-1">
-  <h1><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 08</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Perhaps by reading this you may be wondering what is Processing.js? Well, <a href="http://processingjs.org/">Processing.js</a> is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by <a href="http://ejohn.org">John Resig</a>, the creator of jQuery.</p> <h3>First, a little history about p5.</h3> <p> It was developed by Ben Fry and Casey Reas and it...
-            <div class = "continue_reading"><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Carlos Muñiz | carlos.muniz@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 02</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Rails is strongly based in the MVC concept, that means each part of this framework is built to work smoothly under this concept. Conceptually, we understand what we have to deliver in each case. With dumb Views, lean RESTful Controllers and FAT Models(?) we can build whatever we want, or more precisely, whatever we need.</p> <p>Views and Controllers rely on the...
-            <div class = "continue_reading"><a href="/2011/03/02/how-to-make-your-models-look-lean.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/02/how-to-make-your-models-look-lean.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="pagination prepend-1">
-  
-    <span class="previous">Previous</span>
-  
-  <span class="page_number ">Page: 1 of 9</span>
-  
-    <a href="/page2" class="next ">Next</a>
-  
-</div>
-
-
-
-
-
-
-<div class="post prepend-1">
-  <h1>Recent Posts</h1>
+  <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>23 Mar 2011</b></span> &raquo; <a href="/2011/03/23/sinatra-tips.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
-
-  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
-
-  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
-
-  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
-
-  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
-
-  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
-
-  <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
-
-  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
-
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
-
-  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
-
-  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
-
-  <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
-
-  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
-
-  <li><span><b>07 Dec 2010</b></span> &raquo; <a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></li>
-
-  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
-
-  <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
-
-  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
   </ul>
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
 
         </div>
