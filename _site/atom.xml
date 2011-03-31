@@ -4,25 +4,26 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-24T15:39:50-06:00</updated>
+ <updated>2011-03-31T12:21:28-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
-   <link href="http://blog.crowdint.com/2011/03/23/sinatra-tips.html"/>
-   <updated>2011-03-23T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/23/sinatra-tips</id>
+   <link href="http://blog.crowdint.com/2011/03/31/sinatra-tips.html"/>
+   <updated>2011-03-31T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/31/sinatra-tips</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
-   <content type="html">&lt;blockquote&gt;&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
-Make funny jokes, like &quot;Why this guy wears a Mexican hat?&quot;&lt;/code&gt;&lt;/small&gt;&lt;/p&gt;&lt;/blockquote&gt;
+   <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
+Add a disclaimer, pray for feedback.
+Make funny jokes, like &quot;Why does this guy wears a Mexican hat?&quot;&lt;/code&gt;&lt;/small&gt;&lt;/p&gt;
 
-&lt;p&gt;No RESTul knowledge at all? &lt;a href=&quot;http://www.b-simple.de/documents&quot;&gt;read this!&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;No RESTful knowledge at all? &lt;a href=&quot;http://www.b-simple.de/documents&quot;&gt;read this!&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3&gt;REST URLs should be multi-response&lt;/h3&gt;
 
-&lt;p&gt;In rails we have &lt;a href=&quot;http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/&quot;&gt;&lt;code&gt;respond_to(format)&lt;/code&gt;&lt;/a&gt; to switch between different layouts, and partials.
-So, just create a helper like &lt;code&gt;request_type?&lt;/code&gt; and switch between views!&lt;/p&gt;
+&lt;p&gt;In rails we can use &lt;a href=&quot;http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/&quot;&gt;&lt;code&gt;respond_to(format)&lt;/code&gt;&lt;/a&gt; to switch between different layouts, and partials.
+So, we just create a helper like &lt;code&gt;request_type?&lt;/code&gt; and switch between the different kinds of views!&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Route&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/book/:title/chapters&amp;#39;&lt;/span&gt;
@@ -59,7 +60,7 @@ Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;
 
 &lt;h3&gt;&quot;Fat models, skinny &lt;strike&gt;controllers&lt;/strike&gt; routes&quot;&lt;/h3&gt;
 
-&lt;p&gt;Move your ugly controller-based validations &lt;a href=&quot;http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model&quot;&gt;to your models&lt;/a&gt;, like:&lt;/p&gt;
+&lt;p&gt;Move your ugly controller-based validations &lt;a href=&quot;http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model&quot;&gt;to your models&lt;/a&gt;, like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This is wrong&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user/new&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -71,7 +72,7 @@ Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;
 &lt;/div&gt;
 
 
-&lt;p&gt;Use helpers like &lt;a href=&quot;&quot;&gt;&lt;code&gt;error_messages_for(@user)&lt;/code&gt;&lt;/a&gt; with direct model's validates_for:&lt;/p&gt;
+&lt;p&gt;Use helpers like &lt;a href=&quot;&quot;&gt;&lt;code&gt;error_messages_for(@user)&lt;/code&gt;&lt;/a&gt; with the model validations:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Model&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
@@ -121,7 +122,8 @@ Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;
 &lt;/div&gt;
 
 
-&lt;p&gt;Start using &lt;a href=&quot;http://sinatra-book.gittr.com/&quot;&gt;Sinatra's filters&lt;/a&gt; as &lt;code&gt;before&lt;/code&gt; or &lt;code&gt;after&lt;/code&gt;. They also can be string matched! like &lt;code&gt;before '/this/*'&lt;/code&gt; (wildcards) or &lt;code&gt;after /^(this|other)$/&lt;/code&gt; (regex)&lt;/p&gt;
+&lt;p&gt;Start using &lt;a href=&quot;http://sinatra-book.gittr.com/&quot;&gt;Sinatra's filters&lt;/a&gt; as &lt;code&gt;before&lt;/code&gt; or &lt;code&gt;after&lt;/code&gt;. They can be string matched! like &lt;code&gt;before '/this/*'&lt;/code&gt;
+(wildcards) or &lt;code&gt;after /^(this|other)$/&lt;/code&gt; (regex)&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# /user/001/*&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/*&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -160,7 +162,7 @@ Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;
 I do, and I found this: &lt;a href=&quot;http://nuclearsquid.com/writings/multi-routing.html&quot;&gt;Multi-Routing in Sinatra&lt;/a&gt;
 to use 'any' when you need the same route action for different methods (http verbs).&lt;/p&gt;
 
-&lt;p&gt;For example having this routes:&lt;/p&gt;
+&lt;p&gt;For example having these routes:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -179,14 +181,14 @@ to use 'any' when you need the same route action for different methods (http ver
 
 &lt;h3&gt;Be flexible with your route endings&lt;/h3&gt;
 
-&lt;blockquote&gt;&lt;p&gt;I recommend enable your routes with/without last slash &quot;/&quot;,
+&lt;blockquote&gt;&lt;p&gt;I recommend that you enable your routes with/without last slash &quot;/&quot;,
 but I found that some RESTul projects prefer all urls without slashes.
 So, there is a separate opinions... &lt;a href=&quot;http://www.standardzilla.com/2007/07/09/dont-forget-your-trailing-slash/]&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;http://www.projectzero.org/sMash/1.0.x/docs/zero.devguide.doc/zero.core/REST.html]&quot;&gt;2&lt;/a&gt;
-The true is, adding an extra slash to the end isn't a big deal. Don't think so?&lt;/p&gt;&lt;/blockquote&gt;
+The truth is that adding an extra slash to the end is not that big of a deal. Don't you think so?&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;For example having:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This will rais 404 using &amp;#39;/users/001/friends/&amp;#39;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This will raise a 404 if you go to &amp;#39;/users/001/friends/&amp;#39;&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
@@ -194,7 +196,7 @@ The true is, adding an extra slash to the end isn't a big deal. Don't think so?&
 &lt;/div&gt;
 
 
-&lt;p&gt;The solution it’s pretty simple, just add &lt;code&gt;/?&lt;/code&gt; to the end of your routes.&lt;/p&gt;
+&lt;p&gt;The solution is pretty simple, just add &lt;code&gt;/?&lt;/code&gt; at the end of your routes.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# this will work with: /users/:uid/friends and /users/:uid/friends/&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends/?&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -212,6 +214,338 @@ The true is, adding an extra slash to the end isn't a big deal. Don't think so?&
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;rest_rails&quot;&gt;RESTful Rails Development&lt;/a&gt; Excellent tutorial about RESTul and Rails&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+   <author>
+     <name>Mario Zaizar</name>
+     <email>mario@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>How to write good CSS</title>
+   <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
+   <updated>2011-03-24T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
+   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
+   <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
+different people, I have realized that there is a lack of standards for
+it. Like, when you have to make some corrections or improvements and open
+the CSS file and you get a thousand lines of code with no comments at
+all.&lt;/p&gt;
+
+&lt;p&gt;Well, I have a couple Ideas of how CSS should be coded:&lt;/p&gt;
+
+&lt;h2&gt;The ABC of CSS&lt;/h2&gt;
+
+&lt;h3&gt;Keep it simple.&lt;/h3&gt;
+
+&lt;p&gt;Imagine that every time you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remember to keep it simple.&lt;/p&gt;
+
+&lt;h3&gt;Use HTML tags for their propose&lt;/h3&gt;
+
+&lt;p&gt;I'm always finding some code like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you see, it's a common list an instead of using &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; or &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; its using a &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;A better way to do this would be:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You &lt;strong&gt;must&lt;/strong&gt; use the correct tag; if you are not familiar with all of them
+take a look at &lt;a href=&quot;http://w3schools.com/tags/default.asp&quot;&gt;w3schools html reference&lt;/a&gt;.
+Here you will find the complete list of tags with examples and everything you need.&lt;/p&gt;
+
+&lt;p&gt;Also, this is important because, it is easier for search engines to
+identify your page and understand its code. Remember that search engines
+are like a blind users.&lt;/p&gt;
+
+&lt;h3&gt;Use comments&lt;/h3&gt;
+
+&lt;p&gt;Try to put comments on your CSS. It is easier for others to see the comments and
+know what the styles are being used for.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Common&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tags&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Avoid absolute positions&lt;/h3&gt;
+
+&lt;p&gt;When you start making CSS, you can find it &quot;easy&quot; to put every element on
+the right place using absolute position. This is a very common, yet
+incorrect
+method to align your elements. Sometimes when you use absolute positions,
+you will get weird behavior after a window resize or in different
+browsers or screens, just try to avoid it and use margins and
+paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/CSS21/box.html&quot;&gt;the box model&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Ok, First steps&lt;/h2&gt;
+
+&lt;h3&gt;Reset your CSS&lt;/h3&gt;
+
+&lt;p&gt;Did you ever realize the huge differences between the browser when you put
+a text into a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; or inside &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;? You will always face a couple of differences in
+how each browser renders the elements.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2011/renders.jpg&quot; title=&quot;Renders&quot; alt=&quot;Diferent renders&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple
+technique where you put all the style to 0/none by default.
+You can achieve this by applying &lt;a href=&quot;http://meyerweb.com/eric/tools/css/reset/index.html&quot;&gt;Eric Meyer's css reset&lt;/a&gt;,
+download it and put it on your public folder, or link to the url
+directly.&lt;/p&gt;
+
+&lt;h3&gt;Styles for tags first&lt;/h3&gt;
+
+&lt;p&gt;I prefer to write styles for tags first, it’s something like starting from
+the general to the particular. In other words, make it general, and use
+exceptions only when it is really necessary.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1.2em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nc&quot;&gt;.secondary_pages&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Verdana&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Be modular&lt;/h3&gt;
+
+&lt;p&gt;Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like &lt;strong&gt;main.css&lt;/strong&gt; and &lt;strong&gt;form.css&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;CSS&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Do you feel like I am re-writing the whole bible? (Old and new testament!)&lt;/h3&gt;
+
+&lt;p&gt;Sometimes you start to write CSS and then you get velocity, or you have a
+deadline, then you get yourself coding like a mad man. Tons and tons of CSS
+lines. Then, you end up with like 10 different files with a thousand lines on
+each one.&lt;/p&gt;
+
+&lt;p&gt;Well if you end up having that, you are doing it completely wrong.&lt;/p&gt;
+
+&lt;p&gt;Take your time to write the CSS, once you get the expected result,
+take a look at your code and try to clean the clean it.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.&lt;/p&gt;
+
+&lt;h4&gt;Antoine de Saint-Exupery &lt;em&gt;French writer (1900 - 1944)&lt;/em&gt;&lt;/h4&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;There's always a way to make your code look better. If you take care about
+it you will get maintainable, very easy to read and understandable code.&lt;/p&gt;
+
+&lt;h3&gt;Cross-browser testing &lt;strong&gt;ALWAYS&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;I highlighted &quot;always&quot; with caps and bold, because it is something that we
+forget about very often. We write and write CSS lines, and we test on Firefox or
+Chrome because we love those browsers, and we are very happy about the way
+our site looks, then after a couple of days of coding, you start thinking
+about how it will look on IE... that awfulness all web developers fear to
+see their work on. You test in IE and you realize that the entire
+site is messed up, the whole layout is broken.&lt;/p&gt;
+
+&lt;p&gt;You don’t know where to start but you do it anyway.
+Begin making changes here and there and you finish with tons
+of patches or writing a new CSS file just for IE.&lt;/p&gt;
+
+&lt;p&gt;That’s not necessary if you take into consideration what you are doing right
+from the first step. If you wrote 2 lines, verify in all browsers that your
+style is working right. By doing this you will end with clean code and
+compatible with all browsers.&lt;/p&gt;
+
+&lt;h3&gt;Remember the W3C&lt;/h3&gt;
+
+&lt;p&gt;Always keep in mind the standards and validate your site using the
+&lt;a href=&quot;http://jigsaw.w3.org/css-validator/&quot;&gt;CSS&lt;/a&gt; and
+&lt;a href=&quot;http://validator.w3.org/&quot;&gt;HTML&lt;/a&gt; validators. If your code passes the validation, your site will
+be readable for all browsers for sure.&lt;/p&gt;
+
+&lt;h3&gt;My final words&lt;/h3&gt;
+
+&lt;p&gt;All suggestions regarding good CSS writing, are about taking care of the
+details.  Details make the difference, you only have to put some attention
+and code in the right way.  Remeber that sometimes your code is gonna be
+seen by other developers and you have to make it clear for them and for the
+browsers too.&lt;/p&gt;
+
+&lt;p&gt;Also remember the accessibility of your site, think of the people at all
+times... people with some illness or different capacities, like the blind
+people and so on. You can check the &lt;a href=&quot;http://www.w3.org/TR/WCAG10/&quot;&gt;Web Content Accessibility Guidelines&lt;/a&gt;
+and try to at least complete the guides for Level A, the visitors of your
+site will be grateful about this.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;And for God’s sake... Code clean!!!!&lt;/strong&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>Hector Bustillos</name>
+     <email>hector.bustillos@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>What is Sinatra?</title>
+   <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
+   <updated>2011-03-18T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
+   <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
+   <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
+first test-driven Sinatra app.
+Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
+-- &lt;cite&gt;&lt;a href=&quot;http://twitter.com/mariozaizar&quot;&gt;Mario&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/what_is_sinatra/sinatra.png&quot; alt=&quot;Sinatra&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So, you've heard about Sinatra, and you're excited.
+but what is it? and what it's for?
+Just read the answers.&lt;/p&gt;
+
+&lt;h2&gt;Sinatra is.&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;A Ruby web framework.&lt;/em&gt; Use it to develop sites, web apps, services..&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Written in Ruby.&lt;/em&gt; And we all love Ruby, isn't?&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Very simple, but yet powerful.&lt;/em&gt; Like Frank, but ninja.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;A Domain Specific Language (DSL).&lt;/em&gt; Say no to Controllers, hi to Routes.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;RESTful&lt;/em&gt;. So it's based in URLs, and HTTP methods (get, post, put, delete, info)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Advantages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;It's simple&lt;/em&gt;, you only get what you need.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No obscure magic involved&lt;/em&gt;. You always knows where you are, what you got, how and why.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Better performance than Rails&lt;/em&gt;, less drama.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Gems still talks to you&lt;/em&gt;. You can use your favorite gems.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Talks templates&lt;/em&gt;. The views, supports all of them.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No big-fat app&lt;/em&gt;, Your app can be stored in just one file!&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Disadvantages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;No Rails mystical magic&lt;/em&gt;, forget it.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;You only get the basics&lt;/em&gt;, sometimes that means write from scratch.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Not a MVC framework&lt;/em&gt;, No controller/action based.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Not as popular as Rails&lt;/em&gt;, remember, there is life beyond Rails.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No builtin helpers&lt;/em&gt;, but you can use them, including filters, configs.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Good for?&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;API implementations, quick demos, minimal applications, widgets, mobile sites implementations,
+RESTul systems, service-based applications.
+You're  looking for &lt;em&gt;something more like Rails?&lt;/em&gt;, check
+this out: &lt;a href=&quot;http://www.padrinorb.com/&quot;&gt;The Padrino project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And, that's pretty much Sinatra. Now, you should start with &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Omar's&lt;/a&gt; example, or read
+the &lt;a href=&quot;http://www.sinatrarb.com/intro.html&quot;&gt;README&lt;/a&gt; section on Sinatra's website, you should
+get your app running after 1 minute.&lt;/p&gt;
+
+&lt;h2&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;www.sinatrarb.com&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks! and happy coding&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.sinatrarb.com/documentation&quot;&gt;Sinatra documentation&lt;/a&gt; by Sinatra project&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Sinatra, the green way&lt;/a&gt; by Omar Vargas&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation&quot;&gt;Ruby frameworks&lt;/a&gt; by Craig Jolicoeur&lt;/li&gt;
 &lt;/ul&gt;
 
 </content>
@@ -2380,100 +2714,6 @@ Module, or an external class to reuse them.&lt;/p&gt;
    <author>
      <name>Crowd Interactive</name>
      <email>info@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Cool date formatting in Rails</title>
-   <link href="http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html"/>
-   <updated>2010-12-21T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails</id>
-   <photo>d3177da7794ac3ce603d65b33bf4a981</photo>
-   <content type="html">&lt;p&gt;In almost every Rails application, you will need to &lt;em&gt;show dates in a given format&lt;/em&gt;...&lt;/p&gt;
-
-&lt;p&gt;That's why the &lt;em&gt;strftime&lt;/em&gt; function exists, and you can customize the output to meet your needs to something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%Y %l:%M %P&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;12/19/2010 10:45 pm&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This is very customizable, but unfortunately, is hard to mantain and definitly... &lt;em&gt;not cool&lt;/em&gt; ;)&lt;br/&gt;
-In fact, this looks like old C/PHP code&lt;/p&gt;
-
-&lt;h2&gt;The &quot;cool&quot; way&lt;/h2&gt;
-
-&lt;p&gt;Rails is a cool framework that follows DRY and Convention over Configuration.&lt;/p&gt;
-
-&lt;p&gt;So that's why we need to use the &lt;em&gt;to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;This works with Rails 3 and is compatible with Rails 2.x&lt;/em&gt;!
-By default, Rails comes with a few ones that you can use:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;- :long_ordinal  #&amp;lt;- December 19th, 2010 22:42
-- :long          #&amp;lt;- December 19, 2010 22:42
-- :db            #&amp;lt;- 2010-12-19 22:42:43
-- :short         #&amp;lt;- 19 Dec 22:42
-- :time          #&amp;lt;- 22:42
-- :number        #&amp;lt;- 20101219224243
-- :rfc822        #&amp;lt;- Sun, 19 Dec 2010 22:42:43 +0000
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So, you can execute for example:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:short&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;19 Dec 16:27&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Much better now, isn't it?&lt;/p&gt;
-
-&lt;h2&gt;Custom formats&lt;/h2&gt;
-
-&lt;p&gt;The problem is that Rails doesn't provide an obvious way to do that...&lt;/p&gt;
-
-&lt;p&gt;So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that &lt;em&gt;you could create an initializer in your Rails project and add your own custom formats&lt;/em&gt; there:&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;config/initizers/time_formats.rb&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# == Adding your own datetime formats to to_formatted_s&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# DateTime formats are shared with Time. You can add your own to the&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# Time::DATE_FORMATS hash. Use the format name as the hash key and&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# either a strftime string or Proc instance that takes a time or&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# datetime argument as the value.&lt;/span&gt;
-
-&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:month_and_year&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;%B %Y&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DATE_FORMATS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;So here I'm creating 2 new date/time formats to use with the to_s method.&lt;/p&gt;
-
-&lt;p&gt;Let's see how different and clean the code is:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# the &amp;quot;cool&amp;quot; way&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:human&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# the old school way&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strftime&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%m/%d/%y @ %I:%M%p&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;em&gt;Cool, isn't it?&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;And after several reuses of the format, you will start noticing the adventages... especially &lt;em&gt;when you need a change in the format: with this aproach is only one change&lt;/em&gt; (versus search the whole project for strftime usages).&lt;/p&gt;
-
-&lt;p&gt;Hope this help...&lt;br/&gt;
-Thanks for reading&lt;br/&gt;
-Gonzalo &quot;aka Chalo&quot; Fernandez&lt;/p&gt;
-</content>
-   <author>
-     <name>Gonzalo Fernandez</name>
-     <email>gonzalo.fernandez@crowdint.com</email>
    </author>
  </entry>
  
