@@ -4,15 +4,15 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-03-31T12:21:28-06:00</updated>
+ <updated>2011-03-31T12:40:45-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
-   <link href="http://blog.crowdint.com/2011/03/31/sinatra-tips.html"/>
+   <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
    <updated>2011-03-31T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/31/sinatra-tips</id>
+   <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
 Add a disclaimer, pray for feedback.
