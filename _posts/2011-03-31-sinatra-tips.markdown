@@ -6,14 +6,15 @@ email: mario@crowdint.com
 avatar: cd962d009c918bfc2dc6e63fc1b3b5cb
 ---
 
-> <small>`TODO. Write introductions. Include references to some RESTul tutorial. Explain why RESTul is so important. Add a disclaimer, pray for feedback.
-> Make funny jokes, like "Why this guy wears a Mexican hat?"`</small>
+<small>`TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
+Add a disclaimer, pray for feedback.
+Make funny jokes, like "Why does this guy wears a Mexican hat?"`</small>
 
-No RESTul knowledge at all? [read this!][rest_rails]
+No RESTful knowledge at all? [read this!][rest_rails]
 
 ### REST URLs should be multi-response
-In rails we have [`respond_to(format)`][respond_to] to switch between different layouts, and partials. 
-So, just create a helper like `request_type?` and switch between views!
+In rails we can use [`respond_to(format)`][respond_to] to switch between different layouts, and partials.
+So, we just create a helper like `request_type?` and switch between the different kinds of views!
 
 {% highlight ruby %}
 # Route
@@ -33,7 +34,7 @@ def request_type?
 end
 {% endhighlight %}
 
-Avoid having different routes for the same `resource/action`, like `/m/register` and `/user/new` doing the same thing. 
+Avoid having different routes for the same `resource/action`, like `/m/register` and `/user/new` doing the same thing.
 Create one route than actually makes sense, and just play with the response type. 
 
 > Or even simpler!
@@ -47,7 +48,7 @@ haml view, layout => layout
 {% endhighlight %}
 
 ### "Fat models, skinny <strike>controllers</strike> routes"
-Move your ugly controller-based validations [to your models][fat_models], like:
+Move your ugly controller-based validations [to your models][fat_models], like this:
 {% highlight ruby %}
 # This is wrong
 post 'user/new' do
@@ -57,7 +58,7 @@ post 'user/new' do
 end
 {% endhighlight %}
 
-Use helpers like [`error_messages_for(@user)`]() with direct model's validates_for: 
+Use helpers like [`error_messages_for(@user)`]() with the model validations: 
 {% highlight ruby %}
 # Model
 class User
@@ -103,7 +104,8 @@ get '/user/:uid/other' do
 end
 {% endhighlight %}
 
-Start using [Sinatra's filters][sinatra-filters] as `before` or `after`. They also can be string matched! like `before '/this/*'` (wildcards) or `after /^(this|other)$/` (regex)
+Start using [Sinatra's filters][sinatra-filters] as `before` or `after`. They can be string matched! like `before '/this/*'`
+(wildcards) or `after /^(this|other)$/` (regex)
 
 {% highlight ruby %}
 # /user/001/*
@@ -138,7 +140,7 @@ Are you doing the same code, with the same route but only changing the http-verb
 I do, and I found this: [Multi-Routing in Sinatra](http://nuclearsquid.com/writings/multi-routing.html) 
 to use 'any' when you need the same route action for different methods (http verbs). 
 
-For example having this routes:
+For example having these routes:
 {% highlight ruby %}
 get '/user/:id' do ... end
 post '/user/:id' do ... end
@@ -152,20 +154,20 @@ any '/user/:id' do ... end
 {% endhighlight %}
 
 ### Be flexible with your route endings
-> I recommend enable your routes with/without last slash "/", 
-> but I found that some RESTul projects prefer all urls without slashes. 
+> I recommend that you enable your routes with/without last slash "/",
+> but I found that some RESTul projects prefer all urls without slashes.
 > So, there is a separate opinions... [1][si_slash], [2][no_slash]
-> The true is, adding an extra slash to the end isn't a big deal. Don't think so? 
+> The truth is that adding an extra slash to the end is not that big of a deal. Don't you think so?
 
 For example having:
 {% highlight ruby %}
-# This will rais 404 using '/users/001/friends/'
+# This will raise a 404 if you go to '/users/001/friends/'
 get '/users/:uid/friends' do
   ...
 end 
 {% endhighlight %}
 
-The solution it’s pretty simple, just add `/?` to the end of your routes.
+The solution is pretty simple, just add `/?` at the end of your routes.
 {% highlight ruby %}
 # this will work with: /users/:uid/friends and /users/:uid/friends/
 get '/users/:uid/friends/?' do
