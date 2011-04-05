@@ -9,10 +9,10 @@ publish: false
 
 Last week, I spent about half a day trying to get Sinatra working
 with Compass and Blueprint. At first, it was a pain in the ass because the
-documentation is pretty lame. But after some reading here and there, I
-tried by adding it via command line and I failed again.
+documentation is pretty lame. But after some reading here and there and
+trying via command line, I failed again and again.
 
-But, there is hope... I got it working and here is how I did it:
+But, don't despair, there is hope... I got it to work eventually and here is how I did it:
 
 First of all, you have to setup your sinatra app as usual.
 If you have read
@@ -31,21 +31,23 @@ to use Haml and Compass.
 
 First add these gems to you Gemfile (Compass and Haml). You will end up with something like this:
 {% highlight ruby %}
-  source "http://rubygems.org"
+source "http://rubygems.org"
 
-  gem 'compass' 
-  gem 'sinatra'
-  gem 'haml'
-  gem 'cucumber'
-  gem 'cucumber-sinatra'
-  gem 'capybara'
-  gem 'rspec'
+gem 'compass' 
+gem 'sinatra'
+gem 'haml'
+gem 'cucumber'
+gem 'cucumber-sinatra'
+gem 'capybara'
+gem 'rspec'
 {% endhighlight %} 
 
 Now you have to add a config file for compass:
 
-    $ mkdir config
-    $ touch compass.rb
+{% highlight bash %}
+$ mkdir config
+$ touch compass.rb
+{% endhighlight %}
 
 and add this content to it:
 
@@ -71,7 +73,7 @@ http_stylesheets_path = "/stylesheets"
 
 Note that I've changed the css_dir and the image dir to use "public" instead of "static"
 
-Ok, now we are half way there.
+Ok, we are half way there.
 
 Now, let's add some more configuration for compass, but this time in your app file (myapp.rb):
 
@@ -96,12 +98,12 @@ get '/' do
 end
 {% endhighlight %}
 
-With this you are telling compass to automatically convert the SCSS files into CSS files.
+With this you are telling compass to automatically convert SCSS files into CSS files.
 
 And the final touch: let's setup blueprint for this project.
 
 {% highlight bash %}
-    $ compass install blueprint
+$ compass install blueprint
 {% endhighlight %}
 
 And that is all. I hope this is helpful for you.
