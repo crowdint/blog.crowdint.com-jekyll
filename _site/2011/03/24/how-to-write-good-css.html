@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Crowd Interactive Tech Blog :: How to write good CSS</title>
+  <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</head>
+<body>
+  <div class="container">
+    <div id="empty-header">
+      <a href="/" id="home-link"><img src="/images/logo_03.png" id="logoHead" width="227" height="74" alt="LogoHead" onclick="_gaq.push(['_trackEvent', 'header', 'logo']);"/></a>
+      <ul id="navMenu">
+        <li><a href="http://www.crowdint.com/" onclick="_gaq.push(['_trackEvent', 'header', 'home']);"><span>HOME</span></a></li>
+        <li><a href="http://www.crowdint.com/en/projects" onclick="_gaq.push(['_trackEvent', 'header', 'projects']);"><span>PROJECTS</span></a></li>
+        <li><a href="http://www.crowdint.com/en/services" onclick="_gaq.push(['_trackEvent', 'header', 'services']);"><span>SERVICES</span></a></li>
+        <li class="selected"><span>BLOG</span></li>
+        <li><a href="http://www.crowdint.com/en/about_us" onclick="_gaq.push(['_trackEvent', 'header', 'about_us']);"><span>ABOUT</span></a></li>
+        <li><a href="http://www.crowdint.com/" onclick="_gaq.push(['_trackEvent', 'header', 'contact']);"><span>CONTACT</span></a></li>
+      </ul>
+    </div>
+    <div class="span-24 append-bottom testGlow">
+      <div class="round-top span-24">
+        &nbsp;
+      </div>
+      <div id="white-body" class="span-24">
+        <div class="left-side span-17">
+          <div class="post prepend-1">
+  <h1>How to write good CSS</h1>  
+  <p class="author">
+    <span class="date"><b>Mar 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
+    <p>After a while of working with CSS, in different projects and with
+different people, I have realized that there is a lack of standards for
+it. Like, when you have to make some corrections or improvements and open
+the CSS file and you get a thousand lines of code with no comments at
+all.</p>
+
+<p>Well, I have a couple Ideas of how CSS should be coded:</p>
+
+<h2>The ABC of CSS</h2>
+
+<h3>Keep it simple.</h3>
+
+<p>Imagine that every time you write a <code>&lt;div&gt;</code> tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remember to keep it simple.</p>
+
+<h3>Use HTML tags for their propose</h3>
+
+<p>I'm always finding some code like this:</p>
+
+<div class="highlight"><pre><code class="css">   <span class="o">&lt;</span><span class="nt">table</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+   <span class="o">&lt;/</span><span class="nt">table</span><span class="o">&gt;</span>
+  
+</code></pre>
+</div>
+
+
+<p>As you see, it's a common list an instead of using <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code> its using a <code>&lt;table&gt;</code>.</p>
+
+<p>A better way to do this would be:</p>
+
+<div class="highlight"><pre><code class="css">    <span class="o">&lt;</span><span class="nt">ul</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">ul</span><span class="o">&gt;</span>
+  
+</code></pre>
+</div>
+
+
+<p>You <strong>must</strong> use the correct tag; if you are not familiar with all of them
+take a look at <a href="http://w3schools.com/tags/default.asp">w3schools html reference</a>.
+Here you will find the complete list of tags with examples and everything you need.</p>
+
+<p>Also, this is important because, it is easier for search engines to
+identify your page and understand its code. Remember that search engines
+are like a blind users.</p>
+
+<h3>Use comments</h3>
+
+<p>Try to put comments on your CSS. It is easier for others to see the comments and
+know what the styles are being used for.</p>
+
+<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Common</span> <span class="nt">tags</span> <span class="nt">styles</span>
+  <span class="nt">a</span> <span class="p">{</span>
+    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">styles</span>
+  <span class="nf">#header</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+  <span class="p">}</span>
+
+  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">//</span><span class="nt">end</span>
+
+  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span> <span class="nt">styles</span>
+  <span class="nf">#left-menu</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
+  <span class="p">}</span>
+  <span class="o">//</span><span class="nt">end</span>
+</code></pre>
+</div>
+
+
+<h3>Avoid absolute positions</h3>
+
+<p>When you start making CSS, you can find it "easy" to put every element on
+the right place using absolute position. This is a very common, yet
+incorrect
+method to align your elements. Sometimes when you use absolute positions,
+you will get weird behavior after a window resize or in different
+browsers or screens, just try to avoid it and use margins and
+paddings to do the work.  Always remember <a href="http://www.w3.org/TR/CSS21/box.html">the box model</a>.</p>
+
+<h2>Ok, First steps</h2>
+
+<h3>Reset your CSS</h3>
+
+<p>Did you ever realize the huge differences between the browser when you put
+a text into a <code>&lt;div&gt;</code> or inside <code>&lt;p&gt;</code>? You will always face a couple of differences in
+how each browser renders the elements.</p>
+
+<p><img src="/images/2011/renders.jpg" title="Renders" alt="Diferent renders" /></p>
+
+<p>This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple
+technique where you put all the style to 0/none by default.
+You can achieve this by applying <a href="http://meyerweb.com/eric/tools/css/reset/index.html">Eric Meyer's css reset</a>,
+download it and put it on your public folder, or link to the url
+directly.</p>
+
+<h3>Styles for tags first</h3>
+
+<p>I prefer to write styles for tags first, it’s something like starting from
+the general to the particular. In other words, make it general, and use
+exceptions only when it is really necessary.</p>
+
+<div class="highlight"><pre><code class="css">  <span class="nt">body</span><span class="p">{</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nt">h1</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nc">.secondary_pages</span> <span class="nt">h1</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">.</span> <span class="m">1em</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Verdana</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<h3>Be modular</h3>
+
+<p>Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like <strong>main.css</strong> and <strong>form.css</strong>.</p>
+
+<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">CSS</span>
+  <span class="nf">#header</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span>
+  <span class="nf">#left-menu</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
+  <span class="p">}</span>
+  <span class="nt">a</span><span class="p">{</span>
+    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<h3>Do you feel like I am re-writing the whole bible? (Old and new testament!)</h3>
+
+<p>Sometimes you start to write CSS and then you get velocity, or you have a
+deadline, then you get yourself coding like a mad man. Tons and tons of CSS
+lines. Then, you end up with like 10 different files with a thousand lines on
+each one.</p>
+
+<p>Well if you end up having that, you are doing it completely wrong.</p>
+
+<p>Take your time to write the CSS, once you get the expected result,
+take a look at your code and try to clean the clean it.</p>
+
+<blockquote><p>Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</p>
+
+<h4>Antoine de Saint-Exupery <em>French writer (1900 - 1944)</em></h4></blockquote>
+
+<p>There's always a way to make your code look better. If you take care about
+it you will get maintainable, very easy to read and understandable code.</p>
+
+<h3>Cross-browser testing <strong>ALWAYS</strong></h3>
+
+<p>I highlighted "always" with caps and bold, because it is something that we
+forget about very often. We write and write CSS lines, and we test on Firefox or
+Chrome because we love those browsers, and we are very happy about the way
+our site looks, then after a couple of days of coding, you start thinking
+about how it will look on IE... that awfulness all web developers fear to
+see their work on. You test in IE and you realize that the entire
+site is messed up, the whole layout is broken.</p>
+
+<p>You don’t know where to start but you do it anyway.
+Begin making changes here and there and you finish with tons
+of patches or writing a new CSS file just for IE.</p>
+
+<p>That’s not necessary if you take into consideration what you are doing right
+from the first step. If you wrote 2 lines, verify in all browsers that your
+style is working right. By doing this you will end with clean code and
+compatible with all browsers.</p>
+
+<h3>Remember the W3C</h3>
+
+<p>Always keep in mind the standards and validate your site using the
+<a href="http://jigsaw.w3.org/css-validator/">CSS</a> and
+<a href="http://validator.w3.org/">HTML</a> validators. If your code passes the validation, your site will
+be readable for all browsers for sure.</p>
+
+<h3>My final words</h3>
+
+<p>All suggestions regarding good CSS writing, are about taking care of the
+details.  Details make the difference, you only have to put some attention
+and code in the right way.  Remeber that sometimes your code is gonna be
+seen by other developers and you have to make it clear for them and for the
+browsers too.</p>
+
+<p>Also remember the accessibility of your site, think of the people at all
+times... people with some illness or different capacities, like the blind
+people and so on. You can check the <a href="http://www.w3.org/TR/WCAG10/">Web Content Accessibility Guidelines</a>
+and try to at least complete the guides for Level A, the visitors of your
+site will be grateful about this.</p>
+
+<p><strong>And for God’s sake... Code clean!!!!</strong></p>
+
+
+    <div class="tweet right">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+  <div class="author_box">
+    <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
+  </div>
+  <div class="nav_links span-16">
+    
+      <div class="previous span-8"><a href="/2011/03/18/what-is-sinatra.html"><< What is Sinatra?</a></div>
+    
+    
+      <div class="next span-8 last"><a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful? >></a></div>
+    
+  </div>
+</div>
+<div class="post prepend-1">
+  <h1>Related Posts</h1>
+  <ul class="archives">
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  </ul>
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+        </div>
+        <div class="right-side span-5 last prepend-1">
+          <h1><a href="/">Blog Home</a></h1>
+<h1>About Crowd Interactive</h1>
+<p class="append-1 about">Crowd Interactive is a Ruby on Rails
+consultancy firm powered by a team of enthusiast engineers that love
+programming.We turn your ideas into web applications...<br/><a href="/about.html">Read More...</a></p>
+<div id="writeSkribitHere"></div><script src="http://assets.skribit.com/javascripts/SkribitWidget.js?renderTo=writeSkribitHere&amp;blog=ef56d1750b6040b271e0080ef2886f3b&amp;cnt=5&noCSS=1"></script><noscript>Sorry, but the <a href="http://skribit.com" title="Skribit - Cure Writer's Block">Skribit</a> widget only works on browsers with JavaScript support.  <a href="http://skribit.com/blogs/crowdint-tech" title="Skribit Suggestions for Crowdint Tech">View suggestions for this blog here.</a></noscript>
+<h1>Our Favorite Sites</h1>
+<ul>
+  <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
+  <li><a href="http://www.magmarails.com">MagmaRails</a></li>
+  <li><a href="http://rubyonrails.org">Ruby on Rails</a></li>
+  <li><a href="http://ruby-lang.org">Ruby-Lang</a></li>
+  <li><a href="http://github.com/crowdint">Github</a></li>
+</ul>
+<h1>Stuff we've built</h1>
+<ul>
+  <li><a href="http://www.modcloth.com">ModCloth</a></li>
+  <li><a href="http://www.creativeallies.com">Creative Allies</a></li>
+  <li><a href="http://www.nameframe.com">Nameframe</a></li>
+  <li><a href="http://github.com/crowdint/rails3-jquery-autocomplete">Rails3-jQuery-Autocomplete</a></li>
+  <li><a href="http://github.com/crowdint/rankstar">rankstar</a></li>
+  <li><a href="http://github.com/crowdint/blog.crowdint.com">This site's source code</a></li>
+</ul>
+<h1>Older Posts</h1>
+<ul>
+  <li><a href="/archive.html">Archive</a></li>
+</ul>
+
+Site Powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+
+        </div>
+      </div>
+      <div class="round-bottom span-24">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    <div class="copyContent" >
+      <p class="copy">Copyright &copy; 2010, Crowd Interactive. All rights reserved.</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var disqus_shortname = 'crowdinttech';
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'http://disqus.com/forums/crowdinttech/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+  </script>
+</body>
+</html>

@@ -165,15 +165,12 @@ b, em, dfn {
 
 .post .body blockquote {
   font: 14px/20px;
-  padding-left: 70px;
-  padding-top: 18px;
-  padding-bottom: 0px;
-  padding-right: 10px;
+  padding: 15px 5px 0px 40px;
   background-color: #dadada;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   margin: 5px auto 20px;
-  background-image: url(/images/openquote4.gif);
+  background-image: url(/images/openquote4.png);
   background-position: middle left;
   background-repeat: no-repeat;
   text-indent: 23px;

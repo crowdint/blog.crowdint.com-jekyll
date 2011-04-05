@@ -31,7 +31,7 @@ Now, bundler comes with a handy command to generate the basic files to
 start writing a gem.
 
 {% highlight ruby %}
-$ bundler gem awesome_gem
+$ bundle gem awesome_gem
 
   create  awesome_gem/Gemfile
   create  awesome_gem/Rakefile
@@ -125,7 +125,7 @@ install* command, and you will get the gem dependencies installed on your
 computer.
 
 {% highlight bash %}
-$ bundler install
+$ bundle install
 
   Installing rails (3.0.0)
   Using mocha (0.9.10)

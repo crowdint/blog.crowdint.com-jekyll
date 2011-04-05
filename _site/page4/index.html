@@ -47,6 +47,680 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 21</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
+
+<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+</code></pre>
+</div>
+
+
+<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
+In fact, this looks like old C/PHP code</p>
+
+<h2>The "cool" way</h2>
+
+<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
+
+<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
+
+<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
+By default, Rails comes with a few ones that you can use:</p>
+
+<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
+- :long          #&lt;- December 19, 2010 22:42
+- :db            #&lt;- 2010-12-19 22:42:43
+- :short         #&lt;- 19 Dec 22:42
+- :time          #&lt;- 22:42
+- :number        #&lt;- 20101219224243
+- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
+</code></pre>
+
+<p>So, you can execute for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Much better now, isn't it?</p>
+
+<h2>Custom formats</h2>
+
+<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
+
+<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
+
+<p><em>config/initizers/time_formats.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
+<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
+<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
+<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
+<span class="c1"># datetime argument as the value.</span>
+
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+
+<p>Let's see how different and clean the code is:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
+
+<span class="c1"># the old school way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p><em>Cool, isn't it?</em></p>
+
+<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
+
+<p>Hope this help...<br/>
+Thanks for reading<br/>
+Gonzalo "aka Chalo" Fernandez</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/21/cool-date-formatting-in-rails.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 15</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.</p>
+
+<p>I, at least, personally had a problem getting it when I first started
+using Rails.</p>
+
+<h2>REST</h2>
+
+<p>REST stands for <em>Representational State Transfer</em>.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.</p>
+
+<h3>The wrong way</h3>
+
+<p>I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.</p>
+
+<p>So, with that thought on your mind, you end up with a controller like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">remove_review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">cancel</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">pay</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>What's wrong here?</h3>
+
+<p>If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
+
+<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have <em>resources</em> and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.</p>
+
+<p>A resource is not necesarily a model, it's just <em>something</em> that has a
+state or that can be altered.</p>
+
+<h3>How to make it right?</h3>
+
+<p>So, if we go back to our example, the right thing to do, is to think
+about those <em>bad</em> actions as a resource.</p>
+
+<p>If you're going to review an order, then, you need a <em>OrderReview</em>
+controller.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
+can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
+a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
+out of it.</p>
+
+<p>A most common mistake... an action that actually alters the state of an
+object like the cancel action.</p>
+
+<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
+something, but still, this looks much better:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
+cancellation (it can happen).</p>
+
+<p>You could now refactor all the other actions to their respective
+controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
+
+<h2>Associations</h2>
+
+<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.</p>
+
+<p>For example, if you had a User that can add other User objects as its
+friends, instead of creating a <em>add_friend</em> or something action, you'd add
+a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
+
+<p>By the way, I've seen relationships like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
+
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><em>Always remember to think restful</em>, probably the user should:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
+<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
+
+<span class="c1"># This actually requires more code to make it work, but, you get the</span>
+<span class="c1"># point, right?</span>
+</code></pre>
+</div>
+
+
+<p>Think about it. Way better.</p>
+
+<h3>But, why? You have to write all this "unnecesary" code</h3>
+
+<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.</p>
+
+<p>Also, Rails its all about love and following conventions. This is one of
+them.</p>
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 07</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Have you ever wondered if you can do something to make your ruby development even faster?
+Are you tired of waiting for rspec to finish?
+Is your rails application eating more and more memory and you have to restart your app once in a while?</p>
+
+<p>Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.</p>
+
+<h2>What is REE?</h2>
+
+<p>As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "<a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep">mark-and-sweep</a>".</p>
+
+<p>Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.</p>
+
+<p>Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "<a href="http://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">tweak the garbage collector</a> via environment variables.</p>
+
+<p>Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.</p>
+
+<h2>Installing REE</h2>
+
+<p>I'll guide you through this post assuming that you already have <a href="http://rvm.beginrescueend.com/rvm/install/">rvm</a> installed on your computer.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm install ree
+<span class="c">#go and grab a drink, preferably coffee or beer</span>
+<span class="c">#some output</span>
+<span class="c">#done.</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm use ree
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm list
+
+rvm <span class="nv">rubies</span>
+
+<span class="o">=</span>&gt; ree-1.8.7-2010.02 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.8.7-p302 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.9.1-p378 <span class="o">[</span> x86_64 <span class="o">]</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-04-19 patchlevel 253<span class="o">)</span> <span class="o">[</span>i686-darwin10.4.0<span class="o">]</span>, MBARI 0x6770, Ruby Enterprise Edition 2010.02
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Hint: go to this <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">post</a> and make rvm always use your desired gemset@ruby</p>
+
+<p>Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+... in 62.33s
+
+SLOW SPEC: 5.9991  Test A
+SLOW SPEC: 5.3510  Test B
+SLOW SPEC: 7.8485  Test C
+SLOW SPEC: 7.6710  Test D
+SLOW SPEC: 5.8465  Test E
+SLOW SPEC: 5.9972  Test F
+SLOW SPEC: 5.9707  Test G
+SLOW SPEC: 5.4557  Test H
+SLOW SPEC: 6.0631  Test I
+SLOW SPEC: 5.4861  Test J
+1763/1763:     100% |##########################################| Time: 00:10:43
+
+Finished in 643.211296 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  13m45.186s
+user  11m0.745s
+sys   0m20.082s
+</code></pre>
+</div>
+
+
+<p>Mmhm, that was... 'fast', I wonder how previous numbers performed.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use 1.8.7
+Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+...
+in 84.92s
+
+SLOW SPEC: 8.6082  Test A
+SLOW SPEC: 10.3736 Test B
+SLOW SPEC: 11.3856 Test C
+SLOW SPEC: 7.4864  Test D
+SLOW SPEC: 6.5998  Test E
+SLOW SPEC: 8.8307  Test F
+SLOW SPEC: 8.8013  Test G
+SLOW SPEC: 8.8126  Test H
+SLOW SPEC: 8.9622  Test I
+SLOW SPEC: 8.9033  Test J
+1763/1763:     100% |##########################################| Time: 00:15:30
+
+Finished in 930.143889 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  19m40.629s
+user  16m13.691s
+sys   0m21.632s
+</code></pre>
+</div>
+
+
+<p>Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!</p>
+
+<p>Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">Garbage Collector Performance Tunning</a>. Twitter has published their production settings, let's see what we can get.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use ree
+Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span><span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span>500000 <span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span>250000 <span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span>1 <span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span>50000000 rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+...in 44.06s
+SLOW SPEC: 6.2397  Test C
+SLOW SPEC: 8.4131  Test D
+SLOW SPEC: 5.6498  Test E
+1763/1763:     100% |##########################################| Time: 00:06:53
+
+Finished in 413.352603 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  9m26.457s
+user  6m46.696s
+sys   0m20.475s
+</code></pre>
+</div>
+
+
+<p>You should've seen my face when I came back and saw the results, that meant 2.2x faster!</p>
+
+<p>My next thought was: I have to make this a permanent change in my system, so it was easy:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_MIN_SLOTS=500000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_INCREMENT=250000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_GC_MALLOC_LIMIT=50000000&quot;</span> &gt;&gt; ~/.bash_profile
+</code></pre>
+</div>
+
+
+<p>After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:</p>
+
+<h3>Using Standard Ruby 1.8.7</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   56.476 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360264 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    17.71 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       5647.631 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       56.476 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1683.51 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       6
+Processing:    89 5378 899.5   5653    6163
+Waiting:       88 5377 899.5   5652    6162
+Total:         92 5378 898.9   5653    6165
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   45.212 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360134 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    22.12 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4521.241 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       45.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2102.92 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0       5
+Processing:    83 4285 706.4   4456    5027
+Waiting:       82 4284 706.4   4455    5026
+Total:         88 4286 705.5   4456    5028
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with twitter settings</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.348 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360048 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    31.90 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3134.784 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.348 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          3033.01 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:   210 2962 562.4   3074    3873
+Waiting:      210 2961 562.4   3073    3872
+Total:        215 2963 561.6   3074    3873
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with 37signals settings</h3>
+
+<p>37signals has published their production settings too, and I tried to apply them in my project and I got:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   46.230 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360135 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    21.63 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4622.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       46.230 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2056.64 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:    79 4390 760.8   4473    5830
+Waiting:       78 4390 760.8   4472    5829
+Total:         84 4391 760.0   4473    5830
+</code></pre>
+</div>
+
+
+<p>For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.</p>
+
+<p>*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/07/improving-your-dev-life-with-ree.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></h1>
   <p class="author">
     <span class="date"><b>Nov 30</b><br />2010</span>
@@ -392,989 +1066,13 @@ Watermark dimensions are: 250 x 250 pixels</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 17</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Rack provides a minimal interface between web servers supporting <strong>Ruby</strong>. It contains a full stack
-of middleware components. Using <strong>Rack</strong> middleware you can build applications that directly interact
-with a HTTP requests environment and can be plugged in Rails, Sinatra and many other <strong>Rack based frameworks</strong>.</p>
-
-<p>Rack is one of those "bare minimum components" that you need for creating modular web
-applications, furthermore, by learning Rack you begin mastering part of the <em>Rails internals</em>, why?,
-because <strong>Rails</strong> has adopted the <em>Rack philosophy</em> throughout its framework, a Rails application is actually
-<em>a collection of Rack and Rails middleware components</em> that work together to form the completed
-whole.</p>
-
-<p>In this article I'll guide you through the process of installing Rack, letting you know what every rack
-application must implement/provide and creating a rack application, in the process I'll explain some
-concepts with a design pattern interpretation of rack and finally we'll see an integrating example
-of the whole story.</p>
-
-<p>Let's begin.</p>
-
-<h2>Installing Rack</h2>
-
-<p>Just install the rack gem, as simple as:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
-</code></pre>
-</div>
-
-
-<h2>Basic requirements</h2>
-
-<p>A Rack application is a <strong>Ruby object</strong> that <strong>respond_to? 'call'</strong>, it takes exactly <em>one argument</em>:
-<strong>the environment</strong>, and <em>returns</em> an <strong>Array</strong> of exactly <strong>three values</strong>: <strong>http status</strong>, <strong>http
-headers</strong>, and <strong>http body</strong>.</p>
-
-<p>The headers and body returned by the call have to <strong>respond_to? 'each'</strong>.</p>
-
-<p>So basically anything like the following may act as a rack application:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
-</code></pre>
-</div>
-
-
-<p>Of course, there are more things that you need to check in order to make your application
-<strong>Rack compliant</strong>, but we'll get to that later.</p>
-
-<p>Now we are going to build a classic example application.</p>
-
-<h2>Hello World example</h2>
-
-<p>In this example, it returns a three element Array, array's elements in order are: 200 HTTP
-successful response code, a text/html content type and the HTTP response body with a "Hello
-World" message.</p>
-
-<p>Open a file, call it <em>hello_world.ru</em>, and write following:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">app</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> 
-    <span class="o">[</span>
-      <span class="mi">200</span><span class="p">,</span>
-      <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span>
-     <span class="s1">&#39;Hello World&#39;</span>
-    <span class="o">]</span>
-  <span class="k">end</span> 
-  <span class="n">run</span> <span class="n">app</span> 
-</code></pre>
-</div>
-
-
-<p>In order to run it, I'll first send the <em>rackup hello_world.ru</em> to the background, and then, using <em>curl</em>,
-we'll send a request to localhost:</p>
-
-<div class="highlight"><pre><code class="bash">  ..<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup hello_world.ru &amp;
-  <span class="o">[</span>1<span class="o">]</span> 12508
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:9292
-  127.0.0.1 - - <span class="o">[</span>05/Nov/2010 12:07:54<span class="o">]</span> <span class="s2">&quot;GET / HTTP/1.1&quot;</span> 200 - 0.0008
-  Hello World
-</code></pre>
-</div>
-
-
-<p>And there we have our <strong>Hello World</strong> message from the <em>http body</em> example.</p>
-
-<h2>Basic API</h2>
-
-<p>Before going on to the next examples, you need to know that rack applications usually call
-the following methods:</p>
-
-<ul>
-<li><em>use(middleware, **args, &amp;block)</em> adds a middleware to the stack</li>
-<li><em>run(app)</em> dispatches to an application</li>
-<li><em>map(path, &amp;block)</em> constructs a Rack::URLMap in a convenient way</li>
-</ul>
-
-
-<p>Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
-many rack applications.</p>
-
-<h2>Middleware</h2>
-
-<p>A middleware is a Rack application that is <em>designed</em> to <em>run</em> in <em>conjunction</em> with another Rack
-application that acts as the <em>endpoint</em>.</p>
-
-<p>Think of a Rack middleware as a filter <em>receiving</em> the Rack environment for the request
-from the previous <em>middleware, then doing some work with or on the </em>request's environment<em>
-and then </em>calling<em> the </em>next middleware<em> in the chain. The </em>last<em> Rack application in the
-chain is the </em>application itself<em>, </em>any<em> middleware in the chain can </em>return the Rack response
-itself<em>, thus </em>preventing<em> the rest of the middlewares in the chain from </em>executing*.</p>
-
-<p>Now let's build and chain three rack applications/middlewares, one <em>lambda endpoint</em> and two <em>call</em>
-responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
-<em>design pattern</em>.</p>
-
-<h2>Chaining Rack applications example</h2>
-
-<p>Our endpoint application is just like the previous Hello World example but it returns an
-"I'm an endpoint" body.</p>
-
-<p>The point here is to show how three different objects (middlewares) are chained, classes
-<em>SayHi</em> and <em>SayNothing</em> will simply append a message to the response body, in the end, the returned
-request body will contain the message added by each middleware.</p>
-
-<p>In order to avoid code repetition we'll define the common code that is inside the Initializer module
-and then we'll mix it in each class using <strong>Module#include</strong>.</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">module</span> <span class="nn">Initializer</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span> 
-    <span class="k">end</span> 
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">body</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hi from </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">&quot;</span>
-      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
-    <span class="k">end</span> 
-  <span class="k">end</span>
-
-  <span class="k">class</span> <span class="nc">SayHi</span>
-    <span class="kp">include</span> <span class="no">Initializer</span>
-  <span class="k">end</span>
-
-  <span class="k">class</span> <span class="nc">SayNothing</span>
-    <span class="kp">include</span> <span class="no">Initializer</span>
-  <span class="k">end</span>
-    
-  <span class="n">use</span> <span class="no">SayHi</span>
-  <span class="n">use</span> <span class="no">SayNothing</span>
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;I&#39;m the endpoint&quot;</span><span class="o">]]</span> <span class="p">}</span>
-</code></pre>
-</div>
-
-
-<p>Let's test it using <em>rackup</em>:</p>
-
-<div class="highlight"><pre><code class="bash">...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup  simple_stacked.ru  -p 1111 &amp;
-<span class="o">[</span>1<span class="o">]</span> 19216
-
-...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
-I<span class="err">&#39;</span>m the endpoint
-Hi from SayNothing
-Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<p>The response shows the endpoint's message on the first line, plus the SayNothing response,
-plus the SayHi response. As you can see all the applications interacted directly with the
-request and its response.</p>
-
-<h2>Decorator pattern</h2>
-
-<p>It is important to note that Rack applications follow a decorator pattern, where each application
-receives an <em>Array of three elements and returns an Array of three elements</em>, this Array must follow
-the specification we discussed above.</p>
-
-<p>This pattern allows components to receive/add behavior dynamically using a common interface. If
-you want to learn more about the subject I recommend you go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
-article</a>.</p>
-
-<p>The following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
-that initializes with a three elements array mimicking a Rack Application, that application will be
-decorated with HTML and JSON outputs:</p>
-
-<script src="https://gist.github.com/668084.js"> </script>
-
-
-<p>Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
-which one fits your needs.</p>
-
-<h2>Creating valid Rack applications</h2>
-
-<p>Every Rack application must follow the <a href="http://rack.rubyforge.org/doc/SPEC.html">Rack Spec</a>,
-Rack helps you to follow it by providing a <strong>Rack::Lint</strong> middleware, you should include it in your
-application in order to make it <strong>Rack compliant</strong>. By running your application using <strong>rackup</strong>
-command line tool, you are already using it, otherwise include it with:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Lint</span>
-</code></pre>
-</div>
-
-
-<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, the following is an
-example I'm working on based on the Rack Spec:</p>
-
-<script src="https://gist.github.com/668111.js"> </script>
-
-
-<p>Now, let's implement and tie everything together with the next example:</p>
-
-<h2>Static file server with Haml support example</h2>
-
-<p>Imagine your application returns files from a certain folder, just like a file server, but,
-whenever these files have a <a href="http://haml-lang.com/">Haml</a> extension they will be parsed and
-rendered as html.</p>
-
-<p>We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
-start!.</p>
-
-<h3>Step 1. Serving static files</h3>
-
-<p>Create a <em>file_server.rb</em> file, and put following code in it:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
-  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>Now create a <em>public</em> folder and a <em>index.html</em> file inside and fill in this html file with:</p>
-
-<div class="highlight"><pre><code class="html">  <span class="nt">&lt;html&gt;</span>
-    <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;title&gt;</span>The index file<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;/head&gt;</span>
-    <span class="nt">&lt;body&gt;</span>
-      The body
-    <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
-
-
-<p>Now let's test it using <em>rackup</em> and <em>curl</em>:</p>
-
-<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
-  <span class="o">[</span>2<span class="o">]</span> 17882
-
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
-  File not found: /
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111/index.html
-  &lt;html&gt;
-    &lt;head&gt;
-      &lt;title&gt;The index file&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-      The body
-    &lt;/body&gt;
-  &lt;/html&gt;
-</code></pre>
-</div>
-
-
-<p>It works, now we have a static files server.</p>
-
-<h3>Step 2. Serve haml files as html</h3>
-
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
-
-  <span class="k">class</span> <span class="nc">MyHaml</span>
-    <span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
-      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span>
-    <span class="k">end</span>
-
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-
-      <span class="k">if</span> <span class="n">env</span><span class="o">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/\.haml$/</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">to_s</span>
-        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;text/html&#39;</span>
-      <span class="k">end</span>
-
-      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
-    <span class="k">end</span>
-
-    <span class="kp">private</span>
-    <span class="k">def</span> <span class="nf">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">full_body</span> <span class="o">=</span> <span class="n">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">engine</span> <span class="o">=</span> <span class="no">Haml</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">new</span> <span class="n">full_body</span>
-      <span class="n">engine</span><span class="o">.</span><span class="n">render</span>
-    <span class="k">end</span>
-
-    <span class="k">def</span> <span class="nf">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-      <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-      <span class="n">body</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">text</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">}</span>
-      <span class="n">text</span>
-    <span class="k">end</span>
-
-  <span class="k">end</span>
-
-  <span class="n">use</span> <span class="no">MyHaml</span>
-  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>Our call method basically looks for request paths where the file name has a haml extension,
-we have to change the content length and type to match what the response is returning,
-here we are using <em>traverse_body</em> method just to read through the previous response body,
-since it is a <em>Rack::File</em> instance.</p>
-
-<p>In order to test this, create an <em>index.haml</em> file inside public folder and fill it in with
-following:</p>
-
-<div class="highlight"><pre><code class="html">  !!!
-  %html
-    %head
-      %title The index from a haml file
-    %body
-      The haml body
-</code></pre>
-</div>
-
-
-<p>Let's test it with <em>rackup</em> and <em>curl</em>:</p>
-
-<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
-  <span class="o">[</span>2<span class="o">]</span> 19132
-
-  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl  localhost:1111/index.haml
-  &lt;!DOCTYPE html PUBLIC <span class="s2">&quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span> <span class="s2">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;</span>&gt;
-  &lt;html&gt;
-    &lt;head&gt;
-      &lt;title&gt;The index from a haml file&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-      The haml body
-    &lt;/body&gt;
-  &lt;/html&gt;
-</code></pre>
-</div>
-
-
-<h2>Conclusion</h2>
-
-<p>There's lot more to learn about Rack, for example :</p>
-
-<ul>
-<li>Ruby and Rails integration</li>
-<li>Ruby and Rails rack architecture</li>
-<li>Lots of other Rack utilities</li>
-</ul>
-
-
-<p>I'll go through these examples in future articles, for now I think this is enough.
-Feel free to send me your comments, additions, resources or complains. I will certainly
-look forward to them.</p>
-
-<p>Thanks for your reading and remember, other's source code is almost every time your best teacher.</p>
-
-<p>Regards</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/17/rack-basics-a-rack-introduction.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 11</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <h2>Why?</h2>
-
-<p>Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having <a href="http://www.facebook.com/j.francisco.guzman">Facebook-like urls =>  http://www.facebook.com/j.francisco.guzman</a>, you may want to have something like <a href="http://francisco.expensd.com">http://francisco.expensd.com</a>.</p>
-
-<p>This can be particularly useful and shiny in two cases:</p>
-
-<p>● You want to have subdomains such as: admin, blog, mail, etc. <br />
-● You want to provide your users with a subdomain they can come up with <br /></p>
-
-<p>Want to give it a shot?</p>
-
-<h2>Sounds cool, but I still use Rails 2.3.x</h2>
-
-<p>Well, your best friend then is <a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a>; according to its <a href="http://github.com/mbleigh/subdomain-fu">GitHub</a> resource, it "<em>provides a modern implementation of subdomain handling in Rails. It takes aspects from account_location, request_routing, and other snippets found around the web and combines them to provide a single, simple solution for subdomain-based route and url management.</em>"</p>
-
-<p>You can either install it as an 'old school' plugin or a more fashion-like gem:</p>
-
-<h3>Plugin</h3>
-
-<div class="highlight"><pre><code class="bash">script/plugin install git://github.com/mbleigh/subdomain-fu.git
-</code></pre>
-</div>
-
-
-<h3>Gem (no Bundle) -- add it to your config/environment.rb file</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then...</p>
-
-<div class="highlight"><pre><code class="bash">rake gems:install
-</code></pre>
-</div>
-
-
-<h3>Gem (Bundle) -- add it to your Gemfile</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then...</p>
-
-<div class="highlight"><pre><code class="bash">bundle install
-</code></pre>
-</div>
-
-
-<h2>Settings (we're still working with subdomains in Rails 2.3.x)</h2>
-
-<p>What SubdomainFu provides is an extension for the URL Rewriting engine provided with Rails. This means we will be able to use it anywhere we normally generate URLs: <em>url_for</em>, named routes, etc. So here's the basic configuration (with default values):</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># in environment.rb</span>
-  
-<span class="c1"># These are the sizes of the domain (i.e. 0 for localhost, 1 for something.com)</span>
-<span class="c1"># for each of your environments</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">tld_sizes</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:development</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                          <span class="ss">:test</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                          <span class="ss">:production</span> <span class="o">=&gt;</span> <span class="mi">1</span> <span class="p">}</span>
-
-<span class="c1"># These are the subdomains that will be equivalent to no subdomain</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">mirrors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;www&quot;</span><span class="o">]</span>
-
-<span class="c1"># This is the &quot;preferred mirror&quot; if you would rather show this subdomain</span>
-<span class="c1"># in the URL than no subdomain at all.</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">preferred_mirror</span> <span class="o">=</span> <span class="s2">&quot;www&quot;</span>
-</code></pre>
-</div>
-
-
-<h3>What about local dev environment???</h3>
-
-<p>There are two different ways to set up your local environment to work with subdomain:</p>
-
-<p>● Editing your hosts file (usually located in /etc/hosts) and add each subdomain you will need (I know it doesn't sound like a great idea)</p>
-
-<p>● Using <a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Tim Pope's</a> awsome contributon to work with subdomains in our local environments; doing so, will allow us to use <a href="">http://lvh.me:3000</a> with subdomains</p>
-
-<p><a href="">http://cool.lvh.me:3000</a></p>
-
-<h2>Been there, done that... now what???</h2>
-
-<p>Now you can take advantage of two awesome features: the <em>current_subdomain</em> method which will return (of course) the current subdomain or <em>nil</em> if there is no subdomain or the current subdomain is a mirror:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># http://admin.killerapp.com/</span>
-current_subdomain <span class="c"># =&gt; &quot;admin&quot;</span>
-
-<span class="c"># http://www.killerapp.com/ or http://killerapp.com/</span>
-current_subdomain <span class="c"># =&gt; nil</span>
-
-<span class="c"># http://other.subdomain.killerapp.com</span>
-current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
-</code></pre>
-</div>
-
-
-<p>and the-now-extended URL rewriting features passing the <strong>:subdomain</strong> option to an URL generating method:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;da_controller&quot;</span><span class="p">,</span> 
-  <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;cool_feature&quot;</span><span class="p">,</span> 
-  <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/da_controller/cool_feature</span>
-  
-<span class="n">users_url</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>  <span class="c1"># =&gt; http://mykillerapp.com/users</span>
-
-<span class="c1"># The full URL will be generated if the subdomain is not the same as the</span>
-<span class="c1"># current subdomain, regardless of whether _path or _url is used.</span>
-<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/users</span>
-<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="c1"># =&gt; /users</span>
-</code></pre>
-</div>
-
-
-<h2>Generating subdomains</h2>
-
-<p>You have two options (again): reserving yourself the right to create them manually or else, giving your users the ability to choose their own subdomain, checking availability and storing the value to a document or db table... you now have the tool, how to use it is up to you.</p>
-
-<p>Enjoy!</p>
-
-<h2>Enjoy??? Wait!!! What about Rails 3???</h2>
-
-<h2>For our edgy Rails 3 users</h2>
-
-<p>It is a real blessing the guys who worked on Rails 3 decided to incorporate this feature so we can use it out-of-the-box taking advantage of the new routing DSL. A great example we can use is a multiple blog app, where we can have blogs (subdomains), articles and comments:</p>
-
-<p><strong>in config/routes.rb</strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>  
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In this example, our root_path will land in <strong>blogs#index</strong>. We would want this only if no subdomain has been specified, otherwise we want to perform the action <strong>blogs#show</strong>. Rails 3 makes it really easy by adding a restriction:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>  
-  <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span><span class="p">,</span> <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="sr">/.+/</span> <span class="p">}</span>  
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>This setting demands our attention in two details: the <em>id</em> that will be passed to the <em>show_path</em> and the <em>subdomain</em> <strong>:constraint</strong></p>
-
-<p>To pass the id we just need to use a finder like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">show</span>
-  <span class="vi">@blog</span> <span class="o">=</span> <span class="no">Blog</span><span class="o">.</span><span class="n">find_by_subdomain</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>voilà</em></strong></p>
-
-<p>As for the subdomain, we will only pass it in our request when we need it; that simple!</p>
-
-<h2>Mirrors (the 'www' case)</h2>
-
-<p>In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit of a complex way, but not way too complex...</p>
-
-<p>First, we turn the subdomain constraints into a <em>block</em> in our <strong>config/routes.rb</strong> file</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>
-  <span class="n">constraints</span><span class="p">(</span><span class="no">Subdomain</span><span class="p">)</span> <span class="k">do</span>  
-    <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span>
-  <span class="k">end</span>
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>and we pass a new class called <strong>Subdomain</strong>, which we'll define in our <strong>lib</strong> folder (<strong>lib/subdomain.rb</strong>)</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Subdomain</span>  
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">matches?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>  
-    <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span> <span class="o">!=</span> <span class="s1">&#39;www&#39;</span>  
-  <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>done!</em></strong></p>
-
-<h3>Links</h3>
-
-<p>To use subdomains in our links, we can not just pass a <strong>:subdomain</strong> option like we can with <em>SubdomainFu</em>; instead, we must build the host name from scratch and adding the subdomain. This is accomplished using the <em>subdomain</em> attribute in our <strong>blog</strong> object + the request domain + the request port:</p>
-
-<p><strong><em>This won't work...</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  </span>
-<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  &lt;div&gt;  </span>
-<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">blog</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
-<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">    &lt;/div&gt;  </span>
-<span class="x">  &lt;/div&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</code></pre>
-</div>
-
-
-<p><strong><em>but this will...</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  </span>
-<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  &lt;div&gt;  </span>
-<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
-<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">    &lt;/div&gt;  </span>
-<span class="x">  &lt;/div&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</code></pre>
-</div>
-
-
-<p><strong><em>... we just need to make it look cleaner... with a helper!</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="x">&lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="n">with_subdomain</span><span class="p">(</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="p">))</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>the helper must be located in</em></strong> <strong>app/helpers/url_helper.rb</strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">UrlHelper</span>  
-  <span class="k">def</span> <span class="nf">with_subdomain</span><span class="p">(</span><span class="n">subdomain</span><span class="p">)</span>  
-    <span class="n">subdomain</span> <span class="o">=</span> <span class="p">(</span><span class="n">subdomain</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>  
-    <span class="n">subdomain</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span> <span class="k">unless</span> <span class="n">subdomain</span><span class="o">.</span><span class="n">empty?</span>  
-    <span class="o">[</span><span class="n">subdomain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="o">].</span><span class="n">join</span>  
-  <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>and include this module in</em></strong> <strong>ApplicationController</strong> <strong><em>to make it available to all controllers in our app...</em></strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
-  <span class="kp">include</span> <span class="no">UrlHelper</span>
-  <span class="c1">#other includes, protect_from_forgery, layout, etc.</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h2>That should be enough to get you started</h2>
-
-<p>Enjoy!</p>
-
-<h2>Resources</h2>
-
-<p><strong>Rails 2.3.x</strong> <br />
-<a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a> <br />
-<a href="http://railscasts.com/episodes/123-subdomains">Railscasts</a> <br />
-<a href="http://intridea.com/2008/6/23/subdomainfu-a-new-way-to-tame-the-subdomain">Intridea</a> <em>the guys who created SubdomainFu</em></p>
-
-<p><strong>Rails 3</strong> <br />
-<a href="http://railscasts.com/episodes/221-subdomains-in-rails-3">Railscasts</a> <br />
-<a href="http://asciicasts.com/episodes/221-subdomains-in-rails-3">Asciicasts</a> <br /></p>
-
-<p><strong>Local Virtual Host</strong> <br />
-<a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Post</a></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/11/subdomains-in-rails-2-and-3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 05</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!</p>
-
-<p>Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.</p>
-
-<p>Imagine you are creating a basic RESTFUL controller, you could start with:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-
-  def index
-    @variants <span class="o">=</span> Variant.all
-  end
-  
-  def new
-    @variant <span class="o">=</span> Variant.new
-  end
-  
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    <span class="k">if</span> @variant.save
-      flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Fortunately it was saved!&quot;</span>
-      redirect_to variant_path
-    <span class="k">else</span>
-<span class="k">      </span>render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span>
-    end
-  end
-  .
-  .
-  .
-</code></pre>
-</div>
-
-
-<p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-
-  def index
-    @users <span class="o">=</span> User.all
-    respond_to <span class="k">do</span> |format|
-      format.html
-      format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
-    end
-  end
-  .
-  .
-  .
-
-  def create
-    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-    respond_to <span class="k">do</span> |format|
-      <span class="k">if</span> @user.save
-        flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span>
-        format.html <span class="o">{</span> redirect_to variant_path<span class="o">)</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @varian, :status <span class="o">=</span>&gt; :created, :location <span class="o">=</span>&gt; @variant <span class="o">}</span>
-      <span class="k">else</span>
-<span class="k">        </span>format.html <span class="o">{</span> render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span> <span class="o">}</span>
-        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @variant.errors, :status <span class="o">=</span>&gt; :unprocessable_entity <span class="o">}</span>
-      end
-    end
-  end
-  .
-  .
-  .
-</code></pre>
-</div>
-
-
-<p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
-
-<p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html, :xml
-  .
-  .
-  .
-  
-</code></pre>
-</div>
-
-
-<p>Then, we will use respond_with to set the response, like follows:</p>
-
-<div class="highlight"><pre><code class="bash">def index
-  respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-end
-
-def new
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-end
-
-def create
-  @variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
-  flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span> <span class="k">if</span> @user.save
-  respond_with<span class="o">(</span>@variant<span class="o">)</span>
-end
-.
-.
-.
-</code></pre>
-</div>
-
-
-<h2>So, when do I need to use respond_with?</h2>
-
-<p>You need to use it when:</p>
-
-<ul>
-<li>You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).</li>
-<li>When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
-end
-</code></pre>
-</div>
-
-
-<p>or, you could specify different actions for each response:</p>
-
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span> <span class="k">do</span> |format|
-    format.html
-    format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
-  end
-end
-</code></pre>
-</div>
-
-
-<p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
-
-<p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install responders
-
-or, in your Gemfile
-
-gem <span class="s1">&#39;responders&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then, configure it through the appropriate generator:</p>
-
-<div class="highlight"><pre><code class="bash">rails generate responders:install
-</code></pre>
-</div>
-
-
-<p>You will see these changes:</p>
-
-<div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
-prepend  app/controllers/application_controller.rb
-inject  app/controllers/application_controller.rb
-create  config/locales/responders.en.yml
-</code></pre>
-</div>
-
-
-<p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
-
-<div class="highlight"><pre><code class="bash">en:
-  flash:
-    actions:
-      create:
-        notice: <span class="s1">&#39;%{resource_name} was successfully created.&#39;</span>
-      update:
-        notice: <span class="s1">&#39;%{resource_name} was successfully updated.&#39;</span>
-      destroy:
-        notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
-        alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
-</code></pre>
-</div>
-
-
-<p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
-
-<p>Ok, so, back to the controller, yo could define the create action as follows:</p>
-
-<div class="highlight"><pre><code class="bash">def create
-  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-end
-</code></pre>
-</div>
-
-
-<p>And this way you get everything, including the flash notice.</p>
-
-<p>So, in the end, this could be your complete RESTFUL controller:</p>
-
-<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
-  respond_to :html
-
-  def index
-    respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
-  end
-
-  def new
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
-  end
-
-  def create
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
-
-  def edit
-    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">]))</span>
-  end
-
-  def update
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    respond_with<span class="o">(</span>@variant.update_attributes<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
-  end
-  
-  def destroy
-    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
-    @variant.destroy
-    respond_with<span class="o">(</span>@variant<span class="o">)</span>
-  end
-  
-end
-</code></pre>
-</div>
-
-
-<h2>What else?</h2>
-
-<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
-
-<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
-</code></pre>
-</div>
-
-
-<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
-
-<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
       <a href="/page3" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 4 of 8</span>
+  <span class="page_number ">Page: 4 of 9</span>
   
     <a href="/page5" class="next ">Next</a>
   
@@ -1388,6 +1086,12 @@ end
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
+
+  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
+
+  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
 
@@ -1422,12 +1126,6 @@ end
   <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
 
   <li><span><b>24 Nov 2010</b></span> &raquo; <a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></li>
-
-  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
-
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
 
   </ul>
 </div>
