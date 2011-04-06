@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Sinatra + Haml + Compass(SCSS) + Blueprints
+title: How to Sinatra + Haml + Compass(SCSS) + Blueprint
 author: Hector Bustillos
 email: hector.bustillos@crowdint.com
 avatar: fa56812143dd6049ef19d1a8032f21da
