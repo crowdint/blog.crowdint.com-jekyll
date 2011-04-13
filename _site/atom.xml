@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-04-13T10:23:03-05:00</updated>
+ <updated>2011-04-13T10:53:59-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -55,7 +55,7 @@ in test mode.&lt;/p&gt;
 
 &lt;p&gt;How? Very simple.&lt;/p&gt;
 
-&lt;p&gt;All you have to do is add this line within the &lt;code&gt;&amp;lt;title&amp;gt;&lt;/code&gt;
+&lt;p&gt;All you have to do is add this line within the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt;
 section of your layout.&lt;/p&gt;
 
 &lt;h3&gt;Haml&lt;/h3&gt;

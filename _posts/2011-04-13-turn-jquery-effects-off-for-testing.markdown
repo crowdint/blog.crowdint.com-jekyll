@@ -46,7 +46,7 @@ in test mode.
 
 How? Very simple.
 
-All you have to do is add this line within the `<title>`
+All you have to do is add this line within the `<head>`
 section of your layout.
 
 ### Haml
