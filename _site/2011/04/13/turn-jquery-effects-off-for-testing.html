@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: First Things First... Our initial git configuration</title>
+  <title>Crowd Interactive Tech Blog :: Turn jQuery effects off for testing</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,70 +46,77 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>First Things First... Our initial git configuration</h1>  
+  <h1>Turn jQuery effects off for testing</h1>  
   <p class="author">
-    <span class="date"><b>Jul 11</b><br />2010</span>
+    <span class="date"><b>Apr 13</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+    <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the
+TDD + BDD approach when coding new applications.</p>
 
-<p>The basic steps we recommend are:</p>
+<p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use
+<a href="http://cukes.info">Cucumber</a> for BDD, although
+lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of
+Cucumber and so far I am loving it.</p>
 
-<h2>Let us know who you are</h2>
+<p>When you are using Capybara + Selenium for testing with Cucumber or
+Steak, sometimes you can get an error when you write tests for clicks that are
+followed by an animation.</p>
 
-<p>You can set up your email and name by using the following command:</p>
+<p>For example:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">scenario</span> <span class="s2">&quot;New resource&quot;</span> <span class="k">do</span>
+  <span class="n">click_link</span> <span class="s1">&#39;New Resource&#39;</span>
+  <span class="c1"># Shows up an overlay window with the form that</span>
+  <span class="c1"># takes 5 seconds to show up</span>
+
+  <span class="n">fill_in</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;Some value&#39;</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<h2>Reduce the risk factor</h2>
+<p>You get the following error:</p>
 
-<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+<div class="highlight"><pre><code class="ruby"><span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Error</span><span class="o">::</span><span class="no">ElementNotDisplayedError</span><span class="p">:</span>
+  <span class="no">Element</span> <span class="n">is</span> <span class="ow">not</span> <span class="n">currently</span> <span class="n">visible</span> <span class="ow">and</span> <span class="n">so</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">interacted</span> <span class="n">with</span>
 </code></pre>
 </div>
 
 
-<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+<p>This happens because Capybara is trying to access the input element, but
+since the animation is still happening it is not visible yet.</p>
 
-<p>So, we recommend our rookies to use the following command:</p>
+<p>To avoid this, you can simply tell jQuery to turn off all effects when
+in test mode.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+<p>How? Very simple.</p>
+
+<p>All you have to do is add this line within the <code>&lt;title&gt;</code>
+section of your layout.</p>
+
+<h3>Haml</h3>
+
+<div class="highlight"><pre><code class="haml"><span class="p">=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span>
 </code></pre>
 </div>
 
 
-<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+<h3>ERB</h3>
 
-<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span> <span class="cp">%&gt;</span><span class="x"></span>
 </code></pre>
 </div>
 
 
-<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+<p>This way, every time you run your tests you will be telling jQuery to disable
+all effects and your test will pass, and, in some cases, even perform faster.</p>
 
-<h2>Add color to your life</h2>
+<p>You can <a href="http://api.jquery.com/jQuery.fx.off/">read the documentation here</a> for more info on
+how to disable jQuery effects off.</p>
 
-<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
-</code></pre>
-</div>
-
-
-<p>Hope this guide helps you in some way, cheers!</p>
+<p>Enjoy!</p>
 
 
     <div class="tweet right">
@@ -122,8 +129,8 @@
   </div>
   <div class="nav_links span-16">
     
+      <div class="previous span-8"><a href="/2011/04/06/sinatra-haml-compass-blueprint.html"><< How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></div>
     
-      <div class="next span-8 last"><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8 >></a></div>
     
   </div>
 </div>
@@ -131,15 +138,15 @@
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>06 Aug 2010</b></span> &raquo; <a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></li>
-
-  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
-
-  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
