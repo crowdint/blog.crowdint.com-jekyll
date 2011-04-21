@@ -38,9 +38,9 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
+  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
   <p class="author">
-    <span class="date"><b>Feb 21</b><br />2011</span>
+    <span class="date"><b>Jul 11</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
@@ -50,151 +50,70 @@
     
     
       
-        
-            <p>Earlier this month I decided to go to <a href="http://www.larubyconf.com">LA Ruby Conf 2011</a>. I was already in San Francisco, and, since I was just an hour away via plane, I jumped into one and attended the conference sessions on Saturday.</p> <p>As expected, the organization and the conferences were awesome. Kudos to the organizers.</p> <p>Now, a small recap of what I learned...
-            <div class = "continue_reading"><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
+        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+
+<p>The basic steps we recommend are:</p>
+
+<h2>Let us know who you are</h2>
+
+<p>You can set up your email and name by using the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 15</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business, projects or simply our ideas in other countries.</p>...
-            <div class = "continue_reading"><a href="/2011/02/15/internationalizing-your-rails-app.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/15/internationalizing-your-rails-app.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas | ana.rosas@crowdint.com</p>
-    </div>
+<h2>Reduce the risk factor</h2>
+
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 05</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.) to help us accomplish that task. We found a few ones, but eventually we came to a dead end when...
-            <div class = "continue_reading"><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+
+<p>So, we recommend our rookies to use the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 31</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>It all started because I was getting some weird warning while running the specs on one of my apps.</p> <p>I know that, as a developer, I am suppposed to ignore all warnings, but, this one felt ackward, so I had to track it down.</p> <div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found: </code></pre> </div> <p>What? Why is activerecord trying to run some...
-            <div class = "continue_reading"><a href="/2011/01/31/attack-of-the-backticks.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/31/attack-of-the-backticks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
-  <p class="author">
-    <span class="date"><b>Jan 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>If you are a Ruby developer, by now, you have probably used tons of gems in your apps.</p> <p>That's one of the best things of using Ruby, a lot of people writes repeatable code that you can easily integrate into your own apps.</p> <p>In this brief tutorial, I will try to explain the basic things you need to know in order...
-            <div class = "continue_reading"><a href="/2011/01/24/how-to-start-writing-a-gem.html">Continue reading...</a></div>
-        
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
       
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/01/24/how-to-start-writing-a-gem.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -210,12 +129,12 @@
 <div class="pagination prepend-1">
   
     
-      <a href="/page2" class="previous">Previous</a>
+      <a href="/page9" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 3 of 10</span>
+  <span class="page_number ">Page: 10 of 10</span>
   
-    <a href="/page4" class="next ">Next</a>
+    <span class="next ">Next</span>
   
 </div>
 
