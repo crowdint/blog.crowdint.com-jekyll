@@ -24,16 +24,22 @@ Also remember, a middleware is nothing more than another **Rack**
 application, and, **Rack** middlewares can be stacked up in order to compose
 bigger systems.
 
+## Examples source code
+You can download and run the examples by following the next steps:
+
+{% highlight bash %}
+  git clone git://gist.github.com/935008.git gist-935008
+  cd gist-935008
+  gem install bundler && bundle install
+{% endhighlight %}
+
+
+## Hello world
+
 Let's start by building a simple hello world example, save the following
 code as *hello.ru*:
 
-{% highlight ruby %}
-  message = "Hello world"
-  headers = {"Content-Length" => "#{message.length}",
-             "Content-Type" => 'text/html'}
-  status = 200 
-  run lambda {[status, headers, [message]]}
-{% endhighlight  %}
+<script src="https://gist.github.com/935008.js?file=hello1.ru"></script>
 
 Now, run the *hello.ru* app with:
 
@@ -48,68 +54,27 @@ at:
   rackup hello.ru -p 8080
 {% endhighlight  %}
 
-And then, go to [http://localhost:9292/](http://localhost:9292/), so you can
-see your app alive.
+And then, go to [http://localhost:9292/](http://localhost:9292/) or 
+[http://localhost:8080/](http://localhost:8080/) (depending on what port
+you specified), so you can see your app alive.
 
 Creating an application in this way, requires you to manually specify the
 headers, just as I did when I added the *Content-Length* and 
 *Content-Type* headers. Also, this can be accomplished in a simpler way 
 by using the **Rack::ContentLength** and **Rack::ContentType** middlewares:
 
-{% highlight ruby %}
-  message = "Hello world"
-  status = 200
+<script src="https://gist.github.com/935008.js?file=hello2.ru"></script>
 
-  use Rack::ContentLength
-  use Rack::ContentType
+OK, now let's add ERB rendering to this example.
 
-  run lambda {[status, {}, [message]]}
-{% endhighlight  %}
-
-OK, now let's add ERB rendering to this example. I'll use this technique 
-[useless ruby tricks DATA and END](http://shifteleven.com/articles/2009/02/09/useless-ruby-tricks-data-and-__end__)
-in order to embed our HTML template inside the same file.
-
-{% highlight ruby %}
-  require 'erb'
-
-  status = 200 
-  home_view = <<VIEW
-    Hello world
-  VIEW
-  rendered_view = ERB.new(home_view).result
-
-  use Rack::ContentLength
-  use Rack::ContentType
-
-  run lambda {[status, {}, [rendered_view]]}
-{% endhighlight  %}
+<script src="https://gist.github.com/935008.js?file=hello3.ru"></script>
 
 Now, run the script again. You should see the *Hello World* message.
 
 In order to show one last example let's write our view using
 **HAML**, and passing variables to the view:
 
-{% highlight ruby %}
-  require 'haml'
-
-  status = 200 
-  home_view = <<VIEW
-  !!!
-  %html
-    %head
-      %title= title
-    %body
-      = message
-  VIEW
-  rendered_view = Haml::Engine.new(home_view).render Object.new,
-    {:message => 'Hello world', :title => 'A hello world page'}
-
-  use Rack::ContentLength
-  use Rack::ContentType
-
-  run lambda {[status, {}, [rendered_view]]}
-{% endhighlight  %}
+<script src="https://gist.github.com/935008.js?file=hello4.ru"></script>
 
 Run the script again. You should see the *Hello World* message.
 

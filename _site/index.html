@@ -66,16 +66,23 @@ let's you have full control of the components that you employ.</p>
 application, and, <strong>Rack</strong> middlewares can be stacked up in order to compose
 bigger systems.</p>
 
+<h2>Examples source code</h2>
+
+<p>You can download and run the examples by following the next steps:</p>
+
+<div class="highlight"><pre><code class="bash">  git clone git://gist.github.com/935008.git gist-935008
+  <span class="nb">cd </span>gist-935008
+  gem install bundler <span class="o">&amp;&amp;</span> bundle install
+</code></pre>
+</div>
+
+
+<h2>Hello world</h2>
+
 <p>Let's start by building a simple hello world example, save the following
 code as <em>hello.ru</em>:</p>
 
-<div class="highlight"><pre><code class="ruby">  <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Hello world&quot;</span>
-  <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Length&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">message</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;Content-Type&quot;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">}</span>
-  <span class="n">status</span> <span class="o">=</span> <span class="mi">200</span> 
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="o">[</span><span class="n">message</span><span class="o">]]</span><span class="p">}</span>
-</code></pre>
-</div>
+<script src="https://gist.github.com/935008.js?file=hello1.ru"></script>
 
 
 <p>Now, run the <em>hello.ru</em> app with:</p>
@@ -93,51 +100,21 @@ at:</p>
 </div>
 
 
-<p>And then, go to <a href="http://localhost:9292/">http://localhost:9292/</a>, so you can
-see your app alive.</p>
+<p>And then, go to <a href="http://localhost:9292/">http://localhost:9292/</a> or
+<a href="http://localhost:8080/">http://localhost:8080/</a> (depending on what port
+you specified), so you can see your app alive.</p>
 
 <p>Creating an application in this way, requires you to manually specify the
 headers, just as I did when I added the <em>Content-Length</em> and
 <em>Content-Type</em> headers. Also, this can be accomplished in a simpler way
 by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType</strong> middlewares:</p>
 
-<div class="highlight"><pre><code class="ruby">  <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Hello world&quot;</span>
-  <span class="n">status</span> <span class="o">=</span> <span class="mi">200</span>
-
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentLength</span>
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentType</span>
-
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="p">{},</span> <span class="o">[</span><span class="n">message</span><span class="o">]]</span><span class="p">}</span>
-</code></pre>
-</div>
+<script src="https://gist.github.com/935008.js?file=hello2.ru"></script>
 
 
-<p>OK, now let's add ERB rendering to this example. I'll use this technique
-<a href="http://shifteleven.com/articles/2009/02/09/useless-ruby-tricks-data-and-__end__">useless ruby tricks DATA and END</a>
-in order to embed our HTML template inside the same file.</p>
+<p>OK, now let's add ERB rendering to this example.</p>
 
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
-
-  <span class="n">status</span> <span class="o">=</span> <span class="mi">200</span> 
-  <span class="n">home_view</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">VIEW</span>
-<span class="err">    Hello world</span>
-<span class="err">  VIEW</span>
-<span class="err">  rendered_view = ERB.new(home_view).result</span>
-
-<span class="err">  use Rack::ContentLength</span>
-<span class="err">  use Rack::ContentType</span>
-
-<span class="err">  run lambda {[status, {}, [rendered_view]]}</span>
-    <span class="no">Hello</span> <span class="n">world</span>
-  <span class="no">VIEW</span>
-  <span class="n">rendered_view</span> <span class="o">=</span> <span class="no">ERB</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">home_view</span><span class="p">)</span><span class="o">.</span><span class="n">result</span>
-
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentLength</span>
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentType</span>
-
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="p">{},</span> <span class="o">[</span><span class="n">rendered_view</span><span class="o">]]</span><span class="p">}</span>
-</code></pre>
-</div>
+<script src="https://gist.github.com/935008.js?file=hello3.ru"></script>
 
 
 <p>Now, run the script again. You should see the <em>Hello World</em> message.</p>
@@ -145,40 +122,7 @@ in order to embed our HTML template inside the same file.</p>
 <p>In order to show one last example let's write our view using
 <strong>HAML</strong>, and passing variables to the view:</p>
 
-<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
-
-  <span class="n">status</span> <span class="o">=</span> <span class="mi">200</span> 
-  <span class="n">home_view</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">VIEW</span>
-<span class="err">  !!!</span>
-<span class="err">  %html</span>
-<span class="err">    %head</span>
-<span class="err">      %title= title</span>
-<span class="err">    %body</span>
-<span class="err">      = message</span>
-<span class="err">  VIEW</span>
-<span class="err">  rendered_view = Haml::Engine.new(home_view).render Object.new,</span>
-<span class="err">    {:message =&gt; &#39;Hello world&#39;, :title =&gt; &#39;A hello world page&#39;}</span>
-
-<span class="err">  use Rack::ContentLength</span>
-<span class="err">  use Rack::ContentType</span>
-
-<span class="err">  run lambda {[status, {}, [rendered_view]]}</span>
-  <span class="o">!!!</span>
-  <span class="o">%</span><span class="n">html</span>
-    <span class="o">%</span><span class="n">head</span>
-      <span class="o">%</span><span class="n">title</span><span class="o">=</span> <span class="n">title</span>
-    <span class="o">%</span><span class="n">body</span>
-      <span class="o">=</span> <span class="n">message</span>
-  <span class="no">VIEW</span>
-  <span class="n">rendered_view</span> <span class="o">=</span> <span class="no">Haml</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">home_view</span><span class="p">)</span><span class="o">.</span><span class="n">render</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span><span class="p">,</span>
-    <span class="p">{</span><span class="ss">:message</span> <span class="o">=&gt;</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">,</span> <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s1">&#39;A hello world page&#39;</span><span class="p">}</span>
-
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentLength</span>
-  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">ContentType</span>
-
-  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="p">{},</span> <span class="o">[</span><span class="n">rendered_view</span><span class="o">]]</span><span class="p">}</span>
-</code></pre>
-</div>
+<script src="https://gist.github.com/935008.js?file=hello4.ru"></script>
 
 
 <p>Run the script again. You should see the <em>Hello World</em> message.</p>

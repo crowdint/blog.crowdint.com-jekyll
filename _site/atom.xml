@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-04-21T11:20:19-05:00</updated>
+ <updated>2011-04-21T12:42:43-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -31,16 +31,23 @@ let's you have full control of the components that you employ.&lt;/p&gt;
 application, and, &lt;strong&gt;Rack&lt;/strong&gt; middlewares can be stacked up in order to compose
 bigger systems.&lt;/p&gt;
 
+&lt;h2&gt;Examples source code&lt;/h2&gt;
+
+&lt;p&gt;You can download and run the examples by following the next steps:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  git clone git://gist.github.com/935008.git gist-935008
+  &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gist-935008
+  gem install bundler &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Hello world&lt;/h2&gt;
+
 &lt;p&gt;Let's start by building a simple hello world example, save the following
 code as &lt;em&gt;hello.ru&lt;/em&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello world&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Content-Length&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-             &lt;span class=&quot;s2&quot;&gt;&amp;quot;Content-Type&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/html&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello1.ru&quot;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;Now, run the &lt;em&gt;hello.ru&lt;/em&gt; app with:&lt;/p&gt;
@@ -58,51 +65,21 @@ at:&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;And then, go to &lt;a href=&quot;http://localhost:9292/&quot;&gt;http://localhost:9292/&lt;/a&gt;, so you can
-see your app alive.&lt;/p&gt;
+&lt;p&gt;And then, go to &lt;a href=&quot;http://localhost:9292/&quot;&gt;http://localhost:9292/&lt;/a&gt; or
+&lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; (depending on what port
+you specified), so you can see your app alive.&lt;/p&gt;
 
 &lt;p&gt;Creating an application in this way, requires you to manually specify the
 headers, just as I did when I added the &lt;em&gt;Content-Length&lt;/em&gt; and
 &lt;em&gt;Content-Type&lt;/em&gt; headers. Also, this can be accomplished in a simpler way
 by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;Rack::ContentType&lt;/strong&gt; middlewares:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello world&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentLength&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentType&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello2.ru&quot;&gt;&lt;/script&gt;
 
 
-&lt;p&gt;OK, now let's add ERB rendering to this example. I'll use this technique
-&lt;a href=&quot;http://shifteleven.com/articles/2009/02/09/useless-ruby-tricks-data-and-__end__&quot;&gt;useless ruby tricks DATA and END&lt;/a&gt;
-in order to embed our HTML template inside the same file.&lt;/p&gt;
+&lt;p&gt;OK, now let's add ERB rendering to this example.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;erb&amp;#39;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;home_view&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;VIEW&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;    Hello world&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  VIEW&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  rendered_view = ERB.new(home_view).result&lt;/span&gt;
-
-&lt;span class=&quot;err&quot;&gt;  use Rack::ContentLength&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  use Rack::ContentType&lt;/span&gt;
-
-&lt;span class=&quot;err&quot;&gt;  run lambda {[status, {}, [rendered_view]]}&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;world&lt;/span&gt;
-  &lt;span class=&quot;no&quot;&gt;VIEW&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;rendered_view&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ERB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;home_view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentLength&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentType&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rendered_view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello3.ru&quot;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;Now, run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
@@ -110,40 +87,7 @@ in order to embed our HTML template inside the same file.&lt;/p&gt;
 &lt;p&gt;In order to show one last example let's write our view using
 &lt;strong&gt;HAML&lt;/strong&gt;, and passing variables to the view:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;home_view&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;VIEW&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  !!!&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  %html&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;    %head&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;      %title= title&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;    %body&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;      = message&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  VIEW&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  rendered_view = Haml::Engine.new(home_view).render Object.new,&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;    {:message =&amp;gt; &amp;#39;Hello world&amp;#39;, :title =&amp;gt; &amp;#39;A hello world page&amp;#39;}&lt;/span&gt;
-
-&lt;span class=&quot;err&quot;&gt;  use Rack::ContentLength&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;  use Rack::ContentType&lt;/span&gt;
-
-&lt;span class=&quot;err&quot;&gt;  run lambda {[status, {}, [rendered_view]]}&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;!!!&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;
-  &lt;span class=&quot;no&quot;&gt;VIEW&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;rendered_view&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Haml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Engine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;home_view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Hello world&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;A hello world page&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentLength&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ContentType&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rendered_view&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello4.ru&quot;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;Run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
