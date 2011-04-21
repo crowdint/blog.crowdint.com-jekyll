@@ -29,7 +29,10 @@ code as *hello.ru*:
 
 {% highlight ruby %}
   message = "Hello world"
-  run lambda {[200, {"Content-length: #{message.length}"}, [message]]}
+  headers = {"Content-Length" => "#{message.length}",
+             "Content-Type" => 'text/html'}
+  status = 200 
+  run lambda {[status, headers, [message]]}
 {% endhighlight  %}
 
 Now, run the *hello.ru* app with:
@@ -38,24 +41,29 @@ Now, run the *hello.ru* app with:
   rackup hello.ru
 {% endhighlight  %}
 
-Creating an application in this way, requires you to manually specify the
-headers, just as I did when added the *Content-length header*, also, this 
-can be done in a simpler way by using the **Rack::ContentLength** middleware:
+Optionally you may specify what port you want your application to run
+at:
 
-{% highlight ruby %}
-  message = "Hello world"
-  use Rack::ContentLength
-  run lambda {[200, {}, [message]]}
+{% highlight bash %}
+  rackup hello.ru -p 8080
 {% endhighlight  %}
 
-Also, you can add a default content type header using the
-**Rack::ContentType** middleware:
+And then, go to [http://localhost:9292/](http://localhost:9292/), so you can
+see your app alive.
+
+Creating an application in this way, requires you to manually specify the
+headers, just as I did when I added the *Content-Length* and 
+*Content-Type* headers. Also, this can be accomplished in a simpler way 
+by using the **Rack::ContentLength** and **Rack::ContentType** middlewares:
 
 {% highlight ruby %}
   message = "Hello world"
+  status = 200
+
   use Rack::ContentLength
   use Rack::ContentType
-  run lambda {[200, {}, [message]]}
+
+  run lambda {[status, {}, [message]]}
 {% endhighlight  %}
 
 OK, now let's add ERB rendering to this example. I'll use this technique 
@@ -65,16 +73,16 @@ in order to embed our HTML template inside the same file.
 {% highlight ruby %}
   require 'erb'
 
-  def render_view
-    ERB.new(DATA.readlines.join).result
-  end
+  status = 200 
+  home_view = <<VIEW
+    Hello world
+  VIEW
+  rendered_view = ERB.new(home_view).result
 
   use Rack::ContentLength
   use Rack::ContentType
-  run lambda {[200, {}, [render_view]]}
 
-  __FILE__
-  Hello World
+  run lambda {[status, {}, [rendered_view]]}
 {% endhighlight  %}
 
 Now, run the script again. You should see the *Hello World* message.
@@ -85,22 +93,22 @@ In order to show one last example let's write our view using
 {% highlight ruby %}
   require 'haml'
 
-  def render_view
-    Haml::Engine.new(DATA.readlines.join).render Object.new, 
-      {:message => 'Hello world', :title => 'A hello world page'}
-  end
-
-  use Rack::ContentLength
-  use Rack::ContentType
-  run lambda {[200, {}, [render_view]]}
-
-  __FILE__
+  status = 200 
+  home_view = <<VIEW
   !!!
   %html
     %head
       %title= title
     %body
       = message
+  VIEW
+  rendered_view = Haml::Engine.new(home_view).render Object.new,
+    {:message => 'Hello world', :title => 'A hello world page'}
+
+  use Rack::ContentLength
+  use Rack::ContentType
+
+  run lambda {[status, {}, [rendered_view]]}
 {% endhighlight  %}
 
 Run the script again. You should see the *Hello World* message.
