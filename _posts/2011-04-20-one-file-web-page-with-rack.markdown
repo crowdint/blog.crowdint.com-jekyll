@@ -12,7 +12,8 @@ applications. You can do that in many different ways like, creating a
 **Rails**, **Sinatra** or **Rack** application.
 
 I like **Rack**, it gives you more than enough tools to build a web page, and
-let's you have full control of the components that you employ. 
+allows you to have full control of the components that you employ to
+build it.
 
 In this article I'll show some examples about how to create simple one page
 *Rack* web applications.
