@@ -4,15 +4,15 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-04-22T14:04:22-05:00</updated>
+ <updated>2011-04-25T09:49:43-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>One File Web Page with Rack</title>
-   <link href="http://blog.crowdint.com/2011/04/22/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-22T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2011/04/22/one-file-web-page-with-rack</id>
+   <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
+   <updated>2011-04-25T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
 applications. You can do that in many different ways like, creating a
