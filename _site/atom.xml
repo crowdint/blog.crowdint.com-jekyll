@@ -4,12 +4,12 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-05-02T14:57:17-05:00</updated>
+ <updated>2011-05-02T15:00:32-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
-   <title>How to override destroy method and still using callbacks</title>
+   <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
    <updated>2011-05-02T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>

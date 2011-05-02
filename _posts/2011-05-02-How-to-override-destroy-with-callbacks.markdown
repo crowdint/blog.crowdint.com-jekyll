@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to override destroy method and still using callbacks 
+title: How to override destroy method keeping the callbacks
 author: Ana Rosas & Omar Vargas
 email: ana.rosas+omar.vargas@crowdint.com
 avatar: ec9ab4537f5224def5fc54cd7465008b
