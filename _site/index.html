@@ -47,6 +47,77 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method and still using callbacks</a></h1>
+  <p class="author">
+    <span class="date"><b>May 02</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/ec9ab4537f5224def5fc54cd7465008b" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>While working on a project, we were required to override the
+destroy method in order to create a soft delete method, in other words
+to change the active state of the object to deleted instead of deleting
+it from the database.</p>
+
+<p>That was no problem at all, but, issues came when we needed this method to use
+callbacks in order for the counter caches to work properly.</p>
+
+<p>In Rails 2 you can override the destroy method without affecting callbacks
+by overriding the method <em>destroy_without_callbacks</em></p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">destroy_without_callbacks</span>
+    <span class="k">unless</span> <span class="n">new_record?</span>
+      <span class="c1"># your code here</span>
+    <span class="k">end</span>
+    <span class="nb">freeze</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>But in Rails 3 things have changed and the previous methods won't
+work. So, after some research, we found out that you can call the method
+callbacks with the run_callbacks method from ActiveSupport</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">destroy</span>
+      <span class="n">run_callbacks</span> <span class="ss">:destroy</span> <span class="k">do</span>
+        <span class="c1"># your code here</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In this case we use it for the destroy method, but you can use it for
+any method you override and need their callbacks. If you don't specify
+any callbacks, all callbacks will be called.</p>
+
+<p>You can find more info
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html">here</a></p>
+
+<p>Hope this may help you in your overriding tasks.</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Ana Rosas & Omar Vargas | ana.rosas+omar.vargas@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></h1>
   <p class="author">
     <span class="date"><b>Apr 25</b><br />2011</span>
@@ -58,90 +129,12 @@
     
     
     
-      <p>There are times when you need to quickly create small <strong>Ruby</strong> web
-applications. You can do that in many different ways like, creating a
-<strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p>
-
-<p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and
-allows you to have full control of the components that you employ to
-build it.</p>
-
-<p>In this article I'll show some examples about how to create simple one page
-<em>Rack</em> web applications.</p>
-
-<p>For a bigger overview about <strong>Rack</strong> look at this article:
-<a href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a>.</p>
-
-<p>Also remember, a middleware is nothing more than another <strong>Rack</strong>
-application, and, <strong>Rack</strong> middlewares can be stacked up in order to compose
-bigger systems.</p>
-
-<h2>Examples source code</h2>
-
-<p>You can download and run the examples by following the next steps:</p>
-
-<div class="highlight"><pre><code class="bash">  git clone git://gist.github.com/935008.git gist-935008
-  <span class="nb">cd </span>gist-935008
-  gem install bundler <span class="o">&amp;&amp;</span> bundle install
-</code></pre>
-</div>
-
-
-<h2>Hello world</h2>
-
-<p>Let's start by building a simple hello world example, save the following
-code as <em>hello.ru</em>:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello1.ru"></script>
-
-
-<p>Now, run the <em>hello.ru</em> app with:</p>
-
-<div class="highlight"><pre><code class="bash">  rackup hello.ru
-</code></pre>
-</div>
-
-
-<p>Optionally you may specify what port you want your application to run
-at:</p>
-
-<div class="highlight"><pre><code class="bash">  rackup hello.ru -p 8080
-</code></pre>
-</div>
-
-
-<p>And then, go to <a href="http://localhost:9292/">http://localhost:9292/</a> or
-<a href="http://localhost:8080/">http://localhost:8080/</a> (depending on what port
-you specified), so you can see your app alive.</p>
-
-<p>Creating an application in this way, requires you to manually specify the
-headers, just as I did when I added the <em>Content-Length</em> and
-<em>Content-Type</em> headers. Also, this can be accomplished in a simpler way
-by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType</strong> middlewares:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello2.ru"></script>
-
-
-<p>OK, now let's add ERB rendering to this example.</p>
-
-<script src="https://gist.github.com/935008.js?file=hello3.ru"></script>
-
-
-<p>Now, run the script again. You should see the <em>Hello World</em> message.</p>
-
-<p>In order to show one last example let's write our view using
-<strong>HAML</strong>, and passing variables to the view:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello4.ru"></script>
-
-
-<p>Run the script again. You should see the <em>Hello World</em> message.</p>
-
-<p>That's it, you've seen how to create web pages by simply using
-<strong>Rack</strong>, no frameworks, just <strong>Rack</strong>.</p>
-
-<p>Thank you for your reading.</p>
-
+      
+        
+           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to create simple one page <em>Rack</em> web applications.</p> <p>For a bigger overview about <strong>Rack</strong> look at this article: <a href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics...
+           <div class = "continue_reading"><a href="/2011/04/25/one-file-web-page-with-rack.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -260,40 +253,6 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>After a while of working with CSS, in different projects and with different people, I have realized that there is a lack of standards for it. Like, when you have to make some corrections or improvements and open the CSS file and you get a thousand lines of code with no comments at all.</p> <p>Well, I have a couple Ideas of...
-            <div class = "continue_reading"><a href="/2011/03/24/how-to-write-good-css.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/24/how-to-write-good-css.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
@@ -312,6 +271,8 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>02 May 2011</b></span> &raquo; <a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method and still using callbacks</a></li>
 
   <li><span><b>25 Apr 2011</b></span> &raquo; <a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></li>
 
@@ -350,8 +311,6 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
   <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
-
-  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
 
   </ul>
 </div>

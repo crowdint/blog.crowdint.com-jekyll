@@ -25,8 +25,8 @@ by overriding the method *destroy_without_callbacks*
   end
 {% endhighlight %}
 
-But in Rails 3 things have changed and the previuos methods won't
-work. So, after some research, we found out that you can call the method's
+But in Rails 3 things have changed and the previous methods won't
+work. So, after some research, we found out that you can call the method
 callbacks with the run_callbacks method from ActiveSupport
 
 {% highlight ruby %}

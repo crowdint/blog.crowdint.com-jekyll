@@ -47,6 +47,208 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 15</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.</p>
+
+<p>I, at least, personally had a problem getting it when I first started
+using Rails.</p>
+
+<h2>REST</h2>
+
+<p>REST stands for <em>Representational State Transfer</em>.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.</p>
+
+<h3>The wrong way</h3>
+
+<p>I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.</p>
+
+<p>So, with that thought on your mind, you end up with a controller like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">remove_review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">cancel</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">pay</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>What's wrong here?</h3>
+
+<p>If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
+
+<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have <em>resources</em> and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.</p>
+
+<p>A resource is not necesarily a model, it's just <em>something</em> that has a
+state or that can be altered.</p>
+
+<h3>How to make it right?</h3>
+
+<p>So, if we go back to our example, the right thing to do, is to think
+about those <em>bad</em> actions as a resource.</p>
+
+<p>If you're going to review an order, then, you need a <em>OrderReview</em>
+controller.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
+can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
+a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
+out of it.</p>
+
+<p>A most common mistake... an action that actually alters the state of an
+object like the cancel action.</p>
+
+<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
+something, but still, this looks much better:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
+cancellation (it can happen).</p>
+
+<p>You could now refactor all the other actions to their respective
+controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
+
+<h2>Associations</h2>
+
+<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.</p>
+
+<p>For example, if you had a User that can add other User objects as its
+friends, instead of creating a <em>add_friend</em> or something action, you'd add
+a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
+
+<p>By the way, I've seen relationships like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
+
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><em>Always remember to think restful</em>, probably the user should:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
+<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
+
+<span class="c1"># This actually requires more code to make it work, but, you get the</span>
+<span class="c1"># point, right?</span>
+</code></pre>
+</div>
+
+
+<p>Think about it. Way better.</p>
+
+<h3>But, why? You have to write all this "unnecesary" code</h3>
+
+<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.</p>
+
+<p>Also, Rails its all about love and following conventions. This is one of
+them.</p>
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
   <p class="author">
     <span class="date"><b>Dec 07</b><br />2010</span>
@@ -1141,322 +1343,6 @@ look forward to them.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 11</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <h2>Why?</h2>
-
-<p>Knowing how to handle subdomains in your Rails app is a very valuable asset in your toolbox; chances are that any given time you'll need to offer them in your well polished-deployed to production service. So instead of having <a href="http://www.facebook.com/j.francisco.guzman">Facebook-like urls =>  http://www.facebook.com/j.francisco.guzman</a>, you may want to have something like <a href="http://francisco.expensd.com">http://francisco.expensd.com</a>.</p>
-
-<p>This can be particularly useful and shiny in two cases:</p>
-
-<p>● You want to have subdomains such as: admin, blog, mail, etc. <br />
-● You want to provide your users with a subdomain they can come up with <br /></p>
-
-<p>Want to give it a shot?</p>
-
-<h2>Sounds cool, but I still use Rails 2.3.x</h2>
-
-<p>Well, your best friend then is <a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a>; according to its <a href="http://github.com/mbleigh/subdomain-fu">GitHub</a> resource, it "<em>provides a modern implementation of subdomain handling in Rails. It takes aspects from account_location, request_routing, and other snippets found around the web and combines them to provide a single, simple solution for subdomain-based route and url management.</em>"</p>
-
-<p>You can either install it as an 'old school' plugin or a more fashion-like gem:</p>
-
-<h3>Plugin</h3>
-
-<div class="highlight"><pre><code class="bash">script/plugin install git://github.com/mbleigh/subdomain-fu.git
-</code></pre>
-</div>
-
-
-<h3>Gem (no Bundle) -- add it to your config/environment.rb file</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">config</span><span class="o">.</span><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then...</p>
-
-<div class="highlight"><pre><code class="bash">rake gems:install
-</code></pre>
-</div>
-
-
-<h3>Gem (Bundle) -- add it to your Gemfile</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;subdomain-fu&#39;</span>
-</code></pre>
-</div>
-
-
-<p>and then...</p>
-
-<div class="highlight"><pre><code class="bash">bundle install
-</code></pre>
-</div>
-
-
-<h2>Settings (we're still working with subdomains in Rails 2.3.x)</h2>
-
-<p>What SubdomainFu provides is an extension for the URL Rewriting engine provided with Rails. This means we will be able to use it anywhere we normally generate URLs: <em>url_for</em>, named routes, etc. So here's the basic configuration (with default values):</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># in environment.rb</span>
-  
-<span class="c1"># These are the sizes of the domain (i.e. 0 for localhost, 1 for something.com)</span>
-<span class="c1"># for each of your environments</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">tld_sizes</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:development</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                          <span class="ss">:test</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                          <span class="ss">:production</span> <span class="o">=&gt;</span> <span class="mi">1</span> <span class="p">}</span>
-
-<span class="c1"># These are the subdomains that will be equivalent to no subdomain</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">mirrors</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;www&quot;</span><span class="o">]</span>
-
-<span class="c1"># This is the &quot;preferred mirror&quot; if you would rather show this subdomain</span>
-<span class="c1"># in the URL than no subdomain at all.</span>
-<span class="no">SubdomainFu</span><span class="o">.</span><span class="n">preferred_mirror</span> <span class="o">=</span> <span class="s2">&quot;www&quot;</span>
-</code></pre>
-</div>
-
-
-<h3>What about local dev environment???</h3>
-
-<p>There are two different ways to set up your local environment to work with subdomain:</p>
-
-<p>● Editing your hosts file (usually located in /etc/hosts) and add each subdomain you will need (I know it doesn't sound like a great idea)</p>
-
-<p>● Using <a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Tim Pope's</a> awsome contributon to work with subdomains in our local environments; doing so, will allow us to use <a href="">http://lvh.me:3000</a> with subdomains</p>
-
-<p><a href="">http://cool.lvh.me:3000</a></p>
-
-<h2>Been there, done that... now what???</h2>
-
-<p>Now you can take advantage of two awesome features: the <em>current_subdomain</em> method which will return (of course) the current subdomain or <em>nil</em> if there is no subdomain or the current subdomain is a mirror:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># http://admin.killerapp.com/</span>
-current_subdomain <span class="c"># =&gt; &quot;admin&quot;</span>
-
-<span class="c"># http://www.killerapp.com/ or http://killerapp.com/</span>
-current_subdomain <span class="c"># =&gt; nil</span>
-
-<span class="c"># http://other.subdomain.killerapp.com</span>
-current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
-</code></pre>
-</div>
-
-
-<p>and the-now-extended URL rewriting features passing the <strong>:subdomain</strong> option to an URL generating method:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;da_controller&quot;</span><span class="p">,</span> 
-  <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;cool_feature&quot;</span><span class="p">,</span> 
-  <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/da_controller/cool_feature</span>
-  
-<span class="n">users_url</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span>  <span class="c1"># =&gt; http://mykillerapp.com/users</span>
-
-<span class="c1"># The full URL will be generated if the subdomain is not the same as the</span>
-<span class="c1"># current subdomain, regardless of whether _path or _url is used.</span>
-<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span> <span class="c1"># =&gt; http://admin.mykillerapp.com/users</span>
-<span class="n">users_path</span><span class="p">(</span><span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">)</span> <span class="c1"># =&gt; /users</span>
-</code></pre>
-</div>
-
-
-<h2>Generating subdomains</h2>
-
-<p>You have two options (again): reserving yourself the right to create them manually or else, giving your users the ability to choose their own subdomain, checking availability and storing the value to a document or db table... you now have the tool, how to use it is up to you.</p>
-
-<p>Enjoy!</p>
-
-<h2>Enjoy??? Wait!!! What about Rails 3???</h2>
-
-<h2>For our edgy Rails 3 users</h2>
-
-<p>It is a real blessing the guys who worked on Rails 3 decided to incorporate this feature so we can use it out-of-the-box taking advantage of the new routing DSL. A great example we can use is a multiple blog app, where we can have blogs (subdomains), articles and comments:</p>
-
-<p><strong>in config/routes.rb</strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>  
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In this example, our root_path will land in <strong>blogs#index</strong>. We would want this only if no subdomain has been specified, otherwise we want to perform the action <strong>blogs#show</strong>. Rails 3 makes it really easy by adding a restriction:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>  
-  <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span><span class="p">,</span> <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:subdomain</span> <span class="o">=&gt;</span> <span class="sr">/.+/</span> <span class="p">}</span>  
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>This setting demands our attention in two details: the <em>id</em> that will be passed to the <em>show_path</em> and the <em>subdomain</em> <strong>:constraint</strong></p>
-
-<p>To pass the id we just need to use a finder like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">show</span>
-  <span class="vi">@blog</span> <span class="o">=</span> <span class="no">Blog</span><span class="o">.</span><span class="n">find_by_subdomain</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>voilà</em></strong></p>
-
-<p>As for the subdomain, we will only pass it in our request when we need it; that simple!</p>
-
-<h2>Mirrors (the 'www' case)</h2>
-
-<p>In Rails 2.3.x, SubdomainFu handles this specific case in a really cool-simple way; in Rails 3 this is accomplished in a little bit of a complex way, but not way too complex...</p>
-
-<p>First, we turn the subdomain constraints into a <em>block</em> in our <strong>config/routes.rb</strong> file</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">MyKillerApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>  
-  <span class="n">resources</span> <span class="ss">:comments</span>  
-  <span class="n">resources</span> <span class="ss">:articles</span>  
-  <span class="n">resources</span> <span class="ss">:blogs</span>
-  <span class="n">constraints</span><span class="p">(</span><span class="no">Subdomain</span><span class="p">)</span> <span class="k">do</span>  
-    <span class="n">match</span> <span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;blogs#show&#39;</span>
-  <span class="k">end</span>
-  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s2">&quot;blogs#index&quot;</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>and we pass a new class called <strong>Subdomain</strong>, which we'll define in our <strong>lib</strong> folder (<strong>lib/subdomain.rb</strong>)</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Subdomain</span>  
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">matches?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>  
-    <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="n">request</span><span class="o">.</span><span class="n">subdomain</span> <span class="o">!=</span> <span class="s1">&#39;www&#39;</span>  
-  <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>done!</em></strong></p>
-
-<h3>Links</h3>
-
-<p>To use subdomains in our links, we can not just pass a <strong>:subdomain</strong> option like we can with <em>SubdomainFu</em>; instead, we must build the host name from scratch and adding the subdomain. This is accomplished using the <em>subdomain</em> attribute in our <strong>blog</strong> object + the request domain + the request port:</p>
-
-<p><strong><em>This won't work...</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  </span>
-<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  &lt;div&gt;  </span>
-<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">blog</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
-<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">    &lt;/div&gt;  </span>
-<span class="x">  &lt;/div&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</code></pre>
-</div>
-
-
-<p><strong><em>but this will...</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%</span> <span class="n">title</span> <span class="s2">&quot;Blogs&quot;</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  </span>
-<span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">blog</span> <span class="k">in</span> <span class="vi">@blogs</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">  &lt;div&gt;  </span>
-<span class="x">    &lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;  </span>
-<span class="x">    &lt;div class=&quot;actions&quot;&gt;  </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Edit&quot;</span><span class="p">,</span> <span class="n">edit_blog_path</span><span class="p">(</span><span class="n">blog</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"> |   </span>
-<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Destroy&quot;</span><span class="p">,</span> <span class="n">blog</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span> <span class="cp">%&gt;</span><span class="x">  </span>
-<span class="x">    &lt;/div&gt;  </span>
-<span class="x">  &lt;/div&gt;</span>
-<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</code></pre>
-</div>
-
-
-<p><strong><em>... we just need to make it look cleaner... with a helper!</em></strong></p>
-
-<div class="highlight"><pre><code class="erb"><span class="x">&lt;h2&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="n">blog</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">root_url</span><span class="p">(</span><span class="ss">:host</span> <span class="o">=&gt;</span> <span class="n">with_subdomain</span><span class="p">(</span><span class="n">blog</span><span class="o">.</span><span class="n">subdomain</span><span class="p">))</span> <span class="cp">%&gt;</span><span class="x">&lt;/h2&gt;</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>the helper must be located in</em></strong> <strong>app/helpers/url_helper.rb</strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">UrlHelper</span>  
-  <span class="k">def</span> <span class="nf">with_subdomain</span><span class="p">(</span><span class="n">subdomain</span><span class="p">)</span>  
-    <span class="n">subdomain</span> <span class="o">=</span> <span class="p">(</span><span class="n">subdomain</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>  
-    <span class="n">subdomain</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span> <span class="k">unless</span> <span class="n">subdomain</span><span class="o">.</span><span class="n">empty?</span>  
-    <span class="o">[</span><span class="n">subdomain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">port_string</span><span class="o">].</span><span class="n">join</span>  
-  <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><strong><em>and include this module in</em></strong> <strong>ApplicationController</strong> <strong><em>to make it available to all controllers in our app...</em></strong></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
-  <span class="kp">include</span> <span class="no">UrlHelper</span>
-  <span class="c1">#other includes, protect_from_forgery, layout, etc.</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h2>That should be enough to get you started</h2>
-
-<p>Enjoy!</p>
-
-<h2>Resources</h2>
-
-<p><strong>Rails 2.3.x</strong> <br />
-<a href="http://github.com/mbleigh/subdomain-fu">SubdomainFu</a> <br />
-<a href="http://railscasts.com/episodes/123-subdomains">Railscasts</a> <br />
-<a href="http://intridea.com/2008/6/23/subdomainfu-a-new-way-to-tame-the-subdomain">Intridea</a> <em>the guys who created SubdomainFu</em></p>
-
-<p><strong>Rails 3</strong> <br />
-<a href="http://railscasts.com/episodes/221-subdomains-in-rails-3">Railscasts</a> <br />
-<a href="http://asciicasts.com/episodes/221-subdomains-in-rails-3">Asciicasts</a> <br /></p>
-
-<p><strong>Local Virtual Host</strong> <br />
-<a href="http://tbaggery.com/2010/03/04/smack-a-ho-st.html">Post</a></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/11/subdomains-in-rails-2-and-3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -1477,6 +1363,8 @@ current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>02 May 2011</b></span> &raquo; <a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method and still using callbacks</a></li>
 
   <li><span><b>25 Apr 2011</b></span> &raquo; <a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></li>
 
@@ -1515,8 +1403,6 @@ current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
   <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
-
-  <li><span><b>15 Dec 2010</b></span> &raquo; <a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></li>
 
   </ul>
 </div>
