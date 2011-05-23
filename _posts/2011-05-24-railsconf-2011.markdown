@@ -1,0 +1,46 @@
+---
+layout: post
+title: Railsconf 2011
+author: David Padilla
+email: david@crowdint.com
+avatar: d32b52ec6403614b1adf3e648cbbe584
+---
+
+Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
+every year, it was a ton of fun, there was a lot to learn and it was inspiring.
+
+I love going to conferences, not just because of the talks, but, because you
+get to meet people. I like talking to the persons that wrote the gems that
+I use everyday and thank them for their effort in creating awesome code so
+we don't have to.
+
+![The Crowd Interactive team](/images/2011/05/24/guns.jpg)
+
+And not just gem writers, it's also fun to meet all those other Ruby
+developers that enjoy using Rails and everything else as much as I do.
+
+![The sign](/images/2011/05/24/sign.jpg)
+
+The best thing you can take out of the experience is inspiration.
+Inspiration to follow the leaders. Inspiration to collaborate to open
+source. Or, as Corey Haines said on his keynote, inspiration to be awesome.
+
+![Friends at Railsconf](/images/2011/05/24/friends.jpg)
+
+Since we enjoy confences so much, last year we were bummed that there was not
+a lot of Ruby conferences in Mexico so we organized
+[Magma Rails](http://www.magmarails.com), and it ended
+up being better than expected. this year we're organizing its second edition
+and it's going to be twice as awesome as last year.
+
+We're moving to Manzanillo Colima, since this year we are inviting people
+from all over the world, it makes more sense to have it at a tourist friendly
+city. You will be able to smell the ocean from your seat.
+
+<a href="http://www.magmarails.com">
+![Last year](http://www.magmarails.com/images/foto-magma.png)
+</a>
+
+Right now we're looking for [speakers](http://http://www.magmarails.com/callforpapers)
+and sponsors, contact us if you're interested. I promise it will be a lot of fun!
+
