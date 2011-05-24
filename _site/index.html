@@ -47,6 +47,72 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
+  <p class="author">
+    <span class="date"><b>May 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
+every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
+
+<p>I love going to conferences, not just because of the talks, but, because you
+get to meet people. I like talking to the persons that wrote the gems that
+I use everyday and thank them for their effort in creating awesome code so
+we don't have to.</p>
+
+<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
+
+<p>And not just gem writers, it's also fun to meet all those other Ruby
+developers that enjoy using Rails and everything else as much as I do.</p>
+
+<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
+
+<p>The best thing you can take out of the experience is inspiration.
+Inspiration to follow the leaders. Inspiration to collaborate to open
+source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
+
+<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
+
+<p>Since we enjoy confences so much, last year we were bummed that there was not
+a lot of Ruby conferences in Mexico so we organized
+<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
+up being better than expected. this year we're organizing its second edition
+and it's going to be twice as awesome as last year.</p>
+
+<p>We're moving to Manzanillo Colima, since this year we are inviting people
+from all over the world, it makes more sense to have it at a tourist friendly
+city. You will be able to smell the ocean from your seat.</p>
+
+<p><a href="http://www.magmarails.com">
+<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
+</a></p>
+
+<p>Right now we're looking for <a href="http://http://www.magmarails.com/callforpapers">speakers</a>
+and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
   <p class="author">
     <span class="date"><b>May 02</b><br />2011</span>
@@ -58,49 +124,12 @@
     
     
     
-      <p>While working on a project, we were required to override the
-destroy method in order to create a soft delete method, in other words
-to change the active state of the object to deleted instead of deleting
-it from the database.</p>
-
-<p>That was no problem at all, but, issues came when we needed this method to use
-callbacks in order for the counter caches to work properly.</p>
-
-<p>In Rails 2 you can override the destroy method without affecting callbacks
-by overriding the method <em>destroy_without_callbacks</em></p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">destroy_without_callbacks</span>
-    <span class="k">unless</span> <span class="n">new_record?</span>
-      <span class="c1"># your code here</span>
-    <span class="k">end</span>
-    <span class="nb">freeze</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>But in Rails 3 things have changed and the previous methods won't
-work. So, after some research, we found out that you can call the method
-callbacks with the run_callbacks method from ActiveSupport</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">destroy</span>
-      <span class="n">run_callbacks</span> <span class="ss">:destroy</span> <span class="k">do</span>
-        <span class="c1"># your code here</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In this case we use it for the destroy method, but you can use it for
-any method you override and need their callbacks. If you don't specify
-any callbacks, all callbacks will be called.</p>
-
-<p>You can find more info
-<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html">here</a></p>
-
-<p>Hope this may help you in your overriding tasks.</p>
-
+      
+        
+           <p>While working on a project, we were required to override the destroy method in order to create a soft delete method, in other words to change the active state of the object to deleted instead of deleting it from the database.</p> <p>That was no problem at all, but, issues came when we needed this method to use callbacks in order for the counter caches to work properly.</p> <p>In Rails 2 you can override the destroy method without affecting callbacks by overriding the method <em>destroy_without_callbacks</em></p> <div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span...
+           <div class = "continue_reading"><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -219,40 +248,6 @@ any callbacks, all callbacks will be called.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 31</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p><small><code>TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important. Add a disclaimer, pray for feedback. Make funny jokes, like "Why does this guy wears a Mexican hat?"</code></small></p> <p>No RESTful knowledge at all? <a href="http://www.b-simple.de/documents">read this!</a></p> <h3>REST URLs should be multi-response</h3> <p>In rails we can use <a href="http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/"><code>respond_to(format)</code></a> to switch between different layouts, and partials. So,...
-            <div class = "continue_reading"><a href="/2011/03/31/make-your-sinatra-more-restful.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/31/make-your-sinatra-more-restful.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
@@ -271,6 +266,8 @@ any callbacks, all callbacks will be called.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
 
   <li><span><b>02 May 2011</b></span> &raquo; <a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></li>
 
@@ -309,8 +306,6 @@ any callbacks, all callbacks will be called.</p>
   <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
 
   <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
-
-  <li><span><b>21 Dec 2010</b></span> &raquo; <a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></li>
 
   </ul>
 </div>

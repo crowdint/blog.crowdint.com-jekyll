@@ -4,14 +4,64 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-05-02T15:00:32-05:00</updated>
+ <updated>2011-05-24T11:02:02-04:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
+   <title>Railsconf 2011</title>
+   <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
+   <updated>2011-05-24T00:00:00-04:00</updated>
+   <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
+every year, it was a ton of fun, there was a lot to learn and it was inspiring.&lt;/p&gt;
+
+&lt;p&gt;I love going to conferences, not just because of the talks, but, because you
+get to meet people. I like talking to the persons that wrote the gems that
+I use everyday and thank them for their effort in creating awesome code so
+we don't have to.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/guns.jpg&quot; alt=&quot;The Crowd Interactive team&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And not just gem writers, it's also fun to meet all those other Ruby
+developers that enjoy using Rails and everything else as much as I do.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/sign.jpg&quot; alt=&quot;The sign&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The best thing you can take out of the experience is inspiration.
+Inspiration to follow the leaders. Inspiration to collaborate to open
+source. Or, as Corey Haines said on his keynote, inspiration to be awesome.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/friends.jpg&quot; alt=&quot;Friends at Railsconf&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we enjoy confences so much, last year we were bummed that there was not
+a lot of Ruby conferences in Mexico so we organized
+&lt;a href=&quot;http://www.magmarails.com&quot;&gt;Magma Rails&lt;/a&gt;, and it ended
+up being better than expected. this year we're organizing its second edition
+and it's going to be twice as awesome as last year.&lt;/p&gt;
+
+&lt;p&gt;We're moving to Manzanillo Colima, since this year we are inviting people
+from all over the world, it makes more sense to have it at a tourist friendly
+city. You will be able to smell the ocean from your seat.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.magmarails.com&quot;&gt;
+&lt;img src=&quot;http://www.magmarails.com/images/foto-magma.png&quot; alt=&quot;Last year&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Right now we're looking for &lt;a href=&quot;http://http://www.magmarails.com/callforpapers&quot;&gt;speakers&lt;/a&gt;
+and sponsors, contact us if you're interested. I promise it will be a lot of fun!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-05:00</updated>
+   <updated>2011-05-02T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
    <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
    <content type="html">&lt;p&gt;While working on a project, we were required to override the
@@ -66,7 +116,7 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
  <entry>
    <title>One File Web Page with Rack</title>
    <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-05:00</updated>
+   <updated>2011-04-25T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
@@ -162,7 +212,7 @@ by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;
  <entry>
    <title>Turn jQuery effects off for testing</title>
    <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
-   <updated>2011-04-13T00:00:00-05:00</updated>
+   <updated>2011-04-13T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
@@ -240,7 +290,7 @@ how to disable jQuery effects off.&lt;/p&gt;
  <entry>
    <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
    <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-05:00</updated>
+   <updated>2011-04-06T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
@@ -359,7 +409,7 @@ to use Haml and Compass.&lt;/p&gt;
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
    <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
-   <updated>2011-03-31T00:00:00-06:00</updated>
+   <updated>2011-03-31T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
@@ -574,7 +624,7 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
  <entry>
    <title>How to write good CSS</title>
    <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
-   <updated>2011-03-24T00:00:00-06:00</updated>
+   <updated>2011-03-24T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
@@ -817,7 +867,7 @@ site will be grateful about this.&lt;/p&gt;
  <entry>
    <title>What is Sinatra?</title>
    <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
-   <updated>2011-03-18T00:00:00-06:00</updated>
+   <updated>2011-03-18T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
@@ -906,7 +956,7 @@ get your app running after 1 minute.&lt;/p&gt;
  <entry>
    <title>Sinatra, the green way</title>
    <link href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html"/>
-   <updated>2011-03-14T00:00:00-06:00</updated>
+   <updated>2011-03-14T00:00:00-04:00</updated>
    <id>http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.&lt;/p&gt;
@@ -1050,7 +1100,7 @@ For more info visit &lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&q
  <entry>
    <title>As Monty Python said... "And Now For Something Completly Different"</title>
    <link href="http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html"/>
-   <updated>2011-03-08T00:00:00-06:00</updated>
+   <updated>2011-03-08T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different</id>
    <photo>89c6420fb99cb01bcf2e3502a7851da2</photo>
    <content type="html">&lt;p&gt;Perhaps by reading this you may be wondering what is Processing.js?
@@ -1134,7 +1184,7 @@ Well, &lt;a href=&quot;http://processingjs.org/&quot;&gt;Processing.js&lt;/a&gt;
  <entry>
    <title>How to make your Models look lean</title>
    <link href="http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean.html"/>
-   <updated>2011-03-02T00:00:00-06:00</updated>
+   <updated>2011-03-02T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean</id>
    <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;Rails is strongly based in the MVC concept, that means each part of
@@ -1341,7 +1391,7 @@ development environment loads the classes in a lazy mode!.&lt;/p&gt;
  <entry>
    <title>Why ruby?</title>
    <link href="http://blog.crowdint.com/2011/02/25/why-ruby.html"/>
-   <updated>2011-02-25T00:00:00-06:00</updated>
+   <updated>2011-02-25T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/02/25/why-ruby</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;We have been seeing a lot of posts about different Rails and Ruby topics,
@@ -1519,7 +1569,7 @@ outside of it.&lt;/p&gt;
  <entry>
    <title>What we learned at LA Ruby Conf</title>
    <link href="http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf.html"/>
-   <updated>2011-02-21T00:00:00-06:00</updated>
+   <updated>2011-02-21T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Earlier this month I decided to go to &lt;a href=&quot;http://www.larubyconf.com&quot;&gt;LA Ruby Conf 2011&lt;/a&gt;.
@@ -1743,7 +1793,7 @@ times.&lt;/p&gt;
  <entry>
    <title>Internationalizing your Rails application with i18n</title>
    <link href="http://blog.crowdint.com/2011/02/15/internationalizing-your-rails-app.html"/>
-   <updated>2011-02-15T00:00:00-06:00</updated>
+   <updated>2011-02-15T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/02/15/internationalizing-your-rails-app</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business,  projects or simply our ideas in other countries.&lt;/p&gt;
@@ -1929,7 +1979,7 @@ Well it’s easy, you just need to put the tags in the right order to obtain the
  <entry>
    <title>Auditrail, how to play dirty with callbacks.</title>
    <link href="http://blog.crowdint.com/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html"/>
-   <updated>2011-02-05T00:00:00-06:00</updated>
+   <updated>2011-02-05T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/02/05/auditrail-how-to-play-dirty-with-callbacks</id>
    <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
    <content type="html">&lt;p&gt;Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models
@@ -2020,115 +2070,6 @@ gem by forking it on github.&lt;/p&gt;
    <author>
      <name>Luis Galaviz</name>
      <email>luis.galaviz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Attack of the backtick</title>
-   <link href="http://blog.crowdint.com/2011/01/31/attack-of-the-backticks.html"/>
-   <updated>2011-01-31T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/01/31/attack-of-the-backticks</id>
-   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
-   <content type="html">&lt;p&gt;It all started because I was getting some weird warning while running
-the specs on one of my apps.&lt;/p&gt;
-
-&lt;p&gt;I know that, as a developer, I am suppposed to ignore all warnings, but,
-this one felt ackward, so I had to track it down.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;not found:
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;What? Why is activerecord trying to run some command? what command? and
-why it isn't finding that command?&lt;/p&gt;
-
-&lt;p&gt;Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
-something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;convert_number_column_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
-    &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-    &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_a?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt;
-    &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Nothing useful there, line 1838 was just doing some if thing. So, what's
-going on?&lt;/p&gt;
-
-&lt;p&gt;I went through lots of source files, trying to narrow down the
-posibilites. But I just couldn't find anything unusual. If there was a
-syntax error, why is the code not breaking completely, it's just a
-warning on STDOUT.&lt;/p&gt;
-
-&lt;p&gt;I ended up doing the worst thing ever (for me, anyway) to figure out this
-one, run the code with &lt;em&gt;ruby-debug&lt;/em&gt;, put a couple of breakpoints. I feel
-dirty just by admiting that.&lt;/p&gt;
-
-&lt;p&gt;Anyway, the problem was caused by some unintentional mistake:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;items_returned&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cancelled?&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;``&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;How could I have missed that? the &lt;em&gt;backticks&lt;/em&gt; at the end of the line, of
-course.&lt;/p&gt;
-
-&lt;p&gt;In ruby, the backtick method returns the standard output of running the string encompassed
-by the backticks in a subshell.&lt;/p&gt;
-
-&lt;p&gt;Yes, it is a method, like almost every operator in Ruby.&lt;/p&gt;
-
-&lt;p&gt;A few examples:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;hey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`echo hey`&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;quot;hey\n&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;list_of_files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`ls`&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;quot;file1\nfile2\nfile3\n&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;It also sets a special variable $? with a Process::Status object with
-the PID of that subshell.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;sb&quot;&gt;`exit 99`&lt;/span&gt;
-&lt;span class=&quot;vg&quot;&gt;$?&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;#  =&amp;gt; # &amp;lt;Process::Status: pid 7781 exit 99&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;vg&quot;&gt;$.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exitstatus&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#  =&amp;gt; 99&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;So, I guess what was happening is that, the &lt;em&gt;cancelled?&lt;/em&gt; method was
-taking the result of `` as a parameter, in this case, a string, printing the result of that to
-STDOUT and just ignoring the value of the parameter.&lt;/p&gt;
-
-&lt;p&gt;In other words, I was calling &lt;em&gt;cancelled?&lt;/em&gt; like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;cancelled?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;``&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;But, since cancelled wasn't expecting a parameter at all, it just
-ignored the input. That's why I wasn't getting a syntax error or a
-runtime error.&lt;/p&gt;
-
-&lt;p&gt;Probably nothing useful on my experience, since this is such a weird
-problem to have, yet I just felt like explaining the power of the backticks.&lt;/p&gt;
-
-&lt;p&gt;Cheers&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
    </author>
  </entry>
  
