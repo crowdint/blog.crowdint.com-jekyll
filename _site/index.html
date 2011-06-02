@@ -15,15 +15,6 @@
     <script type="text/javascript">
       var _gaq = _gaq || [];
 
-      _gaq.push(['_setAccount', 'UA-17527068-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
     </script>
 </head>
 <body>
@@ -47,6 +38,110 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/06/02/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
+  <p class="author">
+    <span class="date"><b>Jun 02</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <h2>Using Vagrant to manage different dev environments, services and configurations.</h2>
+
+<hr />
+
+<p><em>Lets start rocking like a pro. Installing services (like mysql, redis, mongo..) in your own machine is old fashioned</em>. Don't let you handle with different versions, as different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant came for us.</p>
+
+<p>Vagrant let you create different virtualized machines, easy and separated from your computer internals. So, you can easy handle all your dev environments (like dev, stage, production..) including specific versions of server and services.</p>
+
+<p>For example, I'm working in two projects, and both uses <a href="http://mongodb.org">mongodb</a> as primary database but locked with different (and incompatible) versions. So, I've started using Vagrant to handle that. I need one version, I just start the box that contains that server, and I don't mess with my real system. That's why Vagrant is so important.</p>
+
+<p>It uses <a href="http://virtualbox.org">Virtualbox</a> inside, it supports command line, easy ssh access, easy distribution, shared folders, and other goodies.
+Even you can package your box, and distribute it to all your team members. One suprem box for rule them all.</p>
+
+<h3>Installation</h3>
+
+<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em> installed.</p>
+
+<pre><code>gem install vagrant
+vagrant --help
+</code></pre>
+
+<h3>Creating a new box</h3>
+
+<pre><code>mkdir ~/Vagrants;
+cd ~/Vagrants/;
+vagrant box add base http://files.vagrantup.com/lucid32.box;
+vagrant init
+</code></pre>
+
+<p><em>Notes:</em>
+The <code>vagrant box add</code> command will download a pre-created ubuntu linux system (so ~260Mb will be downloaded)
+Vagrant uses one configuration file per box, and it's called <code>VagrantFile</code>.</p>
+
+<h3>Starting your box</h3>
+
+<pre><code>cd ~/Vagrants/;
+vagrant up
+</code></pre>
+
+<p>And thats it. You have a new Linux environment ready to be configured, be installed by your software, servers, services, etc.</p>
+
+<p><em>Note:</em> if you require directly access from outside to your box, just enable the ssh access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>. For example, if you're configuring an MySQL instance, your client will connect to 33.33.33.10:3606.</p>
+
+<h3>Accessing it</h3>
+
+<p>Now, all you need install your servers. It's just like log in into your servers, do some apt-get install, configure your settings.</p>
+
+<pre><code>cd ~/Vagrants/;
+vagrant ssh
+# sudo apt-get install your-stuff-1.2.3
+exit
+</code></pre>
+
+<h3>Power OFF, suspend, resume..</h3>
+
+<p>It's easy as:</p>
+
+<pre><code>vagrant halt
+vagrant suspend
+vagrant resume
+vagrant destroy
+</code></pre>
+
+<h2>And that's it</h2>
+
+<p>Now it's your time. Try it, learn it, use it, enjoy it.
+<em>And see you next time!</em></p>
+
+<h3>More info</h3>
+
+<ul>
+<li>More info at: <a href="http://vagrant.com">vagrant.com</a></li>
+<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first explanation about Vagrant.</li>
+</ul>
+
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/06/02/vagrant.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
   <p class="author">
     <span class="date"><b>May 24</b><br />2011</span>
@@ -58,150 +153,16 @@
     
     
     
-      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
-
-<p>I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.</p>
-
-<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
-
-<p>And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.</p>
-
-<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
-
-<p>The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
-
-<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
-
-<p>Since we enjoy confences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.</p>
-
-<p>We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.</p>
-
-<p><a href="http://www.magmarails.com">
-<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
-</a></p>
-
-<p>Right now we're looking for <a href="http://http://www.magmarails.com/callforpapers">speakers</a>
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
-
+      
+        
+           <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p> <p>I love going to conferences, not just because of the talks, but, because you get to meet people. I like talking to the persons that wrote the gems that I use everyday and thank them for their effort in creating awesome code so we don't have to.</p> <p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p> <p>And not just...
+           <div class = "continue_reading"><a href="/2011/05/24/railsconf-2011.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
       <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
-  <p class="author">
-    <span class="date"><b>May 02</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/ec9ab4537f5224def5fc54cd7465008b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>While working on a project, we were required to override the destroy method in order to create a soft delete method, in other words to change the active state of the object to deleted instead of deleting it from the database.</p> <p>That was no problem at all, but, issues came when we needed this method to use callbacks in order for the counter caches to work properly.</p> <p>In Rails 2 you can override the destroy method without affecting callbacks by overriding the method <em>destroy_without_callbacks</em></p> <div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span...
-           <div class = "continue_reading"><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas & Omar Vargas | ana.rosas+omar.vargas@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 25</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to create simple one page <em>Rack</em> web applications.</p> <p>For a bigger overview about <strong>Rack</strong> look at this article: <a href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics...
-           <div class = "continue_reading"><a href="/2011/04/25/one-file-web-page-with-rack.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/25/one-file-web-page-with-rack.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 13</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the TDD + BDD approach when coding new applications.</p> <p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use <a href="http://cukes.info">Cucumber</a> for BDD, although lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of Cucumber and so far I am loving it.</p> <p>When you are using Capybara + Selenium for testing with Cucumber or Steak, sometimes you can get an error when you write tests for clicks that are followed by an animation.</p> <p>For example:</p> <div class="highlight"><pre><code class="ruby"><span class="n">scenario</span> <span class="s2">&quot;New resource&quot;</span> <span...
-           <div class = "continue_reading"><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -252,7 +213,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   
     <span class="previous">Previous</span>
   
-  <span class="page_number ">Page: 1 of 10</span>
+  <span class="page_number ">Page: 1 of 8/5</span>
   
     <a href="/page2" class="next ">Next</a>
   
@@ -267,45 +228,11 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   <h1>Recent Posts</h1>
   <ul class="archives">
 
+  <li><span><b>02 Jun 2011</b></span> &raquo; <a href="/2011/06/02/vagrant.html">Vagrant to manage multiple dev environments</a></li>
+
   <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
 
-  <li><span><b>02 May 2011</b></span> &raquo; <a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></li>
-
-  <li><span><b>25 Apr 2011</b></span> &raquo; <a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></li>
-
-  <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
-
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
-
-  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
-
-  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
-
-  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
-
-  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
-
-  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
-
-  <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
-
-  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
-
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
-
-  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
-
-  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   </ul>
 </div>
