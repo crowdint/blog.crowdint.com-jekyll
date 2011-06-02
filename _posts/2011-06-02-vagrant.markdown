@@ -1,0 +1,74 @@
+---
+layout: post
+title: Vagrant to manage multiple dev environments
+author: Mario Zaizar
+email: mario@crowdint.com
+avatar: 29612de9aa10447dc2f9ec84cf2ab1b2
+---
+
+## Using Vagrant to manage different dev environments, services and configurations.
+---
+
+*Lets start rocking like a pro. Installing services (like mysql, redis, mongo..) in your own machine is old fashioned*. Don't let you handle with different versions, as different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant came for us.
+
+Vagrant let you create different virtualized machines, easy and separated from your computer internals. So, you can easy handle all your dev environments (like dev, stage, production..) including specific versions of server and services. 
+
+For example, I'm working in two projects, and both uses [mongodb](http://mongodb.org) as primary database but locked with different (and incompatible) versions. So, I've started using Vagrant to handle that. I need one version, I just start the box that contains that server, and I don't mess with my real system. That's why Vagrant is so important.
+
+It uses [Virtualbox](http://virtualbox.org) inside, it supports command line, easy ssh access, easy distribution, shared folders, and other goodies.
+Even you can package your box, and distribute it to all your team members. One suprem box for rule them all.
+
+### Installation
+
+You will require *ruby*, *rubygems*, and *virtualbox 4* installed.
+
+    gem install vagrant
+    vagrant --help
+
+### Creating a new box
+
+    mkdir ~/Vagrants;
+    cd ~/Vagrants/;
+    vagrant box add base http://files.vagrantup.com/lucid32.box;
+    vagrant init
+
+*Notes:* 
+The `vagrant box add` command will download a pre-created ubuntu linux system (so ~260Mb will be downloaded)
+Vagrant uses one configuration file per box, and it's called `VagrantFile`.
+
+### Starting your box
+
+    cd ~/Vagrants/;
+    vagrant up
+
+And thats it. You have a new Linux environment ready to be configured, be installed by your software, servers, services, etc. 
+
+*Note:* if you require directly access from outside to your box, just enable the ssh access editing the `VagrantFile`, and uncommenting this: `config.vm.network "33.33.33.10"`. For example, if you're configuring an MySQL instance, your client will connect to 33.33.33.10:3606.
+
+### Accessing it
+
+Now, all you need install your servers. It's just like log in into your servers, do some apt-get install, configure your settings.
+
+    cd ~/Vagrants/;
+    vagrant ssh
+    # sudo apt-get install your-stuff-1.2.3
+    exit
+
+### Power OFF, suspend, resume..
+
+It's easy as:
+
+    vagrant halt
+    vagrant suspend
+    vagrant resume
+    vagrant destroy
+
+## And that's it
+
+Now it's your time. Try it, learn it, use it, enjoy it.
+*And see you next time!*
+
+### More info
+
+- More info at: [vagrant.com](http://vagrant.com)
+- And thanks to [Edwin](https://twitter.com/#!/softr8), for his first explanation about Vagrant.
