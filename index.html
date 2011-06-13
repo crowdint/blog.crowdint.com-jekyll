@@ -25,7 +25,7 @@ title: Blog
             {{ post.content  | split_truncate | truncatewords: 61}}
             <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% else %}
-           {{ post.content  | split_truncate | truncatewords: 90}}
+           {{ post.content  | split_truncate | truncatewords: 70}}
            <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% endif %}
       {% endif %}
