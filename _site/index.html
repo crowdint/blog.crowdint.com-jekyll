@@ -47,6 +47,78 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to yours Ruby classes</a></h1>
+  <p class="author">
+    <span class="date"><b>Jun 13</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>Validations are one of the most useful things in ActiveRecord.
+To use them all you have to do is make your class inherit from ActiveRecord::Base,
+but, what if you don't want to save the records in a database?
+Does it make sense to use ActiveRecord and its overload only for validations?
+In case you're wondering, the answer is NO.</p>
+
+<p>Fortunately, in Rails 3, validations were moved from <em>ActiveRecord</em> to
+<em>ActiveModel</em>. This give us the ability to use validations in our ruby
+classes very easily, even if you don't want to use ActiveRecord.</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="c1"># contact.rb</span>
+    <span class="k">class</span> <span class="nc">Contact</span>
+      <span class="kp">include</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">Validations</span>
+      
+      <span class="kp">attr_accessor</span> <span class="ss">:name</span>
+      
+      <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+      
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>By including the <em>ActiveModel::Validations</em> module in our class we are able
+to use methods like the following</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">contact</span> <span class="o">=</span> <span class="no">Contact</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">contact</span><span class="o">.</span><span class="n">valid?</span> <span class="c1"># =&gt; false</span>
+</code></pre>
+</div>
+
+
+<p>or</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">contact</span><span class="o">.</span><span class="n">errors</span> <span class="c1"># =&gt; {:name=&gt;[&quot;can&#39;t be blank&quot;]}</span>
+</code></pre>
+</div>
+
+
+<p>We can use all of
+the <a href="http://edgeguides.rubyonrails.org/3_0_release_notes.html#validations">Rails 3 Validations</a>.</p>
+
+<p>Hope this may help you</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/06/13/add-validations-to-your-ruby-classes.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
   <p class="author">
     <span class="date"><b>May 24</b><br />2011</span>
@@ -58,44 +130,12 @@
     
     
     
-      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
-
-<p>I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.</p>
-
-<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
-
-<p>And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.</p>
-
-<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
-
-<p>The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
-
-<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
-
-<p>Since we enjoy conferences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.</p>
-
-<p>We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.</p>
-
-<p><a href="http://www.magmarails.com">
-<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
-</a></p>
-
-<p>Right now we're looking for <a href="http://www.magmarails.com/callforpapers">speakers</a>
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
-
+      
+        
+           <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p> <p>I love going to conferences, not just because of the talks, but, because you get to meet people. I like talking to the persons that wrote the gems that I use everyday and thank them for their...
+           <div class = "continue_reading"><a href="/2011/05/24/railsconf-2011.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -126,7 +166,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
     
       
         
-           <p>While working on a project, we were required to override the destroy method in order to create a soft delete method, in other words to change the active state of the object to deleted instead of deleting it from the database.</p> <p>That was no problem at all, but, issues came when we needed this method to use callbacks in order for the counter caches to work properly.</p> <p>In Rails 2 you can override the destroy method without affecting callbacks by overriding the method <em>destroy_without_callbacks</em></p> <div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span...
+           <p>While working on a project, we were required to override the destroy method in order to create a soft delete method, in other words to change the active state of the object to deleted instead of deleting it from the database.</p> <p>That was no problem at all, but, issues came when we needed this method to use callbacks in order for the counter caches to work properly.</p> <p>In Rails 2...
            <div class = "continue_reading"><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">Continue reading...</a></div>
         
       
@@ -160,7 +200,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
     
       
         
-           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to create simple one page <em>Rack</em> web applications.</p> <p>For a bigger overview about <strong>Rack</strong> look at this article: <a href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics...
+           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to...
            <div class = "continue_reading"><a href="/2011/04/25/one-file-web-page-with-rack.html">Continue reading...</a></div>
         
       
@@ -194,7 +234,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
     
       
         
-           <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the TDD + BDD approach when coding new applications.</p> <p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use <a href="http://cukes.info">Cucumber</a> for BDD, although lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of Cucumber and so far I am loving it.</p> <p>When you are using Capybara + Selenium for testing with Cucumber or Steak, sometimes you can get an error when you write tests for clicks that are followed by an animation.</p> <p>For example:</p> <div class="highlight"><pre><code class="ruby"><span class="n">scenario</span> <span class="s2">&quot;New resource&quot;</span> <span...
+           <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the TDD + BDD approach when coding new applications.</p> <p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use <a href="http://cukes.info">Cucumber</a> for BDD, although lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of Cucumber and so far I am loving it.</p> <p>When you are using Capybara + Selenium for testing with Cucumber or Steak, sometimes you can get an error when you...
            <div class = "continue_reading"><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Continue reading...</a></div>
         
       
@@ -210,40 +250,6 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   </div>
       <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 06</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Last week, I spent about half a day trying to get Sinatra working with Compass and Blueprint. At first, it was a pain in the ass because the documentation is pretty lame. But after some reading here and there and trying via command line, I failed again and again.</p> <p>But, don't despair, there is hope... I got it to work eventually and here is how I did it:</p> <p>First of all, you have to setup your sinatra app as usual. If you have read <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's post about setting up...
-           <div class = "continue_reading"><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/06/sinatra-haml-compass-blueprint.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
     </div>
 </div>
 
@@ -266,6 +272,8 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>13 Jun 2011</b></span> &raquo; <a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to yours Ruby classes</a></li>
 
   <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
 
@@ -304,8 +312,6 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   </ul>
 </div>

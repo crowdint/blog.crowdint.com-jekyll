@@ -47,6 +47,196 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/11/24/watermarking-images.html">Watermarking images minimizing the overhead</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 24</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>During the days I was working for a project called <a href="http://creativeallies.com">Creative Allies</a>, I faced the need to find a way to stamp watermarks in user images; some of them were files with long width/height attributes and though the process was apparently simple, in practice our servers even crashed the app due to overhead.</p>
+
+<p>After doing some research, I decided to come up with my own solution and now I want to share it here, hoping somebody will find it helpful. Let's get started.</p>
+
+<h2>What I did the first time</h2>
+
+<p>The feature included uploading a file, validating it using <a href="http://rmagick.rubyforge.org/">RMagick</a> and if validation passed, creating thumbnails and a watermarked preview.</p>
+
+<p>For this post's purposes I will only re-create such functionality specifying a fixed path to file so I we can compare benchmark outcome. Ready?</p>
+
+<h3>Opening the file</h3>
+
+<p>We'll assume our file was uploaded from a form and it's already in our app's temp folder, under the name <a href="/images/wallpaper_original.jpg">"wallpaper_original.jpg"</a> (the file is 1.1 Mb)</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">example_image_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_original.jpg&quot;</span>
+
+ <span class="c1"># Let&#39;s also specify the file path for our watermarked image</span>
+<span class="n">example_image_output_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/wallpaper_watermarked.jpg&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Image dimensions are: 1800 x 1200 pixels (big enough)</p>
+
+<p>Also, we have the <a href="/images/watermark.png">watermark stamp</a> in our images folder.
+Watermark dimensions are: 250 x 250 pixels</p>
+
+<h3>Stamping the watermark</h3>
+
+<p>I used a method called <em>apply_watermark</em> that will receive the path to our image as a string and the path of the watermarked image, like this:</p>
+
+<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span> <span class="c1"># great idea to fire up the garbage collector here, it&#39;s a good practice</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now we just have to call our <em>apply_watermark</em> method passing the <em>example_image_path</em> string as the <em>image_path</em> and the <em>new_filename_path</em> arguments:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">apply_watermark</span><span class="p">(</span><span class="n">example_image_path</span><span class="p">,</span> <span class="n">example_image_output_path</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Now let's add some code to our <em>apply_watermark</em> method to perform <a href="http://ruby-doc.org/core/classes/Benchmark.html">benchmarking</a>:</p>
+
+<div class="highlight"><pre><code class="ruby"> <span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
+          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>I entered the console, picked our image's file path, called the method, grabbed a cup of coffee and relaxed... you can see the console output <a href="https://gist.github.com/661883">here</a></p>
+
+<h3>Here's what happened</h3>
+
+<p>The code in our <em>apply_watermark</em> method iterated as many times our watermark file could fit into our original wallpaper image, stamped the watermark once and again until iterations were completed. This demanded memory and processing power and took longer than any user out there would expect. Sometimes our app just hung.</p>
+
+<p>You can see the result here: <a href="/images/wallpaper_watermarked.jpg">wallpaper_watermarked.jpg</a></p>
+
+<h2>How I fixed it</h2>
+
+<p>Sometimes users would upload HUGE files that were about 8000 x 5000 pixels and everything would just fall apart. We needed to find a way to reduce the number of iterations regardless the dimensions of the images; so I created an additional method that would pick a watermark stamp depending on how big the new image was and then using it in the iterations. Results just rocked!</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">pick_watermark</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+  <span class="n">image_width</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">columns</span> <span class="o">/</span> <span class="mi">250</span>
+  <span class="k">case</span> <span class="n">image_width</span><span class="o">.</span><span class="n">to_i</span>
+  <span class="k">when</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span> <span class="mi">2</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark.png&quot;</span>
+  <span class="k">when</span> <span class="mi">3</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark3.png&quot;</span>
+  <span class="k">when</span> <span class="mi">6</span><span class="o">.</span><span class="n">.</span><span class="mi">11</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark6.png&quot;</span>
+  <span class="k">when</span> <span class="mi">12</span><span class="o">.</span><span class="n">.</span><span class="mi">17</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark12.png&quot;</span>
+  <span class="k">when</span> <span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark18.png&quot;</span>
+  <span class="k">else</span>
+    <span class="n">watermark</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">RAILS_ROOT</span><span class="si">}</span><span class="s2">/public/images/watermark24.png&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">apply_watermark</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">new_filename_path</span><span class="p">)</span>
+  <span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+  <span class="n">dst</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="no">Magick</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pick_watermark</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span><span class="o">.</span><span class="n">first</span>
+  <span class="no">GC</span><span class="o">.</span><span class="n">start</span>
+  <span class="n">new_filename</span> <span class="o">=</span> <span class="n">new_filename_path</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="n">src</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">ceil</span>
+  <span class="n">wcolumns</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">columns</span>
+  <span class="n">wrows</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">rows</span>
+  <span class="n">lightness</span> <span class="o">=</span><span class="mi">0</span><span class="o">.</span><span class="mo">075</span>
+  <span class="n">rows</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">col</span><span class="o">|</span>
+      <span class="no">Benchmark</span> <span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">report</span> <span class="p">{</span>
+          <span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">watermark</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lightness</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">*</span> <span class="n">wcolumns</span><span class="p">,</span> <span class="n">row</span> <span class="o">*</span> <span class="n">wrows</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+  <span class="n">dst</span><span class="o">.</span><span class="n">destroy!</span>
+  <span class="n">src</span><span class="o">.</span><span class="n">destroy!</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Here's the output from our tweaked code (I couldn't even grab another cup of coffee):</p>
+
+<script src="https://gist.github.com/661917.js?file=gistfile1.rb"></script>
+
+
+<p>Pretty amazing, uh?</p>
+
+<p>We saved memory and processor power by 'pre-processing' the watermark stamps and putting them together in separate files so we could pick the one that would demand the lowest number of iterations in our code. After this tweak, our app was ready for the next move...</p>
+
+<h2>Enjoy!</h2>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/11/24/watermarking-images.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></h1>
   <p class="author">
     <span class="date"><b>Nov 17</b><br />2010</span>
@@ -1087,160 +1277,6 @@ public/images/system/**/*
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 27</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
-
-<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
-
-<p>OK so, let's begin with our brief trip</p>
-
-<h2>Installing Ruby</h2>
-
-<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
-</code></pre>
-</div>
-
-
-<p>and switch to that ruby version by running:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
-</code></pre>
-</div>
-
-
-<h2>Installing Rails</h2>
-
-<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em><gemset_name></em>' and 'rvm gemset use <em><gemset_name></em>', so after this we do:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
-</code></pre>
-</div>
-
-
-<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
-
-<h2>Installing PostgreSQL with Visual Administrator</h2>
-
-<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
-</code></pre>
-</div>
-
-
-<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
-</code></pre>
-</div>
-
-
-<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
- As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And run the bundler:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-</code></pre>
-</div>
-
-
-<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
-
-<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
-</code></pre>
-</div>
-
-
-<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
-So this will create a user with database and user creation permissions with a defined password.</p>
-
-<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
-
-<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
-
-<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-</code></pre>
-</div>
-
-
-<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
-
-<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -1261,6 +1297,8 @@ So this will create a user with database and user creation permissions with a de
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>13 Jun 2011</b></span> &raquo; <a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to yours Ruby classes</a></li>
 
   <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
 
@@ -1299,8 +1337,6 @@ So this will create a user with database and user creation permissions with a de
   <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   </ul>
 </div>

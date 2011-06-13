@@ -47,6 +47,179 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 02</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
+
+<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
+
+<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
+
+<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
+
+<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
+
+<h2>Setup jekyll</h2>
+
+<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
+all you have to do is run:</p>
+
+<div class="highlight"><pre><code class="bash">gem install jekyll
+</code></pre>
+</div>
+
+
+<h2>Create the site structure</h2>
+
+<p>Create a folder wherever you want to put your blog files.</p>
+
+<div class="highlight"><pre><code class="bash">mkdir my_blog
+</code></pre>
+</div>
+
+
+<p>and create the following files:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
+touch _config.yml
+touch index.html
+mkdir _posts
+mkdir _layouts
+touch _layouts/default.html
+</code></pre>
+</div>
+
+
+<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
+
+<h2>"Hello World" Jekyll</h2>
+
+<h3>_layouts/default.html</h3>
+
+<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+
+<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
+
+<div class="highlight"><pre><code class="html">---
+layout: default
+---
+</code></pre>
+</div>
+
+
+<p>What we're telling the index page is to use the default layout we created earlier.</p>
+
+<p>Run:</p>
+
+<div class="highlight"><pre><code class="bash">jekyll--server --auto
+</code></pre>
+</div>
+
+
+<p>Open your browser and go to http://127.0.0.1:4000</p>
+
+<p>You should now see "Hello World"</p>
+
+<h2>Deploying to Heroku</h2>
+
+<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
+
+<p>You can read the documentation on the gem page, the basic steps are:</p>
+
+<p>First, install the Heroku gem</p>
+
+<div class="highlight"><pre><code class="bash">gem install heroku
+</code></pre>
+</div>
+
+
+<p>Create a config.ru file:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
+
+<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
+</code></pre>
+</div>
+
+
+<p>Add the rack-jekyll gem to the heroku manifest:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
+</code></pre>
+</div>
+
+
+<p>Create a git repo and an initial commit:</p>
+
+<div class="highlight"><pre><code class="bash">git init
+git add .
+git commit -m <span class="s2">&quot;First commit&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Create a Heroku app:</p>
+
+<div class="highlight"><pre><code class="bash">heroku create
+</code></pre>
+</div>
+
+
+<p>And, deploy!</p>
+
+<div class="highlight"><pre><code class="bash">git push heroku master
+</code></pre>
+</div>
+
+
+<p>Check out how it looks:</p>
+
+<div class="highlight"><pre><code class="bash">heroku open
+</code></pre>
+</div>
+
+
+<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
+
+<p>Cheers!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></h1>
   <p class="author">
     <span class="date"><b>Jul 28</b><br />2010</span>
@@ -478,6 +651,8 @@ or
   <h1>Recent Posts</h1>
   <ul class="archives">
 
+  <li><span><b>13 Jun 2011</b></span> &raquo; <a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to yours Ruby classes</a></li>
+
   <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
 
   <li><span><b>02 May 2011</b></span> &raquo; <a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></li>
@@ -515,8 +690,6 @@ or
   <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
-
-  <li><span><b>25 Dec 2010</b></span> &raquo; <a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></li>
 
   </ul>
 </div>
