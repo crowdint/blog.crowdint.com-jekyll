@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Add Validations to yours Ruby classes
+title: Add Validations to your Ruby classes
 author: Omar Vargas
 email: omar@crowdint.com
 avatar: 433031df4018635dfb177f4066c37a3b

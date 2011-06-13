@@ -4,12 +4,12 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-06-13T12:06:36-05:00</updated>
+ <updated>2011-06-13T12:09:29-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
-   <title>Add Validations to yours Ruby classes</title>
+   <title>Add Validations to your Ruby classes</title>
    <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
    <updated>2011-06-13T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
