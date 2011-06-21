@@ -4,95 +4,175 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-06-02T01:21:19-05:00</updated>
+ <updated>2011-06-21T11:56:22-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Vagrant to manage multiple dev environments</title>
-   <link href="http://blog.crowdint.com/2011/06/02/vagrant.html"/>
-   <updated>2011-06-02T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2011/06/02/vagrant</id>
+   <link href="http://blog.crowdint.com/2011/06/21/vagrant.html"/>
+   <updated>2011-06-21T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/06/21/vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
-   <content type="html">&lt;h2&gt;Using Vagrant to manage different dev environments, services and configurations.&lt;/h2&gt;
+   <content type="html">&lt;p&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
+machine is old fashioned. They won't let you handle different versions, or different
+configurations, and most of the time your dev machine isn't the same as your production server.
+That's why Vagrant is there for us.&lt;/p&gt;
 
-&lt;hr /&gt;
+&lt;p&gt;Vagrant allows you to create different virtualized machines, easy and separated from your
+computer internals. So, you can handle all your dev environments (dev, stage, production)
+including specific versions of all servers and services.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo..) in your own machine is old fashioned&lt;/em&gt;. Don't let you handle with different versions, as different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant came for us.&lt;/p&gt;
+&lt;p&gt;For example, I'm currently working on two different projects, and both use
+&lt;a href=&quot;http://mongodb.org&quot;&gt;mongodb&lt;/a&gt; as the primary database locked with different
+(and incompatible) versions.&lt;/p&gt;
 
-&lt;p&gt;Vagrant let you create different virtualized machines, easy and separated from your computer internals. So, you can easy handle all your dev environments (like dev, stage, production..) including specific versions of server and services.&lt;/p&gt;
+&lt;p&gt;So, I've started using Vagrant to handle that. When I need one version, I just start the box
+that contains that server, and I don't mess with my system. That's why Vagrant is so important.&lt;/p&gt;
 
-&lt;p&gt;For example, I'm working in two projects, and both uses &lt;a href=&quot;http://mongodb.org&quot;&gt;mongodb&lt;/a&gt; as primary database but locked with different (and incompatible) versions. So, I've started using Vagrant to handle that. I need one version, I just start the box that contains that server, and I don't mess with my real system. That's why Vagrant is so important.&lt;/p&gt;
+&lt;p&gt;It uses &lt;a href=&quot;http://virtualbox.org&quot;&gt;Virtualbox&lt;/a&gt; internally, and supports command line, easy ssh access,
+easy distribution, shared folders, and other goodies.&lt;/p&gt;
 
-&lt;p&gt;It uses &lt;a href=&quot;http://virtualbox.org&quot;&gt;Virtualbox&lt;/a&gt; inside, it supports command line, easy ssh access, easy distribution, shared folders, and other goodies.
-Even you can package your box, and distribute it to all your team members. One suprem box for rule them all.&lt;/p&gt;
+&lt;p&gt;You can even package your own boxes, and distribute it to all of your team members.
+One box to rule them all.&lt;/p&gt;
 
 &lt;h3&gt;Installation&lt;/h3&gt;
 
-&lt;p&gt;You will require &lt;em&gt;ruby&lt;/em&gt;, &lt;em&gt;rubygems&lt;/em&gt;, and &lt;em&gt;virtualbox 4&lt;/em&gt; installed.&lt;/p&gt;
+&lt;p&gt;You will require &lt;em&gt;ruby&lt;/em&gt;, &lt;em&gt;rubygems&lt;/em&gt;, and &lt;em&gt;virtualbox 4&lt;/em&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;gem install vagrant
-vagrant --help
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    gem install vagrant
+    vagrant --help
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;h3&gt;Creating a new box&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;mkdir ~/Vagrants;
-cd ~/Vagrants/;
-vagrant box add base http://files.vagrantup.com/lucid32.box;
-vagrant init
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    mkdir ~/Vagrants;
+    &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/Vagrants/;
+    vagrant box add base http://files.vagrantup.com/lucid32.box;
+    vagrant init
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;p&gt;&lt;em&gt;Notes:&lt;/em&gt;
-The &lt;code&gt;vagrant box add&lt;/code&gt; command will download a pre-created ubuntu linux system (so ~260Mb will be downloaded)
+The &lt;code&gt;vagrant box add&lt;/code&gt; command will download a pre-created ubuntu linux system
+(so ~260Mb will be downloaded)
 Vagrant uses one configuration file per box, and it's called &lt;code&gt;VagrantFile&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h3&gt;Starting your box&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;cd ~/Vagrants/;
-vagrant up
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/Vagrants/;
+    vagrant up
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;And thats it. You have a new Linux environment ready to be configured, be installed by your software, servers, services, etc.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note:&lt;/em&gt; if you require directly access from outside to your box, just enable the ssh access editing the &lt;code&gt;VagrantFile&lt;/code&gt;, and uncommenting this: &lt;code&gt;config.vm.network &quot;33.33.33.10&quot;&lt;/code&gt;. For example, if you're configuring an MySQL instance, your client will connect to 33.33.33.10:3606.&lt;/p&gt;
+&lt;p&gt;And that's it. Now you have a new Linux environment ready to be configured
+and installed with your software, servers, services, etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note:&lt;/em&gt; if you require direct access from the outside to your box, just enable ssh
+access editing the &lt;code&gt;VagrantFile&lt;/code&gt;, and uncommenting this: &lt;code&gt;config.vm.network &quot;33.33.33.10&quot;&lt;/code&gt;.
+For example, if you're configuring a MySQL instance, your client will connect to 33.33.33.10:3606.&lt;/p&gt;
 
 &lt;h3&gt;Accessing it&lt;/h3&gt;
 
-&lt;p&gt;Now, all you need install your servers. It's just like log in into your servers, do some apt-get install, configure your settings.&lt;/p&gt;
+&lt;p&gt;Now, to install your servers, all you need to do is log in to the box,
+do some apt-get install, configure your settings.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;cd ~/Vagrants/;
-vagrant ssh
-# sudo apt-get install your-stuff-1.2.3
-exit
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;    &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/Vagrants/;
+    vagrant ssh
+    &lt;span class=&quot;c&quot;&gt;# sudo apt-get install your-stuff-1.2.3&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;h3&gt;Power OFF, suspend, resume..&lt;/h3&gt;
 
-&lt;p&gt;It's easy as:&lt;/p&gt;
+&lt;p&gt;It's as easy as:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;vagrant halt
-vagrant suspend
-vagrant resume
-vagrant destroy
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;n&quot;&gt;vagrant&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vagrant&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;suspend&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vagrant&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resume&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;vagrant&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;destroy&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;h2&gt;And that's it&lt;/h2&gt;
 
-&lt;p&gt;Now it's your time. Try it, learn it, use it, enjoy it.
-&lt;em&gt;And see you next time!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Now it's your turn. Try it, learn it, use it, enjoy it.
+&lt;em&gt;And, see you next time!&lt;/em&gt;&lt;/p&gt;
 
 &lt;h3&gt;More info&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;More info at: &lt;a href=&quot;http://vagrant.com&quot;&gt;vagrant.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;And thanks to &lt;a href=&quot;https://twitter.com/#!/softr8&quot;&gt;Edwin&lt;/a&gt;, for his first explanation about Vagrant.&lt;/li&gt;
+&lt;li&gt;And thanks to &lt;a href=&quot;https://twitter.com/#!/softr8&quot;&gt;Edwin&lt;/a&gt;, for his first Vagrant explanation.&lt;/li&gt;
 &lt;/ul&gt;
 
 </content>
    <author>
      <name>Mario Zaizar</name>
      <email>mario@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Add Validations to your Ruby classes</title>
+   <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
+   <updated>2011-06-13T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
+   <photo>433031df4018635dfb177f4066c37a3b</photo>
+   <content type="html">&lt;p&gt;Validations are one of the most useful things in ActiveRecord.
+To use them all you have to do is make your class inherit from ActiveRecord::Base,
+but, what if you don't want to save the records in a database?
+Does it make sense to use ActiveRecord and its overload only for validations?
+In case you're wondering, the answer is NO.&lt;/p&gt;
+
+&lt;p&gt;Fortunately, in Rails 3, validations were moved from &lt;em&gt;ActiveRecord&lt;/em&gt; to
+&lt;em&gt;ActiveModel&lt;/em&gt;. This give us the ability to use validations in our ruby
+classes very easily, even if you don't want to use ActiveRecord.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# contact.rb&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Contact&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Validations&lt;/span&gt;
+      
+      &lt;span class=&quot;kp&quot;&gt;attr_accessor&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;
+      
+      &lt;span class=&quot;n&quot;&gt;validates&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:presence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+      
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;By including the &lt;em&gt;ActiveModel::Validations&lt;/em&gt; module in our class we are able
+to use methods like the following&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;n&quot;&gt;contact&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Contact&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;contact&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;valid?&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;n&quot;&gt;contact&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; {:name=&amp;gt;[&amp;quot;can&amp;#39;t be blank&amp;quot;]}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;We can use all of
+the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#validations&quot;&gt;Rails 3 Validations&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Hope this may help you&lt;/p&gt;
+</content>
+   <author>
+     <name>Omar Vargas</name>
+     <email>omar@crowdint.com</email>
    </author>
  </entry>
  
@@ -123,7 +203,7 @@ source. Or, as Corey Haines said on his keynote, inspiration to be awesome.&lt;/
 
 &lt;p&gt;&lt;img src=&quot;/images/2011/05/24/friends.jpg&quot; alt=&quot;Friends at Railsconf&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Since we enjoy confences so much, last year we were bummed that there was not
+&lt;p&gt;Since we enjoy conferences so much, last year we were bummed that there was not
 a lot of Ruby conferences in Mexico so we organized
 &lt;a href=&quot;http://www.magmarails.com&quot;&gt;Magma Rails&lt;/a&gt;, and it ended
 up being better than expected. this year we're organizing its second edition
@@ -137,8 +217,237 @@ city. You will be able to smell the ocean from your seat.&lt;/p&gt;
 &lt;img src=&quot;http://www.magmarails.com/images/foto-magma.png&quot; alt=&quot;Last year&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Right now we're looking for &lt;a href=&quot;http://http://www.magmarails.com/callforpapers&quot;&gt;speakers&lt;/a&gt;
+&lt;p&gt;Right now we're looking for &lt;a href=&quot;http://www.magmarails.com/callforpapers&quot;&gt;speakers&lt;/a&gt;
 and sponsors, contact us if you're interested. I promise it will be a lot of fun!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>How to override destroy method keeping the callbacks</title>
+   <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
+   <updated>2011-05-02T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
+   <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
+   <content type="html">&lt;p&gt;While working on a project, we were required to override the
+destroy method in order to create a soft delete method, in other words
+to change the active state of the object to deleted instead of deleting
+it from the database.&lt;/p&gt;
+
+&lt;p&gt;That was no problem at all, but, issues came when we needed this method to use
+callbacks in order for the counter caches to work properly.&lt;/p&gt;
+
+&lt;p&gt;In Rails 2 you can override the destroy method without affecting callbacks
+by overriding the method &lt;em&gt;destroy_without_callbacks&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy_without_callbacks&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_record?&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# your code here&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;freeze&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;But in Rails 3 things have changed and the previous methods won't
+work. So, after some research, we found out that you can call the method
+callbacks with the run_callbacks method from ActiveSupport&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;run_callbacks&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:destroy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# your code here&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In this case we use it for the destroy method, but you can use it for
+any method you override and need their callbacks. If you don't specify
+any callbacks, all callbacks will be called.&lt;/p&gt;
+
+&lt;p&gt;You can find more info
+&lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hope this may help you in your overriding tasks.&lt;/p&gt;
+</content>
+   <author>
+     <name>Ana Rosas &amp; Omar Vargas</name>
+     <email>ana.rosas+omar.vargas@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>One File Web Page with Rack</title>
+   <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
+   <updated>2011-04-25T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
+   <photo>a302e7dd208f335dc67761a6db911561</photo>
+   <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
+applications. You can do that in many different ways like, creating a
+&lt;strong&gt;Rails&lt;/strong&gt;, &lt;strong&gt;Sinatra&lt;/strong&gt; or &lt;strong&gt;Rack&lt;/strong&gt; application.&lt;/p&gt;
+
+&lt;p&gt;I like &lt;strong&gt;Rack&lt;/strong&gt;, it gives you more than enough tools to build a web page, and
+allows you to have full control of the components that you employ to
+build it.&lt;/p&gt;
+
+&lt;p&gt;In this article I'll show some examples about how to create simple one page
+&lt;em&gt;Rack&lt;/em&gt; web applications.&lt;/p&gt;
+
+&lt;p&gt;For a bigger overview about &lt;strong&gt;Rack&lt;/strong&gt; look at this article:
+&lt;a href=&quot;http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html&quot;&gt;Rack Basics - A Rack Introduction&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also remember, a middleware is nothing more than another &lt;strong&gt;Rack&lt;/strong&gt;
+application, and, &lt;strong&gt;Rack&lt;/strong&gt; middlewares can be stacked up in order to compose
+bigger systems.&lt;/p&gt;
+
+&lt;h2&gt;Examples source code&lt;/h2&gt;
+
+&lt;p&gt;You can download and run the examples by following the next steps:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  git clone git://gist.github.com/935008.git gist-935008
+  &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gist-935008
+  gem install bundler &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Hello world&lt;/h2&gt;
+
+&lt;p&gt;Let's start by building a simple hello world example, save the following
+code as &lt;em&gt;hello.ru&lt;/em&gt;:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello1.ru&quot;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;Now, run the &lt;em&gt;hello.ru&lt;/em&gt; app with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  rackup hello.ru
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Optionally you may specify what port you want your application to run
+at:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  rackup hello.ru -p 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And then, go to &lt;a href=&quot;http://localhost:9292/&quot;&gt;http://localhost:9292/&lt;/a&gt; or
+&lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; (depending on what port
+you specified), so you can see your app alive.&lt;/p&gt;
+
+&lt;p&gt;Creating an application in this way, requires you to manually specify the
+headers, just as I did when I added the &lt;em&gt;Content-Length&lt;/em&gt; and
+&lt;em&gt;Content-Type&lt;/em&gt; headers. Also, this can be accomplished in a simpler way
+by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;Rack::ContentType&lt;/strong&gt; middlewares:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello2.ru&quot;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;OK, now let's add ERB rendering to this example.&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello3.ru&quot;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;Now, run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
+
+&lt;p&gt;In order to show one last example let's write our view using
+&lt;strong&gt;HAML&lt;/strong&gt;, and passing variables to the view:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/935008.js?file=hello4.ru&quot;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;Run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
+
+&lt;p&gt;That's it, you've seen how to create web pages by simply using
+&lt;strong&gt;Rack&lt;/strong&gt;, no frameworks, just &lt;strong&gt;Rack&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Thank you for your reading.&lt;/p&gt;
+</content>
+   <author>
+     <name>Emmanuel Delgado</name>
+     <email>emmanuel.delgado@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Turn jQuery effects off for testing</title>
+   <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
+   <updated>2011-04-13T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
+TDD + BDD approach when coding new applications.&lt;/p&gt;
+
+&lt;p&gt;The usual, we use &lt;a href=&quot;http://www.rspec.info&quot;&gt;RSpec&lt;/a&gt; for TDD, we use
+&lt;a href=&quot;http://cukes.info&quot;&gt;Cucumber&lt;/a&gt; for BDD, although
+lately, I've been using &lt;a href=&quot;https://github.com/cavalle/steak&quot;&gt;Steak&lt;/a&gt; in place of
+Cucumber and so far I am loving it.&lt;/p&gt;
+
+&lt;p&gt;When you are using Capybara + Selenium for testing with Cucumber or
+Steak, sometimes you can get an error when you write tests for clicks that are
+followed by an animation.&lt;/p&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;scenario&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;New resource&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;click_link&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;New Resource&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# Shows up an overlay window with the form that&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# takes 5 seconds to show up&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;fill_in&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:with&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Some value&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You get the following error:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Selenium&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;WebDriver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ElementNotDisplayedError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;no&quot;&gt;Element&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currently&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visible&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;so&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;may&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;be&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;interacted&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;with&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This happens because Capybara is trying to access the input element, but
+since the animation is still happening it is not visible yet.&lt;/p&gt;
+
+&lt;p&gt;To avoid this, you can simply tell jQuery to turn off all effects when
+in test mode.&lt;/p&gt;
+
+&lt;p&gt;How? Very simple.&lt;/p&gt;
+
+&lt;p&gt;All you have to do is add this line within the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt;
+section of your layout.&lt;/p&gt;
+
+&lt;h3&gt;Haml&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;haml&quot;&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;javascript_tag&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;$.fx.off = true;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test?&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;ERB&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;javascript_tag&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;$.fx.off = true;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test?&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This way, every time you run your tests you will be telling jQuery to disable
+all effects and your test will pass, and, in some cases, even perform faster.&lt;/p&gt;
+
+&lt;p&gt;You can &lt;a href=&quot;http://api.jquery.com/jQuery.fx.off/&quot;&gt;read the documentation here&lt;/a&gt; for more info on
+how to disable jQuery effects off.&lt;/p&gt;
+
+&lt;p&gt;Enjoy!&lt;/p&gt;
 </content>
    <author>
      <name>David Padilla</name>
@@ -176,9 +485,49 @@ to use Haml and Compass.&lt;/p&gt;
 
 &lt;p&gt;First add these gems to you Gemfile (Compass and Haml). You will end up with something like this:&lt;/p&gt;
 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;http://rubygems.org&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-sinatra&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
 &lt;p&gt;Now you have to add a config file for compass:&lt;/p&gt;
 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mkdir config
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;touch compass.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
 &lt;p&gt;and add this content to it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defined?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# This is the configuration to use when running within sinatra&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;project_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# this is the configuration to use when running within the compass command line tool.&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;css_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;stylesheets&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;relative_assets&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:production&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# This is common configuration&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sass_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;views&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;stylesheets&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;images_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;images&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;http_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;http_images_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/images&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;http_stylesheets_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/stylesheets&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;p&gt;Note that I've changed the css_dir and the image dir to use &quot;public&quot; instead of &quot;static&quot;&lt;/p&gt;
 
@@ -186,15 +535,1426 @@ to use Haml and Compass.&lt;/p&gt;
 
 &lt;p&gt;Now, let's add some more configuration for compass, but this time in your app file (myapp.rb):&lt;/p&gt;
 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;configure&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:format&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:escape_html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:scss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:style&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:compact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:debug_info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;no&quot;&gt;Compass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_project_configuration&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass.rb&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/stylesheets/:name.css&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;content_type&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/css&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:charset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;scss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;quot;stylesheets/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:index&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
 &lt;p&gt;With this you are telling compass to automatically convert SCSS files into CSS files.&lt;/p&gt;
 
 &lt;p&gt;And the final touch: let's setup blueprint for this project.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;compass install blueprint
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
 
 &lt;p&gt;And that is all. I hope this is helpful for you.&lt;/p&gt;
 </content>
    <author>
      <name>Hector Bustillos</name>
      <email>hector.bustillos@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Trying to make your Sinatra more RESTful?</title>
+   <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
+   <updated>2011-03-31T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
+   <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
+   <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
+Add a disclaimer, pray for feedback.
+Make funny jokes, like &quot;Why does this guy wears a Mexican hat?&quot;&lt;/code&gt;&lt;/small&gt;&lt;/p&gt;
+
+&lt;p&gt;No RESTful knowledge at all? &lt;a href=&quot;http://www.b-simple.de/documents&quot;&gt;read this!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;REST URLs should be multi-response&lt;/h3&gt;
+
+&lt;p&gt;In rails we can use &lt;a href=&quot;http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/&quot;&gt;&lt;code&gt;respond_to(format)&lt;/code&gt;&lt;/a&gt; to switch between different layouts, and partials.
+So, we just create a helper like &lt;code&gt;request_type?&lt;/code&gt; and switch between the different kinds of views!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Route&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/book/:title/chapters&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request_type?&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/layout&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:chapters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# json&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:chapters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;static/layout&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Helper&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request_type?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mobile_request?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xhr?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:normal&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Avoid having different routes for the same &lt;code&gt;resource/action&lt;/code&gt;, like &lt;code&gt;/m/register&lt;/code&gt; and &lt;code&gt;/user/new&lt;/code&gt; doing the same thing.
+Create one route than actually makes sense, and just play with the response type.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Or even simpler!
+Thanks to &lt;a href=&quot;http://twitter.com/chischaschos&quot;&gt;Emmanuel&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mobile_request?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:&amp;#39;mobile/layout&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;#39;chapters&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;&quot;Fat models, skinny &lt;strike&gt;controllers&lt;/strike&gt; routes&quot;&lt;/h3&gt;
+
+&lt;p&gt;Move your ugly controller-based validations &lt;a href=&quot;http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model&quot;&gt;to your models&lt;/a&gt;, like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This is wrong&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user/new&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user exists&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;halt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;empty email&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Use helpers like &lt;a href=&quot;&quot;&gt;&lt;code&gt;error_messages_for(@user)&lt;/code&gt;&lt;/a&gt; with the model validations:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Model&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;validate_uniqueness_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;validate_presence_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Route&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user/name&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error_messages_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &amp;#39;Email can&amp;#39;t be blank and it&amp;#39;s already taken.&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Helpers&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;error_messages_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;capitalize&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;what_is_wrong&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39; and &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;what_is_wrong&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;all_errors&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Start using route &quot;Filters&quot;&lt;/h3&gt;
+
+&lt;p&gt;If you are using the same sentence in a several routes, like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# /user/001/ + dash&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/dash&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# /user/001/ + other&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/other&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Start using &lt;a href=&quot;http://sinatra-book.gittr.com/&quot;&gt;Sinatra's filters&lt;/a&gt; as &lt;code&gt;before&lt;/code&gt; or &lt;code&gt;after&lt;/code&gt;. They can be string matched! like &lt;code&gt;before '/this/*'&lt;/code&gt;
+(wildcards) or &lt;code&gt;after /^(this|other)$/&lt;/code&gt; (regex)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# /user/001/*&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/*&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;require_login!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged?&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/dash&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:uid/other&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Better error messaging&lt;/h3&gt;
+
+&lt;p&gt;Improve your multi-response routes, handling the correct messages for.
+&lt;u&gt;For example&lt;/u&gt; use flash/notices for mobiles, json for ajax or jGrowls, and so on...&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/new&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request_type?&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:mobile&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Ups, something goes wrong.&amp;#39;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;redirect&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;back&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ajax&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Ups, something goes wrong.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;401&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_json&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Doing the same thing, but using different requests?&lt;/h3&gt;
+
+&lt;p&gt;Are you doing the same code, with the same route but only changing the http-verb?
+I do, and I found this: &lt;a href=&quot;http://nuclearsquid.com/writings/multi-routing.html&quot;&gt;Multi-Routing in Sinatra&lt;/a&gt;
+to use 'any' when you need the same route action for different methods (http verbs).&lt;/p&gt;
+
+&lt;p&gt;For example having these routes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You can use:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/user/:id&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Be flexible with your route endings&lt;/h3&gt;
+
+&lt;blockquote&gt;&lt;p&gt;I recommend that you enable your routes with/without last slash &quot;/&quot;,
+but I found that some RESTul projects prefer all urls without slashes.
+So, there is a separate opinions... &lt;a href=&quot;http://www.standardzilla.com/2007/07/09/dont-forget-your-trailing-slash/]&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;http://www.projectzero.org/sMash/1.0.x/docs/zero.devguide.doc/zero.core/REST.html]&quot;&gt;2&lt;/a&gt;
+The truth is that adding an extra slash to the end is not that big of a deal. Don't you think so?&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;For example having:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This will raise a 404 if you go to &amp;#39;/users/001/friends/&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The solution is pretty simple, just add &lt;code&gt;/?&lt;/code&gt; at the end of your routes.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# this will work with: /users/:uid/friends and /users/:uid/friends/&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/users/:uid/friends/?&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;See you next time!&lt;/h2&gt;
+
+&lt;p&gt;May the Source Be With You.&lt;/p&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;rest_rails&quot;&gt;RESTful Rails Development&lt;/a&gt; Excellent tutorial about RESTul and Rails&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+   <author>
+     <name>Mario Zaizar</name>
+     <email>mario@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>How to write good CSS</title>
+   <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
+   <updated>2011-03-24T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
+   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
+   <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
+different people, I have realized that there is a lack of standards for
+it. Like, when you have to make some corrections or improvements and open
+the CSS file and you get a thousand lines of code with no comments at
+all.&lt;/p&gt;
+
+&lt;p&gt;Well, I have a couple Ideas of how CSS should be coded:&lt;/p&gt;
+
+&lt;h2&gt;The ABC of CSS&lt;/h2&gt;
+
+&lt;h3&gt;Keep it simple.&lt;/h3&gt;
+
+&lt;p&gt;Imagine that every time you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remember to keep it simple.&lt;/p&gt;
+
+&lt;h3&gt;Use HTML tags for their propose&lt;/h3&gt;
+
+&lt;p&gt;I'm always finding some code like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you see, it's a common list an instead of using &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; or &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; its using a &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;A better way to do this would be:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You &lt;strong&gt;must&lt;/strong&gt; use the correct tag; if you are not familiar with all of them
+take a look at &lt;a href=&quot;http://w3schools.com/tags/default.asp&quot;&gt;w3schools html reference&lt;/a&gt;.
+Here you will find the complete list of tags with examples and everything you need.&lt;/p&gt;
+
+&lt;p&gt;Also, this is important because, it is easier for search engines to
+identify your page and understand its code. Remember that search engines
+are like a blind users.&lt;/p&gt;
+
+&lt;h3&gt;Use comments&lt;/h3&gt;
+
+&lt;p&gt;Try to put comments on your CSS. It is easier for others to see the comments and
+know what the styles are being used for.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Common&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tags&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Avoid absolute positions&lt;/h3&gt;
+
+&lt;p&gt;When you start making CSS, you can find it &quot;easy&quot; to put every element on
+the right place using absolute position. This is a very common, yet
+incorrect
+method to align your elements. Sometimes when you use absolute positions,
+you will get weird behavior after a window resize or in different
+browsers or screens, just try to avoid it and use margins and
+paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/CSS21/box.html&quot;&gt;the box model&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Ok, First steps&lt;/h2&gt;
+
+&lt;h3&gt;Reset your CSS&lt;/h3&gt;
+
+&lt;p&gt;Did you ever realize the huge differences between the browser when you put
+a text into a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; or inside &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;? You will always face a couple of differences in
+how each browser renders the elements.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2011/renders.jpg&quot; title=&quot;Renders&quot; alt=&quot;Diferent renders&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple
+technique where you put all the style to 0/none by default.
+You can achieve this by applying &lt;a href=&quot;http://meyerweb.com/eric/tools/css/reset/index.html&quot;&gt;Eric Meyer's css reset&lt;/a&gt;,
+download it and put it on your public folder, or link to the url
+directly.&lt;/p&gt;
+
+&lt;h3&gt;Styles for tags first&lt;/h3&gt;
+
+&lt;p&gt;I prefer to write styles for tags first, it’s something like starting from
+the general to the particular. In other words, make it general, and use
+exceptions only when it is really necessary.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1.2em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nc&quot;&gt;.secondary_pages&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Verdana&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Be modular&lt;/h3&gt;
+
+&lt;p&gt;Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like &lt;strong&gt;main.css&lt;/strong&gt; and &lt;strong&gt;form.css&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;CSS&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt;
+  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Do you feel like I am re-writing the whole bible? (Old and new testament!)&lt;/h3&gt;
+
+&lt;p&gt;Sometimes you start to write CSS and then you get velocity, or you have a
+deadline, then you get yourself coding like a mad man. Tons and tons of CSS
+lines. Then, you end up with like 10 different files with a thousand lines on
+each one.&lt;/p&gt;
+
+&lt;p&gt;Well if you end up having that, you are doing it completely wrong.&lt;/p&gt;
+
+&lt;p&gt;Take your time to write the CSS, once you get the expected result,
+take a look at your code and try to clean the clean it.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.&lt;/p&gt;
+
+&lt;h4&gt;Antoine de Saint-Exupery &lt;em&gt;French writer (1900 - 1944)&lt;/em&gt;&lt;/h4&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;There's always a way to make your code look better. If you take care about
+it you will get maintainable, very easy to read and understandable code.&lt;/p&gt;
+
+&lt;h3&gt;Cross-browser testing &lt;strong&gt;ALWAYS&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;I highlighted &quot;always&quot; with caps and bold, because it is something that we
+forget about very often. We write and write CSS lines, and we test on Firefox or
+Chrome because we love those browsers, and we are very happy about the way
+our site looks, then after a couple of days of coding, you start thinking
+about how it will look on IE... that awfulness all web developers fear to
+see their work on. You test in IE and you realize that the entire
+site is messed up, the whole layout is broken.&lt;/p&gt;
+
+&lt;p&gt;You don’t know where to start but you do it anyway.
+Begin making changes here and there and you finish with tons
+of patches or writing a new CSS file just for IE.&lt;/p&gt;
+
+&lt;p&gt;That’s not necessary if you take into consideration what you are doing right
+from the first step. If you wrote 2 lines, verify in all browsers that your
+style is working right. By doing this you will end with clean code and
+compatible with all browsers.&lt;/p&gt;
+
+&lt;h3&gt;Remember the W3C&lt;/h3&gt;
+
+&lt;p&gt;Always keep in mind the standards and validate your site using the
+&lt;a href=&quot;http://jigsaw.w3.org/css-validator/&quot;&gt;CSS&lt;/a&gt; and
+&lt;a href=&quot;http://validator.w3.org/&quot;&gt;HTML&lt;/a&gt; validators. If your code passes the validation, your site will
+be readable for all browsers for sure.&lt;/p&gt;
+
+&lt;h3&gt;My final words&lt;/h3&gt;
+
+&lt;p&gt;All suggestions regarding good CSS writing, are about taking care of the
+details.  Details make the difference, you only have to put some attention
+and code in the right way.  Remeber that sometimes your code is gonna be
+seen by other developers and you have to make it clear for them and for the
+browsers too.&lt;/p&gt;
+
+&lt;p&gt;Also remember the accessibility of your site, think of the people at all
+times... people with some illness or different capacities, like the blind
+people and so on. You can check the &lt;a href=&quot;http://www.w3.org/TR/WCAG10/&quot;&gt;Web Content Accessibility Guidelines&lt;/a&gt;
+and try to at least complete the guides for Level A, the visitors of your
+site will be grateful about this.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;And for God’s sake... Code clean!!!!&lt;/strong&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>Hector Bustillos</name>
+     <email>hector.bustillos@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>What is Sinatra?</title>
+   <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
+   <updated>2011-03-18T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
+   <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
+   <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
+first test-driven Sinatra app.
+Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
+-- &lt;cite&gt;&lt;a href=&quot;http://twitter.com/mariozaizar&quot;&gt;Mario&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/what_is_sinatra/sinatra.png&quot; alt=&quot;Sinatra&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So, you've heard about Sinatra, and you're excited.
+but what is it? and what it's for?
+Just read the answers.&lt;/p&gt;
+
+&lt;h2&gt;Sinatra is.&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;A Ruby web framework.&lt;/em&gt; Use it to develop sites, web apps, services..&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Written in Ruby.&lt;/em&gt; And we all love Ruby, isn't?&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Very simple, but yet powerful.&lt;/em&gt; Like Frank, but ninja.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;A Domain Specific Language (DSL).&lt;/em&gt; Say no to Controllers, hi to Routes.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;RESTful&lt;/em&gt;. So it's based in URLs, and HTTP methods (get, post, put, delete, info)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Advantages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;It's simple&lt;/em&gt;, you only get what you need.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No obscure magic involved&lt;/em&gt;. You always knows where you are, what you got, how and why.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Better performance than Rails&lt;/em&gt;, less drama.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Gems still talks to you&lt;/em&gt;. You can use your favorite gems.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Talks templates&lt;/em&gt;. The views, supports all of them.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No big-fat app&lt;/em&gt;, Your app can be stored in just one file!&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Disadvantages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;No Rails mystical magic&lt;/em&gt;, forget it.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;You only get the basics&lt;/em&gt;, sometimes that means write from scratch.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Not a MVC framework&lt;/em&gt;, No controller/action based.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Not as popular as Rails&lt;/em&gt;, remember, there is life beyond Rails.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;No builtin helpers&lt;/em&gt;, but you can use them, including filters, configs.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Good for?&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;API implementations, quick demos, minimal applications, widgets, mobile sites implementations,
+RESTul systems, service-based applications.
+You're  looking for &lt;em&gt;something more like Rails?&lt;/em&gt;, check
+this out: &lt;a href=&quot;http://www.padrinorb.com/&quot;&gt;The Padrino project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And, that's pretty much Sinatra. Now, you should start with &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Omar's&lt;/a&gt; example, or read
+the &lt;a href=&quot;http://www.sinatrarb.com/intro.html&quot;&gt;README&lt;/a&gt; section on Sinatra's website, you should
+get your app running after 1 minute.&lt;/p&gt;
+
+&lt;h2&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;www.sinatrarb.com&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks! and happy coding&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.sinatrarb.com/documentation&quot;&gt;Sinatra documentation&lt;/a&gt; by Sinatra project&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Sinatra, the green way&lt;/a&gt; by Omar Vargas&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation&quot;&gt;Ruby frameworks&lt;/a&gt; by Craig Jolicoeur&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+   <author>
+     <name>Mario Zaizar</name>
+     <email>mario@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Sinatra, the green way</title>
+   <link href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html"/>
+   <updated>2011-03-14T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way</id>
+   <photo>433031df4018635dfb177f4066c37a3b</photo>
+   <content type="html">&lt;p&gt;Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests.
+Together they are a quick and efficient way to create web applications.&lt;/p&gt;
+
+&lt;p&gt;In this post we'll create our first Sinatra application using 'outside-in' development with
+Cucumber or how I like to call it, &lt;em&gt;the green way&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2&gt;First Sinatra application.&lt;/h2&gt;
+
+&lt;p&gt;First of all, we need to create our basic environment. Personally, I like to use a gemset per project.&lt;/p&gt;
+
+&lt;p&gt;Then we need to create our application's directory. Let’s call it ‘greenway’. Inside the ‘greenway’ directory,
+call bundle init (assuming you already installed bundler) and then edit the Gemfile so that it looks
+like the example below:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://rubygems.org&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-sinatra&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;blockquote&gt;&lt;p&gt;With rvm you can use diferents rubies and gemsets for each project. If you don't know rvm. What are you waiting for?
+go to &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;.
+For more info on gemsets and RVM check out these posts: &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;getting started with rvm&lt;/a&gt; &lt;a href=&quot;http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html&quot;&gt;Use a project specific Ruby version&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Now we can install our gems, with this command&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If you haven’t installed Bundler, you can do so with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install bundler
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now we need to create our Sinatra application, set the configuration for Cucumber, define the web steps and so on.
+To start we have to install the cucumber-sinatra gem, it does most of the configuration work for us.
+For more info visit &lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;cucumber-sinatra&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber-sinatra init --app Hello src/hello.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Writing tests&lt;/h3&gt;
+
+&lt;p&gt;Now we can write our cucumber test... yes, I said test.&lt;/p&gt;
+
+&lt;p&gt;Inside the features directory create a new file called hello.feature.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;no&quot;&gt;Feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Cucumber&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;web&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;
+          &lt;span class=&quot;no&quot;&gt;In&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Order&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;verify&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;works&lt;/span&gt;
+          &lt;span class=&quot;no&quot;&gt;As&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;developer&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;want&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+
+          &lt;span class=&quot;no&quot;&gt;Scenario&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;Given&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;am&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;Then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
+    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then run the test:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_red_tests.jpg&quot; alt=&quot;Red tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And... it Fails! But don’t worry, that was expected. Now we are ready to write the code we need to make that test pass.&lt;/p&gt;
+
+&lt;h3&gt;Writing Code&lt;/h3&gt;
+
+&lt;p&gt;This is the moment to write the code to pass the test. Open the file src/hello.rb and edit it to look like the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra/base&amp;#39;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And now, run the test again&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_green_tests.jpg&quot; alt=&quot;Green tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we're green. If you want to see your web application, you can do it with:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup -p 4567
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And you just have to go to &quot;localhost:4567/&quot; in your browser&lt;/p&gt;
+
+&lt;p&gt;Congrats for your first &quot;green way&quot; Sinatra application! To celebrate, I’ll leave you with &lt;a href=&quot;http://www.youtube.com/watch?v=Aht9hcDFyVw&quot;&gt;Frank&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://cukes.info/&quot;&gt;Cucumber&lt;/a&gt; Behavior Driven Development tool.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;Siantra&lt;/a&gt; a DSL for quickly creating web applications in Ruby.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;Cucumber-Sinatra&lt;/a&gt; helpful gem to initialize a cucumber environment for a sinatra application.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; Command line tool to easily install, manage and work with multiple ruby environments.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://gembundler.com/&quot;&gt;Bundler&lt;/a&gt; a tool that manages gem dependencies for your ruby application.&lt;/p&gt;
+</content>
+   <author>
+     <name>Omar Vargas</name>
+     <email>omar@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>As Monty Python said... "And Now For Something Completly Different"</title>
+   <link href="http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html"/>
+   <updated>2011-03-08T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different</id>
+   <photo>89c6420fb99cb01bcf2e3502a7851da2</photo>
+   <content type="html">&lt;p&gt;Perhaps by reading this you may be wondering what is Processing.js?
+Well, &lt;a href=&quot;http://processingjs.org/&quot;&gt;Processing.js&lt;/a&gt; is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by &lt;a href=&quot;http://ejohn.org&quot;&gt;John Resig&lt;/a&gt;, the creator of jQuery.&lt;/p&gt;
+
+&lt;h3&gt;First, a little history about p5.&lt;/h3&gt;
+
+&lt;p&gt;  It was developed by Ben Fry and Casey Reas and it was intended to help electronic arts and visual design communities learn the basis of computer programming in a visual context.&lt;/p&gt;
+
+&lt;p&gt;And... what about Processing.js?&lt;/p&gt;
+
+&lt;p&gt;  Processing.js is the little sister project of the popular Processing visual programming language, but designed for the web.
+  &lt;strong&gt;Processing.js helps you to make your data visualizations, digital art, interactive animations, educational graphs, video games, etc. work using web standards and without any plug-ins.&lt;/strong&gt; You only write code using the Processing language, include it in your web page, and Processing.js does the rest. &lt;em&gt;It's not magic, but almost&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;  Originally developed by Ben Fry and Casey Reas, Processing started as an open source programming language based on Java to help the electronic arts and visual design communities learn the basics of computer programming in a visual context.
+  &lt;strong&gt;Processing.js takes this to the next level&lt;/strong&gt;, allowing Processing code to be run by &lt;strong&gt;any HTML5 compatible browser&lt;/strong&gt;, including current versions of Firefox, Safari, Chrome, Opera, and even the upcoming Internet Explorer 9. &lt;em&gt;Processing.js brings the best of visual programming to the web, both for Processing and web developers&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;  Ok, so when or where could I use processing?, It's simple, for example: when you need to implement some animation or visual interaction without using Adobe's Flash, or when you want to make new interfaces (like using Arduino) or maybe if you want to put multimedia. That's why I like Processing.js.&lt;/p&gt;
+
+&lt;p&gt;  Well, first of all &lt;strong&gt;you'll need the Processing.js&lt;/strong&gt; (which could be &lt;a href=&quot;http://processingjs.org/content/download/processing-js-1.0.0/processing-1.0.0.min.js&quot;&gt;downloaded here&lt;/a&gt;), and &lt;strong&gt;include it on your page&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;processing-1.0.0.min.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;  Then, wherever you want to use it just put it inside a canvas element (note: of course it has to be HTML5 canvas, which I will speak on my next post).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;canvas&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-processing-sources=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;MySuperDuperInteractionFile.pjs.&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/canvas&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;  &lt;strong&gt;Load your web page, and it will parse, translate, and run your sketch in the browser&lt;/strong&gt;... Tadaaaa! =)&lt;/p&gt;
+
+&lt;p&gt;  In my experience, I've always hated those basic HELLO WORLD examples so here is a little example which you can try.
+  I won't explain all the Processing language, this will just show you a little bouncing ball, nothing great because out there you can find lots of more complex examples.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;  &lt;span class=&quot;kr&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;frame&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// we start at frame 0&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;framerate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// our &amp;quot;sketch&amp;quot; will have a framerate of 24 frames per second.&lt;/span&gt;
+
+  &lt;span class=&quot;kr&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ball_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// ball x coordinate&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ball_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// ball y coordinate&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ball_radius&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// ball radius&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// set draw area size&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;frameRate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;framerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// set animation framerate&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;ball_x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// set the initial ball coordinates&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;ball_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ball_radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// set the initial ball coordinates&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;stroke&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;003300&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// set the default shape outline colour&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0000&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;FF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// set the default shape fill colour&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                       &lt;span class=&quot;c1&quot;&gt;// note that we&amp;#39;re one frame further than last time&lt;/span&gt;
+    &lt;span class=&quot;kr&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bounce_height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;PI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;framerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// compute the ball height for this frame&lt;/span&gt;
+    &lt;span class=&quot;kr&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ball_height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bounce_height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// because the top of the screen is 0, and the bottom is &amp;quot;height&amp;quot;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;FFFFEE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// clear the drawing area&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;ball_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// set the new ball y position&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;ellipse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ball_radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;                 &lt;span class=&quot;c1&quot;&gt;// draw the ball&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;  What can we see here? If you noticed, we have three main sections, the global variables (nothing to say), the setup method which sets the configuration that will be used in our sketch and the draw method which well... will draw our sketch.&lt;/p&gt;
+
+&lt;p&gt;  Wait a minute, Sketch?, yeap... &lt;em&gt;sketches are the main way to use processing&lt;/em&gt;.
+  If you remember Adobe Flash you'll easy understand a sketch because it works similar, they are like small scenes which together make a movie, and just as happens in Processing, you can use several sketches to make more complex things.&lt;/p&gt;
+
+&lt;p&gt;  That's all folks! (for now).
+  Hope you have enjoyed this small change, as someone said before: Ruby is not the first nor will be the last programming language, it is always good to have alternatives...&lt;/p&gt;
+</content>
+   <author>
+     <name>Carlos Muñiz</name>
+     <email>carlos.muniz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>How to make your Models look lean</title>
+   <link href="http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean.html"/>
+   <updated>2011-03-02T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean</id>
+   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
+   <content type="html">&lt;p&gt;Rails is strongly based in the MVC concept, that means each part of
+this framework is built to work smoothly under this concept.
+Conceptually, we understand what we have to deliver in each case.
+With dumb Views, lean RESTful Controllers and FAT Models(?) we can build
+whatever we want, or more precisely, whatever we need.&lt;/p&gt;
+
+&lt;p&gt;Views and Controllers rely on the Model to deliver the business logic. Our Models,
+empty at the beginning, slowly becomes into big monsters sometimes difficult to
+maintain, scale, and usually, forget.
+So with all that code, our &lt;em&gt;Models become FAT, and therefore we have to put
+them on a diet sometimes&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;A common practice in order to get our models as Lean as possible is &lt;em&gt;extracting from
+them all the duplicated code into modules&lt;/em&gt;.
+This way we can make modules that contains our common methods, scopes, method calls, etc.&lt;/p&gt;
+
+&lt;p&gt;For example, we have a Model named Product as follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Some shared behavior code.&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# This method Activates all the products.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# This method Disables all the products.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  
+  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Let's assume we have Type and Category models that shares the Product shared behavior.
+So we have duplication along the three models.
+&lt;strong&gt;One of RoR rules is DRY and therefore we could send the duplicate code into modules&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonClassMethods&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonInstanceMethods&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Shared behavior code.&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;CommonClassMethods&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# This method Activates all the products.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# This method Disables all the products.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;CommonInstanceMethods&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This way we can reuse all the class methods extending the CommonClassMethods
+module and the instance methods including the CommonInstanceMethods module in our
+models.
+Anyway, we still have the state machine and the active scope duplicated.
+What could we do to avoid duplication in that case? Well, Rails provides us a
+great tool trough the &lt;em&gt;ActiveSupport::Concern&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;The ActiveSupport::Concern has a method named &lt;strong&gt;included&lt;/strong&gt; where we can include all
+the common behavior like scopes, validations or method calls.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonBehavior&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonBehavior&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveSupport&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Concern&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;included&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ClassMethods&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This method Activates all the elements.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This method Disables all the elements.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;InstanceMethods&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
+      &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;By extending the ActiveSupport::Concern we can include our states and active scope
+in the CommonBehavior module, and reuse them.
+Also, we include the instance methods and extend the class methods just including the CommonBehavior
+module into our Product model. Those methods also looks more readable by putting
+them into modules named ClassMethods and InstanceMethods.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Great! Now our models looks more Lean&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;WARNING!&lt;/em&gt;: We have to be careful when using modules. Remember to initialize them to
+make them available for your classes in &lt;em&gt;development&lt;/em&gt; mode, this is because the
+development environment loads the classes in a lazy mode!.&lt;/p&gt;
+
+&lt;p&gt;You can use something like this in your &lt;strong&gt;&quot;~development.rb&quot;&lt;/strong&gt; to pre-load this modules:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Rails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;lib&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;*.rb&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+
+</content>
+   <author>
+     <name>Luis Galaviz</name>
+     <email>luis.galaviz@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>Why ruby?</title>
+   <link href="http://blog.crowdint.com/2011/02/25/why-ruby.html"/>
+   <updated>2011-02-25T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/02/25/why-ruby</id>
+   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
+   <content type="html">&lt;p&gt;We have been seeing a lot of posts about different Rails and Ruby topics,
+such as  benchmarks, ways to develop ,implementations and more. But if you
+are a n00b in the ruby world or if you are thinking in change to ruby, but you
+are not sure about it, I will try to give some answers for the most common
+questions that I think you may have.
+Like PHP vs Ruby? or thoose sorts of things...&lt;/p&gt;
+
+&lt;h2&gt;PHP, .net, flex or ruby??&lt;/h2&gt;
+
+&lt;h3&gt;PHP advantage&lt;/h3&gt;
+
+&lt;p&gt;Well PHP is one of the most common and widely used languages for
+ coding dynamic webpages. You can write code inserted directly in HTML,
+ it's secure, stable an open source.&lt;/p&gt;
+
+&lt;p&gt;I have to said that it is easy to use, I've started to write webpages
+in PHP and it was easy to understand 'cause, when I began using it I knew C,
+and PHP is C based.  It runs in almost all systems (UNIX, Windows and MAC OSX).&lt;br/&gt;
+Beginning to use it is as simple as installing Apache and add the PHP module,
+ then you’re set.&lt;/p&gt;
+
+&lt;p&gt;PHP has a wide community and a lot of useful libraries.
+There are a lot of books to learn from, and also PHP.net is awesome.&lt;/p&gt;
+
+&lt;h3&gt;PHP disadvantages&lt;/h3&gt;
+
+&lt;p&gt;First of all, not everything in PHP is a piece of cake, when I was coding in it,
+I got some issues when I tried doing some more &quot;complex&quot; things, like making a
+file upload feature and things like that.&lt;/p&gt;
+
+&lt;p&gt;PHP is not a 100% Object oriented, it's trying to implement it in the newest version, but is not as good as others.
+The error handling is very poor in PHP.&lt;/p&gt;
+
+&lt;p&gt;Sometimes, you will get messy code because of  the lack of good practices.&lt;/p&gt;
+
+&lt;p&gt;You have to take care of some security flaws on your own.&lt;/p&gt;
+
+&lt;h3&gt;.net framework advantages&lt;/h3&gt;
+
+&lt;p&gt;I really don’t like to talk about it, but, I have to say that it's easy and it has a
+very complete documentation.  It's an event language, so it is easy for n00b developers.
+C# is powerful, binding and a couple of more features.&lt;/p&gt;
+
+&lt;h3&gt;.net framework disadvantages&lt;/h3&gt;
+
+&lt;p&gt;With this framework you have to work in Windows and within this enviroment, you will get a
+lot of issues trying to connect to other DB instead of to a SQL Server. And it is heavy as hell!
+Also, you have to pay for everything.&lt;/p&gt;
+
+&lt;h3&gt;Flex advantages&lt;/h3&gt;
+
+&lt;p&gt;I really don’t know much about it, so I ask to a friend of mine whom is nicknamed &lt;em&gt;Chicken&lt;/em&gt;(Adrian Castillo). &lt;br/&gt;
+He told me that Flex had a lot of positive points, like:
+* Cross-browser.
+* Multiplatform.
+* Multimedia content.
+* Authorship, you can create digital signs for you projects.
+* And it is extensible.&lt;/p&gt;
+
+&lt;h3&gt;Flex disadvantages&lt;/h3&gt;
+
+&lt;p&gt;The bad things about Flex are:
+when you create a project you have to choose a flash version, and you will
+have to use that version only. If you want the edgy stuff, It will be not available
+for everyone. There’s not to many docs and examples.&lt;/p&gt;
+
+&lt;p&gt;It's a event language, so if you are not careful, you will get a mess&lt;/p&gt;
+
+&lt;h3&gt;Ruby advantages&lt;/h3&gt;
+
+&lt;p&gt;Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
+it has been amazing time. Everything is so easy, you dont have to worry in write
+common methods, you have to worry about solving the problem that you have, not in trivial
+stuff.&lt;/p&gt;
+
+&lt;p&gt;The guy who wrote it &lt;a href=&quot;http://en.wikipedia.org/wiki/Yukihiro_Matsumoto&quot;&gt;&lt;em&gt;Yukihiro Matsumoto&lt;/em&gt;&lt;/a&gt; wants to have simple code
+not so complex, something with the developers feel free and happy.&lt;/p&gt;
+
+&lt;p&gt;It's also fast to learn, just take a look at the documentation and that’s all you have to do, besides practicing it.&lt;/p&gt;
+
+&lt;p&gt;In ruby everything is an object, an example.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hello world&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Take a look at the code and you will see that &quot;10&quot; is an object with the method &quot;times&quot;, and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.&lt;/p&gt;
+
+&lt;p&gt;Another plus is that ruby has an excellent error handler.&lt;/p&gt;
+
+&lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
+
+&lt;p&gt;When we are talking of ruby and PHP, we have to talk about &lt;a href=&quot;http://rubyonrails.org&quot;&gt;&lt;em&gt;Ruby on Rails&lt;/em&gt;&lt;/a&gt; an
+awesome framework for ruby, there are other out there(like sinatra), but
+right now is the one I like the most.&lt;/p&gt;
+
+&lt;p&gt;So, What can I say about it?. Well you can create a web site in minutes...
+I really meant that, with the &lt;em&gt;scaffold&lt;/em&gt; function you will have a template
+in a second(not recommended for important projects).
+Theres a lot of cool functions, like time methods:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#2010-12-19 23:55:57 -0600&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#2010-12-20 23:56:06 -0600&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;#Sat, 18 Dec 2010 05:57:15 UTC +00:00&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It's a simple stuff but so usefull.&lt;/p&gt;
+
+&lt;p&gt;In ruby on rails, you will write a lot less code,
+ easy configuration, it has an integrated testing framework.&lt;/p&gt;
+
+&lt;p&gt;And more and more and more.....&lt;/p&gt;
+
+&lt;h3&gt;Ruby disadvantages&lt;/h3&gt;
+
+&lt;p&gt;Like all the languages it has disadvantages, not everything is beatiful.
+ Ok now a couple of them:&lt;/p&gt;
+
+&lt;p&gt;The documentation is mostly complete, but it doesn't have method examples or stuff
+like PHP.net&lt;/p&gt;
+
+&lt;p&gt;If you don't have the money to pay the hosting it will be difficult to get your app
+online, there's a solution &lt;a href=&quot;http://www.heroku.com&quot;&gt;&lt;em&gt;heroku&lt;/em&gt;&lt;/a&gt;. Heroku is a free web  hosting company, but only free startups.
+So I have to say that it's expensive to host apps.&lt;/p&gt;
+
+&lt;p&gt;Another thing is when ruby sites grow they will need a
+robust infraestructure, it's heavy.&lt;/p&gt;
+
+&lt;h2&gt;My coworkers opinion&lt;/h2&gt;
+
+&lt;p&gt;I've asked to some of my co-workers about the things that they like about ruby,
+and the things they don't. And I got the next anwsers about their likes:&lt;/p&gt;
+
+&lt;p&gt;They love the way you can change everything, like opening the methods and rewritting
+them.
+They said that everything is so easy to do, the sintax, write methods, the blocks,
+etc.
+Also, it's amazing how everything is an object, you can create methods for
+that object, and access them so quickly.
+It's really easy to learn.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, I ask about the things that they don't like about it.&lt;/p&gt;
+
+&lt;p&gt;It's not multithread.multitask
+It's so easy that sometimes it turns you into a lazy developer.
+It's perfect. (I know i now I'm just telling you what they said).
+It's heavier than PHP.&lt;/p&gt;
+
+&lt;h2&gt;Final thoughts&lt;/h2&gt;
+
+&lt;p&gt;This are a couple of things, just to get an idea across. If you dig more I am sure,
+that you will find more things, good and bad ones, and it's the same in every
+language, you have to try it by yourself and see what can you do with ruby.&lt;/p&gt;
+
+&lt;p&gt;If you have another question or if you want to say that this post it's pure
+crap, don't hesitate on telling. I am open to any kind of feedback.&lt;/p&gt;
+
+&lt;p&gt;I hope this help you a little bit to take a step into ruby or maybe to keep
+outside of it.&lt;/p&gt;
+</content>
+   <author>
+     <name>Hector Bustillos</name>
+     <email>hector.bustillos@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
+   <title>What we learned at LA Ruby Conf</title>
+   <link href="http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf.html"/>
+   <updated>2011-02-21T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/02/21/what-we-learned-at-la-ruby-conf</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;Earlier this month I decided to go to &lt;a href=&quot;http://www.larubyconf.com&quot;&gt;LA Ruby Conf 2011&lt;/a&gt;.
+I was already in San Francisco, and, since I was just an hour away via
+plane, I jumped into one and attended the conference sessions on Saturday.&lt;/p&gt;
+
+&lt;p&gt;As expected, the organization and the conferences were awesome. Kudos to
+the organizers.&lt;/p&gt;
+
+&lt;p&gt;Now, a small recap of what I learned there.&lt;/p&gt;
+
+&lt;h2&gt;ActiveSupport Three - It is finally getting interesting&lt;/h2&gt;
+
+&lt;h3&gt;Bryan Lyles&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://smartic.us/&quot;&gt;Bryan Liles&lt;/a&gt;, being the Greatest
+Man Alive gave an awesome talk on ActiveSupport and its similarities
+with &lt;a href=&quot;http://rubyworks.github.com/facets/&quot;&gt;Ruby Facets&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To be honest, I have never used Facets, but it seems it's worth taking a
+look.&lt;/p&gt;
+
+&lt;p&gt;Here's the &lt;a href=&quot;http://rubyworks.github.com/facets/learn.html&quot;&gt;API Documentation&lt;/a&gt;, I've already
+gone through it and I found a lot of interesting things going on there.&lt;/p&gt;
+
+&lt;p&gt;Sadly, Bryan was time constrained and he just gave a small part of what
+seems to be a big, interesting talk about those two libraries.&lt;/p&gt;
+
+&lt;p&gt;The most interesting part of this talk for me was to learn that Rails 3
+ships with a lot of built-in instrumentation, so, expect a lot of gems
+to measure performance of the applications more acurately in the near
+future.&lt;/p&gt;
+
+&lt;p&gt;Tried to google on the subject, and couldn't find a lot on
+Instrumentations, so I went straight to the Rails source code.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://bit.ly/earFTF&quot;&gt;Here you can get an example&lt;/a&gt; more or less on how it works.&lt;/p&gt;
+
+&lt;h2&gt;NinjaScript: JavaScript so unobtrusive, you won't see it coming.&lt;/h2&gt;
+
+&lt;h3&gt;Evan Dorn&lt;/h3&gt;
+
+&lt;p&gt;These guys are making an awesome effort of separating the Javascript
+dependency out of the HTML and the CSS.&lt;/p&gt;
+
+&lt;p&gt;So, they wrote &lt;a href=&quot;https://github.com/LRDesign/NinjaScript&quot;&gt;NinjaScript&lt;/a&gt;.
+From their github page:&lt;/p&gt;
+
+&lt;p&gt;NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
+Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
+to apply stylings.
+Additionally, NinjaScript makes it easy to package up useful behaviors and apply
+them quickly to disparate elements, or in different projects.&lt;/p&gt;
+
+&lt;p&gt;Looks promising, but there's still a lot of Javascript involved, and I
+usually try to stay away from Javascript as much as I can, I am old
+school.&lt;/p&gt;
+
+&lt;p&gt;Lucky for me, they also wrote the &lt;a href=&quot;https://github.com/LRDesign/mizugumo&quot;&gt;Mizugumo&lt;/a&gt;
+gem.&lt;/p&gt;
+
+&lt;p&gt;Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Absolutely seamless&lt;/li&gt;
+&lt;li&gt;Completely unombtrusive - no markup whatsoever in your HTML and&lt;/li&gt;
+&lt;li&gt;Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Now, that's more like it.&lt;/p&gt;
+
+&lt;p&gt;You can see it in action &lt;a href=&quot;http://mizugumo-demo.lrdesign.com/products&quot;&gt;right here&lt;/a&gt;.
+Try using that UI both with your JS enabled and disabled. See what
+happens.&lt;/p&gt;
+
+&lt;p&gt;You're supposed to get all that sweetness just by dropping the gem and
+doing some minimal configuration.&lt;/p&gt;
+
+&lt;p&gt;Haven't tried it myself, but probably will soon.&lt;/p&gt;
+
+&lt;h2&gt;The Rails Tutorial Story&lt;/h2&gt;
+
+&lt;h3&gt;Michael Hartl&lt;/h3&gt;
+
+&lt;p&gt;I have never heard about &lt;a href=&quot;http://ruby.railstutorial.org/&quot;&gt;The Rails Tutorial&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Michael Hartl told us the story behind it, and how he ended up writing
+all of that, and let me tell you something: it was &lt;em&gt;Inspiring&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Talk about perseverance. I won't ruin this story for you, because,
+obviously I can't tell it as good nor accurate as he did.&lt;/p&gt;
+
+&lt;p&gt;All I can tell you is, take a look at the site, do yourself some good,
+buy the screencast / PDF bundle.&lt;/p&gt;
+
+&lt;p&gt;It does look like a very good way to learn Rails 3.&lt;/p&gt;
+
+&lt;h2&gt;How To Jam In Code&lt;/h2&gt;
+
+&lt;h3&gt;Ron Evans&lt;/h3&gt;
+
+&lt;p&gt;You probably know Ron Evans, he knows everyone. I had already seen this
+talk when he gave it at &lt;a href=&quot;http://www.magmarails.com&quot;&gt;MagmaRails&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Awesome. Period. Ron knows how to involve the crowd on his talks.&lt;/p&gt;
+
+&lt;p&gt;If you haven't seen this talk, you are out of luck since now he's more
+into &lt;a href=&quot;http://www.kidsruby.com/&quot;&gt;Kids Ruby&lt;/a&gt;. Can't wait to see that
+talk later in the year, Bravo Ron! for thinking of the kids. Someone has
+to.&lt;/p&gt;
+
+&lt;h2&gt;Working in Virtual Machines, the Vagrant Way&lt;/h2&gt;
+
+&lt;h3&gt;Mitchell Hashimoto&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://vagrantup.com/&quot;&gt;Vagrant&lt;/a&gt; is a tool for building and distributing
+virtualized development environments.&lt;/p&gt;
+
+&lt;p&gt;I wonder if you can do some funky stuff with vagrant where you create
+Windows virtual machines and run your cucumber features or Selenium
+tests automagically on them.&lt;/p&gt;
+
+&lt;p&gt;I will have to play with this eventually.&lt;/p&gt;
+
+&lt;h2&gt;Securing Your Rails App&lt;/h2&gt;
+
+&lt;h3&gt;Jim Weirich, Matt Yoho&lt;/h3&gt;
+
+&lt;p&gt;Basics on Rails app security. I was sort of expecting something more
+advanced from Jim Weirich, but, it was good.&lt;/p&gt;
+
+&lt;p&gt;Learned about the existence of these two papers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://guides.rubyonrails.org/security.html&quot;&gt;Ruby on Rails Security Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.owasp.org/images/8/89/Rails_Security_2.pdf&quot;&gt;OWASP Ruby on Rails Security Guide&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;No Rails developer should be allowed to send code to production without
+reading those.&lt;/p&gt;
+
+&lt;p&gt;Also learned that security holes can slip everywhere, &lt;a href=&quot;http://martinfowler.com/snips/201102031214.html&quot;&gt;even to the best
+people out there&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;No one is safe on the interwebs.&lt;/p&gt;
+
+&lt;p&gt;By the way, if you've finally decided to be more serious about security, take
+a look at &lt;a href=&quot;http://www.metasploit.com/framework/&quot;&gt;Metasploit&lt;/a&gt;. A
+framework to perform penetration testing on your Network.&lt;/p&gt;
+
+&lt;h2&gt;Twitter Mobile&lt;/h2&gt;
+
+&lt;h3&gt;Ben Sandofsky&lt;/h3&gt;
+
+&lt;p&gt;This talk was full of interesting stuff and could easily be it's own
+post by itself.&lt;/p&gt;
+
+&lt;p&gt;Ben described how they work at twitter. I'll highlight what I think was the most
+interesting parts of the talk.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The record of tweets per second was set last New Years eve at 6,939
+tps.&lt;/li&gt;
+&lt;li&gt;Twitter is heavily Service oriented. They didn't start that way, but
+they have been transitioning in the last few years. Doesn't sound like
+an easy task.&lt;/li&gt;
+&lt;li&gt;They created a DSL that allows them to create new Service endpoints
+with just a few lines of code. Clever.&lt;/li&gt;
+&lt;li&gt;They use YAJL for JSON. Twice the performance just by dropping a gem.&lt;/li&gt;
+&lt;li&gt;They use GD2 for image processing since it's way faster than Image
+Magick.&lt;/li&gt;
+&lt;li&gt;They use &lt;a href=&quot;https://github.com/dbalatero/typhoeus&quot;&gt;Typhoeus&lt;/a&gt; for
+parallel HTTP requests betwen their services.&lt;/li&gt;
+&lt;li&gt;They work in small agile teams&lt;/li&gt;
+&lt;li&gt;Usually composed of 1 PM, 1 Designer, 3 Devs&lt;/li&gt;
+&lt;li&gt;Iterative development&lt;/li&gt;
+&lt;li&gt;They believe in continuous shipping. They usually do 3 deploys a
+day. The record? 7 in one day.&lt;/li&gt;
+&lt;li&gt;They have a rigorous test suite in place. It runs for 1 hour by
+itself but they built an awesome fleet of servers that can run it in
+&lt;em&gt;2 minutes&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Sadly, no details on how they do that :(&lt;/li&gt;
+&lt;li&gt;They do beleive in Pair programming, but it's up to the teams to do
+actually do it.&lt;/li&gt;
+&lt;li&gt;They do require code review before pushing something.&lt;/li&gt;
+&lt;li&gt;They deliver the features to small amounts of users before full
+release.&lt;/li&gt;
+&lt;li&gt;They have no QA team. Every team is responsible of their features and
+their code. They believe that developers tend to become lazy and
+careless when there's a QA team in place.&lt;/li&gt;
+&lt;li&gt;Company culture is key to success.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I missed a review on some of the conferences, but I just included on
+this post what I personally found as the most interesting part of the event.&lt;/p&gt;
+
+&lt;p&gt;LARubyconf just made me reassure my thoughts about small regional
+conferences being way better than the big ones, being single tracked and
+with a lot better content.&lt;/p&gt;
+
+&lt;p&gt;Many thanks to Ron Evans of &lt;a href=&quot;http://hybridgroup.com/&quot;&gt;The Hybrid Group&lt;/a&gt;
+for inviting us to have delicious brunch the next day at his place. Good
+times.&lt;/p&gt;
+
+&lt;p&gt;Looking forward to my next conference. Don't know where or when yet,
+&lt;a href=&quot;http://www.rubynation.org//&quot;&gt;Ruby Nation&lt;/a&gt;'s lineup looks very promising.&lt;/p&gt;
+
+&lt;p&gt;Until the next time.&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
    </author>
  </entry>
  

@@ -15,6 +15,15 @@
     <script type="text/javascript">
       var _gaq = _gaq || [];
 
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
     </script>
 </head>
 <body>
@@ -67,9 +76,49 @@ to use Haml and Compass.</p>
 
 <p>First add these gems to you Gemfile (Compass and Haml). You will end up with something like this:</p>
 
+<div class="highlight"><pre><code class="ruby"><span class="n">source</span> <span class="s2">&quot;http://rubygems.org&quot;</span>
+
+<span class="n">gem</span> <span class="s1">&#39;compass&#39;</span> 
+<span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;haml&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;cucumber&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;cucumber-sinatra&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;capybara&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span>
+</code></pre>
+</div>
+
+
 <p>Now you have to add a config file for compass:</p>
 
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir config
+<span class="nv">$ </span>touch compass.rb
+</code></pre>
+</div>
+
+
 <p>and add this content to it:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Sinatra</span><span class="p">)</span>
+  <span class="c1"># This is the configuration to use when running within sinatra</span>
+  <span class="n">project_path</span> <span class="o">=</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">root</span>
+  <span class="n">environment</span> <span class="o">=</span> <span class="ss">:development</span>
+<span class="k">else</span>
+  <span class="c1"># this is the configuration to use when running within the compass command line tool.</span>
+  <span class="n">css_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;stylesheets&#39;</span>
+  <span class="n">relative_assets</span> <span class="o">=</span> <span class="kp">true</span>
+  <span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span>
+<span class="k">end</span>
+
+<span class="c1"># This is common configuration</span>
+<span class="n">sass_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;views&#39;</span><span class="p">,</span> <span class="s1">&#39;stylesheets&#39;</span>
+<span class="n">images_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;images&#39;</span>
+<span class="n">http_path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
+<span class="n">http_images_path</span> <span class="o">=</span> <span class="s2">&quot;/images&quot;</span>
+<span class="n">http_stylesheets_path</span> <span class="o">=</span> <span class="s2">&quot;/stylesheets&quot;</span>
+</code></pre>
+</div>
+
 
 <p>Note that I've changed the css_dir and the image dir to use "public" instead of "static"</p>
 
@@ -77,9 +126,36 @@ to use Haml and Compass.</p>
 
 <p>Now, let's add some more configuration for compass, but this time in your app file (myapp.rb):</p>
 
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;compass&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;sinatra&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
+
+<span class="n">configure</span> <span class="k">do</span>
+  <span class="n">set</span> <span class="ss">:haml</span><span class="p">,</span> <span class="p">{</span><span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:html5</span><span class="p">,</span> <span class="ss">:escape_html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">}</span>
+  <span class="n">set</span> <span class="ss">:scss</span><span class="p">,</span> <span class="p">{</span><span class="ss">:style</span> <span class="o">=&gt;</span> <span class="ss">:compact</span><span class="p">,</span> <span class="ss">:debug_info</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">}</span>
+  <span class="no">Compass</span><span class="o">.</span><span class="n">add_project_configuration</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Sinatra</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;compass.rb&#39;</span><span class="p">))</span>
+<span class="k">end</span>
+
+<span class="n">get</span> <span class="s1">&#39;/stylesheets/:name.css&#39;</span> <span class="k">do</span>
+  <span class="n">content_type</span> <span class="s1">&#39;text/css&#39;</span><span class="p">,</span> <span class="ss">:charset</span> <span class="o">=&gt;</span> <span class="s1">&#39;utf-8&#39;</span>
+  <span class="n">scss</span><span class="p">(</span><span class="ss">:&quot;stylesheets/</span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="si">}</span><span class="ss">&quot;</span> <span class="p">)</span> 
+<span class="k">end</span>
+
+<span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+  <span class="n">haml</span> <span class="ss">:index</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
 <p>With this you are telling compass to automatically convert SCSS files into CSS files.</p>
 
 <p>And the final touch: let's setup blueprint for this project.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>compass install blueprint
+</code></pre>
+</div>
+
 
 <p>And that is all. I hope this is helpful for you.</p>
 
@@ -94,8 +170,10 @@ to use Haml and Compass.</p>
   </div>
   <div class="nav_links span-16">
     
+      <div class="previous span-8"><a href="/2011/03/31/make-your-sinatra-more-restful.html"><< Trying to make your Sinatra more RESTful?</a></div>
     
-      <div class="next span-8 last"><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011 >></a></div>
+    
+      <div class="next span-8 last"><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing >></a></div>
     
   </div>
 </div>
@@ -103,11 +181,15 @@ to use Haml and Compass.</p>
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
-  <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>02 Jun 2011</b></span> &raquo; <a href="/2011/06/02/vagrant.html">Vagrant to manage multiple dev environments</a></li>
+  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+
+  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
+
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
   </ul>
   <div id="disqus_thread"></div>

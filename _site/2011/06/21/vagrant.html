@@ -15,6 +15,15 @@
     <script type="text/javascript">
       var _gaq = _gaq || [];
 
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
     </script>
 </head>
 <body>
@@ -39,83 +48,107 @@
           <div class="post prepend-1">
   <h1>Vagrant to manage multiple dev environments</h1>  
   <p class="author">
-    <span class="date"><b>Jun 02</b><br />2011</span>
+    <span class="date"><b>Jun 21</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
-    <h2>Using Vagrant to manage different dev environments, services and configurations.</h2>
+    <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
+machine is old fashioned. They won't let you handle different versions, or different
+configurations, and most of the time your dev machine isn't the same as your production server.
+That's why Vagrant is there for us.</p>
 
-<hr />
+<p>Vagrant allows you to create different virtualized machines, easy and separated from your
+computer internals. So, you can handle all your dev environments (dev, stage, production)
+including specific versions of all servers and services.</p>
 
-<p><em>Lets start rocking like a pro. Installing services (like mysql, redis, mongo..) in your own machine is old fashioned</em>. Don't let you handle with different versions, as different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant came for us.</p>
+<p>For example, I'm currently working on two different projects, and both use
+<a href="http://mongodb.org">mongodb</a> as the primary database locked with different
+(and incompatible) versions.</p>
 
-<p>Vagrant let you create different virtualized machines, easy and separated from your computer internals. So, you can easy handle all your dev environments (like dev, stage, production..) including specific versions of server and services.</p>
+<p>So, I've started using Vagrant to handle that. When I need one version, I just start the box
+that contains that server, and I don't mess with my system. That's why Vagrant is so important.</p>
 
-<p>For example, I'm working in two projects, and both uses <a href="http://mongodb.org">mongodb</a> as primary database but locked with different (and incompatible) versions. So, I've started using Vagrant to handle that. I need one version, I just start the box that contains that server, and I don't mess with my real system. That's why Vagrant is so important.</p>
+<p>It uses <a href="http://virtualbox.org">Virtualbox</a> internally, and supports command line, easy ssh access,
+easy distribution, shared folders, and other goodies.</p>
 
-<p>It uses <a href="http://virtualbox.org">Virtualbox</a> inside, it supports command line, easy ssh access, easy distribution, shared folders, and other goodies.
-Even you can package your box, and distribute it to all your team members. One suprem box for rule them all.</p>
+<p>You can even package your own boxes, and distribute it to all of your team members.
+One box to rule them all.</p>
 
 <h3>Installation</h3>
 
-<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em> installed.</p>
+<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em>.</p>
 
-<pre><code>gem install vagrant
-vagrant --help
+<div class="highlight"><pre><code class="bash">    gem install vagrant
+    vagrant --help
 </code></pre>
+</div>
+
 
 <h3>Creating a new box</h3>
 
-<pre><code>mkdir ~/Vagrants;
-cd ~/Vagrants/;
-vagrant box add base http://files.vagrantup.com/lucid32.box;
-vagrant init
+<div class="highlight"><pre><code class="bash">    mkdir ~/Vagrants;
+    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant box add base http://files.vagrantup.com/lucid32.box;
+    vagrant init
 </code></pre>
+</div>
+
 
 <p><em>Notes:</em>
-The <code>vagrant box add</code> command will download a pre-created ubuntu linux system (so ~260Mb will be downloaded)
+The <code>vagrant box add</code> command will download a pre-created ubuntu linux system
+(so ~260Mb will be downloaded)
 Vagrant uses one configuration file per box, and it's called <code>VagrantFile</code>.</p>
 
 <h3>Starting your box</h3>
 
-<pre><code>cd ~/Vagrants/;
-vagrant up
+<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant up
 </code></pre>
+</div>
 
-<p>And thats it. You have a new Linux environment ready to be configured, be installed by your software, servers, services, etc.</p>
 
-<p><em>Note:</em> if you require directly access from outside to your box, just enable the ssh access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>. For example, if you're configuring an MySQL instance, your client will connect to 33.33.33.10:3606.</p>
+<p>And that's it. Now you have a new Linux environment ready to be configured
+and installed with your software, servers, services, etc.</p>
+
+<p><em>Note:</em> if you require direct access from the outside to your box, just enable ssh
+access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>.
+For example, if you're configuring a MySQL instance, your client will connect to 33.33.33.10:3606.</p>
 
 <h3>Accessing it</h3>
 
-<p>Now, all you need install your servers. It's just like log in into your servers, do some apt-get install, configure your settings.</p>
+<p>Now, to install your servers, all you need to do is log in to the box,
+do some apt-get install, configure your settings.</p>
 
-<pre><code>cd ~/Vagrants/;
-vagrant ssh
-# sudo apt-get install your-stuff-1.2.3
-exit
+<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant ssh
+    <span class="c"># sudo apt-get install your-stuff-1.2.3</span>
+    <span class="nb">exit</span>
 </code></pre>
+</div>
+
 
 <h3>Power OFF, suspend, resume..</h3>
 
-<p>It's easy as:</p>
+<p>It's as easy as:</p>
 
-<pre><code>vagrant halt
-vagrant suspend
-vagrant resume
-vagrant destroy
+<div class="highlight"><pre><code class="ruby">    <span class="n">vagrant</span> <span class="n">halt</span>
+    <span class="n">vagrant</span> <span class="n">suspend</span>
+    <span class="n">vagrant</span> <span class="n">resume</span>
+    <span class="n">vagrant</span> <span class="n">destroy</span>
 </code></pre>
+</div>
+
 
 <h2>And that's it</h2>
 
-<p>Now it's your time. Try it, learn it, use it, enjoy it.
-<em>And see you next time!</em></p>
+<p>Now it's your turn. Try it, learn it, use it, enjoy it.
+<em>And, see you next time!</em></p>
 
 <h3>More info</h3>
 
 <ul>
 <li>More info at: <a href="http://vagrant.com">vagrant.com</a></li>
-<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first explanation about Vagrant.</li>
+<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first Vagrant explanation.</li>
 </ul>
 
 
@@ -130,7 +163,7 @@ vagrant destroy
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2011/05/24/railsconf-2011.html"><< Railsconf 2011</a></div>
+      <div class="previous span-8"><a href="/2011/06/13/add-validations-to-your-ruby-classes.html"><< Add Validations to your Ruby classes</a></div>
     
     
   </div>
@@ -139,11 +172,15 @@ vagrant destroy
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>02 Jun 2011</b></span> &raquo; <a href="/2011/06/02/vagrant.html">Vagrant to manage multiple dev environments</a></li>
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
-  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
+  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
-  <li><span><b>24 May 2011</b></span> &raquo; <a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
