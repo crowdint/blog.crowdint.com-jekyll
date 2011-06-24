@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-06-21T11:56:22-05:00</updated>
+ <updated>2011-06-24T00:34:33-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -109,7 +109,7 @@ do some apt-get install, configure your settings.&lt;/p&gt;
 &lt;h3&gt;More info&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;More info at: &lt;a href=&quot;http://vagrant.com&quot;&gt;vagrant.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;More info at: &lt;a href=&quot;http://vagrantup.com&quot;&gt;vagrantup.com&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;And thanks to &lt;a href=&quot;https://twitter.com/#!/softr8&quot;&gt;Edwin&lt;/a&gt;, for his first Vagrant explanation.&lt;/li&gt;
 &lt;/ul&gt;
 
