@@ -93,5 +93,5 @@ Now it's your turn. Try it, learn it, use it, enjoy it.
 
 ### More info
 
-- More info at: [vagrant.com](http://vagrant.com)
+- More info at: [vagrantup.com](http://vagrantup.com)
 - And thanks to [Edwin](https://twitter.com/#!/softr8), for his first Vagrant explanation.
