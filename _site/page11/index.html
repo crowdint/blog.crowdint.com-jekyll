@@ -47,163 +47,82 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></h1>
+  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
   <p class="author">
-    <span class="date"><b>Mar 18</b><br />2011</span>
+    <span class="date"><b>Jul 11</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
     
     
     
     
       
-        
-            <p>In our <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our first test-driven Sinatra app. Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding. -- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p> <p><img src="/images/what_is_sinatra/sinatra.png" alt="Sinatra" /></p> <p>So, you've heard about Sinatra, and you're excited. but what is it? and what it's...
-            <div class = "continue_reading"><a href="/2011/03/18/what-is-sinatra.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/18/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
+        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+
+<p>The basic steps we recommend are:</p>
+
+<h2>Let us know who you are</h2>
+
+<p>You can set up your email and name by using the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 14</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.</p> <p>On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests. Together they are a quick and efficient way to create web applications.</p> <p>In this post we'll create our first Sinatra application using...
-            <div class = "continue_reading"><a href="/2011/03/14/Sinatra-the-green-way.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/14/Sinatra-the-green-way.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
-    </div>
+<h2>Reduce the risk factor</h2>
+
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 08</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Perhaps by reading this you may be wondering what is Processing.js? Well, <a href="http://processingjs.org/">Processing.js</a> is a JavaScript port of a visualization-oriented language based on Java with the same name Processing (or p5 for short) made by <a href="http://ejohn.org">John Resig</a>, the creator of jQuery.</p> <h3>First, a little history about p5.</h3> <p> It was developed by Ben Fry and Casey Reas and it...
-            <div class = "continue_reading"><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Carlos Muñiz | carlos.muniz@crowdint.com</p>
-    </div>
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+
+<p>So, we recommend our rookies to use the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 02</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Rails is strongly based in the MVC concept, that means each part of this framework is built to work smoothly under this concept. Conceptually, we understand what we have to deliver in each case. With dumb Views, lean RESTful Controllers and FAT Models(?) we can build whatever we want, or more precisely, whatever we need.</p> <p>Views and Controllers rely on the...
-            <div class = "continue_reading"><a href="/2011/03/02/how-to-make-your-models-look-lean.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/02/how-to-make-your-models-look-lean.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/02/25/why-ruby.html">Why ruby?</a></h1>
-  <p class="author">
-    <span class="date"><b>Feb 25</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>We have been seeing a lot of posts about different Rails and Ruby topics, such as benchmarks, ways to develop ,implementations and more. But if you are a n00b in the ruby world or if you are thinking in change to ruby, but you are not sure about it, I will try to give some answers for the most common questions...
-            <div class = "continue_reading"><a href="/2011/02/25/why-ruby.html">Continue reading...</a></div>
-        
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
       
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/02/25/why-ruby.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     <div class="tweet">
       <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
@@ -211,7 +130,7 @@
     </div>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
 </div>
 
@@ -219,12 +138,12 @@
 <div class="pagination prepend-1">
   
     
-      <a href="/page2" class="previous">Previous</a>
+      <a href="/page10" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 3 of 11</span>
+  <span class="page_number ">Page: 11 of 11</span>
   
-    <a href="/page4" class="next ">Next</a>
+    <span class="next ">Next</span>
   
 </div>
 

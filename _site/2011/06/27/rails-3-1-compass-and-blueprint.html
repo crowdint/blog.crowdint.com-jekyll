@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Railsconf 2011</title>
+  <title>Crowd Interactive Tech Blog :: Rails 3.1, Compass and Blueprint</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,49 +46,63 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Railsconf 2011</h1>  
+  <h1>Rails 3.1, Compass and Blueprint</h1>  
   <p class="author">
-    <span class="date"><b>May 24</b><br />2011</span>
+    <span class="date"><b>Jun 27</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
+    <p>So, we all know that Rails 3.1 comes with a Sass compiler. But still,
+there are a few of us that used <a href="http://compass-style.org/">compass</a> on
+most of our pre 3.1 projects not just
+because of the sass, but because of the <a href="http://www.blueprintcss.org/">blueprint</a>
+integration.</p>
 
-<p>I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.</p>
+<p>Well, it's very easy to use Compass with Rails 3.1 and get all those
+Blueprint mixins for your stylesheets.</p>
 
-<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
+<p>All you have to do is, add the compass gem to your Gemfile:</p>
 
-<p>And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;compass&#39;</span><span class="p">,</span> <span class="n">git</span><span class="p">:</span> <span class="s1">&#39;https://github.com/chriseppstein/compass.git&#39;</span><span class="p">,</span>
+    <span class="n">branch</span><span class="p">:</span> <span class="s1">&#39;rails31&#39;</span>
+</code></pre>
+</div>
 
-<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
 
-<p>The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
+<p>The trick here is that you have to use the compass edge version from git, and
+the <em>rails31</em> branch currently under development.</p>
 
-<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
+<p>This might change in future compass releases, but for now, this is the
+only way.</p>
 
-<p>Since we enjoy conferences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.</p>
+<p>Now, create a <em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
+the following contents:</p>
 
-<p>We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.</p>
+<div class="highlight"><pre><code class="scss">  <span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">_blueprint&#39;</span><span class="p">;</span>
 
-<p><a href="http://www.magmarails.com">
-<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
-</a></p>
+  <span class="k">@include</span><span class="nd"> blueprint</span><span class="p">;</span>
+</code></pre>
+</div>
 
-<p>Right now we're looking for <a href="http://www.magmarails.com/callforpapers">speakers</a>
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
+
+<p>This file will just be used to load the blueprint css framework onto our
+stylesheet files.</p>
+
+<p>Now, on <em>app/assets/stylesheets/application.css</em> make sure you require
+the file that you just created by adding it right after <em>require_self</em>
+in the manifest:</p>
+
+<div class="highlight"><pre><code class="scss">  <span class="o">*=</span> <span class="nt">require_self</span>
+  <span class="o">*=</span> <span class="nt">require</span> <span class="nt">blueprint</span>
+  <span class="o">*=</span> <span class="nt">require_tree</span> <span class="nc">.</span>
+</code></pre>
+</div>
+
+
+<p>And, that's it. Now you'll be able to use all the usual blueprint mixins
+on your Rails 3.1 stylesheets.</p>
+
+<p>Hope this helps you somehow.</p>
 
 
     <div class="tweet right">
@@ -101,10 +115,8 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html"><< How to override destroy method keeping the callbacks</a></div>
+      <div class="previous span-8"><a href="/2011/06/21/vagrant.html"><< Vagrant to manage multiple dev environments</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to your Ruby classes >></a></div>
     
   </div>
 </div>
@@ -112,15 +124,15 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
-
-  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
+  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
-  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
-
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+
+  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
 
   </ul>
   <div id="disqus_thread"></div>

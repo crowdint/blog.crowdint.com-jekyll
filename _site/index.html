@@ -47,6 +47,86 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint</a></h1>
+  <p class="author">
+    <span class="date"><b>Jun 27</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>So, we all know that Rails 3.1 comes with a Sass compiler. But still,
+there are a few of us that used <a href="http://compass-style.org/">compass</a> on
+most of our pre 3.1 projects not just
+because of the sass, but because of the <a href="http://www.blueprintcss.org/">blueprint</a>
+integration.</p>
+
+<p>Well, it's very easy to use Compass with Rails 3.1 and get all those
+Blueprint mixins for your stylesheets.</p>
+
+<p>All you have to do is, add the compass gem to your Gemfile:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;compass&#39;</span><span class="p">,</span> <span class="n">git</span><span class="p">:</span> <span class="s1">&#39;https://github.com/chriseppstein/compass.git&#39;</span><span class="p">,</span>
+    <span class="n">branch</span><span class="p">:</span> <span class="s1">&#39;rails31&#39;</span>
+</code></pre>
+</div>
+
+
+<p>The trick here is that you have to use the compass edge version from git, and
+the <em>rails31</em> branch currently under development.</p>
+
+<p>This might change in future compass releases, but for now, this is the
+only way.</p>
+
+<p>Now, create a <em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
+the following contents:</p>
+
+<div class="highlight"><pre><code class="scss">  <span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">_blueprint&#39;</span><span class="p">;</span>
+
+  <span class="k">@include</span><span class="nd"> blueprint</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>This file will just be used to load the blueprint css framework onto our
+stylesheet files.</p>
+
+<p>Now, on <em>app/assets/stylesheets/application.css</em> make sure you require
+the file that you just created by adding it right after <em>require_self</em>
+in the manifest:</p>
+
+<div class="highlight"><pre><code class="scss">  <span class="o">*=</span> <span class="nt">require_self</span>
+  <span class="o">*=</span> <span class="nt">require</span> <span class="nt">blueprint</span>
+  <span class="o">*=</span> <span class="nt">require_tree</span> <span class="nc">.</span>
+</code></pre>
+</div>
+
+
+<p>And, that's it. Now you'll be able to use all the usual blueprint mixins
+on your Rails 3.1 stylesheets.</p>
+
+<p>Hope this helps you somehow.</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
   <p class="author">
     <span class="date"><b>Jun 21</b><br />2011</span>
@@ -58,106 +138,12 @@
     
     
     
-      <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
-machine is old fashioned. They won't let you handle different versions, or different
-configurations, and most of the time your dev machine isn't the same as your production server.
-That's why Vagrant is there for us.</p>
-
-<p>Vagrant allows you to create different virtualized machines, easy and separated from your
-computer internals. So, you can handle all your dev environments (dev, stage, production)
-including specific versions of all servers and services.</p>
-
-<p>For example, I'm currently working on two different projects, and both use
-<a href="http://mongodb.org">mongodb</a> as the primary database locked with different
-(and incompatible) versions.</p>
-
-<p>So, I've started using Vagrant to handle that. When I need one version, I just start the box
-that contains that server, and I don't mess with my system. That's why Vagrant is so important.</p>
-
-<p>It uses <a href="http://virtualbox.org">Virtualbox</a> internally, and supports command line, easy ssh access,
-easy distribution, shared folders, and other goodies.</p>
-
-<p>You can even package your own boxes, and distribute it to all of your team members.
-One box to rule them all.</p>
-
-<h3>Installation</h3>
-
-<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em>.</p>
-
-<div class="highlight"><pre><code class="bash">    gem install vagrant
-    vagrant --help
-</code></pre>
-</div>
-
-
-<h3>Creating a new box</h3>
-
-<div class="highlight"><pre><code class="bash">    mkdir ~/Vagrants;
-    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant box add base http://files.vagrantup.com/lucid32.box;
-    vagrant init
-</code></pre>
-</div>
-
-
-<p><em>Notes:</em>
-The <code>vagrant box add</code> command will download a pre-created ubuntu linux system
-(so ~260Mb will be downloaded)
-Vagrant uses one configuration file per box, and it's called <code>VagrantFile</code>.</p>
-
-<h3>Starting your box</h3>
-
-<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant up
-</code></pre>
-</div>
-
-
-<p>And that's it. Now you have a new Linux environment ready to be configured
-and installed with your software, servers, services, etc.</p>
-
-<p><em>Note:</em> if you require direct access from the outside to your box, just enable ssh
-access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>.
-For example, if you're configuring a MySQL instance, your client will connect to 33.33.33.10:3606.</p>
-
-<h3>Accessing it</h3>
-
-<p>Now, to install your servers, all you need to do is log in to the box,
-do some apt-get install, configure your settings.</p>
-
-<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant ssh
-    <span class="c"># sudo apt-get install your-stuff-1.2.3</span>
-    <span class="nb">exit</span>
-</code></pre>
-</div>
-
-
-<h3>Power OFF, suspend, resume..</h3>
-
-<p>It's as easy as:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="n">vagrant</span> <span class="n">halt</span>
-    <span class="n">vagrant</span> <span class="n">suspend</span>
-    <span class="n">vagrant</span> <span class="n">resume</span>
-    <span class="n">vagrant</span> <span class="n">destroy</span>
-</code></pre>
-</div>
-
-
-<h2>And that's it</h2>
-
-<p>Now it's your turn. Try it, learn it, use it, enjoy it.
-<em>And, see you next time!</em></p>
-
-<h3>More info</h3>
-
-<ul>
-<li>More info at: <a href="http://vagrantup.com">vagrantup.com</a></li>
-<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first Vagrant explanation.</li>
-</ul>
-
-
+      
+        
+           <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own machine is old fashioned. They won't let you handle different versions, or different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant is there for us.</p> <p>Vagrant allows you to create different virtualized machines, easy and separated from your computer internals. So, you can handle...
+           <div class = "continue_reading"><a href="/2011/06/21/vagrant.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -276,45 +262,11 @@ do some apt-get install, configure your settings.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 25</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to...
-           <div class = "continue_reading"><a href="/2011/04/25/one-file-web-page-with-rack.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/25/one-file-web-page-with-rack.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
   
-  <span class="page_number ">Page: 1 of 10</span>
+  <span class="page_number ">Page: 1 of 11</span>
   
     <a href="/page2" class="next ">Next</a>
   
@@ -328,6 +280,8 @@ do some apt-get install, configure your settings.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>27 Jun 2011</b></span> &raquo; <a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint</a></li>
 
   <li><span><b>21 Jun 2011</b></span> &raquo; <a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></li>
 
@@ -366,8 +320,6 @@ do some apt-get install, configure your settings.</p>
   <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
-
-  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
   </ul>
 </div>
