@@ -4,9 +4,154 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-06-27T11:59:53-05:00</updated>
+ <updated>2011-07-06T09:39:32-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Acceptance testing with Steak</title>
+   <link href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html"/>
+   <updated>2011-07-06T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak</id>
+   <photo>2f2bc78de007915554f49c3ea0fef125</photo>
+   <content type="html">&lt;p&gt;Acceptance testing is a technique that helps determine if the requirements of
+our application are met. There are several frameworks to help us with this.
+One of the most popular is Cucumber, in which you practically describe in plain English
+your stories, but you also have to code a lot of steps in order for your tests to work.&lt;/p&gt;
+
+&lt;p&gt;To avoid this, and just test your features in Ruby, we have Steak,
+which works very well with Rspec.
+To use it you only need to put this on your Gemfile:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;steak&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Then run the bundle install command and after that install steak&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g steak:install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Steak will create the acceptance folder inside your specs directory. This is where
+all your acceptance tests will be placed.
+Now, to create your test, you need to run the command&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rails g steak:spec my_first_steak_test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will create a file with the basic structure of your test, and now you are
+ready to start coding!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;acceptance/acceptance_helper&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Steak feature&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%q{&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  In order to ...&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  As a ...&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  I want ...&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;scenario&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;first scenario&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you can see it starts pretty much as a Cucumber feature, where you can describe
+what your feature is about and what should every scenario do.&lt;/p&gt;
+
+&lt;p&gt;Here's a small feature to test a form in an application.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;__FILE__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/acceptance_helper&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Add Products to Store&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%q{&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  In order to add products in my store&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  As an admin&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  I want to create a product&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;background&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;login_user!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;admin@example.com&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;scenario&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Add products to store&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;visit&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_product_path&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;have_css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;form&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fill_the_following&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;New Product&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;Description&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fantastic product&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;32.00&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;click_link_or_button&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Create Product&amp;#39;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;have_css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;div&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Your product has been created&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;As you can see the syntax is pretty easy and looks a lot like Rspec. The cool thing
+is that Steak creates a support folder inside the acceptance directory, where you
+have your helpers.rb file and the paths.rb file.&lt;/p&gt;
+
+&lt;p&gt;In the helpers.rb file you can put all the methods you need to run your test,
+methods that you might end up using a lot among all your specs, like the one in the
+example login_user!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;login_user!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;visit&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;homepage&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;click_link_or_button&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Log In&amp;#39;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;fill_the_following&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;Email&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;Password&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;click_link_or_button&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Log In&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;For paths, you can put directly the route like in the example, or you can define your
+own named routes in the paths.rb file, like&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create_product&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;/products/new&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Hope this little guide will help you as an introduction to the Steak world!
+Which in my opinion is not difficult nor totally different from Cucumber, I think
+its even easier, because it comes with a lot of helpers and methods to check the
+styles and contents in your page.&lt;/p&gt;
+
+&lt;p&gt;The other thing I like about Steak, as I mentioned at the beginning of this post, is
+that you get rid of tons of steps definitions, you just write down methods for
+the repeated steps you take in all of your tests.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading and happy testing!&lt;/p&gt;
+</content>
+   <author>
+     <name>Ana Rosas</name>
+     <email>ana@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Rails 3.1, Compass and Blueprint</title>
@@ -1617,184 +1762,6 @@ development environment loads the classes in a lazy mode!.&lt;/p&gt;
    <author>
      <name>Luis Galaviz</name>
      <email>luis.galaviz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Why ruby?</title>
-   <link href="http://blog.crowdint.com/2011/02/25/why-ruby.html"/>
-   <updated>2011-02-25T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/02/25/why-ruby</id>
-   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
-   <content type="html">&lt;p&gt;We have been seeing a lot of posts about different Rails and Ruby topics,
-such as  benchmarks, ways to develop ,implementations and more. But if you
-are a n00b in the ruby world or if you are thinking in change to ruby, but you
-are not sure about it, I will try to give some answers for the most common
-questions that I think you may have.
-Like PHP vs Ruby? or thoose sorts of things...&lt;/p&gt;
-
-&lt;h2&gt;PHP, .net, flex or ruby??&lt;/h2&gt;
-
-&lt;h3&gt;PHP advantage&lt;/h3&gt;
-
-&lt;p&gt;Well PHP is one of the most common and widely used languages for
- coding dynamic webpages. You can write code inserted directly in HTML,
- it's secure, stable an open source.&lt;/p&gt;
-
-&lt;p&gt;I have to said that it is easy to use, I've started to write webpages
-in PHP and it was easy to understand 'cause, when I began using it I knew C,
-and PHP is C based.  It runs in almost all systems (UNIX, Windows and MAC OSX).&lt;br/&gt;
-Beginning to use it is as simple as installing Apache and add the PHP module,
- then you’re set.&lt;/p&gt;
-
-&lt;p&gt;PHP has a wide community and a lot of useful libraries.
-There are a lot of books to learn from, and also PHP.net is awesome.&lt;/p&gt;
-
-&lt;h3&gt;PHP disadvantages&lt;/h3&gt;
-
-&lt;p&gt;First of all, not everything in PHP is a piece of cake, when I was coding in it,
-I got some issues when I tried doing some more &quot;complex&quot; things, like making a
-file upload feature and things like that.&lt;/p&gt;
-
-&lt;p&gt;PHP is not a 100% Object oriented, it's trying to implement it in the newest version, but is not as good as others.
-The error handling is very poor in PHP.&lt;/p&gt;
-
-&lt;p&gt;Sometimes, you will get messy code because of  the lack of good practices.&lt;/p&gt;
-
-&lt;p&gt;You have to take care of some security flaws on your own.&lt;/p&gt;
-
-&lt;h3&gt;.net framework advantages&lt;/h3&gt;
-
-&lt;p&gt;I really don’t like to talk about it, but, I have to say that it's easy and it has a
-very complete documentation.  It's an event language, so it is easy for n00b developers.
-C# is powerful, binding and a couple of more features.&lt;/p&gt;
-
-&lt;h3&gt;.net framework disadvantages&lt;/h3&gt;
-
-&lt;p&gt;With this framework you have to work in Windows and within this enviroment, you will get a
-lot of issues trying to connect to other DB instead of to a SQL Server. And it is heavy as hell!
-Also, you have to pay for everything.&lt;/p&gt;
-
-&lt;h3&gt;Flex advantages&lt;/h3&gt;
-
-&lt;p&gt;I really don’t know much about it, so I ask to a friend of mine whom is nicknamed &lt;em&gt;Chicken&lt;/em&gt;(Adrian Castillo). &lt;br/&gt;
-He told me that Flex had a lot of positive points, like:
-* Cross-browser.
-* Multiplatform.
-* Multimedia content.
-* Authorship, you can create digital signs for you projects.
-* And it is extensible.&lt;/p&gt;
-
-&lt;h3&gt;Flex disadvantages&lt;/h3&gt;
-
-&lt;p&gt;The bad things about Flex are:
-when you create a project you have to choose a flash version, and you will
-have to use that version only. If you want the edgy stuff, It will be not available
-for everyone. There’s not to many docs and examples.&lt;/p&gt;
-
-&lt;p&gt;It's a event language, so if you are not careful, you will get a mess&lt;/p&gt;
-
-&lt;h3&gt;Ruby advantages&lt;/h3&gt;
-
-&lt;p&gt;Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
-it has been amazing time. Everything is so easy, you dont have to worry in write
-common methods, you have to worry about solving the problem that you have, not in trivial
-stuff.&lt;/p&gt;
-
-&lt;p&gt;The guy who wrote it &lt;a href=&quot;http://en.wikipedia.org/wiki/Yukihiro_Matsumoto&quot;&gt;&lt;em&gt;Yukihiro Matsumoto&lt;/em&gt;&lt;/a&gt; wants to have simple code
-not so complex, something with the developers feel free and happy.&lt;/p&gt;
-
-&lt;p&gt;It's also fast to learn, just take a look at the documentation and that’s all you have to do, besides practicing it.&lt;/p&gt;
-
-&lt;p&gt;In ruby everything is an object, an example.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hello world&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Take a look at the code and you will see that &quot;10&quot; is an object with the method &quot;times&quot;, and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.&lt;/p&gt;
-
-&lt;p&gt;Another plus is that ruby has an excellent error handler.&lt;/p&gt;
-
-&lt;p&gt;The community is huge now, and you have a lot of gems and plugins to help in your projects.&lt;/p&gt;
-
-&lt;p&gt;When we are talking of ruby and PHP, we have to talk about &lt;a href=&quot;http://rubyonrails.org&quot;&gt;&lt;em&gt;Ruby on Rails&lt;/em&gt;&lt;/a&gt; an
-awesome framework for ruby, there are other out there(like sinatra), but
-right now is the one I like the most.&lt;/p&gt;
-
-&lt;p&gt;So, What can I say about it?. Well you can create a web site in minutes...
-I really meant that, with the &lt;em&gt;scaffold&lt;/em&gt; function you will have a template
-in a second(not recommended for important projects).
-Theres a lot of cool functions, like time methods:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;
- &lt;span class=&quot;c1&quot;&gt;#2010-12-19 23:55:57 -0600&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;
- &lt;span class=&quot;c1&quot;&gt;#2010-12-20 23:56:06 -0600&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;
- &lt;span class=&quot;c1&quot;&gt;#Sat, 18 Dec 2010 05:57:15 UTC +00:00&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;It's a simple stuff but so usefull.&lt;/p&gt;
-
-&lt;p&gt;In ruby on rails, you will write a lot less code,
- easy configuration, it has an integrated testing framework.&lt;/p&gt;
-
-&lt;p&gt;And more and more and more.....&lt;/p&gt;
-
-&lt;h3&gt;Ruby disadvantages&lt;/h3&gt;
-
-&lt;p&gt;Like all the languages it has disadvantages, not everything is beatiful.
- Ok now a couple of them:&lt;/p&gt;
-
-&lt;p&gt;The documentation is mostly complete, but it doesn't have method examples or stuff
-like PHP.net&lt;/p&gt;
-
-&lt;p&gt;If you don't have the money to pay the hosting it will be difficult to get your app
-online, there's a solution &lt;a href=&quot;http://www.heroku.com&quot;&gt;&lt;em&gt;heroku&lt;/em&gt;&lt;/a&gt;. Heroku is a free web  hosting company, but only free startups.
-So I have to say that it's expensive to host apps.&lt;/p&gt;
-
-&lt;p&gt;Another thing is when ruby sites grow they will need a
-robust infraestructure, it's heavy.&lt;/p&gt;
-
-&lt;h2&gt;My coworkers opinion&lt;/h2&gt;
-
-&lt;p&gt;I've asked to some of my co-workers about the things that they like about ruby,
-and the things they don't. And I got the next anwsers about their likes:&lt;/p&gt;
-
-&lt;p&gt;They love the way you can change everything, like opening the methods and rewritting
-them.
-They said that everything is so easy to do, the sintax, write methods, the blocks,
-etc.
-Also, it's amazing how everything is an object, you can create methods for
-that object, and access them so quickly.
-It's really easy to learn.&lt;/p&gt;
-
-&lt;p&gt;On the other hand, I ask about the things that they don't like about it.&lt;/p&gt;
-
-&lt;p&gt;It's not multithread.multitask
-It's so easy that sometimes it turns you into a lazy developer.
-It's perfect. (I know i now I'm just telling you what they said).
-It's heavier than PHP.&lt;/p&gt;
-
-&lt;h2&gt;Final thoughts&lt;/h2&gt;
-
-&lt;p&gt;This are a couple of things, just to get an idea across. If you dig more I am sure,
-that you will find more things, good and bad ones, and it's the same in every
-language, you have to try it by yourself and see what can you do with ruby.&lt;/p&gt;
-
-&lt;p&gt;If you have another question or if you want to say that this post it's pure
-crap, don't hesitate on telling. I am open to any kind of feedback.&lt;/p&gt;
-
-&lt;p&gt;I hope this help you a little bit to take a step into ruby or maybe to keep
-outside of it.&lt;/p&gt;
-</content>
-   <author>
-     <name>Hector Bustillos</name>
-     <email>hector.bustillos@crowdint.com</email>
    </author>
  </entry>
  

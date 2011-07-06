@@ -47,6 +47,166 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></h1>
+  <p class="author">
+    <span class="date"><b>Jul 18</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/56839e737258faa963847dd7269a8059" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.</p>
+
+<p>Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.</p>
+
+<h2>Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails</h2>
+
+<p>First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:</p>
+
+<div class="highlight"><pre><code class="bash">gem install rspec-rails
+</code></pre>
+</div>
+
+
+<p>You can type <em>spec --help</em> to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:</p>
+
+<div class="highlight"><pre><code class="bash">spec spec/
+</code></pre>
+</div>
+
+
+<p>It's time to install cucumber gem like this:</p>
+
+<div class="highlight"><pre><code class="bash">gem install cucumber-rails
+</code></pre>
+</div>
+
+
+<p>It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:</p>
+
+<div class="highlight"><pre><code class="bash">gem install gherkin
+</code></pre>
+</div>
+
+
+<p>After that, try to install cucumber gem again, and if there is no problem, you may see cucumber help:</p>
+
+<div class="highlight"><pre><code class="bash">cucumber --help
+</code></pre>
+</div>
+
+
+<p>In order to run your cucumber scenarios, you use this command:</p>
+
+<div class="highlight"><pre><code class="bash">cucumber features/
+</code></pre>
+</div>
+
+
+<p>Just as a note here, when you write your features and describe your steps for a web application it is a handy to make use of the webrat gem which includes some useful steps:</p>
+
+<div class="highlight"><pre><code class="bash">gem install webrat
+</code></pre>
+</div>
+
+
+<h2>Installing ZenTest, Autotest-Rails y Autotest-Growl</h2>
+
+<p>At this point we are ready to start writing our features, but before we do that, we want to go a little bit further and install autotest, which will allow us to write our features and rspec scenarios while autotest will handle to run tests every time it detects a change in our code, really cool eh?</p>
+
+<p>We need to include gemcutter as a repository in case we don't have it already:</p>
+
+<div class="highlight"><pre><code class="bash">gem sources -add http://gemcutter.org
+</code></pre>
+</div>
+
+
+<p>After that we go for the Gems we need for autotest:</p>
+
+<div class="highlight"><pre><code class="bash">gem install autotest-rails
+</code></pre>
+</div>
+
+
+<p>You may need to install before ZenTest, in case autotest didn't do it previously:</p>
+
+<div class="highlight"><pre><code class="bash">gem install ZenTest
+</code></pre>
+</div>
+
+
+<p>And for MacOS users we can even "beautify" it a more using Growl to show us notifications about the status of our tests. So let's keep going.</p>
+
+<p>In order to do that, now you have to install the autotest/growl gem:</p>
+
+<div class="highlight"><pre><code class="bash">gem install autotest-growl
+</code></pre>
+</div>
+
+
+<p>Now create a  file ~/.autotest where you need to require it:</p>
+
+<div class="highlight"><pre><code class="ruby"> 
+<span class="nb">require</span> <span class="s1">&#39;autotest/growl&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Once you have written  your features, and rspec tests, you can use autospec for rspec and it will be waiting for you to make changes and rerun automatically your tests every time, you just have to use this command:</p>
+
+<div class="highlight"><pre><code class="bash">autospec
+</code></pre>
+</div>
+
+
+<p>And you can do so to include cucumber scenarios in you autotest:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">AUTOFEATURE</span><span class="o">=</span><span class="nb">true </span>autospec
+</code></pre>
+</div>
+
+
+<p>You'll be getting a nice Growl notification every time you change your code and you can be aware of the status of your tests at any time.</p>
+
+<p>In the case you include cucumber, it may be running the tests indefinitely which can be  a little bit annoying, also could be a memory hazard, so I encourage you to add a new file .autotest in your application root directory and write this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Autotest</span><span class="o">.</span><span class="n">add_hook</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">at</span><span class="o">|</span>
+    <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^\.git}</span>  <span class="c1"># ignore Version Control System</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^./tmp}</span>  <span class="c1"># ignore temp files, lest autotest will run again, and again...</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="s2">&quot;rerun.txt&quot;</span>
+     <span class="n">at</span><span class="o">.</span><span class="n">add_mapping</span><span class="p">(</span><span class="sr">%r{^lib/.*\.rb$}</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
+          <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;spec/**/*.rb&#39;</span><span class="o">]</span>
+     <span class="k">end</span>
+     <span class="kp">nil</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>After this you are now good to go, and you can start using cucumber and rspec to "bddify" your app development!!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    <div class="tweet">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Roberto Cataneo | roberto.cataneo@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
   <p class="author">
     <span class="date"><b>Jul 11</b><br />2010</span>
@@ -156,6 +316,8 @@
   <h1>Recent Posts</h1>
   <ul class="archives">
 
+  <li><span><b>06 Jul 2011</b></span> &raquo; <a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></li>
+
   <li><span><b>27 Jun 2011</b></span> &raquo; <a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint</a></li>
 
   <li><span><b>21 Jun 2011</b></span> &raquo; <a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></li>
@@ -193,8 +355,6 @@
   <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
 
   <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
-
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
   </ul>
 </div>
