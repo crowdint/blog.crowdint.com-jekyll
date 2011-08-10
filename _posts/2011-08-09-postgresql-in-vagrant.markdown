@@ -6,18 +6,17 @@ email: mario@crowdint.com
 avatar: 29612de9aa10447dc2f9ec84cf2ab1b2
 ---
 
-## How to install Postgresql 8.4 in a Vagrant box
-*The Hard Way, step by step.*
-
-If you don't know what is Vagrant, go to our [first post about it](http://blog.crowdint.com/2011/06/21/vagrant.html)
+If you don't know what Vagrant is, go read our [first post about it](http://blog.crowdint.com/2011/06/21/vagrant.html)
 
 ## Introduction
-Ok, we use `Vagrant` to manage our servers and services from a while, and we love it. It's clean, easy and we don't mess with our system.
+Ok, we've been using `Vagrant` to manage our servers and services for a while, and we love it.
+It's clean, easy and we don't mess with our original systems.
 Last week we started a new proyect that uses `postgresql`, so we tried doing the common `apt-get install postgresql` 
-but nothing seems to work, there is a [chef](http://vagrantup.com/docs/provisioners/introduction.html) recipe, 
-but seems to have issues and we hadn't enought time to research.. one word: Frustration.
+but nothing seemed to work, there is a [chef](http://vagrantup.com/docs/provisioners/introduction.html) recipe,
+but it looks like it has some issues and we didn't have enough time to do the research.
+In one word: Frustration.
 
-So, what we do?, we installed it with our bare hands, step by step.. 
+So, what did we do?, we installed it with our bare hands, step by step.
 
 ---
 
@@ -41,7 +40,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 {% endhighlight %}
 
-Save & Exit. Then run this commands:
+Save & Exit. Then run these commands:
 
 {% highlight bash %}
 vagrant$ sudo locale-gen en_US.UTF-8
@@ -153,13 +152,13 @@ It's multiplatform and free.
 * <del>Mom</del>
 
 ## Disclamer & feedback
-Please note that all of this steps have been `discovered` by us entirely with google's special powers.. 
-feel free to add comments if you have better ways to do that, or if there is a mistake 
-that need to be remarked. Also, if you are using Ubuntu, probably you won't need all this steps, 
+Please note that all of these steps have been `discovered` by us entirely with some help of google's special powers...
+feel free to add comments if you know of a better way to do something, or if there is a mistake
+that need to be remarked. Also, if you are using Ubuntu, you probably won't need all of these steps,
 as Ubuntu provides the server with all the structure, and preconfigured files.
 
-Also, we should write another post describing how to use a Cheff recipe for this.. 
-avoiding all this s**t.. And it will be called, `The Easy Way`, really soon. 
+Also, we should write another post describing how to use a Chef recipe for this
+avoiding all this s**t... And it shall be called, `The Easy Way`, coming soon.
 
 ## Stay tuned!
 ### -Mario
