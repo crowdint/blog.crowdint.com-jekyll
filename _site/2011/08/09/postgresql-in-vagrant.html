@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: How to install Postgresql 8.4 in a Vagrant 0.8.2 box</title>
+  <title>Crowd Interactive Tech Blog :: How to install Postgresql 8.4 in a Vagrant box</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -37,7 +37,7 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>How to install Postgresql 8.4 in a Vagrant 0.8.2 box</h1>  
+  <h1>How to install Postgresql 8.4 in a Vagrant box</h1>  
   <p class="author">
     <span class="date"><b>Aug 09</b><br />2011</span>
   </p>
@@ -51,48 +51,68 @@
 
 <h2>Introduction</h2>
 
-<p>Ok, we use <code>Vagrant</code> to manage our server and services from a while, and we love it. It's clean, easy and we don't mess with our System.
-Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql;</code>
-but nothing seems to work, oeven there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
+<p>Ok, we use <code>Vagrant</code> to manage our servers and services from a while, and we love it. It's clean, easy and we don't mess with our system.
+Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql</code>
+but nothing seems to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
 but seems to have issues and we hadn't enought time to research.. one word: Frustration.</p>
 
-<p>So, what we do?, install it with our hands, step by step..</p>
+<p>So, what we do?, we installed it with our bare hands, step by step..</p>
+
+<hr />
 
 <h2>Let's start!</h2>
 
 <p>Start your vagrant box.</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">you<span class="nv">$ </span>vagrant up
+you<span class="nv">$ </span>vagrant ssh
+</code></pre>
+</div>
+
 
 <h2>1) Fixing the 'Please check that your locale settings' error</h2>
 
-<p>Seems like the default box from vagrant have issues with postgres &amp; lang settings. Easy..</p>
+<p>Seems like the current box from vagrant have issues with postgres &amp; lang settings. Easy to fix..</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo vim /etc/bash.bashrc
 
-<p>Add this lines to the bottom:</p>
+<span class="c"># Add this lines to the bottom:</span>
+<span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</code></pre>
+</div>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
 
-<p>Save &amp; Exit <code>bash.bashrc</code>, then run this commands:</p>
+<p>Save &amp; Exit. Then run this commands:</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo locale-gen en_US.UTF-8
+vagrant<span class="nv">$ </span>sudo dpkg-reconfigure locales
+</code></pre>
+</div>
+
 
 <p>Ok, now your system has configured the default LANG. No more 'LANG=C' error.</p>
 
 <h2>2) Install postgres 8.4, and the comunity extras</h2>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib; 
+</code></pre>
+</div>
+
 
 <p>Add postgres's binaries to the PATH.</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo nano /etc/bash.bashrc
 
-<p>Add this lines:</p>
+<span class="c"># Add this lines to the file:</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/postgresql/8.4/bin/
+<span class="nb">export </span><span class="nv">PGDATA</span><span class="o">=</span>/usr/local/pgsql/data
+</code></pre>
+</div>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
 
-<p>Ok, now you can run <code>postgres --version</code> and other postgresql executables.
+<p>Save &amp; Exit. Ok, now you can run <code>postgres --version</code> and other postgresql executables.
 Also, you've defined the default data folder, you will need that soon (1).</p>
 
 <h3>Setup postgres's user, and data folder.</h3>
@@ -103,51 +123,80 @@ Now you'll change that password.</p>
 
 <p>Change postgres's password.</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo su
+root# passwd postgres
+<span class="c"># Type a new password, like &#39;postgres&#39;</span>
+</code></pre>
+</div>
+
 
 <p>Init postgres data structure, and create the storage folder</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">root# mkdir /usr/local/pgsql/data
+root# chown postgres /usr/local/pgsql/data
+root# su postgres
+</code></pre>
+</div>
+
 
 <p>Init the data folder</p>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>initdb -D /usr/local/pgsql/data
+</code></pre>
+</div>
+
 
 <p><em>Note (1): Make sure this is the same directory as your <code>PGDATA</code> variable.</em></p>
 
 <h3>3) Enable remote connections</h3>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>vim /usr/local/pgsql/data/postgres.conf
 
-<p>Change this <code>listen_address='localhost'</code> to</p>
+<span class="c"># Change this `listen_address=&#39;localhost&#39;` to</span>
+<span class="nv">listen_address</span><span class="o">=</span><span class="s1">&#39;*&#39;</span>
+</code></pre>
+</div>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
 
 <p>Save &amp; exit.</p>
 
 <h3>Enable access from local network</h3>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>nano /usr/local/pgsql/data/pg_hba.conf
 
-<p>Add this line (by default Vagrant uses 33.33.33.10 ip address)</p>
+<span class="c"># Vagrant uses 33.33.33.10 like addresses</span>
+host all all 33.33.33.0/24 trust
+</code></pre>
+</div>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
 
 <p>Save &amp; exit.</p>
 
 <h3>Start server</h3>
 
-<p>Liquid error: No such file or directory - pygmentize -l ruby -f html -O encoding=utf-8</p>
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>su postgres
+postgres<span class="nv">$ </span>postgres
+</code></pre>
+</div>
 
-<h3>Done.</h3>
 
-<p>Notes:
-* You can stop the server pressing <code>ctrl + C</code>.
-* You can start the server in background using <code>postgres$ postgres &amp;</code>
-* You must start postgresql using postgres user.
-* <em>Maybe, you could include how to start postgresql as a service, would you?</em></p>
+<h2>Done.</h2>
+
+<p>Congrats!</p>
+
+<hr />
 
 <h2>Extras</h2>
+
+<h3>Notes:</h3>
+
+<ul>
+<li>You can stop the server pressing <code>ctrl + C</code>.</li>
+<li>You can start the server in background using <code>postgres$ postgres &amp;</code></li>
+<li>You must start postgresql using postgres user.</li>
+<li><em>You could improve this post saying how to start postgresql as a service, would you?</em></li>
+</ul>
+
 
 <h3>GUI admin?</h3>
 
@@ -202,18 +251,12 @@ avoiding all this s**t.. And it will be called, <code>The Easy Way</code>, reall
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2011/07/06/acceptance-testing-with-steak.html"><< Acceptance testing with Steak</a></div>
-    
     
   </div>
 </div>
 <div class="post prepend-1">
   <h1>Related Posts</h1>
   <ul class="archives">
-
-  <li><span><b>09 Aug 2011</b></span> &raquo; <a href="/2011/08/09/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant 0.8.2 box</a></li>
-
-  <li><span><b>06 Jul 2011</b></span> &raquo; <a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
