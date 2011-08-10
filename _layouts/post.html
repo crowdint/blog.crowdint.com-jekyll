@@ -11,8 +11,24 @@ layout: default
     {{ content }}
 
     <div class="tweet right">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      <a href="http://twitter.com/share" 
+        class="twitter-share-button" 
+        text="{{ page.title }}"
+        count="none"
+        via="Crowdint"
+        related="{{page.author}}:with"
+        > Tweet </a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+    </div>
+    		
+		<div class="left">
+		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828 -->
+    	<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%63293958828&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=35" 
+	      scrolling="no"
+	      frameborder="0"
+	      style="border:none; overflow:hidden; width:450px; height:35px;"
+	      allowTransparency = "true">
+      </iframe>
     </div>
   </div>
   <div class="author_box">
