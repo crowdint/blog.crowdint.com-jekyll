@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to install Postgresql 8.4 in a Vagrant 0.8.2 box
+title: How to install Postgresql 8.4 in a Vagrant box
 author: Mario Zaizar
 email: mario@crowdint.com
 avatar: 29612de9aa10447dc2f9ec84cf2ab1b2
