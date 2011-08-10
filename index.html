@@ -34,10 +34,18 @@ title: Blog
     <div class="comments">
       <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="{{ post.title }}" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="{{post.author}}:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> {{ post.author }} | {{ post.email }}</p>
@@ -63,11 +71,6 @@ title: Blog
   {% endif %}
 </div>
 
-
-
-
-
-
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
@@ -75,4 +78,11 @@ title: Blog
   <li><span><b>{{ post.date | date_to_string }}</b></span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
   </ul>
+</div>
+
+<div class="post prepend-1">
+	<div class="left">
+	  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+  </div>  
 </div>

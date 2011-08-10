@@ -9,28 +9,25 @@ layout: default
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ page.avatar }}" class="avatar" alt="Avatar" /></div>
     {{ content }}
-
-    <div class="tweet right">
-      <a href="http://twitter.com/share" 
-        class="twitter-share-button" 
-        text="{{ page.title }}"
-        count="none"
-        via="Crowdint"
-        related="{{page.author}}:with"
-        > Tweet </a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-    </div>
-    		
-		<div class="left">
-		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828 -->
-    	<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%63293958828&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=35" 
-	      scrolling="no"
-	      frameborder="0"
-	      style="border:none; overflow:hidden; width:450px; height:35px;"
-	      allowTransparency = "true">
-      </iframe>
-    </div>
+    
+    <p>
+      <div class="tweet">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="{{ post.title }}" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="{{post.author}}:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>     
+      </div>
+      <br><br>     
+  		<div class="left">
+  		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+      </div>
+    </p>
   </div>
+  
   <div class="author_box">
     <p><b>Author:</b> {{ page.author }} | {{ page.email }}</p>
   </div>
