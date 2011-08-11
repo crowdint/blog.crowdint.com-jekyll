@@ -4,14 +4,208 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-07-06T09:39:32-05:00</updated>
+ <updated>2011-08-11T10:55:14-06:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
+   <title>How to install Postgresql 8.4 in a Vagrant box</title>
+   <link href="http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant.html"/>
+   <updated>2011-08-11T00:00:00-06:00</updated>
+   <id>http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant</id>
+   <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
+   <content type="html">&lt;p&gt;If you don't know what Vagrant is, go read our &lt;a href=&quot;http://blog.crowdint.com/2011/06/21/vagrant.html&quot;&gt;first post about it&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Ok, we've been using &lt;code&gt;Vagrant&lt;/code&gt; to manage our servers and services for a while, and we love it.
+It's clean, easy and we don't mess with our original systems.
+Last week we started a new proyect that uses &lt;code&gt;postgresql&lt;/code&gt;, so we tried doing the common &lt;code&gt;apt-get install postgresql&lt;/code&gt;
+but nothing seemed to work, there is a &lt;a href=&quot;http://vagrantup.com/docs/provisioners/introduction.html&quot;&gt;chef&lt;/a&gt; recipe,
+but it looks like it has some issues and we didn't have enough time to do the research.
+In one word: Frustration.&lt;/p&gt;
+
+&lt;p&gt;So, what did we do?, we installed it with our bare hands, step by step.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Let's start!&lt;/h2&gt;
+
+&lt;p&gt;Start your vagrant box.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;you&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vagrant up
+you&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vagrant ssh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;1) Fixing the 'Please check that your locale settings' error&lt;/h2&gt;
+
+&lt;p&gt;Seems like the current box from vagrant have issues with postgres &amp;amp; lang settings. Easy to fix..&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo vim /etc/bash.bashrc
+
+&lt;span class=&quot;c&quot;&gt;# Add this lines to the bottom:&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LANGUAGE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;en_US.UTF-8
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LANG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;en_US.UTF-8
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LC_ALL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;en_US.UTF-8
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Save &amp;amp; Exit. Then run these commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo locale-gen en_US.UTF-8
+vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo dpkg-reconfigure locales
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Ok, now your system has configured the default LANG. No more 'LANG=C' error.&lt;/p&gt;
+
+&lt;h2&gt;2) Install postgres 8.4, and the comunity extras&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo apt-get install postgresql postgresql-contrib; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Add postgres's binaries to the PATH.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo nano /etc/bash.bashrc
+
+&lt;span class=&quot;c&quot;&gt;# Add this lines to the file:&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;:/usr/lib/postgresql/8.4/bin/
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PGDATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/local/pgsql/data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Save &amp;amp; Exit. Ok, now you can run &lt;code&gt;postgres --version&lt;/code&gt; and other postgresql executables.
+Also, you've defined the default data folder, you will need that soon (1).&lt;/p&gt;
+
+&lt;h3&gt;Setup postgres's user, and data folder.&lt;/h3&gt;
+
+&lt;p&gt;Postgresql server should be started by his own system user,
+and it have been created by the installation but using a random password.
+Now you'll change that password.&lt;/p&gt;
+
+&lt;p&gt;Change postgres's password.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo su
+root# passwd postgres
+&lt;span class=&quot;c&quot;&gt;# Type a new password, like &amp;#39;postgres&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Init postgres data structure, and create the storage folder&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;root# mkdir /usr/local/pgsql/data
+root# chown postgres /usr/local/pgsql/data
+root# su postgres
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Init the data folder&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;postgres&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;initdb -D /usr/local/pgsql/data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Note (1): Make sure this is the same directory as your &lt;code&gt;PGDATA&lt;/code&gt; variable.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3&gt;3) Enable remote connections&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;postgres&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vim /usr/local/pgsql/data/postgres.conf
+
+&lt;span class=&quot;c&quot;&gt;# Change this `listen_address=&amp;#39;localhost&amp;#39;` to&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;listen_address&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Save &amp;amp; exit.&lt;/p&gt;
+
+&lt;h3&gt;Enable access from local network&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;postgres&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nano /usr/local/pgsql/data/pg_hba.conf
+
+&lt;span class=&quot;c&quot;&gt;# Vagrant uses 33.33.33.10 like addresses&lt;/span&gt;
+host all all 33.33.33.0/24 trust
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Save &amp;amp; exit.&lt;/p&gt;
+
+&lt;h3&gt;Start server&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;vagrant&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;su postgres
+postgres&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;postgres
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Done.&lt;/h2&gt;
+
+&lt;p&gt;Congrats!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2&gt;Extras&lt;/h2&gt;
+
+&lt;h3&gt;Notes:&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You can stop the server pressing &lt;code&gt;ctrl + C&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;You can start the server in background using &lt;code&gt;postgres$ postgres &amp;amp;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;You must start postgresql using postgres user.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;You could improve this post saying how to start postgresql as a service, would you?&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;GUI admin?&lt;/h3&gt;
+
+&lt;p&gt;Now you can install tools like &lt;code&gt;pgAdmin3&lt;/code&gt; to manage your postgresql server and databases directly from your host.
+It's multiplatform and free.&lt;/p&gt;
+
+&lt;h3&gt;References:&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.postgresql.org/docs/8.4/static/creating-cluster.html&quot;&gt;Official postgres documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://bookmarks.honewatson.com/2009/05/30/perl-warning-please-check-that-your-locale-settings-ubuntu/&quot;&gt;About the locale error&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.pgadmin.org/&quot;&gt;Download pgAdmin 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;Mom&lt;/del&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Disclamer &amp;amp; feedback&lt;/h2&gt;
+
+&lt;p&gt;Please note that all of these steps have been &lt;code&gt;discovered&lt;/code&gt; by us entirely with some help of google's special powers...
+feel free to add comments if you know of a better way to do something, or if there is a mistake
+that need to be remarked. Also, if you are using Ubuntu, you probably won't need all of these steps,
+as Ubuntu provides the server with all the structure, and preconfigured files.&lt;/p&gt;
+
+&lt;p&gt;Also, we should write another post describing how to use a Chef recipe for this
+avoiding all this s**t... And it shall be called, &lt;code&gt;The Easy Way&lt;/code&gt;, coming soon.&lt;/p&gt;
+
+&lt;h2&gt;Stay tuned!&lt;/h2&gt;
+
+&lt;h3&gt;-Mario&lt;/h3&gt;
+</content>
+   <author>
+     <name>Mario Zaizar</name>
+     <email>mario@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Acceptance testing with Steak</title>
    <link href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html"/>
-   <updated>2011-07-06T00:00:00-05:00</updated>
+   <updated>2011-07-06T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;Acceptance testing is a technique that helps determine if the requirements of
@@ -156,7 +350,7 @@ the repeated steps you take in all of your tests.&lt;/p&gt;
  <entry>
    <title>Rails 3.1, Compass and Blueprint</title>
    <link href="http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint.html"/>
-   <updated>2011-06-27T00:00:00-05:00</updated>
+   <updated>2011-06-27T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;So, we all know that Rails 3.1 comes with a Sass compiler. But still,
@@ -185,26 +379,12 @@ only way.&lt;/p&gt;
 &lt;p&gt;Now, create a &lt;em&gt;blueprint.css.scss&lt;/em&gt; file on &lt;em&gt;app/assets/stylesheets&lt;/em&gt; with
 the following contents:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;scss&quot;&gt;  &lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_blueprint&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt; blueprint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
 &lt;p&gt;This file will just be used to load the blueprint css framework onto our
 stylesheet files.&lt;/p&gt;
 
 &lt;p&gt;Now, on &lt;em&gt;app/assets/stylesheets/application.css&lt;/em&gt; make sure you require
 the file that you just created by adding it right after &lt;em&gt;require_self&lt;/em&gt;
 in the manifest:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;scss&quot;&gt;  &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;require_self&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;blueprint&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;require_tree&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
 
 &lt;p&gt;And, that's it. Now you'll be able to use all the usual blueprint mixins
 on your Rails 3.1 stylesheets.&lt;/p&gt;
@@ -220,7 +400,7 @@ on your Rails 3.1 stylesheets.&lt;/p&gt;
  <entry>
    <title>Vagrant to manage multiple dev environments</title>
    <link href="http://blog.crowdint.com/2011/06/21/vagrant.html"/>
-   <updated>2011-06-21T00:00:00-05:00</updated>
+   <updated>2011-06-21T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/06/21/vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
@@ -332,7 +512,7 @@ do some apt-get install, configure your settings.&lt;/p&gt;
  <entry>
    <title>Add Validations to your Ruby classes</title>
    <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
-   <updated>2011-06-13T00:00:00-05:00</updated>
+   <updated>2011-06-13T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Validations are one of the most useful things in ActiveRecord.
@@ -388,7 +568,7 @@ the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#va
  <entry>
    <title>Railsconf 2011</title>
    <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
-   <updated>2011-05-24T00:00:00-05:00</updated>
+   <updated>2011-05-24T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
@@ -438,7 +618,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
  <entry>
    <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-05:00</updated>
+   <updated>2011-05-02T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
    <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
    <content type="html">&lt;p&gt;While working on a project, we were required to override the
@@ -493,7 +673,7 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
  <entry>
    <title>One File Web Page with Rack</title>
    <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-05:00</updated>
+   <updated>2011-04-25T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
@@ -589,7 +769,7 @@ by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;
  <entry>
    <title>Turn jQuery effects off for testing</title>
    <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
-   <updated>2011-04-13T00:00:00-05:00</updated>
+   <updated>2011-04-13T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
@@ -667,7 +847,7 @@ how to disable jQuery effects off.&lt;/p&gt;
  <entry>
    <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
    <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-05:00</updated>
+   <updated>2011-04-06T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
@@ -786,7 +966,7 @@ to use Haml and Compass.&lt;/p&gt;
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
    <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
-   <updated>2011-03-31T00:00:00-06:00</updated>
+   <updated>2011-03-31T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
@@ -1001,7 +1181,7 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
  <entry>
    <title>How to write good CSS</title>
    <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
-   <updated>2011-03-24T00:00:00-06:00</updated>
+   <updated>2011-03-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
@@ -1244,7 +1424,7 @@ site will be grateful about this.&lt;/p&gt;
  <entry>
    <title>What is Sinatra?</title>
    <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
-   <updated>2011-03-18T00:00:00-06:00</updated>
+   <updated>2011-03-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
@@ -1333,7 +1513,7 @@ get your app running after 1 minute.&lt;/p&gt;
  <entry>
    <title>Sinatra, the green way</title>
    <link href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html"/>
-   <updated>2011-03-14T00:00:00-06:00</updated>
+   <updated>2011-03-14T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.&lt;/p&gt;
@@ -1477,7 +1657,7 @@ For more info visit &lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&q
  <entry>
    <title>As Monty Python said... "And Now For Something Completly Different"</title>
    <link href="http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html"/>
-   <updated>2011-03-08T00:00:00-06:00</updated>
+   <updated>2011-03-08T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/08/as-monty-python-said-and-now-for-something-completly-different</id>
    <photo>89c6420fb99cb01bcf2e3502a7851da2</photo>
    <content type="html">&lt;p&gt;Perhaps by reading this you may be wondering what is Processing.js?
@@ -1555,213 +1735,6 @@ Well, &lt;a href=&quot;http://processingjs.org/&quot;&gt;Processing.js&lt;/a&gt;
    <author>
      <name>Carlos Muñiz</name>
      <email>carlos.muniz@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>How to make your Models look lean</title>
-   <link href="http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean.html"/>
-   <updated>2011-03-02T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/02/how-to-make-your-models-look-lean</id>
-   <photo>1e7f8fb8733b6193cf3bdbc85693f515</photo>
-   <content type="html">&lt;p&gt;Rails is strongly based in the MVC concept, that means each part of
-this framework is built to work smoothly under this concept.
-Conceptually, we understand what we have to deliver in each case.
-With dumb Views, lean RESTful Controllers and FAT Models(?) we can build
-whatever we want, or more precisely, whatever we need.&lt;/p&gt;
-
-&lt;p&gt;Views and Controllers rely on the Model to deliver the business logic. Our Models,
-empty at the beginning, slowly becomes into big monsters sometimes difficult to
-maintain, scale, and usually, forget.
-So with all that code, our &lt;em&gt;Models become FAT, and therefore we have to put
-them on a diet sometimes&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;A common practice in order to get our models as Lean as possible is &lt;em&gt;extracting from
-them all the duplicated code into modules&lt;/em&gt;.
-This way we can make modules that contains our common methods, scopes, method calls, etc.&lt;/p&gt;
-
-&lt;p&gt;For example, we have a Model named Product as follows:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-
-  &lt;span class=&quot;c1&quot;&gt;# Some shared behavior code.&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# This method Activates all the products.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# This method Disables all the products.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  
-  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Let's assume we have Type and Category models that shares the Product shared behavior.
-So we have duplication along the three models.
-&lt;strong&gt;One of RoR rules is DRY and therefore we could send the duplicate code into modules&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonClassMethods&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonInstanceMethods&lt;/span&gt;
-
-  &lt;span class=&quot;c1&quot;&gt;# Shared behavior code.&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;CommonClassMethods&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# This method Activates all the products.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# This method Disables all the products.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;CommonInstanceMethods&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;This way we can reuse all the class methods extending the CommonClassMethods
-module and the instance methods including the CommonInstanceMethods module in our
-models.
-Anyway, we still have the state machine and the active scope duplicated.
-What could we do to avoid duplication in that case? Well, Rails provides us a
-great tool trough the &lt;em&gt;ActiveSupport::Concern&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;The ActiveSupport::Concern has a method named &lt;strong&gt;included&lt;/strong&gt; where we can include all
-the common behavior like scopes, validations or method calls.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Product&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonBehavior&lt;/span&gt;
-
-  &lt;span class=&quot;c1&quot;&gt;# Below this point there is some code for the Product specific behavior...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CommonBehavior&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveSupport&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Concern&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;included&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;state_machine&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:initial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:activate&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:active&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:disabled&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-      &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:soft_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;transition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deleted&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  
-  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ClassMethods&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;activate_all&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;# This method Activates all the elements.&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;disable_all&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;# This method Disables all the elements.&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;InstanceMethods&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
-      &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;soft_delete&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;By extending the ActiveSupport::Concern we can include our states and active scope
-in the CommonBehavior module, and reuse them.
-Also, we include the instance methods and extend the class methods just including the CommonBehavior
-module into our Product model. Those methods also looks more readable by putting
-them into modules named ClassMethods and InstanceMethods.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Great! Now our models looks more Lean&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;WARNING!&lt;/em&gt;: We have to be careful when using modules. Remember to initialize them to
-make them available for your classes in &lt;em&gt;development&lt;/em&gt; mode, this is because the
-development environment loads the classes in a lazy mode!.&lt;/p&gt;
-
-&lt;p&gt;You can use something like this in your &lt;strong&gt;&quot;~development.rb&quot;&lt;/strong&gt; to pre-load this modules:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Rails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;lib&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;*.rb&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-
-</content>
-   <author>
-     <name>Luis Galaviz</name>
-     <email>luis.galaviz@crowdint.com</email>
    </author>
  </entry>
  

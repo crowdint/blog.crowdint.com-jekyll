@@ -47,6 +47,112 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 22</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0a34cf6219c554ee75506e544473aea1" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.</p>
+
+<p>There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.</p>
+
+<p>Let's use Rails to dynamically generate a sitemap on request.</p>
+
+<p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
+    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
+        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
+        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
+        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
+<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+    <span class="k">end</span>
+    
+    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
+
+<p>The parameters of the xml are straightforward:</p>
+
+<ul>
+<li><em>loc</em> is the url</li>
+<li><em>lastmod</em> is the last modified date of that url</li>
+<li><em>changefreq</em> is how often this url is updated</li>
+<li><em>priority</em> is the importance of this url compared to the rest of the urls in our website</li>
+</ul>
+
+
+<p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
+</code></pre>
+</div>
+
+
+<p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
+
+<p>If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.</p>
+
+<p>Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Improve your SEO with a sitemap" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Roberto Sanchez:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Roberto Sanchez | roberto.sanchez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
   <p class="author">
     <span class="date"><b>Oct 18</b><br />2010</span>
@@ -84,10 +190,18 @@
     <div class="comments">
       <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Magma Rails 2010, a success!" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -125,10 +239,18 @@
     <div class="comments">
       <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Magma Rails is just around the corner!" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -191,10 +313,18 @@
     <div class="comments">
       <h2><a href="/2010/09/28/negative-code.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Negative Code" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Luis Galaviz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
@@ -419,64 +549,21 @@ but there are some few more useful links to look at:
     <div class="comments">
       <h2><a href="/2010/09/22/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="First contact with regular expressions" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 17</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Because, let's be honest, these days, we're always connected to the internet.</p>
-
-<p>Personally, I've never used the RDoc included on gem installations.</p>
-
-<p>If I need info about a class, method, module, I ask uncle <em>Google</em>.</p>
-
-<p>Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.</p>
-
-<p>So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.</p>
-
-<p>It is as simple as, opening or creating a <em>.gemrc</em> file in your home directory, and adding the following line:</p>
-
-<div class="highlight"><pre><code class="bash">gem: --no-rdoc --no-ri
-</code></pre>
-</div>
-
-
-<p>And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.</p>
-
-<p>There you go, enjoy!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
 </div>
 
@@ -493,14 +580,11 @@ but there are some few more useful links to look at:
   
 </div>
 
-
-
-
-
-
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>11 Aug 2011</b></span> &raquo; <a href="/2011/08/11/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant box</a></li>
 
   <li><span><b>06 Jul 2011</b></span> &raquo; <a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></li>
 
@@ -540,9 +624,14 @@ but there are some few more useful links to look at:
 
   <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
 
-  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
-
   </ul>
+</div>
+
+<div class="post prepend-1">
+	<div class="left">
+	  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+  </div>  
 </div>
 
         </div>

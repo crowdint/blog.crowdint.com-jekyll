@@ -47,6 +47,224 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/08/11/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant box</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 11</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>If you don't know what Vagrant is, go read our <a href="http://blog.crowdint.com/2011/06/21/vagrant.html">first post about it</a></p>
+
+<h2>Introduction</h2>
+
+<p>Ok, we've been using <code>Vagrant</code> to manage our servers and services for a while, and we love it.
+It's clean, easy and we don't mess with our original systems.
+Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql</code>
+but nothing seemed to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
+but it looks like it has some issues and we didn't have enough time to do the research.
+In one word: Frustration.</p>
+
+<p>So, what did we do?, we installed it with our bare hands, step by step.</p>
+
+<hr />
+
+<h2>Let's start!</h2>
+
+<p>Start your vagrant box.</p>
+
+<div class="highlight"><pre><code class="bash">you<span class="nv">$ </span>vagrant up
+you<span class="nv">$ </span>vagrant ssh
+</code></pre>
+</div>
+
+
+<h2>1) Fixing the 'Please check that your locale settings' error</h2>
+
+<p>Seems like the current box from vagrant have issues with postgres &amp; lang settings. Easy to fix..</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo vim /etc/bash.bashrc
+
+<span class="c"># Add this lines to the bottom:</span>
+<span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</code></pre>
+</div>
+
+
+<p>Save &amp; Exit. Then run these commands:</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo locale-gen en_US.UTF-8
+vagrant<span class="nv">$ </span>sudo dpkg-reconfigure locales
+</code></pre>
+</div>
+
+
+<p>Ok, now your system has configured the default LANG. No more 'LANG=C' error.</p>
+
+<h2>2) Install postgres 8.4, and the comunity extras</h2>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib; 
+</code></pre>
+</div>
+
+
+<p>Add postgres's binaries to the PATH.</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo nano /etc/bash.bashrc
+
+<span class="c"># Add this lines to the file:</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/postgresql/8.4/bin/
+<span class="nb">export </span><span class="nv">PGDATA</span><span class="o">=</span>/usr/local/pgsql/data
+</code></pre>
+</div>
+
+
+<p>Save &amp; Exit. Ok, now you can run <code>postgres --version</code> and other postgresql executables.
+Also, you've defined the default data folder, you will need that soon (1).</p>
+
+<h3>Setup postgres's user, and data folder.</h3>
+
+<p>Postgresql server should be started by his own system user,
+and it have been created by the installation but using a random password.
+Now you'll change that password.</p>
+
+<p>Change postgres's password.</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo su
+root# passwd postgres
+<span class="c"># Type a new password, like &#39;postgres&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Init postgres data structure, and create the storage folder</p>
+
+<div class="highlight"><pre><code class="bash">root# mkdir /usr/local/pgsql/data
+root# chown postgres /usr/local/pgsql/data
+root# su postgres
+</code></pre>
+</div>
+
+
+<p>Init the data folder</p>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>initdb -D /usr/local/pgsql/data
+</code></pre>
+</div>
+
+
+<p><em>Note (1): Make sure this is the same directory as your <code>PGDATA</code> variable.</em></p>
+
+<h3>3) Enable remote connections</h3>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>vim /usr/local/pgsql/data/postgres.conf
+
+<span class="c"># Change this `listen_address=&#39;localhost&#39;` to</span>
+<span class="nv">listen_address</span><span class="o">=</span><span class="s1">&#39;*&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Save &amp; exit.</p>
+
+<h3>Enable access from local network</h3>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>nano /usr/local/pgsql/data/pg_hba.conf
+
+<span class="c"># Vagrant uses 33.33.33.10 like addresses</span>
+host all all 33.33.33.0/24 trust
+</code></pre>
+</div>
+
+
+<p>Save &amp; exit.</p>
+
+<h3>Start server</h3>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>su postgres
+postgres<span class="nv">$ </span>postgres
+</code></pre>
+</div>
+
+
+<h2>Done.</h2>
+
+<p>Congrats!</p>
+
+<hr />
+
+<h2>Extras</h2>
+
+<h3>Notes:</h3>
+
+<ul>
+<li>You can stop the server pressing <code>ctrl + C</code>.</li>
+<li>You can start the server in background using <code>postgres$ postgres &amp;</code></li>
+<li>You must start postgresql using postgres user.</li>
+<li><em>You could improve this post saying how to start postgresql as a service, would you?</em></li>
+</ul>
+
+
+<h3>GUI admin?</h3>
+
+<p>Now you can install tools like <code>pgAdmin3</code> to manage your postgresql server and databases directly from your host.
+It's multiplatform and free.</p>
+
+<h3>References:</h3>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/8.4/static/creating-cluster.html">Official postgres documentation</a></li>
+<li><a href="http://bookmarks.honewatson.com/2009/05/30/perl-warning-please-check-that-your-locale-settings-ubuntu/">About the locale error</a></li>
+<li><a href="http://www.pgadmin.org/">Download pgAdmin 3</a></li>
+<li><del>Mom</del></li>
+</ul>
+
+
+<h2>Disclamer &amp; feedback</h2>
+
+<p>Please note that all of these steps have been <code>discovered</code> by us entirely with some help of google's special powers...
+feel free to add comments if you know of a better way to do something, or if there is a mistake
+that need to be remarked. Also, if you are using Ubuntu, you probably won't need all of these steps,
+as Ubuntu provides the server with all the structure, and preconfigured files.</p>
+
+<p>Also, we should write another post describing how to use a Chef recipe for this
+avoiding all this s**t... And it shall be called, <code>The Easy Way</code>, coming soon.</p>
+
+<h2>Stay tuned!</h2>
+
+<h3>-Mario</h3>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/08/11/postgresql-in-vagrant.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="How to install Postgresql 8.4 in a Vagrant box" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Mario Zaizar:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></h1>
   <p class="author">
     <span class="date"><b>Jul 06</b><br />2011</span>
@@ -58,148 +276,29 @@
     
     
     
-      <p>Acceptance testing is a technique that helps determine if the requirements of
-our application are met. There are several frameworks to help us with this.
-One of the most popular is Cucumber, in which you practically describe in plain English
-your stories, but you also have to code a lot of steps in order for your tests to work.</p>
-
-<p>To avoid this, and just test your features in Ruby, we have Steak,
-which works very well with Rspec.
-To use it you only need to put this on your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
-  <span class="n">gem</span> <span class="s2">&quot;steak&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Then run the bundle install command and after that install steak</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-<span class="nv">$ </span>rails g steak:install
-</code></pre>
-</div>
-
-
-<p>Steak will create the acceptance folder inside your specs directory. This is where
-all your acceptance tests will be placed.
-Now, to create your test, you need to run the command</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rails g steak:spec my_first_steak_test
-</code></pre>
-</div>
-
-
-<p>This will create a file with the basic structure of your test, and now you are
-ready to start coding!</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;acceptance/acceptance_helper&#39;</span>
-
-<span class="n">feature</span> <span class="s1">&#39;Steak feature&#39;</span><span class="p">,</span> <span class="sx">%q{</span>
-<span class="sx">  In order to ...</span>
-<span class="sx">  As a ...</span>
-<span class="sx">  I want ...</span>
-<span class="sx">}</span> <span class="k">do</span>
-
-  <span class="n">scenario</span> <span class="s1">&#39;first scenario&#39;</span> <span class="k">do</span>
-    <span class="kp">true</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="kp">true</span>
-  <span class="k">end</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>As you can see it starts pretty much as a Cucumber feature, where you can describe
-what your feature is about and what should every scenario do.</p>
-
-<p>Here's a small feature to test a form in an application.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/acceptance_helper&#39;</span><span class="p">)</span>
-
-<span class="n">feature</span> <span class="s2">&quot;Add Products to Store&quot;</span><span class="p">,</span> <span class="sx">%q{</span>
-<span class="sx">  In order to add products in my store</span>
-<span class="sx">  As an admin</span>
-<span class="sx">  I want to create a product</span>
-<span class="sx">}</span> <span class="k">do</span>
-
-  <span class="n">background</span> <span class="k">do</span>
-    <span class="n">login_user!</span><span class="p">(</span><span class="s1">&#39;admin@example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="n">scenario</span> <span class="s2">&quot;Add products to store&quot;</span> <span class="k">do</span>
-    <span class="n">visit</span> <span class="n">new_product_path</span>
-    
-    <span class="n">page</span><span class="o">.</span><span class="n">should</span> <span class="n">have_css</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
-    <span class="n">fill_the_following</span><span class="p">(</span>
-      <span class="s1">&#39;Name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;New Product&#39;</span><span class="p">,</span>
-      <span class="s1">&#39;Description&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Fantastic product&#39;</span><span class="p">,</span>
-      <span class="s1">&#39;Price&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;32.00&#39;</span><span class="p">,</span>
-    <span class="p">)</span>
-    
-    <span class="n">click_link_or_button</span> <span class="s1">&#39;Create Product&#39;</span>
-
-    <span class="n">page</span><span class="o">.</span><span class="n">should</span> <span class="n">have_css</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="s1">&#39;Your product has been created&#39;</span><span class="p">)</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>As you can see the syntax is pretty easy and looks a lot like Rspec. The cool thing
-is that Steak creates a support folder inside the acceptance directory, where you
-have your helpers.rb file and the paths.rb file.</p>
-
-<p>In the helpers.rb file you can put all the methods you need to run your test,
-methods that you might end up using a lot among all your specs, like the one in the
-example login_user!</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">login_user!</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-  <span class="n">visit</span> <span class="n">homepage</span>
-  <span class="n">click_link_or_button</span> <span class="s1">&#39;Log In&#39;</span>
-
-  <span class="n">fill_the_following</span><span class="p">(</span>
-    <span class="s1">&#39;Email&#39;</span> <span class="o">=&gt;</span> <span class="n">email</span><span class="p">,</span>
-    <span class="s1">&#39;Password&#39;</span> <span class="o">=&gt;</span> <span class="n">password</span>
-  <span class="p">)</span>
-
-  <span class="n">click_link_or_button</span> <span class="s1">&#39;Log In&#39;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>For paths, you can put directly the route like in the example, or you can define your
-own named routes in the paths.rb file, like</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">create_product</span>
-  <span class="s2">&quot;/products/new&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Hope this little guide will help you as an introduction to the Steak world!
-Which in my opinion is not difficult nor totally different from Cucumber, I think
-its even easier, because it comes with a lot of helpers and methods to check the
-styles and contents in your page.</p>
-
-<p>The other thing I like about Steak, as I mentioned at the beginning of this post, is
-that you get rid of tons of steps definitions, you just write down methods for
-the repeated steps you take in all of your tests.</p>
-
-<p>Thanks for reading and happy testing!</p>
-
+      
+        
+           <p>Acceptance testing is a technique that helps determine if the requirements of our application are met. There are several frameworks to help us with this. One of the most popular is Cucumber, in which you practically describe in plain English your stories, but you also have to code a lot of steps in order for your tests to work.</p> <p>To avoid this, and just test your features in Ruby, we...
+           <div class = "continue_reading"><a href="/2011/07/06/acceptance-testing-with-steak.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
       <h2><a href="/2011/07/06/acceptance-testing-with-steak.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Acceptance testing with Steak" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Ana Rosas:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Ana Rosas | ana@crowdint.com</p>
@@ -230,10 +329,18 @@ the repeated steps you take in all of your tests.</p>
     <div class="comments">
       <h2><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Rails 3.1, Compass and Blueprint" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
@@ -264,10 +371,18 @@ the repeated steps you take in all of your tests.</p>
     <div class="comments">
       <h2><a href="/2011/06/21/vagrant.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Vagrant to manage multiple dev environments" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Mario Zaizar:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
@@ -298,47 +413,21 @@ the repeated steps you take in all of your tests.</p>
     <div class="comments">
       <h2><a href="/2011/06/13/add-validations-to-your-ruby-classes.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Add Validations to your Ruby classes" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Omar Vargas:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
-  <p class="author">
-    <span class="date"><b>May 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p> <p>I love going to conferences, not just because of the talks, but, because you get to meet people. I like talking to the persons that wrote the gems that I use everyday and thank them for their...
-           <div class = "continue_reading"><a href="/2011/05/24/railsconf-2011.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    <div class="tweet">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
 </div>
 
@@ -353,14 +442,11 @@ the repeated steps you take in all of your tests.</p>
   
 </div>
 
-
-
-
-
-
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>11 Aug 2011</b></span> &raquo; <a href="/2011/08/11/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant box</a></li>
 
   <li><span><b>06 Jul 2011</b></span> &raquo; <a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></li>
 
@@ -400,9 +486,14 @@ the repeated steps you take in all of your tests.</p>
 
   <li><span><b>05 Feb 2011</b></span> &raquo; <a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></li>
 
-  <li><span><b>31 Jan 2011</b></span> &raquo; <a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></li>
-
   </ul>
+</div>
+
+<div class="post prepend-1">
+	<div class="left">
+	  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+  </div>  
 </div>
 
         </div>

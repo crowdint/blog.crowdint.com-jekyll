@@ -78,13 +78,6 @@ only way.</p>
 <p>Now, create a <em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
 the following contents:</p>
 
-<div class="highlight"><pre><code class="scss">  <span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">_blueprint&#39;</span><span class="p">;</span>
-
-  <span class="k">@include</span><span class="nd"> blueprint</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
 <p>This file will just be used to load the blueprint css framework onto our
 stylesheet files.</p>
 
@@ -92,24 +85,30 @@ stylesheet files.</p>
 the file that you just created by adding it right after <em>require_self</em>
 in the manifest:</p>
 
-<div class="highlight"><pre><code class="scss">  <span class="o">*=</span> <span class="nt">require_self</span>
-  <span class="o">*=</span> <span class="nt">require</span> <span class="nt">blueprint</span>
-  <span class="o">*=</span> <span class="nt">require_tree</span> <span class="nc">.</span>
-</code></pre>
-</div>
-
-
 <p>And, that's it. Now you'll be able to use all the usual blueprint mixins
 on your Rails 3.1 stylesheets.</p>
 
 <p>Hope this helps you somehow.</p>
 
-
-    <div class="tweet right">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-      <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    </div>
+    
+    <p>
+      <div class="tweet">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related=":with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>     
+      </div>
+      <br><br>     
+  		<div class="left">
+  		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+      </div>
+    </p>
   </div>
+  
   <div class="author_box">
     <p><b>Author:</b> David Padilla | david@crowdint.com</p>
   </div>

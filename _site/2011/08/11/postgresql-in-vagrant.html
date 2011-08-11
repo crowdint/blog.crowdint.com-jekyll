@@ -15,6 +15,15 @@
     <script type="text/javascript">
       var _gaq = _gaq || [];
 
+      _gaq.push(['_setAccount', 'UA-17527068-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
     </script>
 </head>
 <body>
@@ -39,24 +48,22 @@
           <div class="post prepend-1">
   <h1>How to install Postgresql 8.4 in a Vagrant box</h1>  
   <p class="author">
-    <span class="date"><b>Aug 09</b><br />2011</span>
+    <span class="date"><b>Aug 11</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
-    <h2>How to install Postgresql 8.4 in a Vagrant box</h2>
-
-<p><em>The Hard Way, step by step.</em></p>
-
-<p>If you don't know what is Vagrant, go to our <a href="http://blog.crowdint.com/2011/06/21/vagrant.html">first post about it</a></p>
+    <p>If you don't know what Vagrant is, go read our <a href="http://blog.crowdint.com/2011/06/21/vagrant.html">first post about it</a></p>
 
 <h2>Introduction</h2>
 
-<p>Ok, we use <code>Vagrant</code> to manage our servers and services from a while, and we love it. It's clean, easy and we don't mess with our system.
+<p>Ok, we've been using <code>Vagrant</code> to manage our servers and services for a while, and we love it.
+It's clean, easy and we don't mess with our original systems.
 Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql</code>
-but nothing seems to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
-but seems to have issues and we hadn't enought time to research.. one word: Frustration.</p>
+but nothing seemed to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
+but it looks like it has some issues and we didn't have enough time to do the research.
+In one word: Frustration.</p>
 
-<p>So, what we do?, we installed it with our bare hands, step by step..</p>
+<p>So, what did we do?, we installed it with our bare hands, step by step.</p>
 
 <hr />
 
@@ -84,7 +91,7 @@ you<span class="nv">$ </span>vagrant ssh
 </div>
 
 
-<p>Save &amp; Exit. Then run this commands:</p>
+<p>Save &amp; Exit. Then run these commands:</p>
 
 <div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo locale-gen en_US.UTF-8
 vagrant<span class="nv">$ </span>sudo dpkg-reconfigure locales
@@ -215,13 +222,13 @@ It's multiplatform and free.</p>
 
 <h2>Disclamer &amp; feedback</h2>
 
-<p>Please note that all of this steps have been <code>discovered</code> by us entirely with google's special powers..
-feel free to add comments if you have better ways to do that, or if there is a mistake
-that need to be remarked. Also, if you are using Ubuntu, probably you won't need all this steps,
+<p>Please note that all of these steps have been <code>discovered</code> by us entirely with some help of google's special powers...
+feel free to add comments if you know of a better way to do something, or if there is a mistake
+that need to be remarked. Also, if you are using Ubuntu, you probably won't need all of these steps,
 as Ubuntu provides the server with all the structure, and preconfigured files.</p>
 
-<p>Also, we should write another post describing how to use a Cheff recipe for this..
-avoiding all this s**t.. And it will be called, <code>The Easy Way</code>, really soon.</p>
+<p>Also, we should write another post describing how to use a Chef recipe for this
+avoiding all this s**t... And it shall be called, <code>The Easy Way</code>, coming soon.</p>
 
 <h2>Stay tuned!</h2>
 
@@ -251,12 +258,24 @@ avoiding all this s**t.. And it will be called, <code>The Easy Way</code>, reall
   </div>
   <div class="nav_links span-16">
     
+      <div class="previous span-8"><a href="/2011/07/06/acceptance-testing-with-steak.html"><< Acceptance testing with Steak</a></div>
+    
     
   </div>
 </div>
 <div class="post prepend-1">
   <h1>Related Posts</h1>
   <ul class="archives">
+
+  <li><span><b>27 Oct 2010</b></span> &raquo; <a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></li>
+
+  <li><span><b>21 Jun 2011</b></span> &raquo; <a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></li>
+
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
