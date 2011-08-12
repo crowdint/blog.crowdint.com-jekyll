@@ -31,7 +31,7 @@ only way.
 Now, create a *blueprint.css.scss* file on *app/assets/stylesheets* with
 the following contents:
 
-{% highlight scss %}
+{% highlight css %}
   @import '_blueprint';
 
   @include blueprint;
@@ -44,7 +44,7 @@ Now, on *app/assets/stylesheets/application.css* make sure you require
 the file that you just created by adding it right after *require_self*
 in the manifest:
 
-{% highlight scss %}
+{% highlight css %}
   *= require_self
   *= require blueprint
   *= require_tree .

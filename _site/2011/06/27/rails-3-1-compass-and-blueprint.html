@@ -78,12 +78,26 @@ only way.</p>
 <p>Now, create a <em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
 the following contents:</p>
 
+<div class="highlight"><pre><code class="css">  <span class="k">@import</span> <span class="s1">&#39;_blueprint&#39;</span><span class="p">;</span>
+
+  <span class="k">@include</span> <span class="nt">blueprint</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
 <p>This file will just be used to load the blueprint css framework onto our
 stylesheet files.</p>
 
 <p>Now, on <em>app/assets/stylesheets/application.css</em> make sure you require
 the file that you just created by adding it right after <em>require_self</em>
 in the manifest:</p>
+
+<div class="highlight"><pre><code class="css">  <span class="o">*=</span> <span class="nt">require_self</span>
+  <span class="o">*=</span> <span class="nt">require</span> <span class="nt">blueprint</span>
+  <span class="o">*=</span> <span class="nt">require_tree</span> <span class="o">.</span>
+</code></pre>
+</div>
+
 
 <p>And, that's it. Now you'll be able to use all the usual blueprint mixins
 on your Rails 3.1 stylesheets.</p>
