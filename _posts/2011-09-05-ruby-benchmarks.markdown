@@ -9,11 +9,11 @@ avatar: d32b52ec6403614b1adf3e648cbbe584
 I recently started a new client project. Lucky me, [Rails 3.1 has just
 been released](http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released)
 so, it means I'll get to learn a bunch of things while
-building it, you know, the fancy [asset pipeline](http://edgeguides.rubyonrails.org/asset_pipeline.html)
+building it, you know, the fancy [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 stuff everyone's talking about and so on.
 
 I wrote a couple of rspec specs and cucumber features, made them pass, and
-while I was about to start now features, decided to stop to check the
+while I was about to start new features, decided to stop to check the
 current state of all the different rubies to try them and pick the
 faster one, at least for development.
 
@@ -26,7 +26,7 @@ Now, so far, my app has 4 rspec specs and 3 cucumber scenarios, but
 even so, I came up with interesting time results.
 
 Below the results of running *time rake* for each
-implementation.tnueotnuo
+implementation.
 
 ## MRI 1.9.2
 

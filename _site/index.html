@@ -47,6 +47,196 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></h1>
+  <p class="author">
+    <span class="date"><b>Sep 05</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>I recently started a new client project. Lucky me, <a href="http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released">Rails 3.1 has just
+been released</a>
+so, it means I'll get to learn a bunch of things while
+building it, you know, the fancy <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a>
+stuff everyone's talking about and so on.</p>
+
+<p>I wrote a couple of rspec specs and cucumber features, made them pass, and
+while I was about to start new features, decided to stop to check the
+current state of all the different rubies to try them and pick the
+faster one, at least for development.</p>
+
+<p>Well, I was already using <em>MRI 1.9.2</em>, so, for research purposes
+I proceeded to install <em>MRI 1.9.3-preview</em>, <em>Rubinus 1.2.5dev</em>, <em>REE-1.8.7</em> and
+<em>jRuby 1.6.3</em>. (Thank you <a href="http://beginrescueend.com/">RVM</a> for making this as
+easy as possible).</p>
+
+<p>Now, so far, my app has 4 rspec specs and 3 cucumber scenarios, but
+even so, I came up with interesting time results.</p>
+
+<p>Below the results of running <em>time rake</em> for each
+implementation.</p>
+
+<h2>MRI 1.9.2</h2>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># Rspec</span>
+Finished in 0.13588 seconds
+4 examples, 0 failures
+
+<span class="c"># Cucumber</span>
+3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
+10 steps <span class="o">(</span>10 passed<span class="o">)</span>
+0m0.756s
+
+<span class="c"># Time</span>
+real    0m24.259s
+user    0m20.752s
+sys 0m2.530s
+</code></pre>
+</div>
+
+
+<h2>MRI 1.9.3-preview</h2>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># Rspec</span>
+Finished in 0.05074 seconds
+4 examples, 0 failures
+
+<span class="c"># Cucumber</span>
+3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
+10 steps <span class="o">(</span>10 passed<span class="o">)</span>
+0m0.379s
+
+<span class="c"># Time</span>
+real    0m13.354s
+user    0m10.120s
+sys 0m1.546s
+</code></pre>
+</div>
+
+
+<h2>jRuby</h2>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
+Finished in 0.186 seconds
+4 examples, 0 failures
+
+<span class="c"># Cucumber</span>
+3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
+10 steps <span class="o">(</span>10 passed<span class="o">)</span>
+0m2.141s
+
+<span class="c"># Time</span>
+real    1m3.823s
+user    2m9.875s
+sys 0m7.005s
+</code></pre>
+</div>
+
+
+<h2>Rubinus</h2>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
+Finished in 0.27061 seconds
+4 examples, 0 failures
+
+<span class="c"># Cucumber</span>
+3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
+10 steps <span class="o">(</span>10 passed<span class="o">)</span>
+0m2.011s
+
+<span class="c"># Time</span>
+real    0m47.328s
+user    1m1.049s
+sys 0m2.938s
+</code></pre>
+</div>
+
+
+<h2>REE</h2>
+
+<p>Note that I used the following environment variables for this one:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span><span class="s2">&quot;50000000&quot;</span>
+<span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span><span class="s2">&quot;500000&quot;</span>
+<span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+<span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span><span class="s2">&quot;250000&quot;</span>
+</code></pre>
+</div>
+
+
+<p>To understand how this affects its performance, check out <a href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html">this post</a></p>
+
+<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
+Finished in 0.05163 seconds
+4 examples, 0 failures
+
+<span class="c"># Cucumber</span>
+3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
+10 steps <span class="o">(</span>10 passed<span class="o">)</span>
+0m0.277s
+
+<span class="c"># Time</span>
+real    0m10.769s
+user    0m7.519s
+sys 0m2.106s
+</code></pre>
+</div>
+
+
+<h2>Conclusion</h2>
+
+<p>It looks like there's huge speed improvements from 1.9.2 to 1.9.3. It took
+24 seconds on 1.9.2 and 12 on 1.9.3, that's a lot of speed boost!</p>
+
+<p>JRuby, at 1 minute where the other rubies took seconds is light years
+behind them, though, I might be doing something wrong. I really have no practical
+experience with it and I just benchmarked it out of the box.</p>
+
+<p>Rubinus felt kind of slow too, but, I consider it to be
+work in progress, or at least haven't heard of production apps running
+on it yet, which doesn't necesarily mean there aren't any. I'd actually
+love to use it on production for a few weeks when we launch this app
+just to see how it behaves in real life.</p>
+
+<p>And last but not least, a properly configured REE kicks butt. No surprise there, we've been using it
+on another app on production for a year now with good performance and no
+problems at all so far.</p>
+
+<p>So, there it is. I realize it is a small benchmark, but perhaps I can
+revisit it when we have more specs and more features to see if that
+changes how the rubies behave.</p>
+
+<p>Cheers!</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/09/05/ruby-benchmarks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Ruby benchmarks" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Auto Retry Failed Cucumber Tests</a></h1>
   <p class="author">
     <span class="date"><b>Aug 22</b><br />2011</span>
@@ -58,121 +248,12 @@
     
     
     
-      <p>If you're tired of having to re-kick builds in your CI server because of non deterministic failures,
-this post is for you.
-After I implemented this awesome feature our builds started to be more realistic,
-and developers actually care now if their branch is red.</p>
-
-<p>I'm going to show you how I got to the point where failed cucumber features auto retry themselves.
-I started to dig into the cucumber documentation and I couldn't find how to implement an auto retry feature straightforward.
-After being a curious developer and reading some of the cucumber code I found that there was a formatter named 'rerun', this is so nice!
-I went back to the cucumber documentation and I found that it was almost what I was looking for
-and that I could use it straight in my cucumber profiles:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c">#config/cucumber.yml</span>
-selenium: --format pretty --format rerun --out tmp/rerun.txt features/selenium --require features/selenium/step_definitions --require features/selenium/support
-</code></pre>
-</div>
-
-
-<p>It can receive an extra parameter --out, this is used to store failed tests along with the line number, awesome!!, isn't it?</p>
-
-<p>Ok, now I had the ability to track failed tests and store them in a txt file, now what's next? I started to think how my rake task
-would look like, parsing the file and those ugly things, but I was sure that this problem had been already solved, it was as simple
-as run 'cucumber --help' in command line to find out, and guess what?</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>cucumber --help
-Usage: cucumber <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span> <span class="o">[</span>FILE|DIR|URL<span class="o">][</span>:LINE<span class="o">[</span>:LINE<span class="o">]</span>*<span class="o">]</span> <span class="o">]</span>+
-
-Examples:
-cucumber examples/i18n/en/features
-cucumber @rerun.txt <span class="o">(</span>See --format rerun<span class="o">)</span>
-cucumber examples/i18n/it/features/somma.feature:6:98:113
-cucumber -s -i http://rubyurl.com/eeCl
-</code></pre>
-</div>
-
-
-<p>Whooohooo, it accepts the file generated by the rerun formatter!!! so now I tried this:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>cucumber @tmp/rerun.txt --format pretty features/selenium --require features/selenium/step_definitions --require features/selenium/support
-</code></pre>
-</div>
-
-
-<p>And, it worked!... it took failed tests and ran them! Cool, now I had to integrate this with our cucumber rake tasks.</p>
-
-<p>I thought it'd be easy, so I started with a rerun rake task:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">namespace</span> <span class="ss">:cucumber</span> <span class="k">do</span>
-
-  <span class="no">Cucumber</span><span class="o">::</span><span class="no">Rake</span><span class="o">::</span><span class="no">Task</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:rerun</span><span class="p">,</span> <span class="s1">&#39;Rerun failed cucumber tests&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
-    <span class="k">unless</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;tmp/rerun.txt&#39;</span><span class="p">))</span>
-      <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;tmp/rerun.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;rerun&#39;</span>
-  <span class="k">end</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Doh! I ran it and failed because I didn't specify the 'rerun' profile in cucumber.yml, easy to fix:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="c">#config/cucumber.yml</span>
-selenium: --format pretty --format rerun --out tmp/rerun.txt features/selenium --require features/selenium/step_definitions --require features/selenium/support
-rerun: @tmp/rerun.txt --format pretty features/selenium --require features/selenium/step_definitions --require features/selenium/support
-</code></pre>
-</div>
-
-
-<p>Done, I got my 'rake cucumber:rerun' task and it worked just fine. My next step was to include this in 'rake cucumber:all' and, theoretically
-if the selenium profile failed, it'd execute rerun task and retry failed tests,  but! it exited after the selenium profile
-failed and the task finished right away. Then I thought, of course! it works how it's supposed to work,
-it exits when it fails, so it was not that easy.</p>
-
-<p>This was the tricky part, because I had to wrap this task up in a huge begin rescue block, I ended up implementing my own
-super sophisticated task runner:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">run_rake_task</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="k">begin</span>
-    <span class="no">Rake</span><span class="o">::</span><span class="no">Task</span><span class="o">[</span><span class="nb">name</span><span class="o">].</span><span class="n">invoke</span>
-  <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
-    <span class="k">return</span> <span class="kp">false</span>
-  <span class="k">end</span>
-  <span class="kp">true</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Cool, it wraps up my tasks and catches the error, I had everything I needed, so I created another rake task:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">namespace</span> <span class="ss">:cucumber</span> <span class="k">do</span>
-
-  <span class="n">desc</span> <span class="s1">&#39;Run selenium and rerun failed tests&#39;</span>
-  <span class="n">task</span> <span class="ss">:selenium_with_retry</span> <span class="k">do</span>
-    <span class="n">selenium_successful</span> <span class="o">=</span> <span class="n">run_rake_task</span><span class="p">(</span><span class="s2">&quot;cucumber:selenium&quot;</span><span class="p">)</span>
-    <span class="n">rerun_successful</span> <span class="o">=</span> <span class="kp">true</span>
-    <span class="k">unless</span> <span class="n">selenium_successful</span>
-      <span class="n">rerun_successful</span> <span class="o">=</span> <span class="n">run_rake_task</span><span class="p">(</span><span class="s2">&quot;cucumber:rerun&quot;</span><span class="p">)</span>
-    <span class="k">end</span>
-    <span class="k">unless</span> <span class="n">selenium_successful</span> <span class="o">||</span> <span class="n">rerun_successful</span>
-      <span class="k">raise</span> <span class="no">CucumberFailure</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;Cucumber tests failed&#39;</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Done! I just replaced this new task in our main rake cruise task, and bingo! It now auto retries failed cucumber tests.</p>
-
-<p>I know it has a lot of opportunity areas, but hopefully this helps to somebody else to get their builds green!</p>
-
-<p>Thanks for reading!</p>
-
+      
+        
+           <p>If you're tired of having to re-kick builds in your CI server because of non deterministic failures, this post is for you. After I implemented this awesome feature our builds started to be more realistic, and developers actually care now if their branch is red.</p> <p>I'm going to show you how I got to the point where failed cucumber features auto retry themselves. I started to dig into the cucumber...
+           <div class = "continue_reading"><a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -323,48 +404,6 @@ super sophisticated task runner:</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
-  <p class="author">
-    <span class="date"><b>Jun 21</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own machine is old fashioned. They won't let you handle different versions, or different configurations, and most of the time your dev machine isn't the same as your production server. That's why Vagrant is there for us.</p> <p>Vagrant allows you to create different virtualized machines, easy and separated from your computer internals. So, you can handle...
-           <div class = "continue_reading"><a href="/2011/06/21/vagrant.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/06/21/vagrant.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Vagrant to manage multiple dev environments" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Mario Zaizar:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
@@ -378,6 +417,8 @@ super sophisticated task runner:</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
   <li><span><b>22 Aug 2011</b></span> &raquo; <a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Auto Retry Failed Cucumber Tests</a></li>
 
@@ -416,8 +457,6 @@ super sophisticated task runner:</p>
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
   <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
-
-  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
 
   </ul>
 </div>

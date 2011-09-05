@@ -47,6 +47,48 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
+  <p class="author">
+    <span class="date"><b>Jan 05</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        
+            <p>Sometimes, sorting the elements in an array depend on something more complex than just alphabetical order or numerical order.</p> <p>From my experience, take for example shoe sizes for little kids. For some of the vedors I've worked with you have shoes in size 10.5 through 13.5, then, the count is restarted to 1 through 9.</p> <p>So, in order, the size array...
+            <div class = "continue_reading"><a href="/2011/01/05/custom-sorting-with-ruby.html">Continue reading...</a></div>
+        
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/01/05/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Custom Sorting with Ruby" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
   <p class="author">
     <span class="date"><b>Dec 25</b><br />2010</span>
@@ -805,170 +847,6 @@ Total:         84 4391 760.0   4473    5830
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></h1>
-  <p class="author">
-    <span class="date"><b>Nov 30</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>First off, this post is meant to be a brief introduction for testing Rails applications with RSpec, I'll only get into model and controller testing.</p>
-
-<h2>What is RSpec?</h2>
-
-<p>Well, it’s easy, RSpec is a framework for Ruby that allows us make scenarios for our applications and help us test them.
-The main goal about testing your objects with RSpec, is that you test what your object is going to do, <a href="http://en.wikipedia.org/wiki/Behavior_driven_development">Behaviour Driven Development</a>. The syntax is very simple, and human readable, this way you can read it as if you were having a conversation with your client to determine what exactly they want the project to do. It’s very easy to use, as long as you know exactly what you want to test, and here is where I think most of us usually get stuck...
-So, after this brief introduction, let’s get to the action!</p>
-
-<h2>How do we start an RSpec test for our rails application?</h2>
-
-<p>Say you already have a <em>Rails3</em> project. In your Gemfile add the next lines.</p>
-
-<div class="highlight"><pre><code class="bash">group :development, :test <span class="k">do</span>
-<span class="k">  </span>gem <span class="s2">&quot;rspec-rails&quot;</span> , <span class="s2">&quot;&gt;= 2.2.0&quot;</span>
-end
-</code></pre>
-</div>
-
-
-<p>Next run the <em>bundle install</em> command in your console in order to install all your gems in the Gemfile. After the bundle is finished write in your console</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rails generate rspec:install
-</code></pre>
-</div>
-
-
-<p>With this generator we get the necessary files to run the specs and the directory in our app where we are going to save them.
-To finish with this small setup you should run the next commands to make sure everything is running fine in your app!</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake db:migrate
-<span class="nv">$ </span>rake db:test:prepare
-<span class="nv">$ </span>rake spec
-</code></pre>
-</div>
-
-
-<p>After this, every time you generate from the console a new model or controller, RSpec will automatically create the spec file for you... Now you are more than ready to start testing!</p>
-
-<h2>Let’s begin with Model testing</h2>
-
-<p> <em>RSpec is all about expectations</em>. What are you expecting an object to do? That’s what you must be thinking when you start a new test.
-Normally in a Model, what do you do? You basically validate the fields on your tables, or create definitions in order to get new queries, among other things.
-So that’s what you must test, for this you have the following magic words: <br /></p>
-
-<p><em>describe, context, before, it and should</em></p>
-
-<p><em>describe</em>, as the word says, it will help you describe what you want the method to do. <br />
-<em>context</em>, will help you to describe the environment or the background where your tests will be running at. <br />
-<em>before</em>, will help you define stuff you need to be done before you test a method, for example, if you need to simulate an account, a shipping_cart, before is your friend. <br />
-<em>it</em>, is meant to be, also, a descriptor for the situation you are testing. <br />
-<em>should and should</em>_<em>not</em>, with this magic word, you will be able to compare if you’ve received what you were expecting. <em>Remember it’s all about expectations</em>.<br /></p>
-
-<p>In the following example, we are going to test the Account Model in an application, the first step is to describe the model. Next we define the context and create some accounts in the before segment.
-Now, we check that the created accounts have valid attributes, for that we created an account without an e-mail address, which we test in the second example. Finally the second context is meant to search an account by its e-mail address.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">describe</span> <span class="no">Account</span> <span class="k">do</span>
-    <span class="n">context</span> <span class="s2">&quot;when an account is created it has to have an e-mail address&quot;</span> <span class="k">do</span>
-      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
-        <span class="vi">@account</span> <span class="o">=</span> <span class="no">Account</span><span class="o">.</span><span class="n">create!</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="s2">&quot;test@test.com&quot;</span>
-        <span class="vi">@account2</span> <span class="o">=</span> <span class="no">Account</span><span class="o">.</span><span class="n">create</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Test2&quot;</span>
-      <span class="k">end</span> 
-      
-      <span class="n">it</span> <span class="s2">&quot;validates the account attributes&quot;</span> <span class="k">do</span>
-        <span class="vi">@account</span><span class="o">.</span><span class="n">should</span> <span class="n">be_valid</span>
-      <span class="k">end</span>
-
-      <span class="n">it</span> <span class="s2">&quot;doesn&#39;t validates the account attributes&quot;</span> <span class="k">do</span>
-        <span class="vi">@account2</span><span class="o">.</span><span class="n">should_not</span> <span class="n">be_valid</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-
-    <span class="n">context</span> <span class="s2">&quot;when an account is searched by its e-mail address&quot;</span> <span class="k">do</span> 
-      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
-        <span class="vi">@account</span> <span class="o">=</span> <span class="no">Account</span><span class="o">.</span><span class="n">create!</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Test Name&quot;</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="s2">&quot;test@test.com&quot;</span>
-      <span class="k">end</span>
-
-      <span class="n">it</span> <span class="s2">&quot;should find the account&quot;</span> <span class="k">do</span>
-        <span class="no">Account</span><span class="o">.</span><span class="n">find_by_email</span><span class="p">(</span><span class="s2">&quot;test@test.com&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="n">be_true</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<h2>...Now Controllers</h2>
-
-<p>It’s basically the same thing as with models, the difference is that you need to simulate when you’re sending data to a method, what normally a POST, GET, PUT or DELETE request from our browser would be. This is done, for example, by typing <em>get :show, :id => @account.id</em> in our test file where we say which method we want to use (<em>:show</em>) and which parameter we want to send (<em>:id</em>).
-In the next example we test the show method from our Accounts controller, let’s say we want the method to find an account by its id. We go the same way as before, we create two accounts in the before segment, then we describe the method we are testing and what it should do. In this case as our example says, it should find the account by its id. The <em>assigns[:account]</em> is what the method returns to the call. In this case the id, name and e-mail. <br />
-The last example tests the <em>:new</em> method in the controller, again we <em>post</em> the name and email of the account and then we look for the registered name, if it's found then it has been successfully created.</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">describe</span> <span class="no">AccountsController</span> <span class="k">do</span>
-
-  <span class="n">describe</span> <span class="s2">&quot;GET show&quot;</span> <span class="k">do</span>
-    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
-      <span class="vi">@account</span> <span class="o">=</span> <span class="no">Account</span><span class="o">.</span><span class="n">create!</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="s1">&#39;test@test.com&#39;</span>
-    <span class="k">end</span>
-    
-    <span class="n">it</span> <span class="s2">&quot;should find the account by its id&quot;</span> <span class="k">do</span>
-      <span class="n">get</span> <span class="ss">:show</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="vi">@account</span><span class="o">.</span><span class="n">id</span>
-      <span class="n">assigns</span><span class="o">[</span><span class="ss">:account</span><span class="o">].</span><span class="n">name</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">&quot;Name&quot;</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-  
-  <span class="n">describe</span> <span class="s2">&quot;POST new&quot;</span> <span class="k">do</span> 
-    <span class="n">it</span> <span class="s2">&quot;should register the new account&quot;</span> <span class="k">do</span>
-      <span class="n">post</span> <span class="ss">:new</span><span class="p">,</span> <span class="ss">:account</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Name 3&quot;</span><span class="p">,</span> <span class="ss">:email</span> <span class="o">=&gt;</span> <span class="s2">&quot;test4@test.com&quot;</span><span class="p">}</span>
-      <span class="n">assigns</span><span class="o">[</span><span class="ss">:account</span><span class="o">].</span><span class="n">name</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">&quot;Name 3&quot;</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>To finish, I want to talk a little bit about the views, which are not often tested, at least with RSpec, if you want to get into view testing, I think it will be better for you to use <a href="https://github.com/brynary/webrat">Webrat</a>, <a href="http://cukes.info/">Cucumber</a> or <a href="http://seleniumhq.org/">Selenium</a>. I'll just leave this for another post.</p>
-
-<h2>Hope this will help you start with the long road of BDD!</h2>
-
-<h2>Resources</h2>
-
-<p><a href="http://www.pragprog.com/titles/achbd/the-rspec-book">The RSpec Book</a><br />
-<a href="http://rspec.info/">RSpec's homepage</a><br />
-<a href="http://rspec.info/rails/writing/models.html">Model testing</a><br />
-<a href="http://rspec.info/rails/writing/controllers.html">Controller testing</a><br /></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/11/30/rspec-for-really-newbies.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="RSpec for really newbies" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Ana Rosas:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas | ana@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -984,6 +862,8 @@ The last example tests the <em>:new</em> method in the controller, again we <em>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
   <li><span><b>22 Aug 2011</b></span> &raquo; <a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Auto Retry Failed Cucumber Tests</a></li>
 
@@ -1022,8 +902,6 @@ The last example tests the <em>:new</em> method in the controller, again we <em>
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
   <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
-
-  <li><span><b>15 Feb 2011</b></span> &raquo; <a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></li>
 
   </ul>
 </div>

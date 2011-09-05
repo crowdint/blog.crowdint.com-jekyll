@@ -4,14 +4,180 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-08-22T11:26:07-05:00</updated>
+ <updated>2011-09-05T09:04:03-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
+   <title>Ruby benchmarks</title>
+   <link href="http://blog.crowdint.com/2011/09/05/ruby-benchmarks.html"/>
+   <updated>2011-09-05T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/09/05/ruby-benchmarks</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;I recently started a new client project. Lucky me, &lt;a href=&quot;http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released&quot;&gt;Rails 3.1 has just
+been released&lt;/a&gt;
+so, it means I'll get to learn a bunch of things while
+building it, you know, the fancy &lt;a href=&quot;http://guides.rubyonrails.org/asset_pipeline.html&quot;&gt;asset pipeline&lt;/a&gt;
+stuff everyone's talking about and so on.&lt;/p&gt;
+
+&lt;p&gt;I wrote a couple of rspec specs and cucumber features, made them pass, and
+while I was about to start new features, decided to stop to check the
+current state of all the different rubies to try them and pick the
+faster one, at least for development.&lt;/p&gt;
+
+&lt;p&gt;Well, I was already using &lt;em&gt;MRI 1.9.2&lt;/em&gt;, so, for research purposes
+I proceeded to install &lt;em&gt;MRI 1.9.3-preview&lt;/em&gt;, &lt;em&gt;Rubinus 1.2.5dev&lt;/em&gt;, &lt;em&gt;REE-1.8.7&lt;/em&gt; and
+&lt;em&gt;jRuby 1.6.3&lt;/em&gt;. (Thank you &lt;a href=&quot;http://beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; for making this as
+easy as possible).&lt;/p&gt;
+
+&lt;p&gt;Now, so far, my app has 4 rspec specs and 3 cucumber scenarios, but
+even so, I came up with interesting time results.&lt;/p&gt;
+
+&lt;p&gt;Below the results of running &lt;em&gt;time rake&lt;/em&gt; for each
+implementation.&lt;/p&gt;
+
+&lt;h2&gt;MRI 1.9.2&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Rspec&lt;/span&gt;
+Finished in 0.13588 seconds
+4 examples, 0 failures
+
+&lt;span class=&quot;c&quot;&gt;# Cucumber&lt;/span&gt;
+3 scenarios &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+10 steps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+0m0.756s
+
+&lt;span class=&quot;c&quot;&gt;# Time&lt;/span&gt;
+real    0m24.259s
+user    0m20.752s
+sys 0m2.530s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;MRI 1.9.3-preview&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Rspec&lt;/span&gt;
+Finished in 0.05074 seconds
+4 examples, 0 failures
+
+&lt;span class=&quot;c&quot;&gt;# Cucumber&lt;/span&gt;
+3 scenarios &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+10 steps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+0m0.379s
+
+&lt;span class=&quot;c&quot;&gt;# Time&lt;/span&gt;
+real    0m13.354s
+user    0m10.120s
+sys 0m1.546s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;jRuby&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# RSpec&lt;/span&gt;
+Finished in 0.186 seconds
+4 examples, 0 failures
+
+&lt;span class=&quot;c&quot;&gt;# Cucumber&lt;/span&gt;
+3 scenarios &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+10 steps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+0m2.141s
+
+&lt;span class=&quot;c&quot;&gt;# Time&lt;/span&gt;
+real    1m3.823s
+user    2m9.875s
+sys 0m7.005s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Rubinus&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# RSpec&lt;/span&gt;
+Finished in 0.27061 seconds
+4 examples, 0 failures
+
+&lt;span class=&quot;c&quot;&gt;# Cucumber&lt;/span&gt;
+3 scenarios &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+10 steps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+0m2.011s
+
+&lt;span class=&quot;c&quot;&gt;# Time&lt;/span&gt;
+real    0m47.328s
+user    1m1.049s
+sys 0m2.938s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;REE&lt;/h2&gt;
+
+&lt;p&gt;Note that I used the following environment variables for this one:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;RUBY_GC_MALLOC_LIMIT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;50000000&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_MIN_SLOTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;500000&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_SLOTS_GROWTH_FACTOR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;RUBY_HEAP_SLOTS_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;250000&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;To understand how this affects its performance, check out &lt;a href=&quot;http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html&quot;&gt;this post&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# RSpec&lt;/span&gt;
+Finished in 0.05163 seconds
+4 examples, 0 failures
+
+&lt;span class=&quot;c&quot;&gt;# Cucumber&lt;/span&gt;
+3 scenarios &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+10 steps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10 passed&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+0m0.277s
+
+&lt;span class=&quot;c&quot;&gt;# Time&lt;/span&gt;
+real    0m10.769s
+user    0m7.519s
+sys 0m2.106s
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It looks like there's huge speed improvements from 1.9.2 to 1.9.3. It took
+24 seconds on 1.9.2 and 12 on 1.9.3, that's a lot of speed boost!&lt;/p&gt;
+
+&lt;p&gt;JRuby, at 1 minute where the other rubies took seconds is light years
+behind them, though, I might be doing something wrong. I really have no practical
+experience with it and I just benchmarked it out of the box.&lt;/p&gt;
+
+&lt;p&gt;Rubinus felt kind of slow too, but, I consider it to be
+work in progress, or at least haven't heard of production apps running
+on it yet, which doesn't necesarily mean there aren't any. I'd actually
+love to use it on production for a few weeks when we launch this app
+just to see how it behaves in real life.&lt;/p&gt;
+
+&lt;p&gt;And last but not least, a properly configured REE kicks butt. No surprise there, we've been using it
+on another app on production for a year now with good performance and no
+problems at all so far.&lt;/p&gt;
+
+&lt;p&gt;So, there it is. I realize it is a small benchmark, but perhaps I can
+revisit it when we have more specs and more features to see if that
+changes how the rubies behave.&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Auto Retry Failed Cucumber Tests</title>
    <link href="http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests.html"/>
-   <updated>2011-08-22T00:00:00-05:00</updated>
+   <updated>2011-08-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests</id>
    <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;If you're tired of having to re-kick builds in your CI server because of non deterministic failures,
@@ -138,7 +304,7 @@ super sophisticated task runner:&lt;/p&gt;
  <entry>
    <title>How to install Postgresql 8.4 in a Vagrant box</title>
    <link href="http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant.html"/>
-   <updated>2011-08-11T00:00:00-05:00</updated>
+   <updated>2011-08-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;If you don't know what Vagrant is, go read our &lt;a href=&quot;http://blog.crowdint.com/2011/06/21/vagrant.html&quot;&gt;first post about it&lt;/a&gt;&lt;/p&gt;
@@ -332,7 +498,7 @@ avoiding all this s**t... And it shall be called, &lt;code&gt;The Easy Way&lt;/c
  <entry>
    <title>Acceptance testing with Steak</title>
    <link href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html"/>
-   <updated>2011-07-06T00:00:00-05:00</updated>
+   <updated>2011-07-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;Acceptance testing is a technique that helps determine if the requirements of
@@ -477,7 +643,7 @@ the repeated steps you take in all of your tests.&lt;/p&gt;
  <entry>
    <title>Rails 3.1, Compass and Blueprint</title>
    <link href="http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint.html"/>
-   <updated>2011-06-27T00:00:00-05:00</updated>
+   <updated>2011-06-27T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;So, we all know that Rails 3.1 comes with a Sass compiler. But still,
@@ -541,7 +707,7 @@ on your Rails 3.1 stylesheets.&lt;/p&gt;
  <entry>
    <title>Vagrant to manage multiple dev environments</title>
    <link href="http://blog.crowdint.com/2011/06/21/vagrant.html"/>
-   <updated>2011-06-21T00:00:00-05:00</updated>
+   <updated>2011-06-21T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/21/vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
@@ -653,7 +819,7 @@ do some apt-get install, configure your settings.&lt;/p&gt;
  <entry>
    <title>Add Validations to your Ruby classes</title>
    <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
-   <updated>2011-06-13T00:00:00-05:00</updated>
+   <updated>2011-06-13T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Validations are one of the most useful things in ActiveRecord.
@@ -709,7 +875,7 @@ the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#va
  <entry>
    <title>Railsconf 2011</title>
    <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
-   <updated>2011-05-24T00:00:00-05:00</updated>
+   <updated>2011-05-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
@@ -759,7 +925,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
  <entry>
    <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-05:00</updated>
+   <updated>2011-05-02T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
    <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
    <content type="html">&lt;p&gt;While working on a project, we were required to override the
@@ -814,7 +980,7 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
  <entry>
    <title>One File Web Page with Rack</title>
    <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-05:00</updated>
+   <updated>2011-04-25T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
@@ -910,7 +1076,7 @@ by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;
  <entry>
    <title>Turn jQuery effects off for testing</title>
    <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
-   <updated>2011-04-13T00:00:00-05:00</updated>
+   <updated>2011-04-13T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
@@ -988,7 +1154,7 @@ how to disable jQuery effects off.&lt;/p&gt;
  <entry>
    <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
    <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-05:00</updated>
+   <updated>2011-04-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
@@ -1107,7 +1273,7 @@ to use Haml and Compass.&lt;/p&gt;
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
    <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
-   <updated>2011-03-31T00:00:00-06:00</updated>
+   <updated>2011-03-31T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
@@ -1322,7 +1488,7 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
  <entry>
    <title>How to write good CSS</title>
    <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
-   <updated>2011-03-24T00:00:00-06:00</updated>
+   <updated>2011-03-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
@@ -1565,7 +1731,7 @@ site will be grateful about this.&lt;/p&gt;
  <entry>
    <title>What is Sinatra?</title>
    <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
-   <updated>2011-03-18T00:00:00-06:00</updated>
+   <updated>2011-03-18T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
@@ -1648,150 +1814,6 @@ get your app running after 1 minute.&lt;/p&gt;
    <author>
      <name>Mario Zaizar</name>
      <email>mario@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Sinatra, the green way</title>
-   <link href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html"/>
-   <updated>2011-03-14T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way</id>
-   <photo>433031df4018635dfb177f4066c37a3b</photo>
-   <content type="html">&lt;p&gt;Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.&lt;/p&gt;
-
-&lt;p&gt;On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests.
-Together they are a quick and efficient way to create web applications.&lt;/p&gt;
-
-&lt;p&gt;In this post we'll create our first Sinatra application using 'outside-in' development with
-Cucumber or how I like to call it, &lt;em&gt;the green way&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h2&gt;First Sinatra application.&lt;/h2&gt;
-
-&lt;p&gt;First of all, we need to create our basic environment. Personally, I like to use a gemset per project.&lt;/p&gt;
-
-&lt;p&gt;Then we need to create our application's directory. Let’s call it ‘greenway’. Inside the ‘greenway’ directory,
-call bundle init (assuming you already installed bundler) and then edit the Gemfile so that it looks
-like the example below:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://rubygems.org&amp;#39;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-sinatra&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;blockquote&gt;&lt;p&gt;With rvm you can use diferents rubies and gemsets for each project. If you don't know rvm. What are you waiting for?
-go to &lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;.
-For more info on gemsets and RVM check out these posts: &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;getting started with rvm&lt;/a&gt; &lt;a href=&quot;http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html&quot;&gt;Use a project specific Ruby version&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;Now we can install our gems, with this command&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;bundle install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;If you haven’t installed Bundler, you can do so with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install bundler
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now we need to create our Sinatra application, set the configuration for Cucumber, define the web steps and so on.
-To start we have to install the cucumber-sinatra gem, it does most of the configuration work for us.
-For more info visit &lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;cucumber-sinatra&lt;/a&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber-sinatra init --app Hello src/hello.rb
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Writing tests&lt;/h3&gt;
-
-&lt;p&gt;Now we can write our cucumber test... yes, I said test.&lt;/p&gt;
-
-&lt;p&gt;Inside the features directory create a new file called hello.feature.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;no&quot;&gt;Feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Cucumber&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;web&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;
-          &lt;span class=&quot;no&quot;&gt;In&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Order&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;verify&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;works&lt;/span&gt;
-          &lt;span class=&quot;no&quot;&gt;As&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;developer&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;want&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
-
-          &lt;span class=&quot;no&quot;&gt;Scenario&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;View&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
-            &lt;span class=&quot;no&quot;&gt;Given&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;am&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;
-            &lt;span class=&quot;no&quot;&gt;Then&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;should&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;see&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
-    
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Then run the test:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_red_tests.jpg&quot; alt=&quot;Red tests&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And... it Fails! But don’t worry, that was expected. Now we are ready to write the code we need to make that test pass.&lt;/p&gt;
-
-&lt;h3&gt;Writing Code&lt;/h3&gt;
-
-&lt;p&gt;This is the moment to write the code to pass the test. Open the file src/hello.rb and edit it to look like the following:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;        &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra/base&amp;#39;&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&amp;quot;It&amp;#39;s alive!&amp;quot;&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And now, run the test again&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cucumber feature/hello.feature
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;&lt;img src=&quot;/images/sinatra_green_way/sinatra_green_tests.jpg&quot; alt=&quot;Green tests&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now we're green. If you want to see your web application, you can do it with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rackup -p 4567
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And you just have to go to &quot;localhost:4567/&quot; in your browser&lt;/p&gt;
-
-&lt;p&gt;Congrats for your first &quot;green way&quot; Sinatra application! To celebrate, I’ll leave you with &lt;a href=&quot;http://www.youtube.com/watch?v=Aht9hcDFyVw&quot;&gt;Frank&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://cukes.info/&quot;&gt;Cucumber&lt;/a&gt; Behavior Driven Development tool.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;Siantra&lt;/a&gt; a DSL for quickly creating web applications in Ruby.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/bernd/cucumber-sinatra&quot;&gt;Cucumber-Sinatra&lt;/a&gt; helpful gem to initialize a cucumber environment for a sinatra application.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://rvm.beginrescueend.com/&quot;&gt;RVM&lt;/a&gt; Command line tool to easily install, manage and work with multiple ruby environments.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://gembundler.com/&quot;&gt;Bundler&lt;/a&gt; a tool that manages gem dependencies for your ruby application.&lt;/p&gt;
-</content>
-   <author>
-     <name>Omar Vargas</name>
-     <email>omar@crowdint.com</email>
    </author>
  </entry>
  
