@@ -47,51 +47,9 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></h1>
+  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
   <p class="author">
-    <span class="date"><b>Apr 25</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>There are times when you need to quickly create small <strong>Ruby</strong> web applications. You can do that in many different ways like, creating a <strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p> <p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and allows you to have full control of the components that you employ to build it.</p> <p>In this article I'll show some examples about how to...
-           <div class = "continue_reading"><a href="/2011/04/25/one-file-web-page-with-rack.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/25/one-file-web-page-with-rack.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="One File Web Page with Rack" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Emmanuel Delgado:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 13</b><br />2011</span>
+    <span class="date"><b>Jul 11</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
@@ -101,22 +59,77 @@
     
     
       
-        
-           <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the TDD + BDD approach when coding new applications.</p> <p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use <a href="http://cukes.info">Cucumber</a> for BDD, although lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of Cucumber and so far I am loving it.</p> <p>When you are using Capybara + Selenium for testing with Cucumber or Steak, sometimes you can get an error when you...
-           <div class = "continue_reading"><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Continue reading...</a></div>
-        
+        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+
+<p>The basic steps we recommend are:</p>
+
+<h2>Let us know who you are</h2>
+
+<p>You can set up your email and name by using the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+</code></pre>
+</div>
+
+
+<h2>Reduce the risk factor</h2>
+
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+
+<p>So, we recommend our rookies to use the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
+</div>
+
+
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
+</div>
+
+
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
+
       
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     
     <p>     
       <div class="tweet left">
         <a href="http://twitter.com/share" 
           class="twitter-share-button" 
-          data-text="Turn jQuery effects off for testing" 
+          data-text="First Things First... Our initial git configuration" 
           data-count="none" 
           data-via="crowdint" 
           data-related="David Padilla:with">Tweet</a>
@@ -130,141 +143,15 @@
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 06</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Last week, I spent about half a day trying to get Sinatra working with Compass and Blueprint. At first, it was a pain in the ass because the documentation is pretty lame. But after some reading here and there and trying via command line, I failed again and again.</p> <p>But, don't despair, there is hope... I got it to work eventually and here is how I did it:</p> <p>First of...
-           <div class = "continue_reading"><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/06/sinatra-haml-compass-blueprint.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="How to Sinatra + Haml + Compass(SCSS) + Blueprint" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Hector Bustillos:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 31</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p><small><code>TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important. Add a disclaimer, pray for feedback. Make funny jokes, like "Why does this guy wears a Mexican hat?"</code></small></p> <p>No RESTful knowledge at all? <a href="http://www.b-simple.de/documents">read this!</a></p> <h3>REST URLs should be multi-response</h3> <p>In rails we can use <a href="http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/"><code>respond_to(format)</code></a> to switch between different layouts, and partials. So,...
-            <div class = "continue_reading"><a href="/2011/03/31/make-your-sinatra-more-restful.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/31/make-your-sinatra-more-restful.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Trying to make your Sinatra more RESTful?" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Mario Zaizar:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>After a while of working with CSS, in different projects and with different people, I have realized that there is a lack of standards for it. Like, when you have to make some corrections or improvements and open the CSS file and you get a thousand lines of code with no comments at all.</p> <p>Well, I have a couple Ideas of...
-            <div class = "continue_reading"><a href="/2011/03/24/how-to-write-good-css.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/24/how-to-write-good-css.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="How to write good CSS" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Hector Bustillos:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
-      <a href="/page2" class="previous">Previous</a>
+      <a href="/page11" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 3 of 12</span>
+  <span class="page_number ">Page: 12 of 12</span>
   
-    <a href="/page4" class="next ">Next</a>
+    <span class="next ">Next</span>
   
 </div>
 

@@ -4,9 +4,155 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-09-05T09:04:03-07:00</updated>
+ <updated>2011-09-27T11:24:28-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Better SEO with Rich Snippets for eCommerce</title>
+   <link href="http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html"/>
+   <updated>2011-09-27T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce</id>
+   <photo>3902dd38c6f69b1865c5b20e168e827a</photo>
+   <content type="html">&lt;p&gt;While Rich Snippets started indexing by Google two years ago it’s still rarely
+used on small and medium size websites. Big players on market such as Amazon,
+Hotels.com, eBay are using it successfully and getting more benefits in SEO.
+So, why don’t utilize it?&lt;/p&gt;
+
+&lt;h2&gt;What are Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Rich Snippets allows search engines to collect more Meta information about
+pages and its contents. The more information Google can collect about your
+website the more relevant results users get, and thus you have better targeting on web.&lt;/p&gt;
+
+&lt;h2&gt;What you can do with Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Today Rich Snippets allow describing entities of several types:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Organizations&lt;/li&gt;
+&lt;li&gt;People&lt;/li&gt;
+&lt;li&gt;Products and offers&lt;/li&gt;
+&lt;li&gt;Reviews&lt;/li&gt;
+&lt;li&gt;Events&lt;/li&gt;
+&lt;li&gt;Breadcrumbs&lt;/li&gt;
+&lt;li&gt;Videos&lt;/li&gt;
+&lt;li&gt;and Recipes&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;In eCommerce we’re mostly interested in describing organizations, products,
+reviews and breadcrumbs. Other types we use in particular cases.&lt;/p&gt;
+
+&lt;h2&gt;Describe online store&lt;/h2&gt;
+
+&lt;p&gt;In practice it makes sense to implement it on About or Contact page.
+With Rich Snippets for Organizations you can specify following Meta info:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Name of your business&lt;/li&gt;
+&lt;li&gt;Link to organization home page&lt;/li&gt;
+&lt;li&gt;Location of the business&lt;/li&gt;
+&lt;li&gt;Telephone numbers&lt;/li&gt;
+&lt;li&gt;Geographical coordinates of its location&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;With this structured information Google understands your website more accurately.
+Additionally you might get benefits in local search as Google adds your business
+to Google Places service.&lt;/p&gt;
+
+&lt;h2&gt;Describe your products&lt;/h2&gt;
+
+&lt;p&gt;Benefits of implementing Rich Snippets to describe products are evident. Take a
+look at picture below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2011/09/27/search_results.png&quot; alt=&quot;Search Results&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The website on top &lt;a href=&quot;www.pandoramoa.com&quot;&gt;www.pandoramoa.com&lt;/a&gt; describes products
+in proper format. Because of that Google knows and provides not only relevant page
+to users search query, but also shows relevant image and list of similar products
+with links to them. Such huge snippet in SERPs grabs more attention and makes
+it more likely to click on it.
+It supports following Meta info:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The name of the product&lt;/li&gt;
+&lt;li&gt;Product image&lt;/li&gt;
+&lt;li&gt;Product description&lt;/li&gt;
+&lt;li&gt;Brand of the product&lt;/li&gt;
+&lt;li&gt;Product review&lt;/li&gt;
+&lt;li&gt;Product ID (sku, asin, upc, isbn or mpn)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Format customer reviews&lt;/h2&gt;
+
+&lt;p&gt;Customer reviews is a common tool in eCommerce which is used almost on every
+online store. Once you give it a proper shape according Rich Snippets requirements
+you get additional weight on search results. See how stars grab attention..&lt;/p&gt;
+
+&lt;p&gt;To enable Rich Snippet reviews on your page you need to specify following attributes:
+* Item being reviewed
+* Numerical quality rating for the item
+* The author of the review
+* The date that the item was reviewed
+* Review body
+* Short summary of the review&lt;/p&gt;
+
+&lt;h2&gt;Beautify breadcrumbs&lt;/h2&gt;
+
+&lt;p&gt;Instead of displaying long URL in SERPs (which often looks ugly and gives no
+real value to user) Google can show breadcrumbs if you create right markup for it.&lt;/p&gt;
+
+&lt;p&gt;Notice that each item in breadcrumbs is a link to specific page on your website.
+So, in practice you replace long, non-valuable and not clickable URL with
+structured chain of clickable links to your website.&lt;/p&gt;
+
+&lt;p&gt;To format breadcrumbs in this way you just need to specify following
+attributes for each item:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The title of a breadcrumb&lt;/li&gt;
+&lt;li&gt;The URL of a breadcrumb&lt;/li&gt;
+&lt;li&gt;The next breadcrumb in the hierarchy&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;How to markup Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Google supports three formats:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Microdata_(HTML5)&quot;&gt;Microdata (HTML5 specification)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://microformats.org/&quot;&gt;Microformats (simple conventions)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/RDFa&quot;&gt;RDFa (a way to label content)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;One step back&lt;/h2&gt;
+
+&lt;p&gt;While you have all these opportunities to increase evidence and weight in SERPs
+remember that Google doesn’t guarantee that it will be 100% used. In most cases
+it’s using, however consider it as an opportunity of SEO improvement.&lt;/p&gt;
+
+&lt;h2&gt;Links to check&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.google.com/support/webmasters/bin/topic.py?hl=en&amp;amp;topic=21997&quot;&gt;Rich Snippets documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.google.com/webmasters/tools/richsnippets&quot;&gt;Rich Snippets testing tool&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Your turn&lt;/h2&gt;
+
+&lt;p&gt;Tell u which types of Rich Snippets makes the most value for you?&lt;/p&gt;
+</content>
+   <author>
+     <name>Pavel Reva</name>
+     <email>pavel.reva@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Ruby benchmarks</title>
@@ -1725,95 +1871,6 @@ site will be grateful about this.&lt;/p&gt;
    <author>
      <name>Hector Bustillos</name>
      <email>hector.bustillos@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>What is Sinatra?</title>
-   <link href="http://blog.crowdint.com/2011/03/18/what-is-sinatra.html"/>
-   <updated>2011-03-18T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/03/18/what-is-sinatra</id>
-   <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
-   <content type="html">&lt;p&gt;In our &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;last post we talk about Sinatra framework&lt;/a&gt;; and Omar showed us how to build our
-first test-driven Sinatra app.
-Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
--- &lt;cite&gt;&lt;a href=&quot;http://twitter.com/mariozaizar&quot;&gt;Mario&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/what_is_sinatra/sinatra.png&quot; alt=&quot;Sinatra&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;So, you've heard about Sinatra, and you're excited.
-but what is it? and what it's for?
-Just read the answers.&lt;/p&gt;
-
-&lt;h2&gt;Sinatra is.&lt;/h2&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;A Ruby web framework.&lt;/em&gt; Use it to develop sites, web apps, services..&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Written in Ruby.&lt;/em&gt; And we all love Ruby, isn't?&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Very simple, but yet powerful.&lt;/em&gt; Like Frank, but ninja.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;A Domain Specific Language (DSL).&lt;/em&gt; Say no to Controllers, hi to Routes.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;RESTful&lt;/em&gt;. So it's based in URLs, and HTTP methods (get, post, put, delete, info)&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h3&gt;Advantages&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;It's simple&lt;/em&gt;, you only get what you need.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No obscure magic involved&lt;/em&gt;. You always knows where you are, what you got, how and why.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Better performance than Rails&lt;/em&gt;, less drama.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Gems still talks to you&lt;/em&gt;. You can use your favorite gems.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Talks templates&lt;/em&gt;. The views, supports all of them.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No big-fat app&lt;/em&gt;, Your app can be stored in just one file!&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h3&gt;Disadvantages&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;No Rails mystical magic&lt;/em&gt;, forget it.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;You only get the basics&lt;/em&gt;, sometimes that means write from scratch.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Not a MVC framework&lt;/em&gt;, No controller/action based.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Not as popular as Rails&lt;/em&gt;, remember, there is life beyond Rails.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;No builtin helpers&lt;/em&gt;, but you can use them, including filters, configs.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;Good for?&lt;/h2&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;API implementations, quick demos, minimal applications, widgets, mobile sites implementations,
-RESTul systems, service-based applications.
-You're  looking for &lt;em&gt;something more like Rails?&lt;/em&gt;, check
-this out: &lt;a href=&quot;http://www.padrinorb.com/&quot;&gt;The Padrino project&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;And, that's pretty much Sinatra. Now, you should start with &lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Omar's&lt;/a&gt; example, or read
-the &lt;a href=&quot;http://www.sinatrarb.com/intro.html&quot;&gt;README&lt;/a&gt; section on Sinatra's website, you should
-get your app running after 1 minute.&lt;/p&gt;
-
-&lt;h2&gt;&lt;a href=&quot;http://www.sinatrarb.com/&quot;&gt;www.sinatrarb.com&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;Thanks! and happy coding&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;h2&gt;References&lt;/h2&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.sinatrarb.com/documentation&quot;&gt;Sinatra documentation&lt;/a&gt; by Sinatra project&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Sinatra, the green way&lt;/a&gt; by Omar Vargas&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation&quot;&gt;Ruby frameworks&lt;/a&gt; by Craig Jolicoeur&lt;/li&gt;
-&lt;/ul&gt;
-
-</content>
-   <author>
-     <name>Mario Zaizar</name>
-     <email>mario@crowdint.com</email>
    </author>
  </entry>
  

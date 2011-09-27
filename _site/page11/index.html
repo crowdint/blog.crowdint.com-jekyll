@@ -47,6 +47,102 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 13</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>If you are stuck in your project using <a href="http://github.com/technoweenie/attachment_fu"><em><strong>attachment_fu</strong></em></a> and<br />
+<a href="http://github.com/rails/acts_as_list"><em><strong>acts_as_list</strong></em></a> plugins/gems in your project,<br />
+you might be facing a weird performance issue when dealing with images with thumbnails.</p>
+<p>Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:</p>
+<div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
+<span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
+<span class="k">LIMIT</span> <span class="mi">1</span>
+</code></pre>
+</div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
+<p>So, let&#8217;s assume the following models:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Image</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:article</span>
+  <span class="n">acts_as_list</span> <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="ss">:article</span>      <span class="c1">#acts_as_list declaration</span>
+
+  <span class="n">has_attachment</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="ss">:image</span><span class="p">,</span>   <span class="c1">#attachment_fu declaration</span>
+    <span class="ss">:storage</span> <span class="o">=&gt;</span> <span class="ss">:file_system</span><span class="p">,</span>
+    <span class="ss">:thumbnails</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="o">]</span><span class="p">,</span> <span class="ss">:tiny</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="o">]</span><span class="p">}</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.</p>
+<p>If you add an image attachment now&#8230; <strong>the slow query will be executed for each thumbnail</strong>. The reasons are:</p>
+<ol>
+	<li>The image file is uploaded to the server.</li>
+	<li>attachment_fu saves the image and creates a new Image row with article_id established.</li>
+	<li>acts_as_list assigns the position attribute to the parent image.</li>
+	<li>attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = <span class="caps">NULL</span></li>
+	<li>acts_as_list assigns the position attribute to images after the thumbnail created.</li>
+	<li>Repeat step #4 and #5 for each thumbnail to be created.</li>
+</ol>
+<p>The problem with this procedure, if you see the acts_as_list source code:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">scope_condition</span>
+  <span class="k">if</span> <span class="c1">#{configuration[:scope].to_s}.nil?</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> IS NULL&quot;</span>
+  <span class="k">else</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> = </span><span class="se">\#</span><span class="s2">{</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2">}&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>As we configured our Image model to use <code>acts_as_list :scope =&gt; :article!</code>, and in the thumbnails the article_id is <span class="caps">NULL</span>, the condition is generated as &#8220;<strong><span class="caps">WHERE</span> (article_id  IS <span class="caps">NULL</span>)</strong>&#8221;.</p>
+<p>To avoid this, you need to manually <strong>set the article_id value before the thumbnails are saved</strong>. This can be done using a <strong>callback in the Image model</strong> (as suggested in acts_as_list source code):</p>
+<div class="highlight"><pre><code class="ruby"><span class="c1">#Callback before a thumbnail is saved...</span>
+<span class="c1">#Assign the article_id to avoid a HUGE query with IS NULL clause</span>
+<span class="n">before_thumbnail_saved</span> <span class="k">do</span> <span class="o">|</span><span class="n">record</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">|</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
+  <span class="n">record</span><span class="o">.</span><span class="n">article_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">article_id</span> <span class="k">if</span> <span class="n">image</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>With this callback, after generating a thumbnail each image will have the <code>article_id</code> attribute filled. Thus in the Article model, the has_many relation is defined as:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
+</code></pre>
+</div><p>Now, <strong>only the article images will have thumbnail.nil</strong> and the thumbnails will be hidden in the image.thumbnails relation.</p>
+<h3>Conclusion</h3>
+<p>In our project, we <strong>expected a 570% <span class="caps">SQL</span> improvement</strong> when creating, modifying or deleting image attachments.</p>
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Improve performance between attachment_fu and acts_as_list" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Chalo Fernandez:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
   <p class="author">
     <span class="date"><b>Aug 06</b><br />2010</span>
@@ -688,118 +784,23 @@ or
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 11</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
-
-<p>The basic steps we recommend are:</p>
-
-<h2>Let us know who you are</h2>
-
-<p>You can set up your email and name by using the following command:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
-</code></pre>
-</div>
-
-
-<h2>Reduce the risk factor</h2>
-
-<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
-
-<p>So, we recommend our rookies to use the following command:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
-</code></pre>
-</div>
-
-
-<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
-
-<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
-</code></pre>
-</div>
-
-
-<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
-
-<h2>Add color to your life</h2>
-
-<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
-</code></pre>
-</div>
-
-
-<p>Hope this guide helps you in some way, cheers!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="First Things First... Our initial git configuration" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
       <a href="/page10" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 11 of 11</span>
+  <span class="page_number ">Page: 11 of 12</span>
   
-    <span class="next ">Next</span>
+    <a href="/page12" class="next ">Next</a>
   
 </div>
 
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>27 Sep 2011</b></span> &raquo; <a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
@@ -838,8 +839,6 @@ or
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
   </ul>
 </div>
