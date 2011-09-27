@@ -3,3 +3,5 @@
 .rvmrc
 **.orig
 **.swp
+.vagrant
+cookbooks

@@ -1,6 +1,6 @@
 markdown: rdiscount
 pygments: true
 lsi: true
-exclude: ['README.markdown', 'README_FOR_COLLABORATORS.markdown', 'Gemfile.lock', 'Gemfile']
+exclude: ['README.markdown', 'README_FOR_COLLABORATORS.markdown', 'Gemfile.lock', 'Gemfile', 'Vagrantfile']
 production: true
 paginate: 5
