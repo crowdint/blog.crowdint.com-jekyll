@@ -47,6 +47,55 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 07</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
+
+<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
+
+<div style="text-align:center">
+  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
+</div>
+
+
+<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Magma Rails is just around the corner!" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/09/28/negative-code.html">Negative Code</a></h1>
   <p class="author">
     <span class="date"><b>Sep 28</b><br />2010</span>
@@ -607,114 +656,13 @@ error  myhelper <span class="o">[</span>not found<span class="o">]</span>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 06</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
-
-<h2>Setting up the class</h2>
-
-<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
-</code></pre>
-</div>
-
-
-<p>The class' attributes will be available as a hash:</p>
-
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;app_name&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;My application name&quot;</span>
-
-AppConfig<span class="o">[</span><span class="s1">&#39;base_domain&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;myapp.com&quot;</span>
-</code></pre>
-</div>
-
-
-<p>You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
-<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-
-<span class="n">development</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-</code></pre>
-</div>
-
-
-<p>Now your class has some hashes values like this:</p>
-
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app key&quot;</span>
-
-AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s1">&#39;twitter_prod_secret&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app secret&quot;</span>
-</code></pre>
-</div>
-
-
-<h2>Enjoy!</h2>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="A simple way to setup a class for global values" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
       <a href="/page8" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 9 of 11</span>
+  <span class="page_number ">Page: 9 of 12</span>
   
     <a href="/page10" class="next ">Next</a>
   
@@ -723,6 +671,8 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>30 Sep 2011</b></span> &raquo; <a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
@@ -761,8 +711,6 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
   </ul>
 </div>

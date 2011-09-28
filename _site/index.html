@@ -47,6 +47,205 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></h1>
+  <p class="author">
+    <span class="date"><b>Sep 30</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/6be5df410f2695b1341f0c359bc9b461" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      <p>While working with ruby, you have some alternatives to manage your binaries,
+but as you think of them, I hope you are not really considering delegating this
+task directly to your OS package manager since it is discouraged, otherwise you
+would end up with a messy workstation.</p>
+
+<p>There are a few tools that allow you to manage your rubies and gems, the most
+popular among them is without doubts <a href="http://beginrescueend.com/">RVM</a>
+(Ruby Version Manager) which in all fairness is good, it provides a CLI to
+switch between your rubies and gemsets. If you haven't used RVM, you should
+read <a href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html">this</a>.</p>
+
+<p>Even when RVM is great there are a couple things that I don't like about it:</p>
+
+<ul>
+<li><p>Personally, I had a painful situation as Linux user, every time I wanted to
+get a fresh ruby version with support for readline and zlib libraries and its
+dependencies.</p></li>
+<li><p>Its gemset management feature tends duplicate gems across your projects. I
+get it, sometimes you need to isolate your gems to keep them compatible. But
+there is another player in the field, called bundler. (mention down below)</p></li>
+<li><p>Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
+folder.</p></li>
+</ul>
+
+
+<p>A couple days ago, I was struggling tracking down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset for a fresh
+started when someone adviced me to check out rbenv.</p>
+
+<h2>The rbenv way</h2>
+
+<p>A highlight in favor of rbenv is that you don't actually need to worry about
+maintaing your gemsets, since it relays on <a href="http://gembundler.com/">bundler</a>
+who takes care of all your application dependencies. Letting you care about
+just the version of the ruby you want to use globally, locally and in a per
+project basis. Let's check out <a href="http://gituhub.com/ssthepenson/rbenv">rbenv</a>.</p>
+
+<p><em>RVM and rbenv aren't friends :(</em></p>
+
+<p>First of all, you better avoid using both in the same environment because they
+are incompatible. Don't say I didn't warn you.</p>
+
+<h2>Installation</h2>
+
+<h3>1. Get rid of RVM by running:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm implode
+</code></pre>
+</div>
+
+
+<h3>2. To install rbenv, must be at ~ and clone it:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+</code></pre>
+</div>
+
+
+<h3>3. Add scope for rbenv binaries to your $PATH</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;&#39;</span> &gt;&gt; .bash_profile
+<span class="c"># be sure of do this to your bash source file (e.g. .bashrc, .profile)</span>
+</code></pre>
+</div>
+
+
+<h3>4. Setup bash autocompletion:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;eval &quot;$(rbenv init -)&quot;&#39;</span> &gt;&gt; .bash_profile
+</code></pre>
+</div>
+
+
+<h3>5. Restart your shell.</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">exec</span>
+</code></pre>
+</div>
+
+
+<p>There are two ways of installing rubies with rbenv. From source and <em>make it</em>
+into "~/.rbenv/versions/&lt;x.x.x-pxxx>" or the one I prefer using <em>ruby-build</em></p>
+
+<h3>6. Install ruby-build</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/ruby-build.git ~/.ruby-build
+<span class="nv">$ </span><span class="nb">cd</span> ~/.ruby-build
+<span class="nv">$ </span>./install.sh
+<span class="c"># you may need to run with sudo, since it installs a binary in /usr/local/bin</span>
+</code></pre>
+</div>
+
+
+<h3>7. Install a ruby</h3>
+
+<p>Now, we are ready to install a ruby.</p>
+
+<p><em>Note:</em> After a couple times trying to get a ruby with readline support
+for my <em>irb</em>, I googled and found a way.</p>
+
+<p><em>For Ubuntu</em> I used my readline path:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&quot;--with-readline-dir=/usr/include/readline&quot;</span> rbenv
+install 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p>And there we go, we give it some time, get a coffee or play a ping pong
+match. Once it rbenv finishes, and every time after installing a ruby
+you need to run:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv rehash
+</code></pre>
+</div>
+
+
+<p>I have to mention, that it seems tricky, but you can set an alias in
+your <code>~/.bash_profile</code> or export an environment variable.</p>
+
+<h2>Usage</h2>
+
+<p>Let's suposse you've got some more rubies, now, how do we specify the
+version of ruby we want to use:</p>
+
+<p><em>To setup a global ruby you do something like:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv global 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p><em>To setup a local (per-project) ruby you do:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv <span class="nb">local </span>1.9.2-p290
+<span class="c"># this creates a rbenv-version file in the current folder</span>
+</code></pre>
+</div>
+
+
+<p><em>What version of ruby am I using?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv version
+</code></pre>
+</div>
+
+
+<p><em>What versions of ruby do I have?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv versions
+</code></pre>
+</div>
+
+
+<h2>Conclusions</h2>
+
+<p>There are a couple things that remain unexplored, but for now this is a getting
+started. In case you miss the gemset, <a href="http://github.com/jamis/rbenv-gemset">this</a>
+is something you might want to look at.</p>
+
+<p>So, give it a try, you might like it. For now I'm happy with my fresh
+rbenv install.</p>
+
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Using rbenv to manage your rubies" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Ignacio Galindo:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Ignacio Galindo | ignacio.galindo@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></h1>
   <p class="author">
     <span class="date"><b>Sep 05</b><br />2011</span>
@@ -58,160 +257,12 @@
     
     
     
-      <p>I recently started a new client project. Lucky me, <a href="http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released">Rails 3.1 has just
-been released</a>
-so, it means I'll get to learn a bunch of things while
-building it, you know, the fancy <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a>
-stuff everyone's talking about and so on.</p>
-
-<p>I wrote a couple of rspec specs and cucumber features, made them pass, and
-while I was about to start new features, decided to stop to check the
-current state of all the different rubies to try them and pick the
-faster one, at least for development.</p>
-
-<p>Well, I was already using <em>MRI 1.9.2</em>, so, for research purposes
-I proceeded to install <em>MRI 1.9.3-preview</em>, <em>Rubinus 1.2.5dev</em>, <em>REE-1.8.7</em> and
-<em>jRuby 1.6.3</em>. (Thank you <a href="http://beginrescueend.com/">RVM</a> for making this as
-easy as possible).</p>
-
-<p>Now, so far, my app has 4 rspec specs and 3 cucumber scenarios, but
-even so, I came up with interesting time results.</p>
-
-<p>Below the results of running <em>time rake</em> for each
-implementation.</p>
-
-<h2>MRI 1.9.2</h2>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># Rspec</span>
-Finished in 0.13588 seconds
-4 examples, 0 failures
-
-<span class="c"># Cucumber</span>
-3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
-10 steps <span class="o">(</span>10 passed<span class="o">)</span>
-0m0.756s
-
-<span class="c"># Time</span>
-real    0m24.259s
-user    0m20.752s
-sys 0m2.530s
-</code></pre>
-</div>
-
-
-<h2>MRI 1.9.3-preview</h2>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># Rspec</span>
-Finished in 0.05074 seconds
-4 examples, 0 failures
-
-<span class="c"># Cucumber</span>
-3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
-10 steps <span class="o">(</span>10 passed<span class="o">)</span>
-0m0.379s
-
-<span class="c"># Time</span>
-real    0m13.354s
-user    0m10.120s
-sys 0m1.546s
-</code></pre>
-</div>
-
-
-<h2>jRuby</h2>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
-Finished in 0.186 seconds
-4 examples, 0 failures
-
-<span class="c"># Cucumber</span>
-3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
-10 steps <span class="o">(</span>10 passed<span class="o">)</span>
-0m2.141s
-
-<span class="c"># Time</span>
-real    1m3.823s
-user    2m9.875s
-sys 0m7.005s
-</code></pre>
-</div>
-
-
-<h2>Rubinus</h2>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
-Finished in 0.27061 seconds
-4 examples, 0 failures
-
-<span class="c"># Cucumber</span>
-3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
-10 steps <span class="o">(</span>10 passed<span class="o">)</span>
-0m2.011s
-
-<span class="c"># Time</span>
-real    0m47.328s
-user    1m1.049s
-sys 0m2.938s
-</code></pre>
-</div>
-
-
-<h2>REE</h2>
-
-<p>Note that I used the following environment variables for this one:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span><span class="s2">&quot;50000000&quot;</span>
-<span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span><span class="s2">&quot;500000&quot;</span>
-<span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
-<span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span><span class="s2">&quot;250000&quot;</span>
-</code></pre>
-</div>
-
-
-<p>To understand how this affects its performance, check out <a href="http://blog.crowdint.com/2010/12/07/improving-your-dev-life-with-ree.html">this post</a></p>
-
-<div class="highlight"><pre><code class="bash"><span class="c"># RSpec</span>
-Finished in 0.05163 seconds
-4 examples, 0 failures
-
-<span class="c"># Cucumber</span>
-3 scenarios <span class="o">(</span>3 passed<span class="o">)</span>
-10 steps <span class="o">(</span>10 passed<span class="o">)</span>
-0m0.277s
-
-<span class="c"># Time</span>
-real    0m10.769s
-user    0m7.519s
-sys 0m2.106s
-</code></pre>
-</div>
-
-
-<h2>Conclusion</h2>
-
-<p>It looks like there's huge speed improvements from 1.9.2 to 1.9.3. It took
-24 seconds on 1.9.2 and 12 on 1.9.3, that's a lot of speed boost!</p>
-
-<p>JRuby, at 1 minute where the other rubies took seconds is light years
-behind them, though, I might be doing something wrong. I really have no practical
-experience with it and I just benchmarked it out of the box.</p>
-
-<p>Rubinus felt kind of slow too, but, I consider it to be
-work in progress, or at least haven't heard of production apps running
-on it yet, which doesn't necesarily mean there aren't any. I'd actually
-love to use it on production for a few weeks when we launch this app
-just to see how it behaves in real life.</p>
-
-<p>And last but not least, a properly configured REE kicks butt. No surprise there, we've been using it
-on another app on production for a year now with good performance and no
-problems at all so far.</p>
-
-<p>So, there it is. I realize it is a small benchmark, but perhaps I can
-revisit it when we have more specs and more features to see if that
-changes how the rubies behave.</p>
-
-<p>Cheers!</p>
-
+      
+        
+           <p>I recently started a new client project. Lucky me, <a href="http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released">Rails 3.1 has just been released</a> so, it means I'll get to learn a bunch of things while building it, you know, the fancy <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a> stuff everyone's talking about and so on.</p> <p>I wrote a couple of rspec specs and cucumber features, made them pass, and while I was about to start new features, decided to stop to...
+           <div class = "continue_reading"><a href="/2011/09/05/ruby-benchmarks.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
@@ -362,53 +413,11 @@ changes how the rubies behave.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint</a></h1>
-  <p class="author">
-    <span class="date"><b>Jun 27</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>So, we all know that Rails 3.1 comes with a Sass compiler. But still, there are a few of us that used <a href="http://compass-style.org/">compass</a> on most of our pre 3.1 projects not just because of the sass, but because of the <a href="http://www.blueprintcss.org/">blueprint</a> integration.</p> <p>Well, it's very easy to use Compass with Rails 3.1 and get all those Blueprint mixins for your stylesheets.</p> <p>All you have to do is, add...
-           <div class = "continue_reading"><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Rails 3.1, Compass and Blueprint" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
   
-  <span class="page_number ">Page: 1 of 11</span>
+  <span class="page_number ">Page: 1 of 12</span>
   
     <a href="/page2" class="next ">Next</a>
   
@@ -417,6 +426,8 @@ changes how the rubies behave.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>30 Sep 2011</b></span> &raquo; <a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
@@ -455,8 +466,6 @@ changes how the rubies behave.</p>
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
   </ul>
 </div>

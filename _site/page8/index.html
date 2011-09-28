@@ -47,6 +47,285 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 05</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>When Rails 3 was released I was expecting several changes, most of them had me excited. I was aware Rails 3 would be even more reliable and tied to it's main concept "Convention over configuration". What can I say? I'm believer!</p>
+
+<p>Well, I'm impressed the most with the new even DRYer way Rails works with Controllers. Let me explain why.</p>
+
+<p>Imagine you are creating a basic RESTFUL controller, you could start with:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+
+  def index
+    @variants <span class="o">=</span> Variant.all
+  end
+  
+  def new
+    @variant <span class="o">=</span> Variant.new
+  end
+  
+  def create
+    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+    <span class="k">if</span> @variant.save
+      flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Fortunately it was saved!&quot;</span>
+      redirect_to variant_path
+    <span class="k">else</span>
+<span class="k">      </span>render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span>
+    end
+  end
+  .
+  .
+  .
+</code></pre>
+</div>
+
+
+<p>Once you are finished, you will have the seven necessary actions (index, new, create, show, edit, update and destroy). Now imagine you have to respond to different MIME requests, like xml, json, html. So, in your controller you may have something like this:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+
+  def index
+    @users <span class="o">=</span> User.all
+    respond_to <span class="k">do</span> |format|
+      format.html
+      format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
+    end
+  end
+  .
+  .
+  .
+
+  def create
+    @variant <span class="o">=</span> Variant.new<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+    respond_to <span class="k">do</span> |format|
+      <span class="k">if</span> @user.save
+        flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span>
+        format.html <span class="o">{</span> redirect_to variant_path<span class="o">)</span> <span class="o">}</span>
+        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @varian, :status <span class="o">=</span>&gt; :created, :location <span class="o">=</span>&gt; @variant <span class="o">}</span>
+      <span class="k">else</span>
+<span class="k">        </span>format.html <span class="o">{</span> render :action <span class="o">=</span>&gt; <span class="s2">&quot;new&quot;</span> <span class="o">}</span>
+        format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @variant.errors, :status <span class="o">=</span>&gt; :unprocessable_entity <span class="o">}</span>
+      end
+    end
+  end
+  .
+  .
+  .
+</code></pre>
+</div>
+
+
+<p>Now our controller looks a bit overweight. So, how could we solve this predicament? We need to respond to different mime requests, but at the same time we want our controllers thin. Ok, it's time for respond_with to come to the rescue.</p>
+
+<p>First, we have to define which MIME responses our controller has to respond to. In this case, they are html and xml, so we have to define:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+  respond_to :html, :xml
+  .
+  .
+  .
+  
+</code></pre>
+</div>
+
+
+<p>Then, we will use respond_with to set the response, like follows:</p>
+
+<div class="highlight"><pre><code class="bash">def index
+  respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
+end
+
+def new
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
+end
+
+def create
+  @variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>
+  flash<span class="o">[</span>:notice<span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Fortunately it was saved!&#39;</span> <span class="k">if</span> @user.save
+  respond_with<span class="o">(</span>@variant<span class="o">)</span>
+end
+.
+.
+.
+</code></pre>
+</div>
+
+
+<h2>So, when do I need to use respond_with?</h2>
+
+<p>You need to use it when:</p>
+
+<ul>
+<li>You want your controllers to be as DRY as possible. Avoiding rewrite as much code as possible. Using the principle convention over configuration, you could simplify your controllers, and make them easy to maintain and read for others (and you as well).</li>
+<li>When you have to respond to many different MIME requests. You can even customize your response_with. For example, you could add the same destination path to your responses adding :location as param:</li>
+</ul>
+
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">])</span>, :location <span class="o">=</span>&gt; variants_path<span class="o">)</span>
+end
+</code></pre>
+</div>
+
+
+<p>or, you could specify different actions for each response:</p>
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span> <span class="k">do</span> |format|
+    format.html
+    format.xml <span class="o">{</span> render :xml <span class="o">=</span>&gt; @users <span class="o">}</span>
+  end
+end
+</code></pre>
+</div>
+
+
+<p>If things get complicated when customizing a respond_with statement, I'd recommend that you stop customizing it and go back to the old configuration.</p>
+
+<p>Other tool that plays very well with this new controllers feature is <a href="http://github.com/plataformatec/responders">responders</a>. Once you are using respond_with you might still be using manual flash (notice, alert) messages. But, with the responders gem you will use automatic response messages configured trough i18n. When you install this gem you will customize your flash messages using your local yml. All you have to do is install the gem:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install responders
+
+or, in your Gemfile
+
+gem <span class="s1">&#39;responders&#39;</span>
+</code></pre>
+</div>
+
+
+<p>and then, configure it through the appropriate generator:</p>
+
+<div class="highlight"><pre><code class="bash">rails generate responders:install
+</code></pre>
+</div>
+
+
+<p>You will see these changes:</p>
+
+<div class="highlight"><pre><code class="bash">create  lib/application_responder.rb
+prepend  app/controllers/application_controller.rb
+inject  app/controllers/application_controller.rb
+create  config/locales/responders.en.yml
+</code></pre>
+</div>
+
+
+<p>what we will use is the last file "responders.en.yml", this file contains the messages for each action of the responders, and it looks like this:</p>
+
+<div class="highlight"><pre><code class="bash">en:
+  flash:
+    actions:
+      create:
+        notice: <span class="s1">&#39;%{resource_name} was successfully created.&#39;</span>
+      update:
+        notice: <span class="s1">&#39;%{resource_name} was successfully updated.&#39;</span>
+      destroy:
+        notice: <span class="s1">&#39;%{resource_name} was successfully destroyed.&#39;</span>
+        alert: <span class="s1">&#39;%{resource_name} could not be destroyed.&#39;</span>
+</code></pre>
+</div>
+
+
+<p>You can manipulate this yml, following the i18n conventions, configuring notice messages or alert, or configure personalized messages for each resource, etc.</p>
+
+<p>Ok, so, back to the controller, yo could define the create action as follows:</p>
+
+<div class="highlight"><pre><code class="bash">def create
+  respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+end
+</code></pre>
+</div>
+
+
+<p>And this way you get everything, including the flash notice.</p>
+
+<p>So, in the end, this could be your complete RESTFUL controller:</p>
+
+<div class="highlight"><pre><code class="bash">class VariantsController &lt; ApplicationController
+  respond_to :html
+
+  def index
+    respond_with<span class="o">(</span>@variants <span class="o">=</span> Variant.all<span class="o">)</span>
+  end
+
+  def new
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.new<span class="o">)</span>
+  end
+
+  def create
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.create<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+  end
+
+  def edit
+    respond_with<span class="o">(</span>@variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">]))</span>
+  end
+
+  def update
+    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
+    respond_with<span class="o">(</span>@variant.update_attributes<span class="o">(</span>params<span class="o">[</span>:variant<span class="o">]))</span>
+  end
+  
+  def destroy
+    @variant <span class="o">=</span> Variant.find<span class="o">(</span>params<span class="o">[</span>:id<span class="o">])</span>
+    @variant.destroy
+    respond_with<span class="o">(</span>@variant<span class="o">)</span>
+  end
+  
+end
+</code></pre>
+</div>
+
+
+<h2>What else?</h2>
+
+<p>Well, if you want to define a particular response by default, you could set it in your "routes.rb" like this:</p>
+
+<div class="highlight"><pre><code class="bash">resources :variants, :defaults <span class="o">=</span>&gt; <span class="o">{</span>:action <span class="o">=</span>&gt; <span class="s2">&quot;index&quot;</span>, :format <span class="o">=</span>&gt; <span class="s2">&quot;xml&quot;</span><span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>If you define a view for this format (for example: index.xml.haml) it will render it. If not, then it will invoke to_xml to render it.</p>
+
+<p>Try to play with the new controllers behavior, it might surprise you. If you want to know more about respond_with you could visit <a href="http://ryandaigle.com/">Ryan Daigle's</a> posts, they are really helpful.</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Controller responders in Rails 3" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="Luis Galaviz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></h1>
   <p class="author">
     <span class="date"><b>Nov 01</b><br />2010</span>
@@ -444,62 +723,13 @@ So this will create a user with database and user creation permissions with a de
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 07</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
-
-<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
-
-<div style="text-align:center">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
-</div>
-
-
-<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Magma Rails is just around the corner!" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
       <a href="/page7" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 8 of 11</span>
+  <span class="page_number ">Page: 8 of 12</span>
   
     <a href="/page9" class="next ">Next</a>
   
@@ -508,6 +738,8 @@ So this will create a user with database and user creation permissions with a de
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>30 Sep 2011</b></span> &raquo; <a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
@@ -546,8 +778,6 @@ So this will create a user with database and user creation permissions with a de
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
 
   <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
-
-  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
   </ul>
 </div>
