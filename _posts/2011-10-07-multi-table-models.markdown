@@ -92,15 +92,47 @@ class Customer < ActiveRecord::Base
 end
 {% endhighlight %}
 
-And _voilà!!!_, our ActiveRecord class will behave as if its columns were all in the same table
+And _voilà!!!_, our ActiveRecord class will behave as if its columns were all in the same table.
 
 {% highlight ruby %}
-
 > Customer
-
 => Customer(id:integer, name:string, email:string, street:string, city:string, state:string)
-
 {% endhighlight %}
+
+Of course, this is not limited to only two tables, you can use as many columns from any tables you may need; let's add a third table
+
+{% highlight ruby %}
+class Customer < ActiveRecord::Base
+  set_table_name :persons
+
+  SELECT_STATEMENT = <<-SELECT
+    person.id AS id,
+    person.name as name
+    person.email as email
+    addresses.street as street
+    addresses.city as city
+    addresses.state as state
+    account.name as account_name
+    account.owner_id as owner
+  SELECT
+
+  DEFAULT_JOIN = <<-JOIN
+    LEFT JOIN addresses ON
+    addresses.person_id = persons.id
+    LEFT JOIN accounts ON
+    accounts.owner_id = person.id
+  JOIN
+
+  default_scope select(SELECT_STATEMENT).joins(DEFAULT_JOIN)
+
+end
+{% endhighlight %}
+
+{% highlight ruby %}
+> Customer
+=> Customer(id:integer, name:string, email:string, street:string, city:string, state:string, account_name:string, owner:integer)
+{% endhighlight %}
+
 ### Constraints
 
 Creating and deleting rows is not conventional. We have to write a bit of code to perform, for example, row deletion (you can not delet rows from a multitable query):
