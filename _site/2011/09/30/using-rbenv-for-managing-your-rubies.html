@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: One File Web Page with Rack</title>
+  <title>Crowd Interactive Tech Blog :: Using rbenv to manage your rubies</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,95 +46,174 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>One File Web Page with Rack</h1>  
+  <h1>Using rbenv to manage your rubies</h1>  
   <p class="author">
-    <span class="date"><b>Apr 25</b><br />2011</span>
+    <span class="date"><b>Sep 30</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
-    <p>There are times when you need to quickly create small <strong>Ruby</strong> web
-applications. You can do that in many different ways like, creating a
-<strong>Rails</strong>, <strong>Sinatra</strong> or <strong>Rack</strong> application.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/6be5df410f2695b1341f0c359bc9b461" class="avatar" alt="Avatar" /></div>
+    <p>While working with ruby, you have some alternatives to manage your binaries,
+but as you think of them, I hope you are not really considering delegating this
+task directly to your OS package manager since it is discouraged, otherwise you
+would end up with a messy workstation.</p>
 
-<p>I like <strong>Rack</strong>, it gives you more than enough tools to build a web page, and
-allows you to have full control of the components that you employ to
-build it.</p>
+<p>There are a few tools that allow you to manage your rubies and gems, the most
+popular among them is without doubts <a href="http://beginrescueend.com/">RVM</a>
+(Ruby Version Manager) which in all fairness is good, it provides a CLI to
+switch between your rubies and gemsets. If you haven't used RVM, you should
+read <a href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html">this</a>.</p>
 
-<p>In this article I'll show some examples about how to create simple one page
-<em>Rack</em> web applications.</p>
+<p>Even when RVM is great there are a couple things that I don't like about it:</p>
 
-<p>For a bigger overview about <strong>Rack</strong> look at this article:
-<a href="http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a>.</p>
+<ul>
+<li><p>Personally, I had a painful situation as Linux user, every time I wanted to
+get a fresh ruby version with support for readline and zlib libraries and its
+dependencies.</p></li>
+<li><p>Its gemset management feature tends duplicate gems across your projects. I
+get it, sometimes you need to isolate your gems to keep them compatible. But
+there is another player in the field, called bundler. (mention down below)</p></li>
+<li><p>Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
+folder.</p></li>
+</ul>
 
-<p>Also remember, a middleware is nothing more than another <strong>Rack</strong>
-application, and, <strong>Rack</strong> middlewares can be stacked up in order to compose
-bigger systems.</p>
 
-<h2>Examples source code</h2>
+<p>A couple days ago, I was struggling tracking down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset for a fresh
+started when someone adviced me to check out rbenv.</p>
 
-<p>You can download and run the examples by following the next steps:</p>
+<h2>The rbenv way</h2>
 
-<div class="highlight"><pre><code class="bash">  git clone git://gist.github.com/935008.git gist-935008
-  <span class="nb">cd </span>gist-935008
-  gem install bundler <span class="o">&amp;&amp;</span> bundle install
+<p>A highlight in favor of rbenv is that you don't actually need to worry about
+maintaing your gemsets, since it relays on <a href="http://gembundler.com/">bundler</a>
+who takes care of all your application dependencies. Letting you care about
+just the version of the ruby you want to use globally, locally and in a per
+project basis. Let's check out <a href="http://gituhub.com/ssthepenson/rbenv">rbenv</a>.</p>
+
+<p><em>RVM and rbenv aren't friends :(</em></p>
+
+<p>First of all, you better avoid using both in the same environment because they
+are incompatible. Don't say I didn't warn you.</p>
+
+<h2>Installation</h2>
+
+<h3>1. Get rid of RVM by running:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm implode
 </code></pre>
 </div>
 
 
-<h2>Hello world</h2>
+<h3>2. To install rbenv, must be at ~ and clone it:</h3>
 
-<p>Let's start by building a simple hello world example, save the following
-code as <em>hello.ru</em>:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello1.ru"></script>
-
-
-<p>Now, run the <em>hello.ru</em> app with:</p>
-
-<div class="highlight"><pre><code class="bash">  rackup hello.ru
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
 </code></pre>
 </div>
 
 
-<p>Optionally you may specify what port you want your application to run
-at:</p>
+<h3>3. Add scope for rbenv binaries to your $PATH</h3>
 
-<div class="highlight"><pre><code class="bash">  rackup hello.ru -p 8080
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;&#39;</span> &gt;&gt; .bash_profile
+<span class="c"># be sure of do this to your bash source file (e.g. .bashrc, .profile)</span>
 </code></pre>
 </div>
 
 
-<p>And then, go to <a href="http://localhost:9292/">http://localhost:9292/</a> or
-<a href="http://localhost:8080/">http://localhost:8080/</a> (depending on what port
-you specified), so you can see your app alive.</p>
+<h3>4. Setup bash autocompletion:</h3>
 
-<p>Creating an application in this way, requires you to manually specify the
-headers, just as I did when I added the <em>Content-Length</em> and
-<em>Content-Type</em> headers. Also, this can be accomplished in a simpler way
-by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType</strong> middlewares:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello2.ru"></script>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;eval &quot;$(rbenv init -)&quot;&#39;</span> &gt;&gt; .bash_profile
+</code></pre>
+</div>
 
 
-<p>OK, now let's add ERB rendering to this example.</p>
+<h3>5. Restart your shell.</h3>
 
-<script src="https://gist.github.com/935008.js?file=hello3.ru"></script>
-
-
-<p>Now, run the script again. You should see the <em>Hello World</em> message.</p>
-
-<p>In order to show one last example let's write our view using
-<strong>HAML</strong>, and passing variables to the view:</p>
-
-<script src="https://gist.github.com/935008.js?file=hello4.ru"></script>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">exec</span>
+</code></pre>
+</div>
 
 
-<p>Run the script again. You should see the <em>Hello World</em> message.</p>
+<p>There are two ways of installing rubies with rbenv. From source and <em>make it</em>
+into "~/.rbenv/versions/&lt;x.x.x-pxxx>" or the one I prefer using <em>ruby-build</em></p>
 
-<p>That's it, you've seen how to create web pages by simply using
-<strong>Rack</strong>, no frameworks, just <strong>Rack</strong>.</p>
+<h3>6. Install ruby-build</h3>
 
-<p>Thank you for your reading.</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/ruby-build.git ~/.ruby-build
+<span class="nv">$ </span><span class="nb">cd</span> ~/.ruby-build
+<span class="nv">$ </span>./install.sh
+<span class="c"># you may need to run with sudo, since it installs a binary in /usr/local/bin</span>
+</code></pre>
+</div>
+
+
+<h3>7. Install a ruby</h3>
+
+<p>Now, we are ready to install a ruby.</p>
+
+<p><em>Note:</em> After a couple times trying to get a ruby with readline support
+for my <em>irb</em>, I googled and found a way.</p>
+
+<p><em>For Ubuntu</em> I used my readline path:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&quot;--with-readline-dir=/usr/include/readline&quot;</span> rbenv
+install 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p>And there we go, we give it some time, get a coffee or play a ping pong
+match. Once it rbenv finishes, and every time after installing a ruby
+you need to run:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv rehash
+</code></pre>
+</div>
+
+
+<p>I have to mention, that it seems tricky, but you can set an alias in
+your <code>~/.bash_profile</code> or export an environment variable.</p>
+
+<h2>Usage</h2>
+
+<p>Let's suposse you've got some more rubies, now, how do we specify the
+version of ruby we want to use:</p>
+
+<p><em>To setup a global ruby you do something like:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv global 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p><em>To setup a local (per-project) ruby you do:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv <span class="nb">local </span>1.9.2-p290
+<span class="c"># this creates a rbenv-version file in the current folder</span>
+</code></pre>
+</div>
+
+
+<p><em>What version of ruby am I using?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv version
+</code></pre>
+</div>
+
+
+<p><em>What versions of ruby do I have?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv versions
+</code></pre>
+</div>
+
+
+<h2>Conclusions</h2>
+
+<p>There are a couple things that remain unexplored, but for now this is a getting
+started. In case you miss the gemset, <a href="http://github.com/jamis/rbenv-gemset">this</a>
+is something you might want to look at.</p>
+
+<p>So, give it a try, you might like it. For now I'm happy with my fresh
+rbenv install.</p>
 
     
     <p>
@@ -163,21 +242,19 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
       <br><br>     
   		<div class="left">
   		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
-        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2011/09/30/using-rbenv-for-managing-your-rubies.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
       </div>
       
     </p>
   </div>
   
   <div class="author_box">
-    <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+    <p><b>Author:</b> Ignacio Galindo | ignacio.galindo@crowdint.com</p>
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html"><< Turn jQuery effects off for testing</a></div>
+      <div class="previous span-8"><a href="/2011/09/05/ruby-benchmarks.html"><< Ruby benchmarks</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks >></a></div>
     
   </div>
 </div>
@@ -185,17 +262,15 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
-  <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
+  <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
   <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
 
-  <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+  <li><span><b>26 Aug 2010</b></span> &raquo; <a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></li>
 
   </ul>
   <div id="disqus_thread"></div>

@@ -47,171 +47,222 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></h1>
+  <h1><a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></h1>
   <p class="author">
-    <span class="date"><b>Sep 27</b><br />2011</span>
+    <span class="date"><b>Sep 30</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/3902dd38c6f69b1865c5b20e168e827a" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/6be5df410f2695b1341f0c359bc9b461" class="avatar" alt="Avatar" /></div>
     <div id='main'>
     
     
     
     
-      <p>While Rich Snippets started indexing by Google two years ago it’s still rarely
-used on small and medium size websites. Big players on market such as Amazon,
-Hotels.com, eBay are using it successfully and getting more benefits in SEO.
-So, why don’t utilize it?</p>
+      <p>While working with ruby, you have some alternatives to manage your binaries,
+but as you think of them, I hope you are not really considering delegating this
+task directly to your OS package manager since it is discouraged, otherwise you
+would end up with a messy workstation.</p>
 
-<h2>What are Rich Snippets?</h2>
+<p>There are a few tools that allow you to manage your rubies and gems, the most
+popular among them is without doubts <a href="http://beginrescueend.com/">RVM</a>
+(Ruby Version Manager) which in all fairness is good, it provides a CLI to
+switch between your rubies and gemsets. If you haven't used RVM, you should
+read <a href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html">this</a>.</p>
 
-<p>Rich Snippets allows search engines to collect more Meta information about
-pages and its contents. The more information Google can collect about your
-website the more relevant results users get, and thus you have better targeting on web.</p>
-
-<h2>What you can do with Rich Snippets?</h2>
-
-<p>Today Rich Snippets allow describing entities of several types:</p>
+<p>Even when RVM is great there are a couple things that I don't like about it:</p>
 
 <ul>
-<li>Organizations</li>
-<li>People</li>
-<li>Products and offers</li>
-<li>Reviews</li>
-<li>Events</li>
-<li>Breadcrumbs</li>
-<li>Videos</li>
-<li>and Recipes</li>
+<li><p>Personally, I had a painful situation as Linux user, every time I wanted to
+get a fresh ruby version with support for readline and zlib libraries and its
+dependencies.</p></li>
+<li><p>Its gemset management feature tends duplicate gems across your projects. I
+get it, sometimes you need to isolate your gems to keep them compatible. But
+there is another player in the field, called bundler. (mention down below)</p></li>
+<li><p>Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
+folder.</p></li>
 </ul>
 
 
-<p>In eCommerce we’re mostly interested in describing organizations, products,
-reviews and breadcrumbs. Other types we use in particular cases.</p>
+<p>A couple days ago, I was struggling tracking down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset for a fresh
+started when someone adviced me to check out rbenv.</p>
 
-<h2>Describe online store</h2>
+<h2>The rbenv way</h2>
+
+<p>A highlight in favor of rbenv is that you don't actually need to worry about
+maintaing your gemsets, since it relays on <a href="http://gembundler.com/">bundler</a>
+who takes care of all your application dependencies. Letting you care about
+just the version of the ruby you want to use globally, locally and in a per
+project basis. Let's check out <a href="http://gituhub.com/ssthepenson/rbenv">rbenv</a>.</p>
+
+<p><em>RVM and rbenv aren't friends :(</em></p>
+
+<p>First of all, you better avoid using both in the same environment because they
+are incompatible. Don't say I didn't warn you.</p>
+
+<h2>Installation</h2>
+
+<h3>1. Get rid of RVM by running:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm implode
+</code></pre>
+</div>
 
 <p>In practice it makes sense to implement it on About or Contact page.
 With Rich Snippets for Organizations you can specify following Meta info:</p>
 
-<ul>
-<li>Name of your business</li>
-<li>Link to organization home page</li>
-<li>Location of the business</li>
-<li>Telephone numbers</li>
-<li>Geographical coordinates of its location</li>
-</ul>
+<h3>2. To install rbenv, must be at ~ and clone it:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+</code></pre>
+</div>
 
 
-<p>With this structured information Google understands your website more accurately.
-Additionally you might get benefits in local search as Google adds your business
-to Google Places service.</p>
+<h3>3. Add scope for rbenv binaries to your $PATH</h3>
 
-<h2>Describe your products</h2>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;&#39;</span> &gt;&gt; .bash_profile
+<span class="c"># be sure of do this to your bash source file (e.g. .bashrc, .profile)</span>
+</code></pre>
+</div>
 
 <p>Benefits of implementing Rich Snippets to describe products are evident. Take a
 look at picture below:</p>
 
-<p><img src="images/2011/09/27/search_results.png" alt="Search Results" /></p>
+<h3>4. Setup bash autocompletion:</h3>
 
-<p>The website on top <a href="www.pandoramoa.com">www.pandoramoa.com</a> describes products
-in proper format. Because of that Google knows and provides not only relevant page
-to users search query, but also shows relevant image and list of similar products
-with links to them. Such huge snippet in SERPs grabs more attention and makes
-it more likely to click on it.
-It supports following Meta info:</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;eval &quot;$(rbenv init -)&quot;&#39;</span> &gt;&gt; .bash_profile
+</code></pre>
+</div>
 
-<ul>
-<li>The name of the product</li>
-<li>Product image</li>
-<li>Product description</li>
-<li>Brand of the product</li>
-<li>Product review</li>
-<li>Product ID (sku, asin, upc, isbn or mpn)</li>
-</ul>
 
+<h3>5. Restart your shell.</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">exec</span>
+</code></pre>
+</div>
 
 <h2>Format customer reviews</h2>
 
-<p>Customer reviews is a common tool in eCommerce which is used almost on every
-online store. Once you give it a proper shape according Rich Snippets requirements
-you get additional weight on search results. See how stars grab attention..</p>
+<p>There are two ways of installing rubies with rbenv. From source and <em>make it</em>
+into "~/.rbenv/versions/&lt;x.x.x-pxxx>" or the one I prefer using <em>ruby-build</em></p>
 
-<p>To enable Rich Snippet reviews on your page you need to specify following attributes:
-* Item being reviewed
-* Numerical quality rating for the item
-* The author of the review
-* The date that the item was reviewed
-* Review body
-* Short summary of the review</p>
+<h3>6. Install ruby-build</h3>
 
-<h2>Beautify breadcrumbs</h2>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/ruby-build.git ~/.ruby-build
+<span class="nv">$ </span><span class="nb">cd</span> ~/.ruby-build
+<span class="nv">$ </span>./install.sh
+<span class="c"># you may need to run with sudo, since it installs a binary in /usr/local/bin</span>
+</code></pre>
+</div>
 
-<p>Instead of displaying long URL in SERPs (which often looks ugly and gives no
-real value to user) Google can show breadcrumbs if you create right markup for it.</p>
+
+<h3>7. Install a ruby</h3>
+
+<p>Now, we are ready to install a ruby.</p>
+
+<p><em>Note:</em> After a couple times trying to get a ruby with readline support
+for my <em>irb</em>, I googled and found a way.</p>
+
+<p><em>For Ubuntu</em> I used my readline path:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&quot;--with-readline-dir=/usr/include/readline&quot;</span> rbenv
+install 1.9.3-preview1
+</code></pre>
+</div>
 
 <p>Notice that each item in breadcrumbs is a link to specific page on your website.
 So, in practice you replace long, non-valuable and not clickable URL with
 structured chain of clickable links to your website.</p>
 
-<p>To format breadcrumbs in this way you just need to specify following
-attributes for each item:</p>
+<p>And there we go, we give it some time, get a coffee or play a ping pong
+match. Once it rbenv finishes, and every time after installing a ruby
+you need to run:</p>
 
-<ul>
-<li>The title of a breadcrumb</li>
-<li>The URL of a breadcrumb</li>
-<li>The next breadcrumb in the hierarchy</li>
-</ul>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv rehash
+</code></pre>
+</div>
 
+
+<p>I have to mention, that it seems tricky, but you can set an alias in
+your <code>~/.bash_profile</code> or export an environment variable.</p>
+
+<h2>Usage</h2>
+
+<p>Let's suposse you've got some more rubies, now, how do we specify the
+version of ruby we want to use:</p>
+
+<p><em>To setup a global ruby you do something like:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv global 1.9.3-preview1
+</code></pre>
+</div>
 
 <h2>How to markup Rich Snippets?</h2>
 
-<p>Google supports three formats:</p>
+<p><em>To setup a local (per-project) ruby you do:</em></p>
 
-<ul>
-<li><a href="http://en.wikipedia.org/wiki/Microdata_(HTML5)">Microdata (HTML5 specification)</a></li>
-<li><a href="http://microformats.org/">Microformats (simple conventions)</a></li>
-<li><a href="http://en.wikipedia.org/wiki/RDFa">RDFa (a way to label content)</a></li>
-</ul>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv <span class="nb">local </span>1.9.2-p290
+<span class="c"># this creates a rbenv-version file in the current folder</span>
+</code></pre>
+</div>
 
 
-<h2>One step back</h2>
+<p><em>What version of ruby am I using?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv version
+</code></pre>
+</div>
 
 <p>While you have all these opportunities to increase evidence and weight in SERPs
 remember that Google doesn’t guarantee that it will be 100% used. In most cases
 it’s using, however consider it as an opportunity of SEO improvement.</p>
 
-<h2>Links to check</h2>
+<p><em>What versions of ruby do I have?</em></p>
 
-<ul>
-<li><a href="http://www.google.com/support/webmasters/bin/topic.py?hl=en&amp;topic=21997">Rich Snippets documentation</a></li>
-<li><a href="http://www.google.com/webmasters/tools/richsnippets">Rich Snippets testing tool</a></li>
-</ul>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv versions
+</code></pre>
+</div>
 
 
-<h2>Your turn</h2>
+<h2>Conclusions</h2>
 
-<p>Tell u which types of Rich Snippets makes the most value for you?</p>
+<p>There are a couple things that remain unexplored, but for now this is a getting
+started. In case you miss the gemset, <a href="http://github.com/jamis/rbenv-gemset">this</a>
+is something you might want to look at.</p>
 
+<p>So, give it a try, you might like it. For now I'm happy with my fresh
+rbenv install.</p>
+
+    
+    
+    
+    
+      
+        
+           <p>I recently started a new client project. Lucky me, <a href="http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released">Rails 3.1 has just been released</a> so, it means I'll get to learn a bunch of things while building it, you know, the fancy <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a> stuff everyone's talking about and so on.</p> <p>I wrote a couple of rspec specs and cucumber features, made them pass, and while I was about to start new features, decided to stop to...
+           <div class = "continue_reading"><a href="/2011/09/05/ruby-benchmarks.html">Continue reading...</a></div>
+        
+      
     
     </div>
     <div class="comments">
-      <h2><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html#disqus_thread">Click here for Comments</a></h2>
     </div>
     
     <p>     
       <div class="tweet left">
         <a href="http://twitter.com/share" 
           class="twitter-share-button" 
-          data-text="Better SEO with Rich Snippets for eCommerce" 
+          data-text="Using rbenv to manage your rubies" 
           data-count="none" 
           data-via="crowdint" 
-          data-related="Pavel Reva:with">Tweet</a>
+          data-related="Ignacio Galindo:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Pavel Reva | pavel.reva@crowdint.com</p>
+      <p><b>Author:</b> Ignacio Galindo | ignacio.galindo@crowdint.com</p>
     </div>
 </div>
 
@@ -398,7 +449,7 @@ it’s using, however consider it as an opportunity of SEO improvement.</p>
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-  <li><span><b>27 Sep 2011</b></span> &raquo; <a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></li>
+  <li><span><b>30 Sep 2011</b></span> &raquo; <a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 

@@ -4,160 +4,189 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-09-27T11:24:28-07:00</updated>
+ <updated>2011-09-28T01:39:12-05:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
-   <title>Better SEO with Rich Snippets for eCommerce</title>
-   <link href="http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html"/>
-   <updated>2011-09-27T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce</id>
-   <photo>3902dd38c6f69b1865c5b20e168e827a</photo>
-   <content type="html">&lt;p&gt;While Rich Snippets started indexing by Google two years ago it’s still rarely
-used on small and medium size websites. Big players on market such as Amazon,
-Hotels.com, eBay are using it successfully and getting more benefits in SEO.
-So, why don’t utilize it?&lt;/p&gt;
+   <title>Using rbenv to manage your rubies</title>
+   <link href="http://blog.crowdint.com/2011/09/30/using-rbenv-for-managing-your-rubies.html"/>
+   <updated>2011-09-30T00:00:00-05:00</updated>
+   <id>http://blog.crowdint.com/2011/09/30/using-rbenv-for-managing-your-rubies</id>
+   <photo>6be5df410f2695b1341f0c359bc9b461</photo>
+   <content type="html">&lt;p&gt;While working with ruby, you have some alternatives to manage your binaries,
+but as you think of them, I hope you are not really considering delegating this
+task directly to your OS package manager since it is discouraged, otherwise you
+would end up with a messy workstation.&lt;/p&gt;
 
-&lt;h2&gt;What are Rich Snippets?&lt;/h2&gt;
+&lt;p&gt;There are a few tools that allow you to manage your rubies and gems, the most
+popular among them is without doubts &lt;a href=&quot;http://beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;
+(Ruby Version Manager) which in all fairness is good, it provides a CLI to
+switch between your rubies and gemsets. If you haven't used RVM, you should
+read &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;this&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Rich Snippets allows search engines to collect more Meta information about
-pages and its contents. The more information Google can collect about your
-website the more relevant results users get, and thus you have better targeting on web.&lt;/p&gt;
-
-&lt;h2&gt;What you can do with Rich Snippets?&lt;/h2&gt;
-
-&lt;p&gt;Today Rich Snippets allow describing entities of several types:&lt;/p&gt;
+&lt;p&gt;Even when RVM is great there are a couple things that I don't like about it:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Organizations&lt;/li&gt;
-&lt;li&gt;People&lt;/li&gt;
-&lt;li&gt;Products and offers&lt;/li&gt;
-&lt;li&gt;Reviews&lt;/li&gt;
-&lt;li&gt;Events&lt;/li&gt;
-&lt;li&gt;Breadcrumbs&lt;/li&gt;
-&lt;li&gt;Videos&lt;/li&gt;
-&lt;li&gt;and Recipes&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Personally, I had a painful situation as Linux user, every time I wanted to
+get a fresh ruby version with support for readline and zlib libraries and its
+dependencies.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Its gemset management feature tends duplicate gems across your projects. I
+get it, sometimes you need to isolate your gems to keep them compatible. But
+there is another player in the field, called bundler. (mention down below)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
+folder.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;p&gt;In eCommerce we’re mostly interested in describing organizations, products,
-reviews and breadcrumbs. Other types we use in particular cases.&lt;/p&gt;
+&lt;p&gt;A couple days ago, I was struggling tracking down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset for a fresh
+started when someone adviced me to check out rbenv.&lt;/p&gt;
 
-&lt;h2&gt;Describe online store&lt;/h2&gt;
+&lt;h2&gt;The rbenv way&lt;/h2&gt;
 
-&lt;p&gt;In practice it makes sense to implement it on About or Contact page.
-With Rich Snippets for Organizations you can specify following Meta info:&lt;/p&gt;
+&lt;p&gt;A highlight in favor of rbenv is that you don't actually need to worry about
+maintaing your gemsets, since it relays on &lt;a href=&quot;http://gembundler.com/&quot;&gt;bundler&lt;/a&gt;
+who takes care of all your application dependencies. Letting you care about
+just the version of the ruby you want to use globally, locally and in a per
+project basis. Let's check out &lt;a href=&quot;http://gituhub.com/ssthepenson/rbenv&quot;&gt;rbenv&lt;/a&gt;.&lt;/p&gt;
 
-&lt;ul&gt;
-&lt;li&gt;Name of your business&lt;/li&gt;
-&lt;li&gt;Link to organization home page&lt;/li&gt;
-&lt;li&gt;Location of the business&lt;/li&gt;
-&lt;li&gt;Telephone numbers&lt;/li&gt;
-&lt;li&gt;Geographical coordinates of its location&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;RVM and rbenv aren't friends :(&lt;/em&gt;&lt;/p&gt;
 
+&lt;p&gt;First of all, you better avoid using both in the same environment because they
+are incompatible. Don't say I didn't warn you.&lt;/p&gt;
 
-&lt;p&gt;With this structured information Google understands your website more accurately.
-Additionally you might get benefits in local search as Google adds your business
-to Google Places service.&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
 
-&lt;h2&gt;Describe your products&lt;/h2&gt;
+&lt;h3&gt;1. Get rid of RVM by running:&lt;/h3&gt;
 
-&lt;p&gt;Benefits of implementing Rich Snippets to describe products are evident. Take a
-look at picture below:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;images/2011/09/27/search_results.png&quot; alt=&quot;Search Results&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The website on top &lt;a href=&quot;www.pandoramoa.com&quot;&gt;www.pandoramoa.com&lt;/a&gt; describes products
-in proper format. Because of that Google knows and provides not only relevant page
-to users search query, but also shows relevant image and list of similar products
-with links to them. Such huge snippet in SERPs grabs more attention and makes
-it more likely to click on it.
-It supports following Meta info:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The name of the product&lt;/li&gt;
-&lt;li&gt;Product image&lt;/li&gt;
-&lt;li&gt;Product description&lt;/li&gt;
-&lt;li&gt;Brand of the product&lt;/li&gt;
-&lt;li&gt;Product review&lt;/li&gt;
-&lt;li&gt;Product ID (sku, asin, upc, isbn or mpn)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rvm implode
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h2&gt;Format customer reviews&lt;/h2&gt;
+&lt;h3&gt;2. To install rbenv, must be at ~ and clone it:&lt;/h3&gt;
 
-&lt;p&gt;Customer reviews is a common tool in eCommerce which is used almost on every
-online store. Once you give it a proper shape according Rich Snippets requirements
-you get additional weight on search results. See how stars grab attention..&lt;/p&gt;
-
-&lt;p&gt;To enable Rich Snippet reviews on your page you need to specify following attributes:
-* Item being reviewed
-* Numerical quality rating for the item
-* The author of the review
-* The date that the item was reviewed
-* Review body
-* Short summary of the review&lt;/p&gt;
-
-&lt;h2&gt;Beautify breadcrumbs&lt;/h2&gt;
-
-&lt;p&gt;Instead of displaying long URL in SERPs (which often looks ugly and gives no
-real value to user) Google can show breadcrumbs if you create right markup for it.&lt;/p&gt;
-
-&lt;p&gt;Notice that each item in breadcrumbs is a link to specific page on your website.
-So, in practice you replace long, non-valuable and not clickable URL with
-structured chain of clickable links to your website.&lt;/p&gt;
-
-&lt;p&gt;To format breadcrumbs in this way you just need to specify following
-attributes for each item:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The title of a breadcrumb&lt;/li&gt;
-&lt;li&gt;The URL of a breadcrumb&lt;/li&gt;
-&lt;li&gt;The next breadcrumb in the hierarchy&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h2&gt;How to markup Rich Snippets?&lt;/h2&gt;
+&lt;h3&gt;3. Add scope for rbenv binaries to your $PATH&lt;/h3&gt;
 
-&lt;p&gt;Google supports three formats:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Microdata_(HTML5)&quot;&gt;Microdata (HTML5 specification)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://microformats.org/&quot;&gt;Microformats (simple conventions)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/RDFa&quot;&gt;RDFa (a way to label content)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;export PATH=&amp;quot;$HOME/.rbenv/bin:$PATH&amp;quot;&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; .bash_profile
+&lt;span class=&quot;c&quot;&gt;# be sure of do this to your bash source file (e.g. .bashrc, .profile)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h2&gt;One step back&lt;/h2&gt;
+&lt;h3&gt;4. Setup bash autocompletion:&lt;/h3&gt;
 
-&lt;p&gt;While you have all these opportunities to increase evidence and weight in SERPs
-remember that Google doesn’t guarantee that it will be 100% used. In most cases
-it’s using, however consider it as an opportunity of SEO improvement.&lt;/p&gt;
-
-&lt;h2&gt;Links to check&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.google.com/support/webmasters/bin/topic.py?hl=en&amp;amp;topic=21997&quot;&gt;Rich Snippets documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.google.com/webmasters/tools/richsnippets&quot;&gt;Rich Snippets testing tool&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;eval &amp;quot;$(rbenv init -)&amp;quot;&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; .bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 
-&lt;h2&gt;Your turn&lt;/h2&gt;
+&lt;h3&gt;5. Restart your shell.&lt;/h3&gt;
 
-&lt;p&gt;Tell u which types of Rich Snippets makes the most value for you?&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;There are two ways of installing rubies with rbenv. From source and &lt;em&gt;make it&lt;/em&gt;
+into &quot;~/.rbenv/versions/&amp;lt;x.x.x-pxxx&gt;&quot; or the one I prefer using &lt;em&gt;ruby-build&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3&gt;6. Install ruby-build&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git clone git://github.com/sstephenson/ruby-build.git ~/.ruby-build
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/.ruby-build
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./install.sh
+&lt;span class=&quot;c&quot;&gt;# you may need to run with sudo, since it installs a binary in /usr/local/bin&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;7. Install a ruby&lt;/h3&gt;
+
+&lt;p&gt;Now, we are ready to install a ruby.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note:&lt;/em&gt; After a couple times trying to get a ruby with readline support
+for my &lt;em&gt;irb&lt;/em&gt;, I googled and found a way.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;For Ubuntu&lt;/em&gt; I used my readline path:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ CONFIGURE_OPTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;--with-readline-dir=/usr/include/readline&amp;quot;&lt;/span&gt; rbenv
+install 1.9.3-preview1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And there we go, we give it some time, get a coffee or play a ping pong
+match. Once it rbenv finishes, and every time after installing a ruby
+you need to run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv rehash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;I have to mention, that it seems tricky, but you can set an alias in
+your &lt;code&gt;~/.bash_profile&lt;/code&gt; or export an environment variable.&lt;/p&gt;
+
+&lt;h2&gt;Usage&lt;/h2&gt;
+
+&lt;p&gt;Let's suposse you've got some more rubies, now, how do we specify the
+version of ruby we want to use:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;To setup a global ruby you do something like:&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv global 1.9.3-preview1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;To setup a local (per-project) ruby you do:&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;1.9.2-p290
+&lt;span class=&quot;c&quot;&gt;# this creates a rbenv-version file in the current folder&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;What version of ruby am I using?&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv version
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;What versions of ruby do I have?&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv versions
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h2&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;There are a couple things that remain unexplored, but for now this is a getting
+started. In case you miss the gemset, &lt;a href=&quot;http://github.com/jamis/rbenv-gemset&quot;&gt;this&lt;/a&gt;
+is something you might want to look at.&lt;/p&gt;
+
+&lt;p&gt;So, give it a try, you might like it. For now I'm happy with my fresh
+rbenv install.&lt;/p&gt;
 </content>
    <author>
-     <name>Pavel Reva</name>
-     <email>pavel.reva@crowdint.com</email>
+     <name>Ignacio Galindo</name>
+     <email>ignacio.galindo@crowdint.com</email>
    </author>
  </entry>
  
  <entry>
    <title>Ruby benchmarks</title>
    <link href="http://blog.crowdint.com/2011/09/05/ruby-benchmarks.html"/>
-   <updated>2011-09-05T00:00:00-07:00</updated>
+   <updated>2011-09-05T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/09/05/ruby-benchmarks</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;I recently started a new client project. Lucky me, &lt;a href=&quot;http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released&quot;&gt;Rails 3.1 has just
@@ -323,7 +352,7 @@ changes how the rubies behave.&lt;/p&gt;
  <entry>
    <title>Auto Retry Failed Cucumber Tests</title>
    <link href="http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests.html"/>
-   <updated>2011-08-22T00:00:00-07:00</updated>
+   <updated>2011-08-22T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests</id>
    <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;If you're tired of having to re-kick builds in your CI server because of non deterministic failures,
@@ -450,7 +479,7 @@ super sophisticated task runner:&lt;/p&gt;
  <entry>
    <title>How to install Postgresql 8.4 in a Vagrant box</title>
    <link href="http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant.html"/>
-   <updated>2011-08-11T00:00:00-07:00</updated>
+   <updated>2011-08-11T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;If you don't know what Vagrant is, go read our &lt;a href=&quot;http://blog.crowdint.com/2011/06/21/vagrant.html&quot;&gt;first post about it&lt;/a&gt;&lt;/p&gt;
@@ -644,7 +673,7 @@ avoiding all this s**t... And it shall be called, &lt;code&gt;The Easy Way&lt;/c
  <entry>
    <title>Acceptance testing with Steak</title>
    <link href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html"/>
-   <updated>2011-07-06T00:00:00-07:00</updated>
+   <updated>2011-07-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;Acceptance testing is a technique that helps determine if the requirements of
@@ -789,7 +818,7 @@ the repeated steps you take in all of your tests.&lt;/p&gt;
  <entry>
    <title>Rails 3.1, Compass and Blueprint</title>
    <link href="http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint.html"/>
-   <updated>2011-06-27T00:00:00-07:00</updated>
+   <updated>2011-06-27T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;So, we all know that Rails 3.1 comes with a Sass compiler. But still,
@@ -853,7 +882,7 @@ on your Rails 3.1 stylesheets.&lt;/p&gt;
  <entry>
    <title>Vagrant to manage multiple dev environments</title>
    <link href="http://blog.crowdint.com/2011/06/21/vagrant.html"/>
-   <updated>2011-06-21T00:00:00-07:00</updated>
+   <updated>2011-06-21T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/06/21/vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
@@ -965,7 +994,7 @@ do some apt-get install, configure your settings.&lt;/p&gt;
  <entry>
    <title>Add Validations to your Ruby classes</title>
    <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
-   <updated>2011-06-13T00:00:00-07:00</updated>
+   <updated>2011-06-13T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Validations are one of the most useful things in ActiveRecord.
@@ -1021,7 +1050,7 @@ the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#va
  <entry>
    <title>Railsconf 2011</title>
    <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
-   <updated>2011-05-24T00:00:00-07:00</updated>
+   <updated>2011-05-24T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
@@ -1071,7 +1100,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
  <entry>
    <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-07:00</updated>
+   <updated>2011-05-02T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
    <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
    <content type="html">&lt;p&gt;While working on a project, we were required to override the
@@ -1126,7 +1155,7 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
  <entry>
    <title>One File Web Page with Rack</title>
    <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-07:00</updated>
+   <updated>2011-04-25T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
@@ -1222,7 +1251,7 @@ by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;
  <entry>
    <title>Turn jQuery effects off for testing</title>
    <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
-   <updated>2011-04-13T00:00:00-07:00</updated>
+   <updated>2011-04-13T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
@@ -1300,7 +1329,7 @@ how to disable jQuery effects off.&lt;/p&gt;
  <entry>
    <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
    <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-07:00</updated>
+   <updated>2011-04-06T00:00:00-05:00</updated>
    <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
@@ -1419,7 +1448,7 @@ to use Haml and Compass.&lt;/p&gt;
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
    <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
-   <updated>2011-03-31T00:00:00-07:00</updated>
+   <updated>2011-03-31T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
@@ -1634,7 +1663,7 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
  <entry>
    <title>How to write good CSS</title>
    <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
-   <updated>2011-03-24T00:00:00-07:00</updated>
+   <updated>2011-03-24T00:00:00-06:00</updated>
    <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
