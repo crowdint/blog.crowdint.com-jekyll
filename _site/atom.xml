@@ -4,15 +4,15 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-09-28T01:39:12-05:00</updated>
+ <updated>2011-10-05T09:01:44-07:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
  <entry>
    <title>Using rbenv to manage your rubies</title>
-   <link href="http://blog.crowdint.com/2011/09/30/using-rbenv-for-managing-your-rubies.html"/>
-   <updated>2011-09-30T00:00:00-05:00</updated>
-   <id>http://blog.crowdint.com/2011/09/30/using-rbenv-for-managing-your-rubies</id>
+   <link href="http://blog.crowdint.com/2011/10/05/using-rbenv-for-managing-your-rubies.html"/>
+   <updated>2011-10-05T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/10/05/using-rbenv-for-managing-your-rubies</id>
    <photo>6be5df410f2695b1341f0c359bc9b461</photo>
    <content type="html">&lt;p&gt;While working with ruby, you have some alternatives to manage your binaries,
 but as you think of them, I hope you are not really considering delegating this
@@ -20,28 +20,28 @@ task directly to your OS package manager since it is discouraged, otherwise you
 would end up with a messy workstation.&lt;/p&gt;
 
 &lt;p&gt;There are a few tools that allow you to manage your rubies and gems, the most
-popular among them is without doubts &lt;a href=&quot;http://beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;
+popular among them is, without doubts, &lt;a href=&quot;http://beginrescueend.com/&quot;&gt;RVM&lt;/a&gt;
 (Ruby Version Manager) which in all fairness is good, it provides a CLI to
 switch between your rubies and gemsets. If you haven't used RVM, you should
-read &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;this&lt;/a&gt;.&lt;/p&gt;
+read &lt;a href=&quot;http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html&quot;&gt;this guide&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Even when RVM is great there are a couple things that I don't like about it:&lt;/p&gt;
+&lt;p&gt;Even when RVM is great, there are a couple of things that I don't like about it:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Personally, I had a painful situation as Linux user, every time I wanted to
+&lt;li&gt;&lt;p&gt;Personally, I had a painful situation as a Linux user, every time I wanted to
 get a fresh ruby version with support for readline and zlib libraries and its
 dependencies.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Its gemset management feature tends duplicate gems across your projects. I
+&lt;li&gt;&lt;p&gt;Its gemset management feature tends to duplicate gems across your projects. I
 get it, sometimes you need to isolate your gems to keep them compatible. But
-there is another player in the field, called bundler. (mention down below)&lt;/p&gt;&lt;/li&gt;
+there is another player in the field, called bundler. (mentioned down below)&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
 folder.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;p&gt;A couple days ago, I was struggling tracking down a gem that I wasn't sure
-where exactly came from, anyway I was about to create a new gemset for a fresh
-started when someone adviced me to check out rbenv.&lt;/p&gt;
+&lt;p&gt;A couple of days ago, I was struggling to track down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset to do a fresh
+start when someone adviced me to check out rbenv.&lt;/p&gt;
 
 &lt;h2&gt;The rbenv way&lt;/h2&gt;
 
@@ -109,7 +109,7 @@ into &quot;~/.rbenv/versions/&amp;lt;x.x.x-pxxx&gt;&quot; or the one I prefer us
 
 &lt;h3&gt;7. Install a ruby&lt;/h3&gt;
 
-&lt;p&gt;Now, we are ready to install a ruby.&lt;/p&gt;
+&lt;p&gt;Now, we are ready to install a ruby version.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Note:&lt;/em&gt; After a couple times trying to get a ruby with readline support
 for my &lt;em&gt;irb&lt;/em&gt;, I googled and found a way.&lt;/p&gt;
@@ -122,8 +122,8 @@ install 1.9.3-preview1
 &lt;/div&gt;
 
 
-&lt;p&gt;And there we go, we give it some time, get a coffee or play a ping pong
-match. Once it rbenv finishes, and every time after installing a ruby
+&lt;p&gt;And there we go, we give it some time, get some coffee or play a ping pong
+match. Once rbenv finishes, and every time after installing a ruby
 you need to run:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rbenv rehash
@@ -170,12 +170,12 @@ version of ruby we want to use:&lt;/p&gt;
 
 &lt;h2&gt;Conclusions&lt;/h2&gt;
 
-&lt;p&gt;There are a couple things that remain unexplored, but for now this is a getting
-started. In case you miss the gemset, &lt;a href=&quot;http://github.com/jamis/rbenv-gemset&quot;&gt;this&lt;/a&gt;
+&lt;p&gt;There are a couple of things that remain unexplored, but for now this is a great
+start. In case you miss the gemset, &lt;a href=&quot;http://github.com/jamis/rbenv-gemset&quot;&gt;this&lt;/a&gt;
 is something you might want to look at.&lt;/p&gt;
 
 &lt;p&gt;So, give it a try, you might like it. For now I'm happy with my fresh
-rbenv install.&lt;/p&gt;
+rbenv install. Let us know your rbenv experience.&lt;/p&gt;
 </content>
    <author>
      <name>Ignacio Galindo</name>
@@ -184,9 +184,155 @@ rbenv install.&lt;/p&gt;
  </entry>
  
  <entry>
+   <title>Better SEO with Rich Snippets for eCommerce</title>
+   <link href="http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html"/>
+   <updated>2011-09-27T00:00:00-07:00</updated>
+   <id>http://blog.crowdint.com/2011/09/27/better-seo-with-rich-snippets-for-e-commerce</id>
+   <photo>3902dd38c6f69b1865c5b20e168e827a</photo>
+   <content type="html">&lt;p&gt;While Rich Snippets started indexing by Google two years ago it’s still rarely
+used on small and medium size websites. Big players on market such as Amazon,
+Hotels.com, eBay are using it successfully and getting more benefits in SEO.
+So, why don’t utilize it?&lt;/p&gt;
+
+&lt;h2&gt;What are Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Rich Snippets allows search engines to collect more Meta information about
+pages and its contents. The more information Google can collect about your
+website the more relevant results users get, and thus you have better targeting on web.&lt;/p&gt;
+
+&lt;h2&gt;What you can do with Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Today Rich Snippets allow describing entities of several types:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Organizations&lt;/li&gt;
+&lt;li&gt;People&lt;/li&gt;
+&lt;li&gt;Products and offers&lt;/li&gt;
+&lt;li&gt;Reviews&lt;/li&gt;
+&lt;li&gt;Events&lt;/li&gt;
+&lt;li&gt;Breadcrumbs&lt;/li&gt;
+&lt;li&gt;Videos&lt;/li&gt;
+&lt;li&gt;and Recipes&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;In eCommerce we’re mostly interested in describing organizations, products,
+reviews and breadcrumbs. Other types we use in particular cases.&lt;/p&gt;
+
+&lt;h2&gt;Describe online store&lt;/h2&gt;
+
+&lt;p&gt;In practice it makes sense to implement it on About or Contact page.
+With Rich Snippets for Organizations you can specify following Meta info:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Name of your business&lt;/li&gt;
+&lt;li&gt;Link to organization home page&lt;/li&gt;
+&lt;li&gt;Location of the business&lt;/li&gt;
+&lt;li&gt;Telephone numbers&lt;/li&gt;
+&lt;li&gt;Geographical coordinates of its location&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;With this structured information Google understands your website more accurately.
+Additionally you might get benefits in local search as Google adds your business
+to Google Places service.&lt;/p&gt;
+
+&lt;h2&gt;Describe your products&lt;/h2&gt;
+
+&lt;p&gt;Benefits of implementing Rich Snippets to describe products are evident. Take a
+look at picture below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;images/2011/09/27/search_results.png&quot; alt=&quot;Search Results&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The website on top &lt;a href=&quot;www.pandoramoa.com&quot;&gt;www.pandoramoa.com&lt;/a&gt; describes products
+in proper format. Because of that Google knows and provides not only relevant page
+to users search query, but also shows relevant image and list of similar products
+with links to them. Such huge snippet in SERPs grabs more attention and makes
+it more likely to click on it.
+It supports following Meta info:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The name of the product&lt;/li&gt;
+&lt;li&gt;Product image&lt;/li&gt;
+&lt;li&gt;Product description&lt;/li&gt;
+&lt;li&gt;Brand of the product&lt;/li&gt;
+&lt;li&gt;Product review&lt;/li&gt;
+&lt;li&gt;Product ID (sku, asin, upc, isbn or mpn)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Format customer reviews&lt;/h2&gt;
+
+&lt;p&gt;Customer reviews is a common tool in eCommerce which is used almost on every
+online store. Once you give it a proper shape according Rich Snippets requirements
+you get additional weight on search results. See how stars grab attention..&lt;/p&gt;
+
+&lt;p&gt;To enable Rich Snippet reviews on your page you need to specify following attributes:
+* Item being reviewed
+* Numerical quality rating for the item
+* The author of the review
+* The date that the item was reviewed
+* Review body
+* Short summary of the review&lt;/p&gt;
+
+&lt;h2&gt;Beautify breadcrumbs&lt;/h2&gt;
+
+&lt;p&gt;Instead of displaying long URL in SERPs (which often looks ugly and gives no
+real value to user) Google can show breadcrumbs if you create right markup for it.&lt;/p&gt;
+
+&lt;p&gt;Notice that each item in breadcrumbs is a link to specific page on your website.
+So, in practice you replace long, non-valuable and not clickable URL with
+structured chain of clickable links to your website.&lt;/p&gt;
+
+&lt;p&gt;To format breadcrumbs in this way you just need to specify following
+attributes for each item:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The title of a breadcrumb&lt;/li&gt;
+&lt;li&gt;The URL of a breadcrumb&lt;/li&gt;
+&lt;li&gt;The next breadcrumb in the hierarchy&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;How to markup Rich Snippets?&lt;/h2&gt;
+
+&lt;p&gt;Google supports three formats:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Microdata_(HTML5)&quot;&gt;Microdata (HTML5 specification)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://microformats.org/&quot;&gt;Microformats (simple conventions)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/RDFa&quot;&gt;RDFa (a way to label content)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;One step back&lt;/h2&gt;
+
+&lt;p&gt;While you have all these opportunities to increase evidence and weight in SERPs
+remember that Google doesn’t guarantee that it will be 100% used. In most cases
+it’s using, however consider it as an opportunity of SEO improvement.&lt;/p&gt;
+
+&lt;h2&gt;Links to check&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.google.com/support/webmasters/bin/topic.py?hl=en&amp;amp;topic=21997&quot;&gt;Rich Snippets documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.google.com/webmasters/tools/richsnippets&quot;&gt;Rich Snippets testing tool&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Your turn&lt;/h2&gt;
+
+&lt;p&gt;Tell u which types of Rich Snippets makes the most value for you?&lt;/p&gt;
+</content>
+   <author>
+     <name>Pavel Reva</name>
+     <email>pavel.reva@crowdint.com</email>
+   </author>
+ </entry>
+ 
+ <entry>
    <title>Ruby benchmarks</title>
    <link href="http://blog.crowdint.com/2011/09/05/ruby-benchmarks.html"/>
-   <updated>2011-09-05T00:00:00-05:00</updated>
+   <updated>2011-09-05T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/09/05/ruby-benchmarks</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;I recently started a new client project. Lucky me, &lt;a href=&quot;http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released&quot;&gt;Rails 3.1 has just
@@ -352,7 +498,7 @@ changes how the rubies behave.&lt;/p&gt;
  <entry>
    <title>Auto Retry Failed Cucumber Tests</title>
    <link href="http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests.html"/>
-   <updated>2011-08-22T00:00:00-05:00</updated>
+   <updated>2011-08-22T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/08/22/auto-retry-failed-cucumber-tests</id>
    <photo>f7412b373affd1d6db10752cf5d69315</photo>
    <content type="html">&lt;p&gt;If you're tired of having to re-kick builds in your CI server because of non deterministic failures,
@@ -479,7 +625,7 @@ super sophisticated task runner:&lt;/p&gt;
  <entry>
    <title>How to install Postgresql 8.4 in a Vagrant box</title>
    <link href="http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant.html"/>
-   <updated>2011-08-11T00:00:00-05:00</updated>
+   <updated>2011-08-11T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/08/11/postgresql-in-vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;If you don't know what Vagrant is, go read our &lt;a href=&quot;http://blog.crowdint.com/2011/06/21/vagrant.html&quot;&gt;first post about it&lt;/a&gt;&lt;/p&gt;
@@ -673,7 +819,7 @@ avoiding all this s**t... And it shall be called, &lt;code&gt;The Easy Way&lt;/c
  <entry>
    <title>Acceptance testing with Steak</title>
    <link href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html"/>
-   <updated>2011-07-06T00:00:00-05:00</updated>
+   <updated>2011-07-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak</id>
    <photo>2f2bc78de007915554f49c3ea0fef125</photo>
    <content type="html">&lt;p&gt;Acceptance testing is a technique that helps determine if the requirements of
@@ -818,7 +964,7 @@ the repeated steps you take in all of your tests.&lt;/p&gt;
  <entry>
    <title>Rails 3.1, Compass and Blueprint</title>
    <link href="http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint.html"/>
-   <updated>2011-06-27T00:00:00-05:00</updated>
+   <updated>2011-06-27T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;So, we all know that Rails 3.1 comes with a Sass compiler. But still,
@@ -882,7 +1028,7 @@ on your Rails 3.1 stylesheets.&lt;/p&gt;
  <entry>
    <title>Vagrant to manage multiple dev environments</title>
    <link href="http://blog.crowdint.com/2011/06/21/vagrant.html"/>
-   <updated>2011-06-21T00:00:00-05:00</updated>
+   <updated>2011-06-21T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/21/vagrant</id>
    <photo>29612de9aa10447dc2f9ec84cf2ab1b2</photo>
    <content type="html">&lt;p&gt;Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
@@ -994,7 +1140,7 @@ do some apt-get install, configure your settings.&lt;/p&gt;
  <entry>
    <title>Add Validations to your Ruby classes</title>
    <link href="http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes.html"/>
-   <updated>2011-06-13T00:00:00-05:00</updated>
+   <updated>2011-06-13T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/13/add-validations-to-your-ruby-classes</id>
    <photo>433031df4018635dfb177f4066c37a3b</photo>
    <content type="html">&lt;p&gt;Validations are one of the most useful things in ActiveRecord.
@@ -1050,7 +1196,7 @@ the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#va
  <entry>
    <title>Railsconf 2011</title>
    <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
-   <updated>2011-05-24T00:00:00-05:00</updated>
+   <updated>2011-05-24T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
@@ -1100,7 +1246,7 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
  <entry>
    <title>How to override destroy method keeping the callbacks</title>
    <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-05:00</updated>
+   <updated>2011-05-02T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
    <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
    <content type="html">&lt;p&gt;While working on a project, we were required to override the
@@ -1155,7 +1301,7 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
  <entry>
    <title>One File Web Page with Rack</title>
    <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-05:00</updated>
+   <updated>2011-04-25T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
    <photo>a302e7dd208f335dc67761a6db911561</photo>
    <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
@@ -1251,7 +1397,7 @@ by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;
  <entry>
    <title>Turn jQuery effects off for testing</title>
    <link href="http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing.html"/>
-   <updated>2011-04-13T00:00:00-05:00</updated>
+   <updated>2011-04-13T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/13/turn-jquery-effects-off-for-testing</id>
    <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
    <content type="html">&lt;p&gt;We, at &lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt;, always go with the
@@ -1329,7 +1475,7 @@ how to disable jQuery effects off.&lt;/p&gt;
  <entry>
    <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
    <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-05:00</updated>
+   <updated>2011-04-06T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
    <photo>fa56812143dd6049ef19d1a8032f21da</photo>
    <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
@@ -1448,7 +1594,7 @@ to use Haml and Compass.&lt;/p&gt;
  <entry>
    <title>Trying to make your Sinatra more RESTful?</title>
    <link href="http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful.html"/>
-   <updated>2011-03-31T00:00:00-06:00</updated>
+   <updated>2011-03-31T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/03/31/make-your-sinatra-more-restful</id>
    <photo>cd962d009c918bfc2dc6e63fc1b3b5cb</photo>
    <content type="html">&lt;p&gt;&lt;small&gt;&lt;code&gt;TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
@@ -1657,249 +1803,6 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
    <author>
      <name>Mario Zaizar</name>
      <email>mario@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>How to write good CSS</title>
-   <link href="http://blog.crowdint.com/2011/03/24/how-to-write-good-css.html"/>
-   <updated>2011-03-24T00:00:00-06:00</updated>
-   <id>http://blog.crowdint.com/2011/03/24/how-to-write-good-css</id>
-   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
-   <content type="html">&lt;p&gt;After a while of working with CSS, in different projects and with
-different people, I have realized that there is a lack of standards for
-it. Like, when you have to make some corrections or improvements and open
-the CSS file and you get a thousand lines of code with no comments at
-all.&lt;/p&gt;
-
-&lt;p&gt;Well, I have a couple Ideas of how CSS should be coded:&lt;/p&gt;
-
-&lt;h2&gt;The ABC of CSS&lt;/h2&gt;
-
-&lt;h3&gt;Keep it simple.&lt;/h3&gt;
-
-&lt;p&gt;Imagine that every time you write a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tag somebody kicks you in the nuts,
-painful huh?... Use only the necessary div tags. Think twice before writing a
-one, because if you don’t care about it you will get a super complex page.
-Always remember to keep it simple.&lt;/p&gt;
-
-&lt;h3&gt;Use HTML tags for their propose&lt;/h3&gt;
-
-&lt;p&gt;I'm always finding some code like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;   &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;td&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-   &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;As you see, it's a common list an instead of using &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; or &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; its using a &lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;A better way to do this would be:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Potatoes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Apples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Watermelons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Oranges&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;Cucumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;You &lt;strong&gt;must&lt;/strong&gt; use the correct tag; if you are not familiar with all of them
-take a look at &lt;a href=&quot;http://w3schools.com/tags/default.asp&quot;&gt;w3schools html reference&lt;/a&gt;.
-Here you will find the complete list of tags with examples and everything you need.&lt;/p&gt;
-
-&lt;p&gt;Also, this is important because, it is easier for search engines to
-identify your page and understand its code. Remember that search engines
-are like a blind users.&lt;/p&gt;
-
-&lt;h3&gt;Use comments&lt;/h3&gt;
-
-&lt;p&gt;Try to put comments on your CSS. It is easier for others to see the comments and
-know what the styles are being used for.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Common&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tags&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
-  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;styles&lt;/span&gt;
-  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Avoid absolute positions&lt;/h3&gt;
-
-&lt;p&gt;When you start making CSS, you can find it &quot;easy&quot; to put every element on
-the right place using absolute position. This is a very common, yet
-incorrect
-method to align your elements. Sometimes when you use absolute positions,
-you will get weird behavior after a window resize or in different
-browsers or screens, just try to avoid it and use margins and
-paddings to do the work.  Always remember &lt;a href=&quot;http://www.w3.org/TR/CSS21/box.html&quot;&gt;the box model&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2&gt;Ok, First steps&lt;/h2&gt;
-
-&lt;h3&gt;Reset your CSS&lt;/h3&gt;
-
-&lt;p&gt;Did you ever realize the huge differences between the browser when you put
-a text into a &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; or inside &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;? You will always face a couple of differences in
-how each browser renders the elements.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/2011/renders.jpg&quot; title=&quot;Renders&quot; alt=&quot;Diferent renders&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This happens because the browsers have different ways to render the elements
-of a page. An easy way to avoid this is by resetting your CSS, a simple
-technique where you put all the style to 0/none by default.
-You can achieve this by applying &lt;a href=&quot;http://meyerweb.com/eric/tools/css/reset/index.html&quot;&gt;Eric Meyer's css reset&lt;/a&gt;,
-download it and put it on your public folder, or link to the url
-directly.&lt;/p&gt;
-
-&lt;h3&gt;Styles for tags first&lt;/h3&gt;
-
-&lt;p&gt;I prefer to write styles for tags first, it’s something like starting from
-the general to the particular. In other words, make it general, and use
-exceptions only when it is really necessary.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1.2em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;nc&quot;&gt;.secondary_pages&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Verdana&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Be modular&lt;/h3&gt;
-
-&lt;p&gt;Remember to separate your CSS like modules, first, the body definitions,
-then the header definitions, and so on.
-Also separate them by files like &lt;strong&gt;main.css&lt;/strong&gt; and &lt;strong&gt;form.css&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;CSS&lt;/span&gt;
-  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;background-color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;#FFFFFF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;nf&quot;&gt;#header&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;black&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;Menu&lt;/span&gt;
-  &lt;span class=&quot;nf&quot;&gt;#left-menu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;text-transform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;uppercase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h3&gt;Do you feel like I am re-writing the whole bible? (Old and new testament!)&lt;/h3&gt;
-
-&lt;p&gt;Sometimes you start to write CSS and then you get velocity, or you have a
-deadline, then you get yourself coding like a mad man. Tons and tons of CSS
-lines. Then, you end up with like 10 different files with a thousand lines on
-each one.&lt;/p&gt;
-
-&lt;p&gt;Well if you end up having that, you are doing it completely wrong.&lt;/p&gt;
-
-&lt;p&gt;Take your time to write the CSS, once you get the expected result,
-take a look at your code and try to clean the clean it.&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.&lt;/p&gt;
-
-&lt;h4&gt;Antoine de Saint-Exupery &lt;em&gt;French writer (1900 - 1944)&lt;/em&gt;&lt;/h4&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;There's always a way to make your code look better. If you take care about
-it you will get maintainable, very easy to read and understandable code.&lt;/p&gt;
-
-&lt;h3&gt;Cross-browser testing &lt;strong&gt;ALWAYS&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;I highlighted &quot;always&quot; with caps and bold, because it is something that we
-forget about very often. We write and write CSS lines, and we test on Firefox or
-Chrome because we love those browsers, and we are very happy about the way
-our site looks, then after a couple of days of coding, you start thinking
-about how it will look on IE... that awfulness all web developers fear to
-see their work on. You test in IE and you realize that the entire
-site is messed up, the whole layout is broken.&lt;/p&gt;
-
-&lt;p&gt;You don’t know where to start but you do it anyway.
-Begin making changes here and there and you finish with tons
-of patches or writing a new CSS file just for IE.&lt;/p&gt;
-
-&lt;p&gt;That’s not necessary if you take into consideration what you are doing right
-from the first step. If you wrote 2 lines, verify in all browsers that your
-style is working right. By doing this you will end with clean code and
-compatible with all browsers.&lt;/p&gt;
-
-&lt;h3&gt;Remember the W3C&lt;/h3&gt;
-
-&lt;p&gt;Always keep in mind the standards and validate your site using the
-&lt;a href=&quot;http://jigsaw.w3.org/css-validator/&quot;&gt;CSS&lt;/a&gt; and
-&lt;a href=&quot;http://validator.w3.org/&quot;&gt;HTML&lt;/a&gt; validators. If your code passes the validation, your site will
-be readable for all browsers for sure.&lt;/p&gt;
-
-&lt;h3&gt;My final words&lt;/h3&gt;
-
-&lt;p&gt;All suggestions regarding good CSS writing, are about taking care of the
-details.  Details make the difference, you only have to put some attention
-and code in the right way.  Remeber that sometimes your code is gonna be
-seen by other developers and you have to make it clear for them and for the
-browsers too.&lt;/p&gt;
-
-&lt;p&gt;Also remember the accessibility of your site, think of the people at all
-times... people with some illness or different capacities, like the blind
-people and so on. You can check the &lt;a href=&quot;http://www.w3.org/TR/WCAG10/&quot;&gt;Web Content Accessibility Guidelines&lt;/a&gt;
-and try to at least complete the guides for Level A, the visitors of your
-site will be grateful about this.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;And for God’s sake... Code clean!!!!&lt;/strong&gt;&lt;/p&gt;
-</content>
-   <author>
-     <name>Hector Bustillos</name>
-     <email>hector.bustillos@crowdint.com</email>
    </author>
  </entry>
  

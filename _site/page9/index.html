@@ -47,6 +47,63 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 18</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>And it's all thanks to <em>you</em>.</p>
+
+<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
+
+<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
+
+<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
+
+<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
+
+<div style="text-align:center; margin: 10px">
+  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
+</div>
+
+
+<p>Thanks again to everyone involved.</p>
+
+<p>Hope to see you next year!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+    
+    <p>     
+      <div class="tweet left">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="Magma Rails 2010, a success!" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
   <p class="author">
     <span class="date"><b>Oct 07</b><br />2010</span>
@@ -464,198 +521,6 @@ but there are some few more useful links to look at:
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 10</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.</p>
-
-<p>We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?</p>
-
-<p>Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.</p>
-
-<p>So, let's try an example:</p>
-
-<h2>Hands on!</h2>
-
-<p>First, we need to create a new Rails Project:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test
-</code></pre>
-</div>
-
-
-<p>In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test -T
-</code></pre>
-</div>
-
-
-<p>Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:</p>
-
-<div class="highlight"><pre><code class="bash">group :test <span class="k">do</span>
-<span class="k">  </span>gem <span class="s2">&quot;rspec-rails&quot;</span>, <span class="s2">&quot;&gt;= 2.0.0.beta.19&quot;</span>
-  gem <span class="s1">&#39;cucumber-rails&#39;</span>
-  gem <span class="s1">&#39;capybara&#39;</span>
-end
-
-gem <span class="s1">&#39;haml-rails&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Then, we just need to install our gems to start playing with our generators:</p>
-
-<div class="highlight"><pre><code class="bash">bundle install
-</code></pre>
-</div>
-
-
-<p>And, that's it! Now we have a perfect (almost) environment to work with.</p>
-
-<h2>Generators</h2>
-
-<p>Now, let's invoke a Rails generator to create a new controller called Test:</p>
-
-<div class="highlight"><pre><code class="bash">rails g controller Test
-</code></pre>
-</div>
-
-
-<p>This function is just going to invoke many other generators, to create something like this:</p>
-
-<div class="highlight"><pre><code class="bash">create  app/controllers/test_controller.rb
-invoke  haml
-create    app/views/test
-invoke  test_unit
-create    <span class="nb">test</span>/functional/test_controller_test.rb
-invoke  helper
-create    app/helpers/test_helper.rb
-invoke    test_unit
-create      <span class="nb">test</span>/unit/helpers/test_helper_test.rb
-</code></pre>
-</div>
-
-
-<p>As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:</p>
-
-<div class="highlight"><pre><code class="bash">rails g cucumber:install
-rails g rspec:install
-</code></pre>
-</div>
-
-
-<p>Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)</p>
-
-<div class="highlight"><pre><code class="bash">config.generators <span class="k">do</span> |g|
-  g.test_framework :rspec
-end
-</code></pre>
-</div>
-
-
-<p>If we try to generate a new controller called RspecTest something like this will show up:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller RspecTest
-create  app/controllers/rspec_test_controller.rb
-invoke  haml
-create    app/views/rspec_test
-invoke  rspec
-create    spec/controllers/rspec_test_controller_spec.rb
-invoke  helper
-create    app/helpers/rspec_test_helper.rb
-invoke    rspec
-create      spec/helpers/rspec_test_helper_spec.rb
-</code></pre>
-</div>
-
-
-<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.rb' like this:</p>
-
-<div class="highlight"><pre><code class="bash">g.test_framework :rspec, :views <span class="o">=</span>&gt; <span class="nb">false</span>
-</code></pre>
-</div>
-
-
-<p>Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g generator my_test_method
-create  lib/generators/my_test_method
-create  lib/generators/my_test_method/my_test_method_generator.rb
-create  lib/generators/my_test_method/USAGE
-create  lib/generators/my_test_method/templates
-</code></pre>
-</div>
-
-
-<p>This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named "generators" is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.</p>
-
-<p>What commands can you use inside your generator? Rails 3 generators were created on top of <a href="http://github.com/wycats/thor">Thor</a>, so you could check Thor <a href="http://rdoc.info/github/wycats/thor/master">documentation</a>, and also there is a great document you can follow on <a href="http://edgeguides.rubyonrails.org/generators.html">RailsGuides</a>.</p>
-
-<p>Anyway, if you want to know more about an specific generator, you could use this command:</p>
-
-<div class="highlight"><pre><code class="bash">rails g <span class="o">[</span>generator_name<span class="o">]</span> -h
-</code></pre>
-</div>
-
-
-<p>There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the <a href="http://github.com/indirect/rails3-generators">rails3-generators</a> gem, there are many helpful generators that can make your coding more DRY.</p>
-
-<p>By the way, there are other things I can't make them to do. For example, if I try to use "my_test_method_generator" as follows, I get an error:</p>
-
-<p>in "application.rb":</p>
-
-<div class="highlight"><pre><code class="bash">g.helper :myhelper
-</code></pre>
-</div>
-
-
-<p>in you terminal:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller <span class="o">[</span>name<span class="o">]</span>
-...
-error  myhelper <span class="o">[</span>not found<span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/10/customize-your-generators-workflow.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Customize your Generators Workflow in Rails 3.0.0" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Luis Galaviz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -672,7 +537,9 @@ error  myhelper <span class="o">[</span>not found<span class="o">]</span>
   <h1>Recent Posts</h1>
   <ul class="archives">
 
-  <li><span><b>30 Sep 2011</b></span> &raquo; <a href="/2011/09/30/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
+  <li><span><b>05 Oct 2011</b></span> &raquo; <a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
+
+  <li><span><b>27 Sep 2011</b></span> &raquo; <a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></li>
 
   <li><span><b>05 Sep 2011</b></span> &raquo; <a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></li>
 
@@ -709,8 +576,6 @@ error  myhelper <span class="o">[</span>not found<span class="o">]</span>
   <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
-
-  <li><span><b>25 Feb 2011</b></span> &raquo; <a href="/2011/02/25/why-ruby.html">Why ruby?</a></li>
 
   </ul>
 </div>
