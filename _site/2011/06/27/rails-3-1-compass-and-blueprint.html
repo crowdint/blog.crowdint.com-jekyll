@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Rails 3.1, Compass and Blueprint</title>
+  <title>Crowd Interactive Tech Blog :: Rails 3.1, Compass and Blueprint (Updated)</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,7 +46,7 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Rails 3.1, Compass and Blueprint</h1>  
+  <h1>Rails 3.1, Compass and Blueprint (Updated)</h1>  
   <p class="author">
     <span class="date"><b>Jun 27</b><br />2011</span>
   </p>
@@ -61,21 +61,27 @@ integration.</p>
 <p>Well, it's very easy to use Compass with Rails 3.1 and get all those
 Blueprint mixins for your stylesheets.</p>
 
+<h3>Using assets:precompile</h3>
+
 <p>All you have to do is, add the compass gem to your Gemfile:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;compass&#39;</span><span class="p">,</span> <span class="n">git</span><span class="p">:</span> <span class="s1">&#39;https://github.com/chriseppstein/compass.git&#39;</span><span class="p">,</span>
-    <span class="n">branch</span><span class="p">:</span> <span class="s1">&#39;rails31&#39;</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">group</span> <span class="ss">:assets</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s1">&#39;compass&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 0.12.alpha&#39;</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>The trick here is that you have to use the compass edge version from git, and
-the <em>rails31</em> branch currently under development.</p>
+<p>The trick here is that you have to use the latest alpha version of compass <span class="updated">compass edge version from git, and
+the <em>rails31</em> branch currently under development</span>.</p>
 
-<p>This might change in future compass releases, but for now, this is the
-only way.</p>
+<p><span class="updated">This might change in future compass releases, but for now, this is the
+only way.</span></p>
 
-<p>Now, create a <em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
+<h2>Blueprint styles</h2>
+
+<p>If you just want to use the blueprint classes on your application, create a
+<em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
 the following contents:</p>
 
 <div class="highlight"><pre><code class="css">  <span class="k">@import</span> <span class="s1">&#39;_blueprint&#39;</span><span class="p">;</span>
@@ -99,8 +105,38 @@ in the manifest:</p>
 </div>
 
 
-<p>And, that's it. Now you'll be able to use all the usual blueprint mixins
-on your Rails 3.1 stylesheets.</p>
+<p>And, that's it. Now you'll be able to use all the usual blueprint styles
+on your Rails 3.1 application.</p>
+
+<h2>Mixins</h2>
+
+<p>If you want to use the blueprint mixins, you must do something a bit
+different than the regular asset pipeline stuff.</p>
+
+<p>Let's say you will have a bookstore.css file with all your styles. If
+this is the case, create a file named
+<em>app/assets/stylesheets/bookstore.css.scss</em> with the following contents:</p>
+
+<div class="highlight"><pre><code class="css"><span class="c">/*</span>
+<span class="c">  *= require_self</span>
+<span class="c">  *= require blueprint</span>
+<span class="c">*/</span>
+
+<span class="k">@import</span> <span class="s1">&#39;bookstore/*&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>This way, all the css.scss on your <em>app/assets/stylesheets/bookstore</em>
+will be compiled into bookstore.css.</p>
+
+<h3>Why not just use require_tree ./bookstore?</h3>
+
+<p>You might think that it's better to use require_tree for this, but, since the asset
+pipeline compiles each individual css file for development, all of them
+would have to be headed with the 'require blueprint' line, else, it will
+show you an error saying that it doesn't recognize the mixins on each
+file.</p>
 
 <p>Hope this helps you somehow.</p>
 
@@ -153,15 +189,15 @@ on your Rails 3.1 stylesheets.</p>
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
+  <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   </ul>
   <div id="disqus_thread"></div>

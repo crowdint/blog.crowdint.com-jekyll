@@ -962,7 +962,7 @@ the repeated steps you take in all of your tests.&lt;/p&gt;
  </entry>
  
  <entry>
-   <title>Rails 3.1, Compass and Blueprint</title>
+   <title>Rails 3.1, Compass and Blueprint (Updated)</title>
    <link href="http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint.html"/>
    <updated>2011-06-27T00:00:00-07:00</updated>
    <id>http://blog.crowdint.com/2011/06/27/rails-3-1-compass-and-blueprint</id>
@@ -976,21 +976,27 @@ integration.&lt;/p&gt;
 &lt;p&gt;Well, it's very easy to use Compass with Rails 3.1 and get all those
 Blueprint mixins for your stylesheets.&lt;/p&gt;
 
+&lt;h3&gt;Using assets:precompile&lt;/h3&gt;
+
 &lt;p&gt;All you have to do is, add the compass gem to your Gemfile:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;git&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;https://github.com/chriseppstein/compass.git&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rails31&amp;#39;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:assets&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;~&amp;gt; 0.12.alpha&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;The trick here is that you have to use the compass edge version from git, and
-the &lt;em&gt;rails31&lt;/em&gt; branch currently under development.&lt;/p&gt;
+&lt;p&gt;The trick here is that you have to use the latest alpha version of compass &lt;span class=&quot;updated&quot;&gt;compass edge version from git, and
+the &lt;em&gt;rails31&lt;/em&gt; branch currently under development&lt;/span&gt;.&lt;/p&gt;
 
-&lt;p&gt;This might change in future compass releases, but for now, this is the
-only way.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&quot;updated&quot;&gt;This might change in future compass releases, but for now, this is the
+only way.&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;Now, create a &lt;em&gt;blueprint.css.scss&lt;/em&gt; file on &lt;em&gt;app/assets/stylesheets&lt;/em&gt; with
+&lt;h2&gt;Blueprint styles&lt;/h2&gt;
+
+&lt;p&gt;If you just want to use the blueprint classes on your application, create a
+&lt;em&gt;blueprint.css.scss&lt;/em&gt; file on &lt;em&gt;app/assets/stylesheets&lt;/em&gt; with
 the following contents:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;  &lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;_blueprint&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -1014,8 +1020,38 @@ in the manifest:&lt;/p&gt;
 &lt;/div&gt;
 
 
-&lt;p&gt;And, that's it. Now you'll be able to use all the usual blueprint mixins
-on your Rails 3.1 stylesheets.&lt;/p&gt;
+&lt;p&gt;And, that's it. Now you'll be able to use all the usual blueprint styles
+on your Rails 3.1 application.&lt;/p&gt;
+
+&lt;h2&gt;Mixins&lt;/h2&gt;
+
+&lt;p&gt;If you want to use the blueprint mixins, you must do something a bit
+different than the regular asset pipeline stuff.&lt;/p&gt;
+
+&lt;p&gt;Let's say you will have a bookstore.css file with all your styles. If
+this is the case, create a file named
+&lt;em&gt;app/assets/stylesheets/bookstore.css.scss&lt;/em&gt; with the following contents:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;c&quot;&gt;/*&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;  *= require_self&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;  *= require blueprint&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;*/&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bookstore/*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This way, all the css.scss on your &lt;em&gt;app/assets/stylesheets/bookstore&lt;/em&gt;
+will be compiled into bookstore.css.&lt;/p&gt;
+
+&lt;h3&gt;Why not just use require_tree ./bookstore?&lt;/h3&gt;
+
+&lt;p&gt;You might think that it's better to use require_tree for this, but, since the asset
+pipeline compiles each individual css file for development, all of them
+would have to be headed with the 'require blueprint' line, else, it will
+show you an error saying that it doesn't recognize the mixins on each
+file.&lt;/p&gt;
 
 &lt;p&gt;Hope this helps you somehow.&lt;/p&gt;
 </content>

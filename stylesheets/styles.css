@@ -175,7 +175,7 @@ b, em, dfn {
   background-repeat: no-repeat;
   text-indent: 23px;
   color: #353535;
-} 
+}
 
 .right-side a {
   color: #175057;
@@ -324,7 +324,7 @@ em {
   }
 .previous{
  color: gray;
- 
+
 }
 .next{
   color: gray;
@@ -334,25 +334,6 @@ em {
   margin-bottom: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.updated {
+  text-decoration: line-through;
+}
