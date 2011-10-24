@@ -22,10 +22,10 @@ title: Blog
         {{ post.content }}
       {% else %}
         {% if month == 'Jan' or month == 'Feb' or month == 'Mar' and year == '2011' %}
-            {{ post.content  | split_truncate | truncatewords: 61}}
+            {{ post.content  | split_truncate | truncatewords: 71}}
             <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% else %}
-           {{ post.content  | split_truncate | truncatewords: 70}}
+           {{ post.content  | split_truncate | truncatewords: 80}}
            <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
         {% endif %}
       {% endif %}
@@ -34,16 +34,16 @@ title: Blog
     <div class="comments">
       <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>
     </div>
-    
-    <p>     
+
+    <p>
       <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="{{ post.title }}" 
-          data-count="none" 
-          data-via="crowdint" 
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="{{ post.title }}"
+          data-count="none"
+          data-via="crowdint"
           data-related="{{post.author}}:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
@@ -81,8 +81,8 @@ title: Blog
 </div>
 
 <div class="post prepend-1">
-	<div class="left">
-	  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+  <div class="left">
+    <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
     <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
-  </div>  
+  </div>
 </div>
