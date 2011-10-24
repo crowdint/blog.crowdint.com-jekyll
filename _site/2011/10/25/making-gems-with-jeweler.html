@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Crowd Interactive Tech Blog :: Making gems with jeweler</title>
+  <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/skribit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/stylesheets/syntax.css" type="text/css" media="screen" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for blog.crowdint.com" href="http://feeds.feedburner.com/CrowdInteractiveTechBlog" />
+  <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+
+    </script>
+</head>
+<body>
+  <div class="container">
+    <div id="empty-header">
+      <a href="/" id="home-link"><img src="/images/logo_03.png" id="logoHead" width="227" height="74" alt="LogoHead" onclick="_gaq.push(['_trackEvent', 'header', 'logo']);"/></a>
+      <ul id="navMenu">
+        <li><a href="http://www.crowdint.com/" onclick="_gaq.push(['_trackEvent', 'header', 'home']);"><span>HOME</span></a></li>
+        <li><a href="http://www.crowdint.com/projects" onclick="_gaq.push(['_trackEvent', 'header', 'projects']);"><span>PROJECTS</span></a></li>
+        <li><a href="http://www.crowdint.com/services" onclick="_gaq.push(['_trackEvent', 'header', 'services']);"><span>SERVICES</span></a></li>
+        <li class="selected"><span>BLOG</span></li>
+        <li><a href="http://www.crowdint.com/about_us" onclick="_gaq.push(['_trackEvent', 'header', 'about_us']);"><span>ABOUT</span></a></li>
+        <li><a href="http://www.crowdint.com/" onclick="_gaq.push(['_trackEvent', 'header', 'contact']);"><span>CONTACT</span></a></li>
+      </ul>
+    </div>
+    <div class="span-24 append-bottom testGlow">
+      <div class="round-top span-24">
+        &nbsp;
+      </div>
+      <div id="white-body" class="span-24">
+        <div class="left-side span-17">
+          <div class="post prepend-1">
+  <h1>Making gems with jeweler</h1>  
+  <p class="author">
+    <span class="date"><b>Oct 25</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/8a4d383333234bd653b7d768ee999c11" class="avatar" alt="Avatar" /></div>
+    <p>A few days ago I was just wondering what the best way to craft a <a href="http://en.wikipedia.org/wiki/RubyGems">Gem</a> was, and I
+guess that doesn't matter, any way you take will lead you to the same place, but
+I really liked an special way to do it: I found <a href="https://github.com/technicalpickles/jeweler">JEWELER</a>. In short, Jeweler is a
+GEM to make GEMS, great right?</p>
+
+<p>Its quite simple to use, you just need to follow a few steps to get the skeleton
+of a GEM and then you will get it ready to use.</p>
+
+<p>The greatest stuff about Jeweler is that you have a library to manage and release
+<a href="http://en.wikipedia.org/wiki/RubyGems">RubyGem</a> projects. Don't forget to create
+your account in RubyGem website, that will be your signature like a gem crafter.</p>
+
+<p>You can also use scaffold generator to start a new RubyGem project.</p>
+
+<h3>We need to use RubyGems to install JEWELER and get started:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install jeweler
+</code></pre>
+</div>
+
+
+<h3>Now with JEWELER installed we are ready to start building our own gem</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>jeweler &lt;my-gem-name&gt;
+</code></pre>
+</div>
+
+
+<p>for instance:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>jeweler My-Gem
+</code></pre>
+</div>
+
+
+<p>You'll get this output:</p>
+
+<pre><code>create  .gitignore
+create  Rakefile 
+create  Gemfile
+create  LICENSE.txt
+create  README.rdoc
+create  .document
+create  lib
+create  lib/My-Gem.rb   #Here you need to put your code
+create  test            #Here you need to put your Unit Test code 
+create  test/helper.rb  
+create  test/test_My-Gem.rb
+</code></pre>
+
+<p>This means now you have the skeleton for your gem in the My-Gem directory.</p>
+
+<p>If you want to see JEWELER command options just run jeweler --help</p>
+
+<h3>Then we need rake commnad to interact with our gem</h3>
+
+<p>This step is really important because with this you can generate and validate
+gemspec, realease gem, runt tests, display the current version, etc.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake -T
+</code></pre>
+</div>
+
+
+<pre><code>rake build              # Build gem into pkg
+rake clobber_rcov       # Remove rcov products for rcov
+rake clobber_rdoc       # Remove rdoc products
+rake console[script]    # Start IRB with all runtime dependencies loaded
+rake gemcutter:release  # Release gem to Gemcutter
+rake gemspec            # Generate and validate gemspec
+rake gemspec:debug      # Display the gemspec for debugging purposes, as jeweler
+rake gemspec:generate   # Regenerate the gemspec on the filesystem
+rake gemspec:release    # Regenerate, validate gemspec.
+rake gemspec:validate   # Validates the gemspec on the filesystem
+rake git:release        # Tag and push release to git.
+rake install            # Build and install gem using `gem install`
+rake rcov               # Analyze code coverage with tests
+rake rdoc               # Build the rdoc HTML Files
+rake release            # Release gem
+rake rerdoc             # Force a rebuild of the RDOC files
+rake test               # Run tests
+rake version            # Displays the current version
+rake version:bump:major # Bump the major version by 1
+rake version:bump:minor # Bump the a minor version by 1
+rake version:bump:patch # Bump the patch version by 1
+rake version:write      # Writes out an explicit version.
+</code></pre>
+
+<h3>Now we need to set a version before start using the gem</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake version:write <span class="nv">MAJOR</span><span class="o">=</span>1 <span class="nv">MINOR</span><span class="o">=</span>0 <span class="nv">PATCH</span><span class="o">=</span>0
+</code></pre>
+</div>
+
+
+<p>The small explanation to see this is if you do a small change you need to
+increase PATCH (0 - 9) then you will start to increase MINOR (0 - 9) stage, and
+when you get MAJOR changes, is because you did a new version of your gem.</p>
+
+<p>You will see this message:</p>
+
+<div class="highlight"><pre><code class="bash"> 
+Updated version: 1.0.0
+</code></pre>
+</div>
+
+
+<h3>Then just we need to edit our Rakefile and change a couple of lines inside, I suggest to you use VIM/MVIM/GVIM to do that:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>vim Rakefile
+</code></pre>
+</div>
+
+
+<p>If your gem depends upon other libraries, you'll need to define a gem specification, commonly called a "gemspec".</p>
+
+<h3>Inside Rakefile look for "gem" and that is the Gem Specification Reference.</h3>
+
+<p>Here you need to change:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem.summary <span class="o">=</span> %Q<span class="o">{</span>TODO: summary here about your gem<span class="o">}</span>
+<span class="nv">$ </span>gem.description <span class="o">=</span> %Q<span class="o">{</span>TODO: longer description of your gem<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>  to this:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem.summary <span class="o">=</span> %Q<span class="o">{</span>Writte a summary here about your gem<span class="o">}</span>
+<span class="nv">$ </span>gem.description <span class="o">=</span> %Q<span class="o">{</span>Writte a longer description of your gem<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<h3>After this, we'll install our gem locally and so, we can start testing it:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake install 
+</code></pre>
+</div>
+
+
+<h3>If later you want to release your gem into www.rubygems.org you just need to run the command:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake release
+</code></pre>
+</div>
+
+
+<p>This will automatically:</p>
+
+<pre><code>• Generate My-Gem.gemspec and commit it
+• Use git to tag v1.0.0 and push it
+• Build My-Gem-1.0.0.gem and push it to rubygems.org
+</code></pre>
+
+<h2>Conclusions</h2>
+
+<p>Now you to know about use jeweler, start and see how this works, is
+not the only way to do a gem, this works to me, but you can find your own way to do
+it wherever you feel more confortable.</p>
+
+<p><em>Make your gem and release it</em> to RubyGem everybody is waiting for sexy gems to
+make more faster our developer life.</p>
+
+<blockquote><p>"Easy way to make yours owns gems (FEB). Faster, Easy and Beautiful"</p></blockquote>
+
+    
+    <p>
+      <div class="tweet">
+        <a href="http://twitter.com/share" 
+          class="twitter-share-button" 
+          data-text="" 
+          data-count="none" 
+          data-via="crowdint" 
+          data-related=":with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>     
+      </div>
+      <div class="right">
+        <!-- Place this tag where you want the +1 button to render -->
+        <g:plusone></g:plusone>
+
+        <!-- Place this tag after the last plusone tag -->
+        <script type="text/javascript">
+          (function() {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+          })();
+        </script>
+      </div>
+      <br><br>     
+  		<div class="left">
+  		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2011/10/25/making-gems-with-jeweler.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+      </div>
+      
+    </p>
+  </div>
+  
+  <div class="author_box">
+    <p><b>Author:</b> Victor Velázquez | victor.velazquez@crowdint.com</p>
+  </div>
+  <div class="nav_links span-16">
+    
+    
+  </div>
+</div>
+<div class="post prepend-1">
+  <h1>Related Posts</h1>
+  <ul class="archives">
+
+  </ul>
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      /**
+        * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+        */
+        // var disqus_developer = 1;
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = 'http://crowdinttech.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=crowdinttech">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+        </div>
+        <div class="right-side span-5 last prepend-1">
+          <h1><a href="/">Blog Home</a></h1>
+<h1>About Crowd Interactive</h1>
+<p class="append-1 about">Crowd Interactive is a Ruby on Rails
+consultancy firm powered by a team of enthusiast engineers that love
+programming.We turn your ideas into web applications...<br/><a href="/about.html">Read More...</a></p>
+<h1>Our Favorite Sites</h1>
+<ul>
+  <li><a href="http://www.crowdint.com">Crowd Interactive</a></li>
+  <li><a href="http://www.magmarails.com">MagmaRails</a></li>
+  <li><a href="http://rubyonrails.org">Ruby on Rails</a></li>
+  <li><a href="http://ruby-lang.org">Ruby-Lang</a></li>
+  <li><a href="http://github.com/crowdint">Github</a></li>
+</ul>
+<h1>Stuff we've built</h1>
+<ul>
+  <li><a href="http://www.modcloth.com">ModCloth</a></li>
+  <li><a href="http://www.creativeallies.com">Creative Allies</a></li>
+  <li><a href="http://www.nameframe.com">Nameframe</a></li>
+  <li><a href="http://github.com/crowdint/rails3-jquery-autocomplete">Rails3-jQuery-Autocomplete</a></li>
+  <li><a href="http://github.com/crowdint/rankstar">rankstar</a></li>
+  <li><a href="http://github.com/crowdint/blog.crowdint.com">This site's source code</a></li>
+</ul>
+<h1>Older Posts</h1>
+<ul>
+  <li><a href="/archive.html">Archive</a></li>
+</ul>
+	  <iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828&amp;width=190&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;height=380px" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:190px; height:380px;" allowTransparency="true"></iframe>
+Site Powered by <a href="http://github.com/mojombo/jekyll">Jekyll</a>
+
+        </div>
+      </div>
+      <div class="round-bottom span-24">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    <div class="copyContent" >
+      <p class="copy">Copyright &copy; 2010, Crowd Interactive. All rights reserved.</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var disqus_shortname = 'crowdinttech';
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'http://disqus.com/forums/crowdinttech/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+  </script>
+</body>
+</html>
