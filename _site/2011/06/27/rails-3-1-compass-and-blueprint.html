@@ -61,8 +61,6 @@ integration.</p>
 <p>Well, it's very easy to use Compass with Rails 3.1 and get all those
 Blueprint mixins for your stylesheets.</p>
 
-<h3>Using assets:precompile</h3>
-
 <p>All you have to do is, add the compass gem to your Gemfile:</p>
 
 <div class="highlight"><pre><code class="ruby"><span class="n">group</span> <span class="ss">:assets</span> <span class="k">do</span>
@@ -71,6 +69,9 @@ Blueprint mixins for your stylesheets.</p>
 </code></pre>
 </div>
 
+
+<p><em>NOTE:</em> If you want the scss files compiled on the fly, you have to put
+the compass gem line <em>outside of the assets group</em>.</p>
 
 <p>The trick here is that you have to use the latest alpha version of compass <span class="updated">compass edge version from git, and
 the <em>rails31</em> branch currently under development</span>.</p>
@@ -191,9 +192,9 @@ file.</p>
 
   <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
-  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
 

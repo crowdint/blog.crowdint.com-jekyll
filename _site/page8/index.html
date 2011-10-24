@@ -47,6 +47,403 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></h1>
+  <p class="author">
+    <span class="date"><b>Nov 17</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Rack provides a minimal interface between web servers supporting <strong>Ruby</strong>. It contains a full stack
+of middleware components. Using <strong>Rack</strong> middleware you can build applications that directly interact
+with a HTTP requests environment and can be plugged in Rails, Sinatra and many other <strong>Rack based frameworks</strong>.</p>
+
+<p>Rack is one of those "bare minimum components" that you need for creating modular web
+applications, furthermore, by learning Rack you begin mastering part of the <em>Rails internals</em>, why?,
+because <strong>Rails</strong> has adopted the <em>Rack philosophy</em> throughout its framework, a Rails application is actually
+<em>a collection of Rack and Rails middleware components</em> that work together to form the completed
+whole.</p>
+
+<p>In this article I'll guide you through the process of installing Rack, letting you know what every rack
+application must implement/provide and creating a rack application, in the process I'll explain some
+concepts with a design pattern interpretation of rack and finally we'll see an integrating example
+of the whole story.</p>
+
+<p>Let's begin.</p>
+
+<h2>Installing Rack</h2>
+
+<p>Just install the rack gem, as simple as:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
+</code></pre>
+</div>
+
+
+<h2>Basic requirements</h2>
+
+<p>A Rack application is a <strong>Ruby object</strong> that <strong>respond_to? 'call'</strong>, it takes exactly <em>one argument</em>:
+<strong>the environment</strong>, and <em>returns</em> an <strong>Array</strong> of exactly <strong>three values</strong>: <strong>http status</strong>, <strong>http
+headers</strong>, and <strong>http body</strong>.</p>
+
+<p>The headers and body returned by the call have to <strong>respond_to? 'each'</strong>.</p>
+
+<p>So basically anything like the following may act as a rack application:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">call</span> <span class="n">environment</span>
+</code></pre>
+</div>
+
+
+<p>Of course, there are more things that you need to check in order to make your application
+<strong>Rack compliant</strong>, but we'll get to that later.</p>
+
+<p>Now we are going to build a classic example application.</p>
+
+<h2>Hello World example</h2>
+
+<p>In this example, it returns a three element Array, array's elements in order are: 200 HTTP
+successful response code, a text/html content type and the HTTP response body with a "Hello
+World" message.</p>
+
+<p>Open a file, call it <em>hello_world.ru</em>, and write following:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">app</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> 
+    <span class="o">[</span>
+      <span class="mi">200</span><span class="p">,</span>
+      <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span>
+     <span class="s1">&#39;Hello World&#39;</span>
+    <span class="o">]</span>
+  <span class="k">end</span> 
+  <span class="n">run</span> <span class="n">app</span> 
+</code></pre>
+</div>
+
+
+<p>In order to run it, I'll first send the <em>rackup hello_world.ru</em> to the background, and then, using <em>curl</em>,
+we'll send a request to localhost:</p>
+
+<div class="highlight"><pre><code class="bash">  ..<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup hello_world.ru &amp;
+  <span class="o">[</span>1<span class="o">]</span> 12508
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:9292
+  127.0.0.1 - - <span class="o">[</span>05/Nov/2010 12:07:54<span class="o">]</span> <span class="s2">&quot;GET / HTTP/1.1&quot;</span> 200 - 0.0008
+  Hello World
+</code></pre>
+</div>
+
+
+<p>And there we have our <strong>Hello World</strong> message from the <em>http body</em> example.</p>
+
+<h2>Basic API</h2>
+
+<p>Before going on to the next examples, you need to know that rack applications usually call
+the following methods:</p>
+
+<ul>
+<li><em>use(middleware, **args, &amp;block)</em> adds a middleware to the stack</li>
+<li><em>run(app)</em> dispatches to an application</li>
+<li><em>map(path, &amp;block)</em> constructs a Rack::URLMap in a convenient way</li>
+</ul>
+
+
+<p>Next, I'll describe a rack basic concept and after that I'll show an example on how to stack
+many rack applications.</p>
+
+<h2>Middleware</h2>
+
+<p>A middleware is a Rack application that is <em>designed</em> to <em>run</em> in <em>conjunction</em> with another Rack
+application that acts as the <em>endpoint</em>.</p>
+
+<p>Think of a Rack middleware as a filter <em>receiving</em> the Rack environment for the request
+from the previous <em>middleware, then doing some work with or on the </em>request's environment<em>
+and then </em>calling<em> the </em>next middleware<em> in the chain. The </em>last<em> Rack application in the
+chain is the </em>application itself<em>, </em>any<em> middleware in the chain can </em>return the Rack response
+itself<em>, thus </em>preventing<em> the rest of the middlewares in the chain from </em>executing*.</p>
+
+<p>Now let's build and chain three rack applications/middlewares, one <em>lambda endpoint</em> and two <em>call</em>
+responders: SayHi and SayNothing. After this example we'll go through how Rack integrates a
+<em>design pattern</em>.</p>
+
+<h2>Chaining Rack applications example</h2>
+
+<p>Our endpoint application is just like the previous Hello World example but it returns an
+"I'm an endpoint" body.</p>
+
+<p>The point here is to show how three different objects (middlewares) are chained, classes
+<em>SayHi</em> and <em>SayNothing</em> will simply append a message to the response body, in the end, the returned
+request body will contain the message added by each middleware.</p>
+
+<p>In order to avoid code repetition we'll define the common code that is inside the Initializer module
+and then we'll mix it in each class using <strong>Module#include</strong>.</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">module</span> <span class="nn">Initializer</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span> 
+    <span class="k">end</span> 
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">body</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hi from </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
+    <span class="k">end</span> 
+  <span class="k">end</span>
+
+  <span class="k">class</span> <span class="nc">SayHi</span>
+    <span class="kp">include</span> <span class="no">Initializer</span>
+  <span class="k">end</span>
+
+  <span class="k">class</span> <span class="nc">SayNothing</span>
+    <span class="kp">include</span> <span class="no">Initializer</span>
+  <span class="k">end</span>
+    
+  <span class="n">use</span> <span class="no">SayHi</span>
+  <span class="n">use</span> <span class="no">SayNothing</span>
+  <span class="n">run</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;text/html&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;I&#39;m the endpoint&quot;</span><span class="o">]]</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>Let's test it using <em>rackup</em>:</p>
+
+<div class="highlight"><pre><code class="bash">...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup  simple_stacked.ru  -p 1111 &amp;
+<span class="o">[</span>1<span class="o">]</span> 19216
+
+...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
+I<span class="err">&#39;</span>m the endpoint
+Hi from SayNothing
+Hi from SayHi...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>The response shows the endpoint's message on the first line, plus the SayNothing response,
+plus the SayHi response. As you can see all the applications interacted directly with the
+request and its response.</p>
+
+<h2>Decorator pattern</h2>
+
+<p>It is important to note that Rack applications follow a decorator pattern, where each application
+receives an <em>Array of three elements and returns an Array of three elements</em>, this Array must follow
+the specification we discussed above.</p>
+
+<p>This pattern allows components to receive/add behavior dynamically using a common interface. If
+you want to learn more about the subject I recommend you go through <a href="http://lukeredpath.co.uk/blog/decorator-pattern-with-ruby-in-8-lines.html">Luke Redpath's excellent
+article</a>.</p>
+
+<p>The following gist intends to show a very basic decorator implementation <strong>MyBaseApp</strong>
+that initializes with a three elements array mimicking a Rack Application, that application will be
+decorated with HTML and JSON outputs:</p>
+
+<script src="https://gist.github.com/668084.js"> </script>
+
+
+<p>Given the dynamic nature of the Ruby language there are many ways to implement a decorator, you decide
+which one fits your needs.</p>
+
+<h2>Creating valid Rack applications</h2>
+
+<p>Every Rack application must follow the <a href="http://rack.rubyforge.org/doc/SPEC.html">Rack Spec</a>,
+Rack helps you to follow it by providing a <strong>Rack::Lint</strong> middleware, you should include it in your
+application in order to make it <strong>Rack compliant</strong>. By running your application using <strong>rackup</strong>
+command line tool, you are already using it, otherwise include it with:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Lint</span>
+</code></pre>
+</div>
+
+
+<p>Also, you may test your application with <a href="http://relishapp.com/rspec">RSpec</a>, the following is an
+example I'm working on based on the Rack Spec:</p>
+
+<script src="https://gist.github.com/668111.js"> </script>
+
+
+<p>Now, let's implement and tie everything together with the next example:</p>
+
+<h2>Static file server with Haml support example</h2>
+
+<p>Imagine your application returns files from a certain folder, just like a file server, but,
+whenever these files have a <a href="http://haml-lang.com/">Haml</a> extension they will be parsed and
+rendered as html.</p>
+
+<p>We'll do this in two steps, first we'll serve static files, second we'll parse haml files. Let's
+start!.</p>
+
+<h3>Step 1. Serving static files</h3>
+
+<p>Create a <em>file_server.rb</em> file, and put following code in it:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
+  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
+</code></pre>
+</div>
+
+
+<p>Now create a <em>public</em> folder and a <em>index.html</em> file inside and fill in this html file with:</p>
+
+<div class="highlight"><pre><code class="html">  <span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+      <span class="nt">&lt;title&gt;</span>The index file<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+      The body
+    <span class="nt">&lt;/body&gt;</span>
+  <span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+
+<p>Now let's test it using <em>rackup</em> and <em>curl</em>:</p>
+
+<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
+  <span class="o">[</span>2<span class="o">]</span> 17882
+
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111
+  File not found: /
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl localhost:1111/index.html
+  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;The index file&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      The body
+    &lt;/body&gt;
+  &lt;/html&gt;
+</code></pre>
+</div>
+
+
+<p>It works, now we have a static files server.</p>
+
+<h3>Step 2. Serve haml files as html</h3>
+
+<div class="highlight"><pre><code class="ruby">  <span class="nb">require</span> <span class="s1">&#39;rack/file&#39;</span>
+
+  <span class="k">class</span> <span class="nc">MyHaml</span>
+    <span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+      <span class="vi">@app</span> <span class="o">=</span> <span class="n">app</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+      <span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="vi">@app</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">env</span><span class="o">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/\.haml$/</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">to_s</span>
+        <span class="n">headers</span><span class="o">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;text/html&#39;</span>
+      <span class="k">end</span>
+
+      <span class="o">[</span><span class="n">status</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">]</span>
+    <span class="k">end</span>
+
+    <span class="kp">private</span>
+    <span class="k">def</span> <span class="nf">parse_haml</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">full_body</span> <span class="o">=</span> <span class="n">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">engine</span> <span class="o">=</span> <span class="no">Haml</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">new</span> <span class="n">full_body</span>
+      <span class="n">engine</span><span class="o">.</span><span class="n">render</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">traverse_body</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+      <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+      <span class="n">body</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">text</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">}</span>
+      <span class="n">text</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+
+  <span class="n">use</span> <span class="no">MyHaml</span>
+  <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;public&#39;</span><span class="p">))</span>
+</code></pre>
+</div>
+
+
+<p>Our call method basically looks for request paths where the file name has a haml extension,
+we have to change the content length and type to match what the response is returning,
+here we are using <em>traverse_body</em> method just to read through the previous response body,
+since it is a <em>Rack::File</em> instance.</p>
+
+<p>In order to test this, create an <em>index.haml</em> file inside public folder and fill it in with
+following:</p>
+
+<div class="highlight"><pre><code class="html">  !!!
+  %html
+    %head
+      %title The index from a haml file
+    %body
+      The haml body
+</code></pre>
+</div>
+
+
+<p>Let's test it with <em>rackup</em> and <em>curl</em>:</p>
+
+<div class="highlight"><pre><code class="bash">  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>rackup file_server.ru -p 1111 &amp;
+  <span class="o">[</span>2<span class="o">]</span> 19132
+
+  ...<span class="o">(</span>master<span class="o">)</span> <span class="nv">$ </span>curl  localhost:1111/index.haml
+  &lt;!DOCTYPE html PUBLIC <span class="s2">&quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span> <span class="s2">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;</span>&gt;
+  &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;The index from a haml file&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      The haml body
+    &lt;/body&gt;
+  &lt;/html&gt;
+</code></pre>
+</div>
+
+
+<h2>Conclusion</h2>
+
+<p>There's lot more to learn about Rack, for example :</p>
+
+<ul>
+<li>Ruby and Rails integration</li>
+<li>Ruby and Rails rack architecture</li>
+<li>Lots of other Rack utilities</li>
+</ul>
+
+
+<p>I'll go through these examples in future articles, for now I think this is enough.
+Feel free to send me your comments, additions, resources or complains. I will certainly
+look forward to them.</p>
+
+<p>Thanks for your reading and remember, other's source code is almost every time your best teacher.</p>
+
+<p>Regards</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/11/17/rack-basics-a-rack-introduction.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Rack Basics - A Rack Introduction"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Emmanuel Delgado:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Emmanuel Delgado | emmanuel.delgado@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></h1>
   <p class="author">
     <span class="date"><b>Nov 11</b><br />2010</span>
@@ -351,16 +748,16 @@ current_subdomain <span class="c"># =&gt; &quot;other.subdomain&quot;</span>
     <div class="comments">
       <h2><a href="/2010/11/11/subdomains-in-rails-2-and-3.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    
-    <p>     
+
+    <p>
       <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Subdomains in Rails (2.3.x &amp; 3)" 
-          data-count="none" 
-          data-via="crowdint" 
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Subdomains in Rails (2.3.x &amp; 3)"
+          data-count="none"
+          data-via="crowdint"
           data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
@@ -630,16 +1027,16 @@ end
     <div class="comments">
       <h2><a href="/2010/11/05/controller-responders-in-rails-3.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    
-    <p>     
+
+    <p>
       <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Controller responders in Rails 3" 
-          data-count="none" 
-          data-via="crowdint" 
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Controller responders in Rails 3"
+          data-count="none"
+          data-via="crowdint"
           data-related="Luis Galaviz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
@@ -703,16 +1100,16 @@ public/images/system/**/*
     <div class="comments">
       <h2><a href="/2010/11/01/ignoring-files-with-git.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    
-    <p>     
+
+    <p>
       <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Ignoring files with Git" 
-          data-count="none" 
-          data-via="crowdint" 
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Ignoring files with Git"
+          data-count="none"
+          data-via="crowdint"
           data-related="Daniel Gaytán:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
@@ -865,127 +1262,21 @@ So this will create a user with database and user creation permissions with a de
     <div class="comments">
       <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
     </div>
-    
-    <p>     
+
+    <p>
       <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Working with PostgreSQL and Rails3" 
-          data-count="none" 
-          data-via="crowdint" 
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Working with PostgreSQL and Rails3"
+          data-count="none"
+          data-via="crowdint"
           data-related="Luis Velasco:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
       <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 22</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0a34cf6219c554ee75506e544473aea1" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.</p>
-
-<p>There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.</p>
-
-<p>Let's use Rails to dynamically generate a sitemap on request.</p>
-
-<p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
-    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
-        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
-        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
-        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
-<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
-    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-    <span class="k">end</span>
-    
-    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-        <span class="k">end</span>
-    <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
-
-<p>The parameters of the xml are straightforward:</p>
-
-<ul>
-<li><em>loc</em> is the url</li>
-<li><em>lastmod</em> is the last modified date of that url</li>
-<li><em>changefreq</em> is how often this url is updated</li>
-<li><em>priority</em> is the importance of this url compared to the rest of the urls in our website</li>
-</ul>
-
-
-<p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
-</code></pre>
-</div>
-
-
-<p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
-
-<p>If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.</p>
-
-<p>Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-    
-    <p>     
-      <div class="tweet left">
-        <a href="http://twitter.com/share" 
-          class="twitter-share-button" 
-          data-text="Improve your SEO with a sitemap" 
-          data-count="none" 
-          data-via="crowdint" 
-          data-related="Roberto Sanchez:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>      
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Roberto Sanchez | roberto.sanchez@crowdint.com</p>
     </div>
 </div>
 
@@ -1005,6 +1296,8 @@ So this will create a user with database and user creation permissions with a de
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>24 Oct 2011</b></span> &raquo; <a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></li>
 
   <li><span><b>05 Oct 2011</b></span> &raquo; <a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></li>
 
@@ -1044,16 +1337,14 @@ So this will create a user with database and user creation permissions with a de
 
   <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
-  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
-
   </ul>
 </div>
 
 <div class="post prepend-1">
-	<div class="left">
-	  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
+  <div class="left">
+    <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
     <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCrowd-Interactive%2F63293958828" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
-  </div>  
+  </div>
 </div>
 
         </div>
