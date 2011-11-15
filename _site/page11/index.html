@@ -47,6 +47,469 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 26</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.</p>
+
+<p>But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.</p>
+
+<p>Let's start with my nginx.conf, it looks like this <a href="/extras/2010/08/26/nginx.conf.txt">nginx.conf</a>:</p>
+
+<p>I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create thin_test
+
+info: Gemset <span class="s1">&#39;thin_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use thin_test
+
+info: Now using gemset <span class="s1">&#39;thin_test&#39;</span>
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+Installing RedCloth <span class="o">(</span>4.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing active_presenter <span class="o">(</span>1.2.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing crack <span class="o">(</span>0.1.8<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing httparty <span class="o">(</span>0.6.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing bitly <span class="o">(</span>0.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing cgi_multipart_eof_fix <span class="o">(</span>2.5.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing columnize <span class="o">(</span>0.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing curb <span class="o">(</span>0.7.7.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing daemons <span class="o">(</span>1.1.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing delayed_job <span class="o">(</span>2.0.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastercsv <span class="o">(</span>1.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastthread <span class="o">(</span>1.0.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing gem_plugin <span class="o">(</span>0.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing handsoap <span class="o">(</span>1.1.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing json <span class="o">(</span>1.4.6<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing linecache <span class="o">(</span>0.43<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing mash <span class="o">(</span>0.1.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mime-types <span class="o">(</span>1.16<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mysql <span class="o">(</span>2.8.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing nokogiri <span class="o">(</span>1.4.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing oauth <span class="o">(</span>0.4.2<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing packet <span class="o">(</span>0.1.15<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing rmagick <span class="o">(</span>2.13.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug-base <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter <span class="o">(</span>0.6.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter_oauth <span class="o">(</span>0.4.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri thin
+Building native extensions.  This could take a <span class="k">while</span>...
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed eventmachine-0.12.10
+Successfully installed thin-1.2.7
+3 gems installed
+</code></pre>
+</div>
+
+
+<p>Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>i686-darwin10.3.1<span class="o">]</span>
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d start
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.713 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817362 bytes
+HTML transferred:       813850 bytes
+Requests per second:    14.02 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       713.256 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       71.326 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1119.10 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:   711  712   0.5    713     713
+Waiting:      710  711   0.6    711     712
+Total:        711  713   0.4    713     713
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    713
+  66%    713
+  75%    713
+  80%    713
+  90%    713
+  95%    713
+  98%    713
+  99%    713
+ 100%    713 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!</p>
+
+<p>Now let's work with Unicorn:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create unicorn_test
+
+info: Gemset <span class="s1">&#39;unicorn_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use unicorn_test
+
+info: Now using gemset <span class="s1">&#39;unicorn_test&#39;</span>
+gecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+   <span class="c">#same gems</span>
+   
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri unicorn
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed unicorn-1.1.2
+2 gems installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+</code></pre>
+</div>
+
+
+<p>Done... I love bundler, I really do, OK, let's continue with our tests:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+
+ecruz@ecruz-mbp:~ <span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.737 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817581 bytes
+HTML transferred:       813910 bytes
+Requests per second:    13.56 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       737.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       73.721 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1083.02 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:    47  332 227.5    406     736
+Waiting:       47  332 227.5    406     736
+Total:         48  332 227.4    406     737
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    406
+  66%    436
+  75%    480
+  80%    510
+  90%    737
+  95%    737
+  98%    737
+  99%    737
+ 100%    737 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:</p>
+
+<p>I've adjusted my nginx.conf to support multiples thins</p>
+
+<div class="highlight"><pre><code class="bash">upstream balancer_thin <span class="o">{</span>
+  server 127.0.0.1:3000;
+  server 127.0.0.1:3001;
+  server 127.0.0.1:3002;
+  server 127.0.0.1:3003;
+  server 127.0.0.1:3004;
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>And I started 5 thins listening in ports 3000-3004</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d -s 5 start
+Starting server on 0.0.0.0:3000 ... 
+Starting server on 0.0.0.0:3001 ... 
+Starting server on 0.0.0.0:3002 ... 
+Starting server on 0.0.0.0:3003 ... 
+Starting server on 0.0.0.0:3004 ... 
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.665 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8173616 bytes
+HTML transferred:       8138500 bytes
+Requests per second:    37.53 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       399.706 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.647 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2995.47 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    54  374 227.0    324     918
+Waiting:       51  271 167.3    232     708
+Total:         54  375 227.0    325     919
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    325
+  66%    494
+  75%    528
+  80%    594
+  90%    656
+  95%    858
+  98%    919
+  99%    919
+ 100%    919 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+I, <span class="o">[</span>2010-08-14T20:52:48.684992 <span class="c">#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.685496 <span class="c">#40603]  INFO -- : worker=0 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.686348 <span class="c">#40603]  INFO -- : worker=1 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687000 <span class="c">#40603]  INFO -- : worker=2 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687786 <span class="c">#40603]  INFO -- : worker=3 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.689268 <span class="c">#40603]  INFO -- : worker=4 spawning...</span>
+</code></pre>
+</div>
+
+
+<p>Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.672 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8175813 bytes
+HTML transferred:       8139100 bytes
+Requests per second:    37.42 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       400.860 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.724 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2987.65 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    69  368 165.3    334     642
+Waiting:       69  368 165.3    334     641
+Total:         69  368 165.3    334     642
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    334
+  66%    504
+  75%    523
+  80%    543
+  90%    587
+  95%    614
+  98%    622
+  99%    642
+ 100%    642 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Look at that!!! the difference is minimal, this is a really huge surprise.</p>
+
+<p>Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.030 seconds
+Complete requests:      1000
+Failed requests:        4
+   <span class="o">(</span>Connect: 0, Receive: 0, Length: 4, Exceptions: 0<span class="o">)</span>
+Write errors:           0
+Total transferred:      81736483 bytes
+HTML transferred:       81385312 bytes
+Requests per second:    32.23 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3102.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.030 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2572.39 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0      10
+Processing:    55 3035 1467.6   2880    7831
+Waiting:       54 2433 1276.4   2202    7369
+Total:         55 3036 1468.1   2880    7833
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2880
+  66%   3314
+  75%   3584
+  80%   3794
+  90%   4485
+  95%   6825
+  98%   7073
+  99%   7369
+ 100%   7833 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Wow! my machine survived...</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   27.692 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      81758141 bytes
+HTML transferred:       81391000 bytes
+Requests per second:    36.11 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       2769.227 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       27.692 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2883.18 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       4
+Processing:    81 2639 441.8   2671    3178
+Waiting:       81 2638 441.8   2670    3172
+Total:         86 2639 441.1   2671    3179
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2671
+  66%   2759
+  75%   2868
+  80%   2923
+  90%   2976
+  95%   3008
+  98%   3048
+  99%   3099
+ 100%   3179 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.</p>
+
+<p>Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).</p>
+
+<h2>Machine used:</h2>
+
+<pre><code>Processor: 2.4 GHz Intel Core i5
+Memory: 4GB 1067 MHz DDR3
+Mac OS X: 10.6.3
+</code></pre>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/26/thin-vs-unicorn.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Benchmarking thin vs unicorn"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Edwin Cruz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></h1>
   <p class="author">
     <span class="date"><b>Aug 20</b><br />2010</span>
@@ -618,187 +1081,6 @@ Fast-forward
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 02</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
-
-<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
-
-<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
-
-<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
-
-<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
-
-<h2>Setup jekyll</h2>
-
-<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
-all you have to do is run:</p>
-
-<div class="highlight"><pre><code class="bash">gem install jekyll
-</code></pre>
-</div>
-
-
-<h2>Create the site structure</h2>
-
-<p>Create a folder wherever you want to put your blog files.</p>
-
-<div class="highlight"><pre><code class="bash">mkdir my_blog
-</code></pre>
-</div>
-
-
-<p>and create the following files:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
-touch _config.yml
-touch index.html
-mkdir _posts
-mkdir _layouts
-touch _layouts/default.html
-</code></pre>
-</div>
-
-
-<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
-
-<h2>"Hello World" Jekyll</h2>
-
-<h3>_layouts/default.html</h3>
-
-<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
-
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
-
-
-<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
-
-<div class="highlight"><pre><code class="html">---
-layout: default
----
-</code></pre>
-</div>
-
-
-<p>What we're telling the index page is to use the default layout we created earlier.</p>
-
-<p>Run:</p>
-
-<div class="highlight"><pre><code class="bash">jekyll--server --auto
-</code></pre>
-</div>
-
-
-<p>Open your browser and go to http://127.0.0.1:4000</p>
-
-<p>You should now see "Hello World"</p>
-
-<h2>Deploying to Heroku</h2>
-
-<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
-
-<p>You can read the documentation on the gem page, the basic steps are:</p>
-
-<p>First, install the Heroku gem</p>
-
-<div class="highlight"><pre><code class="bash">gem install heroku
-</code></pre>
-</div>
-
-
-<p>Create a config.ru file:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
-
-<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
-</code></pre>
-</div>
-
-
-<p>Add the rack-jekyll gem to the heroku manifest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
-</code></pre>
-</div>
-
-
-<p>Create a git repo and an initial commit:</p>
-
-<div class="highlight"><pre><code class="bash">git init
-git add .
-git commit -m <span class="s2">&quot;First commit&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Create a Heroku app:</p>
-
-<div class="highlight"><pre><code class="bash">heroku create
-</code></pre>
-</div>
-
-
-<p>And, deploy!</p>
-
-<div class="highlight"><pre><code class="bash">git push heroku master
-</code></pre>
-</div>
-
-
-<p>Check out how it looks:</p>
-
-<div class="highlight"><pre><code class="bash">heroku open
-</code></pre>
-</div>
-
-
-<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
-
-<p>Cheers!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Instant blog using Jekyll and Heroku"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -814,6 +1096,8 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>15 Nov 2011</b></span> &raquo; <a href="/2011/11/15/making-gems-with-jeweler.html">Making gems with jeweler</a></li>
 
   <li><span><b>24 Oct 2011</b></span> &raquo; <a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></li>
 
@@ -852,8 +1136,6 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
   <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
-
-  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   </ul>
 </div>

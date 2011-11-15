@@ -47,6 +47,168 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 27</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+    
+    
+    
+    
+      
+        <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
+
+<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
+
+<p>OK so, let's begin with our brief trip</p>
+
+<h2>Installing Ruby</h2>
+
+<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
+</code></pre>
+</div>
+
+
+<p>and switch to that ruby version by running:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
+</code></pre>
+</div>
+
+
+<h2>Installing Rails</h2>
+
+<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em><gemset_name></em>' and 'rvm gemset use <em><gemset_name></em>', so after this we do:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
+</code></pre>
+</div>
+
+
+<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
+
+<h2>Installing PostgreSQL with Visual Administrator</h2>
+
+<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
+</code></pre>
+</div>
+
+
+<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
+</code></pre>
+</div>
+
+
+<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
+ As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And run the bundler:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
+</code></pre>
+</div>
+
+
+<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
+
+<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
+</code></pre>
+</div>
+
+
+<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
+So this will create a user with database and user creation permissions with a defined password.</p>
+
+<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
+
+<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
+
+<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+
+<span class="nb">test</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+
+<span class="n">production</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
+  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
+  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
+</code></pre>
+</div>
+
+
+<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
+
+<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
+
+      
+    
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Working with PostgreSQL and Rails3"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Luis Velasco:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
   <p class="author">
     <span class="date"><b>Oct 22</b><br />2010</span>
@@ -332,242 +494,6 @@
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 22</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.</p>
-
-<p>They are built within forward slashes and they even have their own class</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; Regexp</span>
-</code></pre>
-</div>
-
-
-<h2>Taxonomy of a Regular Expression</h2>
-
-<p>If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/o</span><span class="n">ptions</span>
-</code></pre>
-</div>
-
-
-<p>Also, in Ruby you can express a regular expression in two alternate ways:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">%r{expression}o</span><span class="n">ptions</span>
-
-<span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span> <span class="o">[</span><span class="p">,</span> <span class="n">options</span><span class="o">]</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>The <em>match</em> method and the operator <em>=~</em> can be used to verify if a string matches a regular expression:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">match1</span> <span class="o">=</span> <span class="sr">/Example/</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Example of a Regexp&quot;</span><span class="p">)</span>
-<span class="c1">#=&gt; &quot;Example&quot;</span>
-<span class="nb">puts</span> <span class="n">match1</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; MatchData</span>
-</code></pre>
-</div>
-
-
-<p>When using the <em>match</em> method, the returned value is the matched string or <em>nil</em> if no match was found. The class of the object that received the assignment is <em>MatchData</em>.</p>
-
-<h2>Building regular expressions</h2>
-
-<p>To start building our own regular expressions, there is a couple of lists we have to become familiar with:</p>
-
-<h3>1. Special Characters</h3>
-
-<p>Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is <strong>\</strong>.</p>
-
-<h4>Special characters list</h4>
-
-<p>^<br/>
-$<br/>
-?<br/>
-.<br/>
-/<br/>
-\<br/>
-[<br/>
-]<br/>
-{<br/>
-}<br/>
-(<br/>
-)<br/>
-+<br/>
-*</p>
-
-<h3>2. Types of expressions</h3>
-
-<p>The most common patterns we can specify in a regular expressions are included in the following table:</p>
-
-<table>
-    <tr>
-        <th>expression</th>
-        <th>meaning</th>
-  </tr>
-  <tr>
-        <td>.</td>
-        <td>any character</td>
-    </tr>
-  <tr>
-        <td>[ ]</td>
-        <td>specify a range (e.g. [a-z] means a letter from a to z)</td>
-    </tr>
-  <tr>
-        <td>\w</td>
-        <td>letter or digit; same as [0-9A-Za-z]</td>
-    </tr>
-  <tr>
-        <td>\W</td>
-        <td>any character but letter or a number</td>
-    </tr>
-  <tr>
-        <td>\s</td>
-        <td>space character; same as [ \t\n\r\f]</td>
-    </tr>
-  <tr>
-      <td>\S</td>
-      <td>any character but a space space char</td>
-    </tr>
-  <tr>
-      <td>\d</td>
-      <td>a number; same as [0-9]</td>
-    </tr>
-  <tr>
-      <td>\D</td>
-      <td>any character but a number</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>backspace (0x08), only within a range</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>word limit, if NOT within a range</td>
-    </tr>
-  <tr>
-      <td>\B</td>
-      <td>not word limit</td>
-    </tr>
-  <tr>
-      <td>*</td>
-      <td>zero or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>+</td>
-      <td>one or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>^</td>
-      <td>matches the beginning of a line</td>
-    </tr>
-  <tr>
-      <td>$</td>
-      <td>matches the end of a line</td>
-    </tr>
-    <tr>
-        <td>\A</td>
-        <td>matches the beginning of the string</td>
-    </tr>
-    <tr>
-        <td>\z</td>
-        <td>matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')</td>
-  <tr>
-      <td>{m[,n]}</td>
-      <td>at least 'm', topping 'n' matches of the preceeding ('n' is optional)</td>
-    </tr>
-  <tr>
-      <td>?</td>
-      <td>at least one match of the preceeding (same as {1})</td>
-    </tr>
-  <tr>
-      <td>( )</td>
-      <td>group expressions</td>
-    </tr>
-    <tr>
-        <td>|</td>
-        <td>logical operator 'or', in [a|b] looks for a OR b</td>
-    </tr>
-</table>
-
-
-<h2>Common examples</h2>
-
-<h3>The e-mail address</h3>
-
-<p>This is a very common pattern example (it's the one that you get by default in <a href="" title="http://rubular.com">Rubular</a>).</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/</span>
-</code></pre>
-</div>
-
-
-<p>First, '\A' makes sure to match the string against the start of string; then ([<sup>@\s]+)</sup> groups the recipient's name, avoiding @ character and space characters.</p>
-
-<p>After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.</p>
-
-<p>Finally, the '\Z' makes sure to match the end of line</p>
-
-<h3>The phone number</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\((\d{3})\)\s+(\d{3})-(\d{4})/</span>
-</code></pre>
-</div>
-
-
-<p>First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.</p>
-
-<h2>Where to look for more information</h2>
-
-<p>The star of these links is <a href="" title="http://rubular.com">Rubular</a>
-but there are some few more useful links to look at:
-<a href="http://www.regular-expressions.info/ruby.html">http://www.regular-expressions.info/ruby.html</a>
-<a href="http://www.rubyist.net/~slagell/ruby/regexp.html">http://www.rubyist.net/~slagell/ruby/regexp.html</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ">http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new">http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new</a>
-<a href="http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm">http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm</a></p>
-
-<p>Enjoy!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/22/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="First contact with regular expressions"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -583,6 +509,8 @@ but there are some few more useful links to look at:
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>15 Nov 2011</b></span> &raquo; <a href="/2011/11/15/making-gems-with-jeweler.html">Making gems with jeweler</a></li>
 
   <li><span><b>24 Oct 2011</b></span> &raquo; <a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></li>
 
@@ -621,8 +549,6 @@ but there are some few more useful links to look at:
   <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   <li><span><b>14 Mar 2011</b></span> &raquo; <a href="/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a></li>
-
-  <li><span><b>08 Mar 2011</b></span> &raquo; <a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html">As Monty Python said... "And Now For Something Completly Different"</a></li>
 
   </ul>
 </div>

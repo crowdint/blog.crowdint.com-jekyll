@@ -4,9 +4,186 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-10-24T08:57:56-07:00</updated>
+ <updated>2011-11-15T09:52:04-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Making gems with jeweler</title>
+   <link href="http://blog.crowdint.com/2011/11/15/making-gems-with-jeweler.html"/>
+   <updated>2011-11-15T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2011/11/15/making-gems-with-jeweler</id>
+   <photo>8a4d383333234bd653b7d768ee999c11</photo>
+   <content type="html">&lt;p&gt;A few days ago I was just wondering what the best way to craft a
+&lt;a href=&quot;http://en.wikipedia.org/wiki/RubyGems&quot;&gt;Gem&lt;/a&gt; was, and I
+figured out it doesn't really matter. Any way you take will lead you to the same place, yet,
+I really liked an special way to do it: I found &lt;a href=&quot;https://github.com/technicalpickles/jeweler&quot;&gt;JEWELER&lt;/a&gt;.
+In short, Jeweler is a GEM to make GEMS, great, right?&lt;/p&gt;
+
+&lt;p&gt;Its quite simple to use, you just need to follow a few steps to get the skeleton
+of a GEM and then you will get it ready to use.&lt;/p&gt;
+
+&lt;p&gt;The greatest stuff about Jeweler is that you have a library to manage and release
+&lt;a href=&quot;http://en.wikipedia.org/wiki/RubyGems&quot;&gt;RubyGem&lt;/a&gt; projects. Don't forget to create
+your account on the RubyGems website, that will be your signature like a gem crafter.&lt;/p&gt;
+
+&lt;p&gt;You can also use its scaffold generator to start a new RubyGem project.&lt;/p&gt;
+
+&lt;h3&gt;We need to use RubyGems to install JEWELER and get started:&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem install jeweler
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Now with JEWELER installed we are ready to start building our own gem&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jeweler &amp;lt;my-gem-name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;for instance:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jeweler My-Gem
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;You'll get this output:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  create  .gitignore
+  create  Rakefile
+  create  Gemfile
+  create  LICENSE.txt
+  create  README.rdoc
+  create  .document
+  create  lib
+  create  lib/My-Gem.rb   &lt;span class=&quot;c&quot;&gt;#Here you need to put your code&lt;/span&gt;
+  create  &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;       &lt;span class=&quot;c&quot;&gt;#Here you need to put your Unit Test code&lt;/span&gt;
+  create  &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/helper.rb
+  create  &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;/test_My-Gem.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This means now you have the skeleton for your gem in the My-Gem directory.&lt;/p&gt;
+
+&lt;p&gt;If you want to see the JEWELER command options just run jeweler --help&lt;/p&gt;
+
+&lt;h3&gt;Then we need rake commnad to interact with our gem&lt;/h3&gt;
+
+&lt;p&gt;This step is really important because with this you can generate and validate
+the gemspec, realease the gem, run its test suite, display the current version, etc.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake -T
+
+  rake build              &lt;span class=&quot;c&quot;&gt;# Build gem into pkg&lt;/span&gt;
+  rake clobber_rcov       &lt;span class=&quot;c&quot;&gt;# Remove rcov products for rcov&lt;/span&gt;
+  rake clobber_rdoc       &lt;span class=&quot;c&quot;&gt;# Remove rdoc products&lt;/span&gt;
+  rake console&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;script&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;c&quot;&gt;# Start IRB with all runtime dependencies loaded&lt;/span&gt;
+  rake gemcutter:release  &lt;span class=&quot;c&quot;&gt;# Release gem to Gemcutter&lt;/span&gt;
+  rake gemspec            &lt;span class=&quot;c&quot;&gt;# Generate and validate gemspec&lt;/span&gt;
+  rake gemspec:debug      &lt;span class=&quot;c&quot;&gt;# Display the gemspec for debugging purposes, as jeweler&lt;/span&gt;
+  rake gemspec:generate   &lt;span class=&quot;c&quot;&gt;# Regenerate the gemspec on the filesystem&lt;/span&gt;
+  rake gemspec:release    &lt;span class=&quot;c&quot;&gt;# Regenerate, validate gemspec.&lt;/span&gt;
+  rake gemspec:validate   &lt;span class=&quot;c&quot;&gt;# Validates the gemspec on the filesystem&lt;/span&gt;
+  rake git:release        &lt;span class=&quot;c&quot;&gt;# Tag and push release to git.&lt;/span&gt;
+  rake install            &lt;span class=&quot;c&quot;&gt;# Build and install gem using `gem install`&lt;/span&gt;
+  rake rcov               &lt;span class=&quot;c&quot;&gt;# Analyze code coverage with tests&lt;/span&gt;
+  rake rdoc               &lt;span class=&quot;c&quot;&gt;# Build the rdoc HTML Files&lt;/span&gt;
+  rake release            &lt;span class=&quot;c&quot;&gt;# Release gem&lt;/span&gt;
+  rake rerdoc             &lt;span class=&quot;c&quot;&gt;# Force a rebuild of the RDOC files&lt;/span&gt;
+  rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;               &lt;span class=&quot;c&quot;&gt;# Run tests&lt;/span&gt;
+  rake version            &lt;span class=&quot;c&quot;&gt;# Displays the current version&lt;/span&gt;
+  rake version:bump:major &lt;span class=&quot;c&quot;&gt;# Bump the major version by 1&lt;/span&gt;
+  rake version:bump:minor &lt;span class=&quot;c&quot;&gt;# Bump the a minor version by 1&lt;/span&gt;
+  rake version:bump:patch &lt;span class=&quot;c&quot;&gt;# Bump the patch version by 1&lt;/span&gt;
+  rake version:write      &lt;span class=&quot;c&quot;&gt;# Writes out an explicit version.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Now we need to set a version before we start using the gem&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake version:write &lt;span class=&quot;nv&quot;&gt;MAJOR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;MINOR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0 &lt;span class=&quot;nv&quot;&gt;PATCH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;The small explanation for this is: if you do a small change you need to
+increase PATCH (0 - 9) then you will start to increase MINOR (0 - 9) stage, and
+when you get MAJOR changes, its because you did a whole new version of your gem.&lt;/p&gt;
+
+&lt;p&gt;You will see this message:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;Updated version: 1.0.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;Then, we need to edit our Rakefile and change a couple of lines inside, I suggest to you use VIM/MVIM/GVIM to do that:&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vim Rakefile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;If your gem depends upon other libraries, you'll need to define a gem specification, commonly called a &quot;gemspec&quot;.&lt;/p&gt;
+
+&lt;h3&gt;Inside Rakefile look for &quot;gem&quot; and that is the Gem Specification Reference.&lt;/h3&gt;
+
+&lt;p&gt;Here you need to change:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem.summary &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; %Q&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TODO: summary here about your gem&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem.description &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; %Q&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TODO: longer description of your gem&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;  to this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem.summary &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; %Q&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Writte a summary here about your gem&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem.description &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; %Q&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;Writte a longer description of your gem&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;After this, we'll install our gem locally and so, we can start testing it:&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;h3&gt;If later you want to release your gem into www.rubygems.org you just need to run the command:&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake release
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This will automatically:
+* Generate My-Gem.gemspec and commit it
+* Use git to tag v1.0.0 and push it
+* Build My-Gem-1.0.0.gem and push it to rubygems.org&lt;/p&gt;
+
+&lt;h2&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;Now you to know about use jeweler, use it and see how this works, its
+not the only way to do a gem, it just works for me, but you can find your own way to do
+it however you feel more confortable.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Make your gem and release it&lt;/em&gt; to RubyGems, everybody is waiting for your sexy gems to
+make their developer life easier.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&quot;Easy way to make yours owns gems (FEB). Faster, Easy and Beautiful&quot;&lt;/p&gt;&lt;/blockquote&gt;
+</content>
+   <author>
+     <name>Victor Velázquez</name>
+     <email>victor.velazquez@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Has Cucumber become more ... "Steak"?</title>
@@ -1631,125 +1808,6 @@ how to disable jQuery effects off.&lt;/p&gt;
    <author>
      <name>David Padilla</name>
      <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>How to Sinatra + Haml + Compass(SCSS) + Blueprint</title>
-   <link href="http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint.html"/>
-   <updated>2011-04-06T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/04/06/sinatra-haml-compass-blueprint</id>
-   <photo>fa56812143dd6049ef19d1a8032f21da</photo>
-   <content type="html">&lt;p&gt;Last week, I spent about half a day trying to get Sinatra working
-with Compass and Blueprint. At first, it was a pain in the ass because the
-documentation is pretty lame. But after some reading here and there and
-trying via command line, I failed again and again.&lt;/p&gt;
-
-&lt;p&gt;But, don't despair, there is hope... I got it to work eventually and here is how I did it:&lt;/p&gt;
-
-&lt;p&gt;First of all, you have to setup your sinatra app as usual.
-If you have read
-&lt;a href=&quot;http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html&quot;&gt;Omar's post about setting up your sinatra app with test&lt;/a&gt;
-you know what I'm talking about. Take a look at it if you haven't.&lt;/p&gt;
-
-&lt;p&gt;It is very easy to setup your sinatra apps, a couple of minutes and you're done.&lt;/p&gt;
-
-&lt;p&gt;You can also fork my ready-to-use github repo &lt;a href=&quot;http://github.com/hecbuma/sinatra-blueprint&quot;&gt;Sinatra+Haml+Compas+Blueprint&lt;/a&gt;
-and make your changes there.&lt;/p&gt;
-
-&lt;h2&gt;The real deal&lt;/h2&gt;
-
-&lt;p&gt;Ok, now that we have our sinatra app, it's time to add some stuff so we are able
-to use Haml and Compass.&lt;/p&gt;
-
-&lt;p&gt;First add these gems to you Gemfile (Compass and Haml). You will end up with something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;http://rubygems.org&amp;quot;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cucumber-sinatra&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;capybara&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Now you have to add a config file for compass:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mkdir config
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;touch compass.rb
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;and add this content to it:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defined?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# This is the configuration to use when running within sinatra&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;project_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# this is the configuration to use when running within the compass command line tool.&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;css_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;stylesheets&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;relative_assets&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:production&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# This is common configuration&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;sass_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;views&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;stylesheets&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;images_dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;public&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;images&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;http_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;http_images_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/images&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;http_stylesheets_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/stylesheets&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Note that I've changed the css_dir and the image dir to use &quot;public&quot; instead of &quot;static&quot;&lt;/p&gt;
-
-&lt;p&gt;Ok, we are half way there.&lt;/p&gt;
-
-&lt;p&gt;Now, let's add some more configuration for compass, but this time in your app file (myapp.rb):&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sinatra&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;haml&amp;#39;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;configure&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:haml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:format&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:escape_html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:scss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:style&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:compact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:debug_info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;no&quot;&gt;Compass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_project_configuration&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;compass.rb&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/stylesheets/:name.css&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;content_type&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;text/css&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:charset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;scss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:&amp;quot;stylesheets/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;haml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:index&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;With this you are telling compass to automatically convert SCSS files into CSS files.&lt;/p&gt;
-
-&lt;p&gt;And the final touch: let's setup blueprint for this project.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;compass install blueprint
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And that is all. I hope this is helpful for you.&lt;/p&gt;
-</content>
-   <author>
-     <name>Hector Bustillos</name>
-     <email>hector.bustillos@crowdint.com</email>
    </author>
  </entry>
  
