@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Cool date formatting in Rails</title>
+  <title>Crowd Interactive Tech Blog :: Concerning Rails 3 Internals</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,93 +46,100 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Cool date formatting in Rails</h1>  
+  <h1>Concerning Rails 3 Internals</h1>  
   <p class="author">
-    <span class="date"><b>Dec 21</b><br />2010</span>
+    <span class="date"><b>Nov 30</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
+    <p>As you may know, when we want to enhance the functionality of a class, we usually
+'include' or 'extend' it through modules which include new methods or override
+existing ones.</p>
 
-<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
+<p>We use 'include' to add Instance Methods and 'extend' for Class Methods.</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+<p>With this in mind, we usually see things like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1">#lib/posts_lib.rb</span>
+
+<span class="k">module</span> <span class="nn">PostsLib</span>
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
+    <span class="k">def</span> <span class="nf">find_by_author</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+      <span class="c1">#...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
+    <span class="k">def</span> <span class="nf">post_tags</span><span class="p">()</span>
+      <span class="c1">#...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span> <span class="n">base</span>
+    <span class="n">base</span><span class="o">.</span><span class="n">send</span> <span class="ss">:include</span><span class="p">,</span> <span class="no">InstanceMethods</span>
+    <span class="n">base</span><span class="o">.</span><span class="n">send</span> <span class="ss">:extend</span><span class="p">,</span> <span class="no">ClassMethods</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="kp">include</span> <span class="no">PostsLib</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
-In fact, this looks like old C/PHP code</p>
+<p>Looking at the code, we notice that we're overwriting the
+'self.included()' method, which is a especial callback that is executed when the module
+is included on another class ('include PostsLib'  &lt; Right Here).</p>
 
-<h2>The "cool" way</h2>
+<p>Note, we need to use base.send :extend instead because extend is a
+private method.</p>
 
-<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
+<p>Just to clarify, this code will let us do things like:</p>
 
-<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
-
-<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
-By default, Rails comes with a few ones that you can use:</p>
-
-<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
-- :long          #&lt;- December 19, 2010 22:42
-- :db            #&lt;- 2010-12-19 22:42:43
-- :short         #&lt;- 19 Dec 22:42
-- :time          #&lt;- 22:42
-- :number        #&lt;- 20101219224243
-- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
-</code></pre>
-
-<p>So, you can execute for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+<div class="highlight"><pre><code class="ruby"><span class="vi">@post</span><span class="o">.</span><span class="n">post_tags</span>              <span class="c1">#instance method</span>
+<span class="no">Post</span><span class="o">.</span><span class="n">find_by_author</span> <span class="s1">&#39;Mumo&#39;</span>   <span class="c1">#class method</span>
 </code></pre>
 </div>
 
 
-<p>Much better now, isn't it?</p>
+<p>ActiveSupport::Concern gets rid of the self.included override altogether:</p>
 
-<h2>Custom formats</h2>
+<div class="highlight"><pre><code class="ruby"><span class="c1">#lib/posts_lib.rb</span>
+<span class="k">module</span> <span class="nn">PostsLib</span>
+  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
+    <span class="k">def</span> <span class="nf">find_by_author</span><span class="p">(</span><span class="n">autho</span><span class="p">)</span>
+      <span class="c1">#...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
 
-<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
-
-<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
-
-<p><em>config/initizers/time_formats.rb</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
-<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
-<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
-<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
-<span class="c1"># datetime argument as the value.</span>
-
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
+    <span class="k">def</span> <span class="nf">post_tags</span><span class="p">()</span>
+      <span class="c1">#...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+<p>With this, we obtain clearer code and, for example, sometimes you want to add
+different code to self.included() such as logging:</p>
 
-<p>Let's see how different and clean the code is:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
-
-<span class="c1"># the old school way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span> <span class="n">base</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Something to log here&#39;</span><span class="p">)</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p><em>Cool, isn't it?</em></p>
+<p>Well, that's all, I'm still testing and learning, but i hope this will be useful to you in some way. ^^</p>
 
-<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
-
-<p>Hope this help...<br/>
-Thanks for reading<br/>
-Gonzalo "aka Chalo" Fernandez</p>
+<p>Info source:
+  <a href="http://yehudakatz.com/2009/11/12/better-ruby-idioms/">Better Ruby Idioms</a>
+  <a href="http://api.rubyonrails.org/classes/ActiveSupport/Concern.html">ActiveSupport Concern</a>
+  <a href="http://www.google.com">Google</a></p>
 
     
     <p>
@@ -161,21 +168,19 @@ Gonzalo "aka Chalo" Fernandez</p>
       <br><br>     
   		<div class="left">
   		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
-        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2010/12/21/cool-date-formatting-in-rails.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2011/11/30/concerning-rails-3-internals.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
       </div>
       
     </p>
   </div>
   
   <div class="author_box">
-    <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    <p><b>Author:</b> Mumo Carlos | mumoc@crowdint.com</p>
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/12/15/always-think-restful.html"><< Always Think RESTful</a></div>
+      <div class="previous span-8"><a href="/2011/11/15/making-gems-with-jeweler.html"><< Making gems with jeweler</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive >></a></div>
     
   </div>
 </div>
@@ -185,13 +190,13 @@ Gonzalo "aka Chalo" Fernandez</p>
 
   <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
-  <li><span><b>10 Sep 2010</b></span> &raquo; <a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></li>
+  <li><span><b>02 Mar 2011</b></span> &raquo; <a href="/2011/03/02/how-to-make-your-models-look-lean.html">How to make your Models look lean</a></li>
+
+  <li><span><b>20 Aug 2010</b></span> &raquo; <a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></li>
+
+  <li><span><b>05 Jan 2011</b></span> &raquo; <a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></li>
 
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
-
-  <li><span><b>05 Nov 2010</b></span> &raquo; <a href="/2010/11/05/controller-responders-in-rails-3.html">Controller responders in Rails 3</a></li>
-
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
