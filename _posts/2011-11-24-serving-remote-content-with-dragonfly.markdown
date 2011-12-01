@@ -3,7 +3,7 @@ layout: post
 title: Serving Remote Content with Dragonfly
 author: Nora Alvarado
 email: nora.alvarado@crowdint.com
-avatar: 93d9cbaef8e5ceb60881c162e0c4597a
+avatar: 0db484da0a364dbadf287398f97a97db
 published: true
 ---
 In the last project I've been working on, here at __CrowdInteractive__, an issue came up when serving images on the site. We have our app on _Heroku_ and also we have a shop on _Shopify_ as an external service; one of the features we had to implement was to upload, process and serve images, for that we use the Dragonfly gem, it stores original versions of content in a datastore which could be the filesystem, s3, or any other storage service. The thing is, we needed to upload the images in the Heroku app but serve them on the Shopify side.
