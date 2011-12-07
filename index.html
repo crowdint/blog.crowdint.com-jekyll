@@ -12,24 +12,7 @@ title: Blog
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/{{ post.avatar }}" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-    {% capture month %}{{ post.date | date: '%b' }}{% endcapture %}
-    {% capture day %}{{ post.date | date: '%d' }}{% endcapture %}
-    {% if paginator.next_page == 2  and forloop.first %}
       {{ post.content }}
-    {% else %}
-      {% if year == '2010' %}
-        {{ post.content }}
-      {% else %}
-        {% if month == 'Jan' or month == 'Feb' or month == 'Mar' and year == '2011' %}
-            {{ post.content  | split_truncate | truncatewords: 71}}
-            <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
-        {% else %}
-           {{ post.content  | split_truncate | truncatewords: 80}}
-           <div class = "continue_reading"><a href="{{ post.url }}">Continue reading...</a></div>
-        {% endif %}
-      {% endif %}
-    {% endif %}
     </div>
     <div class="comments">
       <h2><a href="{{ post.url }}#disqus_thread">Click here for Comments</a></h2>

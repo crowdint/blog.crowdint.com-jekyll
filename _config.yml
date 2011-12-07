@@ -3,4 +3,4 @@ pygments: true
 lsi: true
 exclude: ['README.markdown', 'README_FOR_COLLABORATORS.markdown', 'Gemfile.lock', 'Gemfile', 'Vagrantfile']
 production: false
-paginate: 5
+paginate: 3
