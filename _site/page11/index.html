@@ -47,817 +47,429 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html">Open and watch specific git branches using gitx</a></h1>
+  <h1><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 31</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>It happens, the project and the team grows, and now, there's a bunch of branches in your git repo. It's called <em>branchitis</em>, and it happens to everyone at some point.</p>
-
-<p>If you're lucky enough to be working on a Mac, odds are that you're using <a href="http://gitx.frim.nl/">gitx</a> to watch over your git repos. You're not?! Shame on you.</p>
-
-<p>Anyway, so, you open gitx, and all you see is a bowl of spaghetti</p>
-
-<p><img src="/images/2010/08/31/a.jpg" alt="Bowl of Spaghetti" /></p>
-
-<p>So, if you want to see a specific branch, you can call gitx from the command line and specify the branch you want to see</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2
-</code></pre>
-</div>
-
-
-<p><img src="/images/2010/08/31/b.jpg" alt="One branch" /></p>
-
-<p>Nothing out of this world here, since you can do the same thing by using the built in dropdown on gitx to select the branch you want to see, but, did you know that you can specify more than one branch?</p>
-
-<p>So, let's say you want to merge the <em>feature2</em> and the <em>feature5</em> branch, but first, you want to see how the branches are related. You can call gitx from the command line and specify <em>both</em> branches as the arguments.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gitx feature2 feature5
-</code></pre>
-</div>
-
-
-<p>Then you'd get something like this:</p>
-
-<p><img src="/images/2010/08/31/c.jpg" alt="Two branches" /></p>
-
-<p>Cool! You can actually read this first hand, and it's faster than trying to descipher the spaguhetti.</p>
-
-<p>In case you're wondering, yes, you can specify 3 branches, or as many as you'd like to see. Go ahead, try it out.</p>
-
-<p>Hope this helps you in some way,</p>
-
-<p>Cheers.</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Open and watch specific git branches using gitx"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 26</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.</p>
-
-<p>But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.</p>
-
-<p>Let's start with my nginx.conf, it looks like this <a href="/extras/2010/08/26/nginx.conf.txt">nginx.conf</a>:</p>
-
-<p>I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create thin_test
-
-info: Gemset <span class="s1">&#39;thin_test&#39;</span> created.
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use thin_test
-
-info: Now using gemset <span class="s1">&#39;thin_test&#39;</span>
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
-Successfully installed bundler-0.9.26
-1 gem installed
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
-Fetching <span class="nb">source </span>index from http://rubygems.org/
-Installing RedCloth <span class="o">(</span>4.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing active_presenter <span class="o">(</span>1.2.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing crack <span class="o">(</span>0.1.8<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing httparty <span class="o">(</span>0.6.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing bitly <span class="o">(</span>0.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing cgi_multipart_eof_fix <span class="o">(</span>2.5.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing columnize <span class="o">(</span>0.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing curb <span class="o">(</span>0.7.7.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing daemons <span class="o">(</span>1.1.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing delayed_job <span class="o">(</span>2.0.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing fastercsv <span class="o">(</span>1.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing fastthread <span class="o">(</span>1.0.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing gem_plugin <span class="o">(</span>0.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing handsoap <span class="o">(</span>1.1.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing json <span class="o">(</span>1.4.6<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing linecache <span class="o">(</span>0.43<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing mash <span class="o">(</span>0.1.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing mime-types <span class="o">(</span>1.16<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing mysql <span class="o">(</span>2.8.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing nokogiri <span class="o">(</span>1.4.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing oauth <span class="o">(</span>0.4.2<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing packet <span class="o">(</span>0.1.15<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing rmagick <span class="o">(</span>2.13.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing ruby-debug-base <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
-Installing ruby-debug <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing twitter <span class="o">(</span>0.6.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Installing twitter_oauth <span class="o">(</span>0.4.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
-Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
-
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri thin
-Building native extensions.  This could take a <span class="k">while</span>...
-Building native extensions.  This could take a <span class="k">while</span>...
-Successfully installed rack-1.2.1
-Successfully installed eventmachine-0.12.10
-Successfully installed thin-1.2.7
-3 gems installed
-</code></pre>
-</div>
-
-
-<p>Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>ruby -v
-ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>i686-darwin10.3.1<span class="o">]</span>
-
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d start
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="err">$</span>
-</code></pre>
-</div>
-
-
-<p>It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_thin/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm_thin
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81385 bytes
-
-Concurrency Level:      10
-Time taken <span class="k">for </span>tests:   0.713 seconds
-Complete requests:      10
-Failed requests:        0
-Write errors:           0
-Total transferred:      817362 bytes
-HTML transferred:       813850 bytes
-Requests per second:    14.02 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       713.256 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       71.326 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          1119.10 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.1      0       0
-Processing:   711  712   0.5    713     713
-Waiting:      710  711   0.6    711     712
-Total:        711  713   0.4    713     713
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%    713
-  66%    713
-  75%    713
-  80%    713
-  90%    713
-  95%    713
-  98%    713
-  99%    713
- 100%    713 <span class="o">(</span>longest request<span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!</p>
-
-<p>Now let's work with Unicorn:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create unicorn_test
-
-info: Gemset <span class="s1">&#39;unicorn_test&#39;</span> created.
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use unicorn_test
-
-info: Now using gemset <span class="s1">&#39;unicorn_test&#39;</span>
-gecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
-Successfully installed bundler-0.9.26
-1 gem installed
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
-Fetching <span class="nb">source </span>index from http://rubygems.org/
-   <span class="c">#same gems</span>
-   
-Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri unicorn
-Building native extensions.  This could take a <span class="k">while</span>...
-Successfully installed rack-1.2.1
-Successfully installed unicorn-1.1.2
-2 gems installed
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
-</code></pre>
-</div>
-
-
-<p>Done... I love bundler, I really do, OK, let's continue with our tests:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
-
-ecruz@ecruz-mbp:~ <span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm_unicorn
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81391 bytes
-
-Concurrency Level:      10
-Time taken <span class="k">for </span>tests:   0.737 seconds
-Complete requests:      10
-Failed requests:        0
-Write errors:           0
-Total transferred:      817581 bytes
-HTML transferred:       813910 bytes
-Requests per second:    13.56 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       737.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       73.721 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          1083.02 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.1      0       0
-Processing:    47  332 227.5    406     736
-Waiting:       47  332 227.5    406     736
-Total:         48  332 227.4    406     737
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%    406
-  66%    436
-  75%    480
-  80%    510
-  90%    737
-  95%    737
-  98%    737
-  99%    737
- 100%    737 <span class="o">(</span>longest request<span class="o">)</span>
-ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<p>Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:</p>
-
-<p>I've adjusted my nginx.conf to support multiples thins</p>
-
-<div class="highlight"><pre><code class="bash">upstream balancer_thin <span class="o">{</span>
-  server 127.0.0.1:3000;
-  server 127.0.0.1:3001;
-  server 127.0.0.1:3002;
-  server 127.0.0.1:3003;
-  server 127.0.0.1:3004;
-<span class="o">}</span>
-</code></pre>
-</div>
-
-
-<p>And I started 5 thins listening in ports 3000-3004</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d -s 5 start
-Starting server on 0.0.0.0:3000 ... 
-Starting server on 0.0.0.0:3001 ... 
-Starting server on 0.0.0.0:3002 ... 
-Starting server on 0.0.0.0:3003 ... 
-Starting server on 0.0.0.0:3004 ... 
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<p>I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81385 bytes
-
-Concurrency Level:      15
-Time taken <span class="k">for </span>tests:   2.665 seconds
-Complete requests:      100
-Failed requests:        0
-Write errors:           0
-Total transferred:      8173616 bytes
-HTML transferred:       8138500 bytes
-Requests per second:    37.53 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       399.706 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       26.647 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2995.47 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.1      0       1
-Processing:    54  374 227.0    324     918
-Waiting:       51  271 167.3    232     708
-Total:         54  375 227.0    325     919
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%    325
-  66%    494
-  75%    528
-  80%    594
-  90%    656
-  95%    858
-  98%    919
-  99%    919
- 100%    919 <span class="o">(</span>longest request<span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
-
-ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
-I, <span class="o">[</span>2010-08-14T20:52:48.684992 <span class="c">#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3</span>
-I, <span class="o">[</span>2010-08-14T20:52:48.685496 <span class="c">#40603]  INFO -- : worker=0 spawning...</span>
-I, <span class="o">[</span>2010-08-14T20:52:48.686348 <span class="c">#40603]  INFO -- : worker=1 spawning...</span>
-I, <span class="o">[</span>2010-08-14T20:52:48.687000 <span class="c">#40603]  INFO -- : worker=2 spawning...</span>
-I, <span class="o">[</span>2010-08-14T20:52:48.687786 <span class="c">#40603]  INFO -- : worker=3 spawning...</span>
-I, <span class="o">[</span>2010-08-14T20:52:48.689268 <span class="c">#40603]  INFO -- : worker=4 spawning...</span>
-</code></pre>
-</div>
-
-
-<p>Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm_unicorn
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81391 bytes
-
-Concurrency Level:      15
-Time taken <span class="k">for </span>tests:   2.672 seconds
-Complete requests:      100
-Failed requests:        0
-Write errors:           0
-Total transferred:      8175813 bytes
-HTML transferred:       8139100 bytes
-Requests per second:    37.42 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       400.860 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       26.724 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2987.65 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.1      0       1
-Processing:    69  368 165.3    334     642
-Waiting:       69  368 165.3    334     641
-Total:         69  368 165.3    334     642
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%    334
-  66%    504
-  75%    523
-  80%    543
-  90%    587
-  95%    614
-  98%    622
-  99%    642
- 100%    642 <span class="o">(</span>longest request<span class="o">)</span>
-ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<p>Look at that!!! the difference is minimal, this is a really huge surprise.</p>
-
-<p>Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm_thin
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81385 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   31.030 seconds
-Complete requests:      1000
-Failed requests:        4
-   <span class="o">(</span>Connect: 0, Receive: 0, Length: 4, Exceptions: 0<span class="o">)</span>
-Write errors:           0
-Total transferred:      81736483 bytes
-HTML transferred:       81385312 bytes
-Requests per second:    32.23 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       3102.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       31.030 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2572.39 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    1   1.0      0      10
-Processing:    55 3035 1467.6   2880    7831
-Waiting:       54 2433 1276.4   2202    7369
-Total:         55 3036 1468.1   2880    7833
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%   2880
-  66%   3314
-  75%   3584
-  80%   3794
-  90%   4485
-  95%   6825
-  98%   7073
-  99%   7369
- 100%   7833 <span class="o">(</span>longest request<span class="o">)</span>
-ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<p>Wow! my machine survived...</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
-
-Server Software:        nginx/0.7.64
-Server Hostname:        ecomm_unicorn
-Server Port:            80
-
-Document Path:          /store/Apparel
-Document Length:        81391 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   27.692 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      81758141 bytes
-HTML transferred:       81391000 bytes
-Requests per second:    36.11 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       2769.227 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       27.692 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2883.18 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.8      0       4
-Processing:    81 2639 441.8   2671    3178
-Waiting:       81 2638 441.8   2670    3172
-Total:         86 2639 441.1   2671    3179
-
-Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
-  50%   2671
-  66%   2759
-  75%   2868
-  80%   2923
-  90%   2976
-  95%   3008
-  98%   3048
-  99%   3099
- 100%   3179 <span class="o">(</span>longest request<span class="o">)</span>
-ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="err">$</span>
-</code></pre>
-</div>
-
-
-<p>Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.</p>
-
-<p>Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).</p>
-
-<h2>Machine used:</h2>
-
-<pre><code>Processor: 2.4 GHz Intel Core i5
-Memory: 4GB 1067 MHz DDR3
-Mac OS X: 10.6.3
-</code></pre>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/26/thin-vs-unicorn.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Benchmarking thin vs unicorn"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Edwin Cruz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 20</b><br />2010</span>
+    <span class="date"><b>Jan 14</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/a302e7dd208f335dc67761a6db911561" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <h2>Motivation</h2>
+      <p>Do you know what a <strong>Domain Specific Language(DSL)</strong> is and how to
+implement one in Ruby?. This article aims to provide a slight introduction
+to this topic. It is divided in 3 sections, first we'll define what a DSL is,
+second we'll see some examples of DSL implementations, and third we'll build
+a DSL.</p>
 
-<p>Everytime I'm learning a new language, the first thing I try to learn is how this new language
-implements OOP, and now it's Ruby's turn. Before joining Crowd Interactive I had been playing with Java for some
-years; then I first heard about Ruby being a fully OOP language I got really excited, and
-when I got hands-on some existing Ruby code, things got confusing.</p>
+<h2>What is a DSL?</h2>
 
-<p>I would've liked to know all of this before looking at any Ruby code:</p>
+<p><a href="http://en.wikipedia.org/wiki/Domain-specific_language">According wikipedia</a> a
+DSL is defined as:</p>
 
-<h2>First things first: Ruby Objects</h2>
+<blockquote><p>In software development and domain engineering, a domain-specific
+language (DSL) is a programming language or specification language dedicated
+to a particular problem domain, a particular problem representation
+technique, and/or a particular solution technique.</p></blockquote>
 
-<p>Things that we must know:</p>
+<p>To clarify, we'll see some examples. As you read through them take into account
+the following points:</p>
 
 <ul>
-<li>And object is formed by: State + Behavior = Object</li>
-<li>Everything in Ruby is an object, even nil which is <em>NilClass</em>, false <em>FalseClass</em>, true <em>TrueClass</em> and modules</li>
+<li><a href="http://rubylearning.com/satishtalim/ruby_blocks.html">Ruby blocks</a>
+are used everywhere. They are the bare minimum construction element.</li>
+<li>Though the used structures are not part of the Ruby core, all of
+them use valid Ruby constructs.</li>
+<li>The main purpose of creating new code structure is to provide a more
+<em>human readable code</em>.</li>
 </ul>
 
 
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="nb">String</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="s2">&quot;some&quot;</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">superclass</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">NilClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">false</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">FalseClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="kp">true</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">TrueClass</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="k">module</span> <span class="nn">B</span> <span class="k">end</span>
- <span class="o">=&gt;</span> <span class="kp">nil</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Module</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">superclass</span>
- <span class="o">=&gt;</span> <span class="no">Object</span> 
+<p>This implies that the following DSL examples(codes) are build with
+sentences like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">Given</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span> <span class="k">end</span>
 </code></pre>
 </div>
 
 
+<p>Be aware, its respective gems may not define each DSL as I did, but it helps
+to show different possible ways to do it.</p>
+
+<p>Let's start with the examples.</p>
+
+<h2>DSL implementations</h2>
+
+<p>If you are doing Ruby then you probably have already used DSL's. Gems like
+RSpec, Cucumber and Sinatra are good examples of DSL implementations. Let's
+see their syntax and put special attention to the structures they use.</p>
+
+<p>First, let's see three snippets from these languages.</p>
+
+<h3>Rspec snippet</h3>
+
+<p>In RSpec when you want to test if some object responds to a method call
+you usually write something like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">describe</span> <span class="no">MyObject</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s1">&#39;should respond to a method call&#39;</span> <span class="k">do</span>
+      <span class="n">subject</span><span class="o">.</span><span class="n">should</span> <span class="n">respond_to</span><span class="p">(</span><span class="ss">:method_call</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>Cucumber snippet</h3>
+
+<p>In Cucumber when you write step definitions you do things like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="no">Given</span><span class="sr"> /^I click link &quot;([^&quot;&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">link</span><span class="o">|</span>
+    <span class="n">find</span><span class="p">(</span><span class="ss">:css</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<h3>Sinatra snippet</h3>
+
+<p>In Sinatra when you whant to write a route/controller you do something
+like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">get</span> <span class="s2">&quot;/&quot;</span> <span class="k">do</span>
+    <span class="s2">&quot;Hi there&quot;</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now let's write our own DSL.</p>
+
+<h2>Writing a DSL</h2>
+
+<p>The following technique intention is similar to that from
+<a href="http://guides.rubyonrails.org/action_controller_overview.html#filters">Rails Controller Filters</a>.</p>
+
+<p>Let's build a DSL called <strong>Wrappable</strong>. <strong>Wrappable</strong> will be a simple custom DSL that
+<em>wrap</em>'s' a method  with <em>callbacks</em> using the Ruby language.</p>
+
+<p>Let me clarify what I mean by <em>wrap</em> using the following snippet:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">original</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><strong>Wrappable</strong> will <em>wrap</em> the <em>original</em> method. Whenever <em>original</em> is
+invoked, the <em>before</em> method will be  automatically invoked first, second it
+will invoke the <em>original</em> method and finally it will invoke the <em>after</em>
+method.</p>
+
+<p>The way the <em>before</em> and <em>after</em> methods behave is known as a
+<a href="http://en.wikipedia.org/wiki/Callback_%28computer_programming%29">Callback</a>.</p>
+
+<p>This behavior can also be achieved with something like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">before</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">original</span>
+    <span class="n">before</span>
+    <span class="c1"># original sentences</span>
+    <span class="n">after</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">after</span><span class="p">;</span> <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>But, I want to do this dynamically, using a <em>wrap</em> method that will be
+able to setup the calls to the methods <em>before</em> and <em>after</em> programatically.</p>
+
+<h3>Usage example</h3>
+
+<p>We will end up the example with the following <strong>CallbackTest</strong> class:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="c1"># This module contains the whole functionality</span>
+      <span class="kp">include</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">before</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">after</span>
+        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+        <span class="n">before_run</span> <span class="ss">:before</span>
+        <span class="n">after_run</span> <span class="ss">:after</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
+</code></pre>
+</div>
+
+
+<p>The script output should be as follows:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
+    Before method
+    Original method     
+    After method
+</code></pre>
+</div>
+
+
+<h3>Writing the callback step by step</h3>
+
+<p>In order to build the whole example let's start by listing what we require
+to do and then we will code the example from scratch.</p>
+
+<h4>The requirements</h4>
+
+<p>Consider the script fragment where <em>wrap</em> is invoked:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+      <span class="n">before_run</span> <span class="ss">:before</span>
+      <span class="n">after_run</span> <span class="ss">:after</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This means:</p>
+
 <ul>
-<li>Do you remember those so-called 'static classes' in languages other than Ruby? They're objects too,
-and when I say objects, I really mean it. Consider the following code stored in test.rb file:</li>
+<li><strong>Step 1</strong>, we need a class method called <em>wrap</em>. The <em>wrap</em> method has two
+parameters: The first is the *symbol representing the name of the method that
+will be wrapped and the second is a block.</li>
+<li><strong>Step 2</strong>, the block parameter contains two method calls that configure
+what methods should be invoked: <em>before_run</em> and <em>after_run</em>. Each method
+receives one parameter as symbol that represents the name of the method
+that will be invoked respectively.</li>
+<li><strong>Step 3</strong>, create the <em>wrap</em> behavior. This step involves creating a new
+method that will eventually call the <em>original</em>, <em>before</em> and <em>after</em>
+methods and implies that we need to keep a reference to the <em>original</em>
+method so we do not overwrite it.</li>
 </ul>
 
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">outside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span>
+<h4>Step 1</h4>
 
-  <span class="k">def</span> <span class="nf">inside</span>
-    <span class="nb">self</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
+<p>What we are going to do here is:
+* Create a <strong>Wrappable</strong> module with an empty <em>wrap</em> method and its two
+  parameters.
+* Add the <strong>Wrappable</strong> module methods to the <strong>CallbackTest</strong> metaclass
+  (adding static methods).
+* Invoking the <strong>Wrappable</strong>'s <em>wrap</em> method inside <em>CallbackTest</em> class.</p>
+
+<p>Now, save the following snippet as <em>callback_test.rb</em>:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="kp">extend</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
 </code></pre>
 </div>
 
 
-<p>Let's play with it using irb:</p>
+<p>Now execute it:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;./test&#39;</span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">outside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;A:0x7ffc94046f58&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">inside</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="n">A</span> 
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
+    Original method
 </code></pre>
 </div>
 
 
-<p>As you can see both are <em>A</em> objects whose type is <em>Class</em></p>
+<h4>Step 2</h4>
+
+<p>What we are going to do here is:</p>
 
 <ul>
-<li>Those class names are constants containing references to objects:</li>
+<li>Invoke the <em>before_run</em> and <em>after_run</em> inside the <em>wrap</em>'s parameter block.</li>
+<li>Create a <strong>WrapperOptions</strong> class.
+
+<ul>
+<li>This class will namespace the <em>before_run</em> and <em>after_run</em> methods.</li>
+<li>I want the <em>wrap</em>'s parameter block to be evaluated inside this
+<strong>WrapperOptions</strong> class.</li>
+<li>By using this class we can handle all options parsing in just one place.</li>
+</ul>
+</li>
 </ul>
 
 
-<div class="highlight"><pre><code class="ruby"><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Class:0x7f8fdec83230&gt; </span>
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="n">clazz</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span> <span class="o">=</span> <span class="n">clazz</span>
- <span class="o">=&gt;</span> <span class="no">Blabla</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">class</span>
- <span class="o">=&gt;</span> <span class="no">Class</span> 
-<span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span><span class="o">-</span><span class="n">p299</span> <span class="o">&gt;</span> <span class="no">Blabla</span><span class="o">.</span><span class="n">new</span>
- <span class="o">=&gt;</span> <span class="c1">#&lt;Blabla:0x7f8fdec77a70&gt; </span>
+<p>Update <em>callback_test.rb</em> with the following:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">class</span> <span class="nc">WrapperOptions</span>
+        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="k">end</span>
+        <span class="kp">private</span>
+        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">class</span> <span class="nc">CallbackTest</span>
+
+      <span class="kp">extend</span> <span class="no">Wrappable</span>
+
+      <span class="k">def</span> <span class="nf">original</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Original method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">before</span>
+        <span class="nb">puts</span> <span class="s2">&quot;Before method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="k">def</span> <span class="nf">after</span>
+        <span class="nb">puts</span> <span class="s2">&quot;After method&quot;</span>
+      <span class="k">end</span>
+
+      <span class="n">wrap</span> <span class="ss">:original</span> <span class="k">do</span>
+        <span class="n">before_run</span> <span class="ss">:before</span>
+        <span class="n">after_run</span> <span class="ss">:after</span>
+      <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="no">CallbackTest</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">original</span>
 </code></pre>
 </div>
 
 
-<h2>Self</h2>
+<p>And verify that your script still works:</p>
 
-<p>When I first met Ruby I thought "self" was the same as <em>this</em> (like in many other languages), and I was wrong, so lets
-see what it is:</p>
-
-<h4>Default receiver of method calls</h4>
-
-<p>Since everything in Ruby are objects, then all the function definitions we find defined all around
-and all those functions we call like <a href="http://ruby-doc.org/core/classes/Kernel.html#M005961">p</a>,
-<a href="http://ruby-doc.org/core/classes/Kernel.html#M005954">puts</a>, def, etc are method calls. Some may
-not be exactly defined inside a class but, in the end they will get either inherited or mixed in.</p>
-
-<p>Look at following example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">p</span> <span class="s2">&quot;1. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="nb">p</span> <span class="s2">&quot;2. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="nb">p</span> <span class="s2">&quot;3. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">end</span> 
-  <span class="nb">p</span> <span class="s2">&quot;4. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">end</span>
-<span class="nb">p</span> <span class="s2">&quot;5. Current receiver is </span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby callback_test.rb
+    Original method
 </code></pre>
 </div>
 
 
-<p>Running this script we see:</p>
+<h4>Step 3</h4>
 
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
-<span class="s2">&quot;1. Current receiver is main&quot;</span>
-<span class="s2">&quot;2. Current receiver is A&quot;</span>
-<span class="s2">&quot;4. Current receiver is A&quot;</span>
-<span class="s2">&quot;5. Current receiver is main&quot;</span>
-</code></pre>
-</div>
-
-
-<h4>Where instance variables are found</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="vi">@a</span><span class="p">,</span> <span class="vi">@b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">instance_variables</span>
-</code></pre>
-</div>
-
-
-<p>Running this script we see:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
-<span class="o">[</span><span class="s2">&quot;@b&quot;</span>, <span class="s2">&quot;@a&quot;</span><span class="o">]</span>
-</code></pre>
-</div>
-
-
-<h2>Metaprogramming</h2>
-
-<p>This is why I fell in love with ruby, it is a huge topic which I won't cover, but it allows you
-to write code that writes code lets see some examples:</p>
-
-<h4>Create a <em>A Class</em>, re-open it and see how it is the same object</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method1</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method one&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-
-<span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">method2</span>
-    <span class="nb">p</span> <span class="s2">&quot;I&#39;m method two&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span> <span class="kp">false</span>
-<span class="nb">p</span> <span class="n">A</span><span class="o">.</span><span class="n">object_id</span>
-</code></pre>
-</div>
-
-
-<p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
-<span class="o">[</span><span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-<span class="o">[</span><span class="s2">&quot;method2&quot;</span>, <span class="s2">&quot;method1&quot;</span><span class="o">]</span>
-70312385439840
-</code></pre>
-</div>
-
-
-<p>As you saw the object id remains the same after re-open a class in order to add a second method, also,
-we got all instance methods that one <a href="http://ruby-doc.org/core/classes/Object.html#M000350">class</a>
-of <em>A</em> would have.</p>
-
-<h4>Call all instance methods of a certain class whenever you call a method whose name matches</h4>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">A</span>
-  <span class="k">def</span> <span class="nf">hello</span>
-    <span class="nb">p</span> <span class="s2">&quot;Hello&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">bye</span> 
-    <span class="nb">p</span> <span class="s2">&quot;Bye&quot;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">welcome</span>
-    <span class="nb">p</span> <span class="s1">&#39;Welcome&#39;</span>
-  <span class="k">end</span> 
-  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-    <span class="n">method_to_call</span> <span class="o">=</span> <span class="nb">methods</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="nb">name</span> <span class="o">=~</span> <span class="sr">/</span><span class="si">#{</span><span class="n">method_name</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="sr">/</span><span class="p">}</span>
-    <span class="nb">send</span><span class="p">(</span><span class="n">method_to_call</span><span class="p">)</span> <span class="k">if</span> <span class="n">method_to_call</span>
-    <span class="nb">p</span> <span class="s1">&#39;Unknown method&#39;</span> <span class="k">unless</span> <span class="n">method_to_call</span>
-  <span class="k">end</span> 
-<span class="k">end</span>
-
-<span class="n">instance</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">els</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">hel</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">by</span>
-<span class="n">instance</span><span class="o">.</span><span class="n">wel</span>
-</code></pre>
-</div>
-
-
-<p>Which throws:</p>
-
-<div class="highlight"><pre><code class="bash">user@user-desktop:~<span class="nv">$ </span>ruby test.rb 
-<span class="s2">&quot;Unknown method&quot;</span>
-<span class="s2">&quot;Hello&quot;</span>
-<span class="s2">&quot;Bye&quot;</span>
-<span class="s2">&quot;Welcome&quot;</span>
-</code></pre>
-</div>
-
-
-<p>That's it. I hope this gives you some good overview and if you are ready for the whole package I
-suggest you start with:</p>
+<p>Our <strong>CallbackTest</strong> remains unchanged. Let's improve and complete the
+<strong>Wrappable</strong> module. What we are going to do here is:</p>
 
 <ul>
-<li>Some good metaprogramming screencasts <a href="http://pragprog.com/screencasts/v-dtrubyom/the-ruby-object-model-and-metaprogramming">Pragmatic Programmers screencasts</a></li>
-<li>An in deep look at <a href="http://raflabs.com/blogs/silence-is-foo/2009/12/13/the-ruby-object-model/">Rafa Maga&ntilde;a's presentation</a> on Ruby object model</li>
+<li><em>Alias</em> the <em>original</em> method so we don't overwrite it.</li>
+<li>Create <em>accessors</em> to our <em>wrapped</em> method names in the <strong>WrapperOptions</strong>
+class.</li>
+<li>Create a new method that will eventually call the <em>original</em>, <em>before</em> and
+<em>after</em> methods.</li>
 </ul>
 
 
-<p>Happy programming!</p>
+<div class="highlight"><pre><code class="ruby">    <span class="k">module</span> <span class="nn">Wrappable</span>
+      <span class="k">class</span> <span class="nc">WrapperOptions</span>
+        <span class="kp">attr_reader</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span>
+        <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+          <span class="nb">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="k">end</span>
+        <span class="kp">private</span>
+        <span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@before</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+        <span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span>
+          <span class="vi">@after</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
 
-      
-    
+      <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">original_method</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">wrapper_options</span> <span class="o">=</span> <span class="no">WrapperOptions</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">alias_method</span> <span class="ss">:old_method</span><span class="p">,</span> <span class="n">original_method</span>
+        <span class="n">define_method</span> <span class="n">original_method</span> <span class="k">do</span>
+          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">before</span><span class="p">)</span>
+          <span class="nb">send</span><span class="p">(</span><span class="ss">:old_method</span><span class="p">)</span>
+          <span class="nb">send</span><span class="p">(</span><span class="n">wrapper_options</span><span class="o">.</span><span class="n">after</span><span class="p">)</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And finally test that the whole this script works:</p>
+
+<div class="highlight"><pre><code class="bash">    ...<span class="nv">$ </span>ruby my_test.rb
+    Before method
+    Original method     
+    After method
+</code></pre>
+</div>
+
+
+<p>That's it.</p>
+
+<h2>Conclusion</h2>
+
+<p>This was a simple way to build a custom DSL, there are many DSL examples all
+around the web for example:</p>
+
+<ul>
+<li>At <a href="http://deadprogrammersociety.blogspot.com/2006/11/ruby-domain-specific-languages-basics.html">Ron Evan's blog</a></li>
+<li>At <a href="http://rubylearning.com/blog/2010/11/30/how-do-i-build-dsls-with-yield-and-instance_eval/">rubylearning.org's blog</a></li>
+<li>At <a href="http://obiefernandez.com/presentations/obie_fernandez-agile_dsl_development_in_ruby.pdf">Obie Fernandez's blog</a></li>
+</ul>
+
+
+<p>Note that this implementation only supports method names as parameters, if
+you want to view an example of transparently supporting <em>blocks</em> as wrappers
+then look at the <a href="https://gist.github.com/762214">complete exercise gist</a>.</p>
+
+<p>Finally, if you really need to implement callbacks then I recommend you to look at the
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html"><strong>ActiveSupport::Callbacks</strong> package</a>.</p>
+
+<p>Thank you for reading.</p>
+
+<p>Regards</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="What I would've loved I had known when I first met Ruby"
+          data-text="Building a basic DSL to create callbacks in Ruby"
           data-count="none"
           data-via="crowdint"
           data-related="Emmanuel Delgado:with">Tweet</a>
@@ -872,164 +484,256 @@ suggest you start with:</p>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version with RVM</a></h1>
+  <h1><a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 17</b><br />2010</span>
+    <span class="date"><b>Jan 05</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>If you are using <a href="http://rvm.beginrescueend.com/"><span class="caps">RVM</span></a> in your machine (just as <a href="/2010/07/28/getting-started-with-rvm.html">Francisco showed us</a> the other day) then you should take advantage of the <a href="http://rvm.beginrescueend.com/workflow/rvmrc/#project">project .rvmrc</a> feature.</p>
-<p>Let&#8217;s say your project is in the directory:</p>
-<div class="highlight"><pre><code class="bash">~/repo/myproject
+      <p>Sometimes, sorting the elements in an array depend on something more
+complex than just alphabetical order or numerical order.</p>
+
+<p>From my experience, take for example shoe sizes for little kids.
+For some of the vedors I've worked with you have shoes in size 10.5
+through 13.5, then, the count is restarted to 1 through 9.</p>
+
+<p>So, in order, the size array would look like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">51</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
 </code></pre>
-</div><p>And you have ruby-1.8.7 and ruby-1.9.2 in <span class="caps">RVM</span> and you want to use 1.9.2 ruby version in that project.</p>
-<p>Then you can put this in your <code>~/repo/myproject/.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2
+</div>
+
+
+<h2>The problem</h2>
+
+<p>Imagine we have those values on a sorted array:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+<span class="mi">11</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
 </code></pre>
-</div><p>So, every time you change to that project directory, <strong><span class="caps">RVM</span> will change to the specified ruby version</strong>.</p>
-<div class="highlight"><pre><code class="bash"><span class="lineno"> 1</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 2</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 3</span> 
-<span class="lineno"> 4</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span><span class="nb">cd </span>myproject/
-<span class="lineno"> 5</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span>ruby --version
-<span class="lineno"> 6</span>   ruby 1.9.2dev <span class="o">(</span>2010-07-11 revision 28618<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
-<span class="lineno"> 7</span> 
-<span class="lineno"> 8</span> chalofa <span class="o">[</span>1.9.2<span class="o">]</span>:~/repo/myproject<span class="nv">$ </span><span class="nb">cd</span> ..
-<span class="lineno"> 9</span> chalofa <span class="o">[</span>1.8.7<span class="o">]</span>:~/repo<span class="nv">$ </span>ruby --version
-<span class="lineno">10</span>   ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>x86_64-linux<span class="o">]</span>
+</div>
+
+
+<p>How would we properly sort it? Well the answer is kinda simple. Extending ruby's sort
+method.</p>
+
+<p>For the sake of legibility, let's make a short version of the array.</p>
+
+<p>Let's pretend for a moment that if we had this array</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
 </code></pre>
-</div><p>As you can see, first we are using Ruby version 1.8.7, after the change to our project directory, the version selected in the <code>.rvmrc</code> is used: 1.9.2<br />
-Once you abandon the project directory, your default Ruby version will be used!</p>
-<p>It even <strong>works with gemsets</strong> so you can have something like this in your <code>.rvmrc</code> file:</p>
-<div class="highlight"><pre><code class="bash">rvm 1.9.2@blog
+</div>
+
+
+<p>It's sorted version should look like:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
 </code></pre>
-</div><p><strong>And every time you cd into your directory, your ruby version and gemset will be changed :)</strong></p>
-<h2>Final thoughts</h2>
-<p>Whether this file should or shouldn&#8217;t be in your project repo is up to you, but <span class="caps">IMO</span> it should be ignored, creating the possibility to be defined by every user&#8230;</p>
-<p>What do you think about that?</p>
-      
-    
+</div>
+
+
+<p>In Ruby, all Enumerables (mostly array and hashes) have a sort method.
+An example on how to use it would be:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span><span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>This code would sort the array in numerical order. The first thime I saw
+this code, one thing came to my mind: What is that <em>&lt;=></em> operator?</p>
+
+<p>To understand that, let's first figure out how the <em>sort</em> method works.</p>
+
+<h2>The sort method</h2>
+
+<p>The sort method takes the elements on the enumerable in pairs,
+receives a block, and expects the result of the block to be:</p>
+
+<div class="highlight"><pre><code class="ruby">   <span class="o">-</span><span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span>
+
+    <span class="mi">0</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
+
+    <span class="mi">1</span>  <span class="k">when</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
+</code></pre>
+</div>
+
+
+<p>Based on the result of that block, the sort method returns the
+array in order.</p>
+
+<h2>The &lt;=> operator</h2>
+
+<p>That means the <em>&lt;=></em> operator, compares both elements on its sides
+and returns <em>-1, 0, 1</em> depending on the values.</p>
+
+<p>An example of how it works for the Fixnum class:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">1</span> <span class="o">&lt;=&gt;</span> <span class="mi">2</span> <span class="c1"># =&gt; -1</span>
+<span class="mi">3</span> <span class="o">&lt;=&gt;</span> <span class="mi">3</span> <span class="c1"># =&gt; 0 </span>
+<span class="mi">4</span> <span class="o">&lt;=&gt;</span> <span class="mi">1</span> <span class="c1"># =&gt; 1</span>
+</code></pre>
+</div>
+
+
+<p>Go on, try that on <em>irb</em>.</p>
+
+<p>In our case, we will use a custom function to return <em>-1, 0, 1</em> depending
+on the value of <em>a</em> and <em>b</em>.</p>
+
+<p>For this example, let's just put it on a Comparison class:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>So, the way we'll use this method will be:</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">values</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+  <span class="n">values</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="no">Comparison</span><span class="o">.</span><span class="n">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">}</span> <span class="c1">#=&gt; [12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3]</span>
+</code></pre>
+</div>
+
+
+<p>To solve this problem, first thing we need to do is assign a weight to
+the two sets of sizes: -1 to [12, 12.5, 13, 13.5] and 1 to [1, 1.5, 2,
+2.5, 3].</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Now, we'll use that weight calculation to determine the sort order of
+the elements.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Comparison</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="c1"># If the weights are the same, compare them numerically</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+      <span class="n">a</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># If the weights are different, just return the weight of a</span>
+    <span class="c1">#</span>
+    <span class="k">else</span>
+      <span class="n">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">little_kid_size_weight</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And that's it, you can try it on irb as it is.</p>
+
+<h2>Conclusion</h2>
+
+<p>All you have to remember is to make the result of the sort block
+return -1, 0, 1 depending on how you want to sort the values.</p>
+
+<p>If the sizes were stored, for example, on a ShoeSize model, the best
+thing to do is override the ShoeSize class <em>&lt;=></em> operator. That would
+actually look much better, but you can always implement the sort methods on a
+Module, or an external class to reuse them.</p>
+
+<p>Hope this helps you somehow.</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/08/17/use-a-project-specific-ruby-version-rvm.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/01/05/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Use a project specific Ruby version with RVM"
+          data-text="Custom Sorting with Ruby"
           data-count="none"
           data-via="crowdint"
-          data-related="Chalo Fernandez:with">Tweet</a>
+          data-related="David Padilla:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></h1>
+  <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 13</b><br />2010</span>
+    <span class="date"><b>Dec 25</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/43c0c5387a923d62b0060291c5c297f4" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>If you are stuck in your project using <a href="http://github.com/technoweenie/attachment_fu"><em><strong>attachment_fu</strong></em></a> and<br />
-<a href="http://github.com/rails/acts_as_list"><em><strong>acts_as_list</strong></em></a> plugins/gems in your project,<br />
-you might be facing a weird performance issue when dealing with images with thumbnails.</p>
-<p>Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:</p>
-<div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
-<span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
-<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
-<span class="k">LIMIT</span> <span class="mi">1</span>
-</code></pre>
-</div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
-<p>So, let&#8217;s assume the following models:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
-<span class="k">end</span>
+      <br />
 
-<span class="k">class</span> <span class="nc">Image</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">belongs_to</span> <span class="ss">:article</span>
-  <span class="n">acts_as_list</span> <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="ss">:article</span>      <span class="c1">#acts_as_list declaration</span>
 
-  <span class="n">has_attachment</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="ss">:image</span><span class="p">,</span>   <span class="c1">#attachment_fu declaration</span>
-    <span class="ss">:storage</span> <span class="o">=&gt;</span> <span class="ss">:file_system</span><span class="p">,</span>
-    <span class="ss">:thumbnails</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="o">]</span><span class="p">,</span> <span class="ss">:tiny</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="o">]</span><span class="p">}</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.</p>
-<p>If you add an image attachment now&#8230; <strong>the slow query will be executed for each thumbnail</strong>. The reasons are:</p>
-<ol>
-	<li>The image file is uploaded to the server.</li>
-	<li>attachment_fu saves the image and creates a new Image row with article_id established.</li>
-	<li>acts_as_list assigns the position attribute to the parent image.</li>
-	<li>attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = <span class="caps">NULL</span></li>
-	<li>acts_as_list assigns the position attribute to images after the thumbnail created.</li>
-	<li>Repeat step #4 and #5 for each thumbnail to be created.</li>
-</ol>
-<p>The problem with this procedure, if you see the acts_as_list source code:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">scope_condition</span>
-  <span class="k">if</span> <span class="c1">#{configuration[:scope].to_s}.nil?</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> IS NULL&quot;</span>
-  <span class="k">else</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> = </span><span class="se">\#</span><span class="s2">{</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2">}&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>As we configured our Image model to use <code>acts_as_list :scope =&gt; :article!</code>, and in the thumbnails the article_id is <span class="caps">NULL</span>, the condition is generated as &#8220;<strong><span class="caps">WHERE</span> (article_id  IS <span class="caps">NULL</span>)</strong>&#8221;.</p>
-<p>To avoid this, you need to manually <strong>set the article_id value before the thumbnails are saved</strong>. This can be done using a <strong>callback in the Image model</strong> (as suggested in acts_as_list source code):</p>
-<div class="highlight"><pre><code class="ruby"><span class="c1">#Callback before a thumbnail is saved...</span>
-<span class="c1">#Assign the article_id to avoid a HUGE query with IS NULL clause</span>
-<span class="n">before_thumbnail_saved</span> <span class="k">do</span> <span class="o">|</span><span class="n">record</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">|</span>
-  <span class="n">image</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
-  <span class="n">record</span><span class="o">.</span><span class="n">article_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">article_id</span> <span class="k">if</span> <span class="n">image</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>With this callback, after generating a thumbnail each image will have the <code>article_id</code> attribute filled. Thus in the Article model, the has_many relation is defined as:</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
-</code></pre>
-</div><p>Now, <strong>only the article images will have thumbnail.nil</strong> and the thumbnails will be hidden in the image.thumbnails relation.</p>
-<h3>Conclusion</h3>
-<p>In our project, we <strong>expected a 570% <span class="caps">SQL</span> improvement</strong> when creating, modifying or deleting image attachments.</p>
-      
-    
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<p><img src="/images/2010/12/30/holidays.jpg" alt="Happy Holidays" /></p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Improve performance between attachment_fu and acts_as_list"
+          data-text="Happy Holidays, your friends from Crowd Interactive"
           data-count="none"
           data-via="crowdint"
-          data-related="Chalo Fernandez:with">Tweet</a>
+          data-related="Crowd Interactive:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+      <p><b>Author:</b> Crowd Interactive | info@crowdint.com</p>
     </div>
 </div>
 
@@ -1040,7 +744,7 @@ you might be facing a weird performance issue when dealing with images with thum
       <a href="/page10" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 11 of 12</span>
+  <span class="page_number ">Page: 11 of 21</span>
   
     <a href="/page12" class="next ">Next</a>
   
@@ -1049,6 +753,8 @@ you might be facing a weird performance issue when dealing with images with thum
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -1087,8 +793,6 @@ you might be facing a weird performance issue when dealing with images with thum
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

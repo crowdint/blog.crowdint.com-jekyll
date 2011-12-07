@@ -47,802 +47,605 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/01/05/custom-sorting-with-ruby.html">Custom Sorting with Ruby</a></h1>
+  <h1><a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></h1>
   <p class="author">
-    <span class="date"><b>Jan 05</b><br />2011</span>
+    <span class="date"><b>Mar 31</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        
-            <p>Sometimes, sorting the elements in an array depend on something more complex than just alphabetical order or numerical order.</p> <p>From my experience, take for example shoe sizes for little kids. For some of the vedors I've worked with you have shoes in size 10.5 through 13.5, then, the count is restarted to 1 through 9.</p> <p>So, in order, the size array would look like this:</p> <div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="mi">10</span><span class="o">.</span><span...
-            <div class = "continue_reading"><a href="/2011/01/05/custom-sorting-with-ruby.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/01/05/custom-sorting-with-ruby.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
+      <p><small><code>TODO. Write introductions. Include references to some RESTful tutorial. Explain why RESTful is so important.
+Add a disclaimer, pray for feedback.
+Make funny jokes, like "Why does this guy wears a Mexican hat?"</code></small></p>
 
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Custom Sorting with Ruby"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
+<p>No RESTful knowledge at all? <a href="http://www.b-simple.de/documents">read this!</a></p>
 
+<h3>REST URLs should be multi-response</h3>
 
-<div class="post prepend-1">
-  <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 25</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/43c0c5387a923d62b0060291c5c297f4" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <br />
+<p>In rails we can use <a href="http://www.tokumine.com/2009/09/13/how-does-respond_to-work-in-the-rails-controllers/"><code>respond_to(format)</code></a> to switch between different layouts, and partials.
+So, we just create a helper like <code>request_type?</code> and switch between the different kinds of views!</p>
 
+<div class="highlight"><pre><code class="ruby"><span class="c1"># Route</span>
+<span class="n">get</span> <span class="s1">&#39;/book/:title/chapters&#39;</span>
+  <span class="k">case</span> <span class="n">request_type?</span>
+    <span class="k">when</span> <span class="ss">:mobile</span>  <span class="k">then</span> <span class="n">haml</span> <span class="ss">:&#39;mobile/chapters&#39;</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="ss">:&#39;mobile/layout&#39;</span>
+    <span class="k">when</span> <span class="ss">:ajax</span>    <span class="k">then</span> <span class="n">haml</span> <span class="ss">:chapters</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span> <span class="c1"># json</span>
+    <span class="k">else</span> <span class="n">haml</span> <span class="ss">:chapters</span><span class="p">,</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="ss">:&#39;static/layout&#39;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<br />
-
-
-<p><img src="/images/2010/12/30/holidays.jpg" alt="Happy Holidays" /></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Happy Holidays, your friends from Crowd Interactive"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Crowd Interactive:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Crowd Interactive | info@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 21</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
-
-<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+<span class="c1"># Helper</span>
+<span class="k">def</span> <span class="nf">request_type?</span>
+  <span class="k">return</span> <span class="ss">:mobile</span>  <span class="k">if</span> <span class="n">mobile_request?</span>
+  <span class="k">return</span> <span class="ss">:ajax</span>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">xhr?</span>
+  <span class="k">return</span> <span class="ss">:normal</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
-In fact, this looks like old C/PHP code</p>
+<p>Avoid having different routes for the same <code>resource/action</code>, like <code>/m/register</code> and <code>/user/new</code> doing the same thing.
+Create one route than actually makes sense, and just play with the response type.</p>
 
-<h2>The "cool" way</h2>
+<blockquote><p>Or even simpler!
+Thanks to <a href="http://twitter.com/chischaschos">Emmanuel</a></p></blockquote>
 
-<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
-
-<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
-
-<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
-By default, Rails comes with a few ones that you can use:</p>
-
-<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
-- :long          #&lt;- December 19, 2010 22:42
-- :db            #&lt;- 2010-12-19 22:42:43
-- :short         #&lt;- 19 Dec 22:42
-- :time          #&lt;- 22:42
-- :number        #&lt;- 20101219224243
-- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
-</code></pre>
-
-<p>So, you can execute for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
-<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">view</span><span class="p">,</span> <span class="n">layout</span> <span class="o">=</span> <span class="n">mobile_request?</span> <span class="p">?</span> 
+    <span class="o">[</span><span class="ss">:&#39;mobile/chapters&#39;</span><span class="p">,</span> <span class="ss">:&#39;mobile/layout&#39;</span><span class="o">]</span> <span class="p">:</span> 
+    <span class="o">[</span><span class="ss">:&#39;chapters&#39;</span><span class="p">,</span> <span class="kp">false</span><span class="o">]</span>
+<span class="n">haml</span> <span class="n">view</span><span class="p">,</span> <span class="n">layout</span> <span class="o">=&gt;</span> <span class="n">layout</span>
 </code></pre>
 </div>
 
 
-<p>Much better now, isn't it?</p>
+<h3>"Fat models, skinny <strike>controllers</strike> routes"</h3>
 
-<h2>Custom formats</h2>
+<p>Move your ugly controller-based validations <a href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model">to your models</a>, like this:</p>
 
-<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
-
-<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
-
-<p><em>config/initizers/time_formats.rb</em></p>
-
-<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
-<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
-<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
-<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
-<span class="c1"># datetime argument as the value.</span>
-
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
-<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># This is wrong</span>
+<span class="n">post</span> <span class="s1">&#39;user/new&#39;</span> <span class="k">do</span>
+  <span class="n">halt</span><span class="p">(</span><span class="s1">&#39;user exists&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="ss">:email</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="n">email</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">halt</span><span class="p">(</span><span class="s1">&#39;empty email&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="n">email</span><span class="o">].</span><span class="n">blank?</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+<p>Use helpers like <a href=""><code>error_messages_for(@user)</code></a> with the model validations:</p>
 
-<p>Let's see how different and clean the code is:</p>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># Model</span>
+<span class="k">class</span> <span class="nc">User</span>
+  <span class="n">validate_uniqueness_for</span> <span class="ss">:email</span>
+  <span class="n">validate_presence_for</span> <span class="ss">:email</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
 
-<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
+<span class="c1"># Route</span>
+<span class="n">post</span> <span class="s1">&#39;user/name&#39;</span> <span class="k">do</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">new</span> <span class="n">params</span>
+  <span class="k">unless</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="n">error_messages_for</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span>
+    <span class="c1"># =&gt; &#39;Email can&#39;t be blank and it&#39;s already taken.&#39;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 
-<span class="c1"># the old school way</span>
-<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+<span class="c1"># Helpers</span>
+<span class="k">def</span> <span class="nf">error_messages_for</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+  <span class="n">all_errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="k">for</span> <span class="n">error</span> <span class="k">in</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">errors</span> <span class="k">do</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">capitalize</span>
+    <span class="n">what_is_wrong</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; and &#39;</span><span class="p">)</span>
+    <span class="n">all_errors</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">what_is_wrong</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+  <span class="k">end</span>
+  <span class="n">all_errors</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p><em>Cool, isn't it?</em></p>
+<h3>Start using route "Filters"</h3>
 
-<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
+<p>If you are using the same sentence in a several routes, like:</p>
 
-<p>Hope this help...<br/>
-Thanks for reading<br/>
-Gonzalo "aka Chalo" Fernandez</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/21/cool-date-formatting-in-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Cool date formatting in Rails"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Gonzalo Fernandez:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
-    </div>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># /user/001/ + dash</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/dash&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+<span class="c1"># /user/001/ + other</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/other&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
+</code></pre>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 15</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>What I am about to describe in this post is probably something obvious to the
-advanced Rails developer. Yet, it's sometimes hard to get the concept
-when you come from other frameworks or technology.</p>
+<p>Start using <a href="http://sinatra-book.gittr.com/">Sinatra's filters</a> as <code>before</code> or <code>after</code>. They can be string matched! like <code>before '/this/*'</code>
+(wildcards) or <code>after /^(this|other)$/</code> (regex)</p>
 
-<p>I, at least, personally had a problem getting it when I first started
-using Rails.</p>
+<div class="highlight"><pre><code class="ruby"><span class="c1"># /user/001/*</span>
+<span class="n">before</span> <span class="s1">&#39;/user/:uid/*&#39;</span> <span class="k">do</span>
+  <span class="n">require_login!</span> <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">logged?</span>
+<span class="k">end</span>
 
-<h2>REST</h2>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/dash&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">get</span> <span class="s1">&#39;/user/:uid/other&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
 
-<p>REST stands for <em>Representational State Transfer</em>.
-What does that mean anyway? well, a lot of things, but, for now, I'll
-just focus on what it means when designing a Rails app.</p>
 
-<h3>The wrong way</h3>
+<h3>Better error messaging</h3>
 
-<p>I've seen it a lot of times. It's just easy to think that, let's say, a
-OrderController, must always be tied to a Order model, and that,
-all actions performed on the Order objects should be done via that controller.</p>
+<p>Improve your multi-response routes, handling the correct messages for.
+<u>For example</u> use flash/notices for mobiles, json for ajax or jGrowls, and so on...</p>
 
-<p>So, with that thought on your mind, you end up with a controller like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">new</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">index</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">update</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">remove_review</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">cancel</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">pay</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">return_order</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<div class="highlight"><pre><code class="ruby"><span class="n">post</span> <span class="s1">&#39;/users/new&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">case</span> <span class="n">request_type?</span>
+    <span class="k">when</span> <span class="ss">:mobile</span>
+      <span class="n">flash</span><span class="o">[</span><span class="ss">:error</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;Ups, something goes wrong.&#39;</span>
+      <span class="n">redirect</span> <span class="n">back</span>
+    <span class="k">when</span> <span class="ss">:ajax</span>
+      <span class="p">{</span> <span class="ss">:message</span> <span class="o">=&gt;</span> <span class="s1">&#39;Ups, something goes wrong.&#39;</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="mi">401</span> <span class="p">}</span><span class="o">.</span><span class="n">to_json</span>
+    <span class="k">end</span>
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
 </div>
 
 
-<h3>What's wrong here?</h3>
+<h3>Doing the same thing, but using different requests?</h3>
 
-<p>If you take a look at it, there's all these actions on the controller
-that shouldn't be there: review, remove_review, cancel, pay,
-return_order.</p>
+<p>Are you doing the same code, with the same route but only changing the http-verb?
+I do, and I found this: <a href="http://nuclearsquid.com/writings/multi-routing.html">Multi-Routing in Sinatra</a>
+to use 'any' when you need the same route action for different methods (http verbs).</p>
 
-<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
-means that you have <em>resources</em> and that with every request you are
-creating, updating, deleting or retrieving for display that resource or
-many of them.</p>
+<p>For example having these routes:</p>
 
-<p>A resource is not necesarily a model, it's just <em>something</em> that has a
-state or that can be altered.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">get</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">post</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">put</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+<span class="n">delete</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
 
-<h3>How to make it right?</h3>
 
-<p>So, if we go back to our example, the right thing to do, is to think
-about those <em>bad</em> actions as a resource.</p>
+<p>You can use:</p>
 
-<p>If you're going to review an order, then, you need a <em>OrderReview</em>
-controller.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">any</span> <span class="s1">&#39;/user/:id&#39;</span> <span class="k">do</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="k">end</span>
+</code></pre>
+</div>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
 
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
+<h3>Be flexible with your route endings</h3>
+
+<blockquote><p>I recommend that you enable your routes with/without last slash "/",
+but I found that some RESTul projects prefer all urls without slashes.
+So, there is a separate opinions... <a href="http://www.standardzilla.com/2007/07/09/dont-forget-your-trailing-slash/]">1</a>, <a href="http://www.projectzero.org/sMash/1.0.x/docs/zero.devguide.doc/zero.core/REST.html]">2</a>
+The truth is that adding an extra slash to the end is not that big of a deal. Don't you think so?</p></blockquote>
+
+<p>For example having:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># This will raise a 404 if you go to &#39;/users/001/friends/&#39;</span>
+<span class="n">get</span> <span class="s1">&#39;/users/:uid/friends&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span> 
+</code></pre>
+</div>
+
+
+<p>The solution is pretty simple, just add <code>/?</code> at the end of your routes.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># this will work with: /users/:uid/friends and /users/:uid/friends/</span>
+<span class="n">get</span> <span class="s1">&#39;/users/:uid/friends/?&#39;</span> <span class="k">do</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
 <span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
-can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
-a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
-out of it.</p>
+<h2>See you next time!</h2>
 
-<p>A most common mistake... an action that actually alters the state of an
-object like the cancel action.</p>
+<p>May the Source Be With You.</p>
 
-<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
-something, but still, this looks much better:</p>
+<h2>References</h2>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">create</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">delete</span>
-    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
+<ul>
+<li><a href="rest_rails">RESTful Rails Development</a> Excellent tutorial about RESTul and Rails</li>
+</ul>
 
 
-<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
-cancellation (it can happen).</p>
-
-<p>You could now refactor all the other actions to their respective
-controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
-
-<h2>Associations</h2>
-
-<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
-how models relate to each other is by thiking that their relationship is
-a resource.</p>
-
-<p>For example, if you had a User that can add other User objects as its
-friends, instead of creating a <em>add_friend</em> or something action, you'd add
-a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
-
-<p>By the way, I've seen relationships like:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-
-  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
-
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p><em>Always remember to think restful</em>, probably the user should:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
-<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
-
-<span class="c1"># This actually requires more code to make it work, but, you get the</span>
-<span class="c1"># point, right?</span>
-</code></pre>
-</div>
-
-
-<p>Think about it. Way better.</p>
-
-<h3>But, why? You have to write all this "unnecesary" code</h3>
-
-<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
-these two while writing your code, you're being rude to your collegues
-or yourself.</p>
-
-<p>Also, Rails its all about love and following conventions. This is one of
-them.</p>
-
-<p>Hope this guide helps you in some way, cheers!</p>
-
-      
-    
     </div>
     <div class="comments">
-      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/03/31/make-your-sinatra-more-restful.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Always Think RESTful"
+          data-text="Trying to make your Sinatra more RESTful?"
           data-count="none"
           data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
+          data-related="Mario Zaizar:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
     </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
+  <h1><a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></h1>
   <p class="author">
-    <span class="date"><b>Dec 07</b><br />2010</span>
+    <span class="date"><b>Mar 24</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>Have you ever wondered if you can do something to make your ruby development even faster?
-Are you tired of waiting for rspec to finish?
-Is your rails application eating more and more memory and you have to restart your app once in a while?</p>
+      <p>After a while of working with CSS, in different projects and with
+different people, I have realized that there is a lack of standards for
+it. Like, when you have to make some corrections or improvements and open
+the CSS file and you get a thousand lines of code with no comments at
+all.</p>
 
-<p>Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.</p>
+<p>Well, I have a couple Ideas of how CSS should be coded:</p>
 
-<h2>What is REE?</h2>
+<h2>The ABC of CSS</h2>
 
-<p>As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "<a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep">mark-and-sweep</a>".</p>
+<h3>Keep it simple.</h3>
 
-<p>Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.</p>
+<p>Imagine that every time you write a <code>&lt;div&gt;</code> tag somebody kicks you in the nuts,
+painful huh?... Use only the necessary div tags. Think twice before writing a
+one, because if you don’t care about it you will get a super complex page.
+Always remember to keep it simple.</p>
 
-<p>Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "<a href="http://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">tweak the garbage collector</a> via environment variables.</p>
+<h3>Use HTML tags for their propose</h3>
 
-<p>Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.</p>
+<p>I'm always finding some code like this:</p>
 
-<h2>Installing REE</h2>
-
-<p>I'll guide you through this post assuming that you already have <a href="http://rvm.beginrescueend.com/rvm/install/">rvm</a> installed on your computer.</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm install ree
-<span class="c">#go and grab a drink, preferably coffee or beer</span>
-<span class="c">#some output</span>
-<span class="c">#done.</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm use ree
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm list
-
-rvm <span class="nv">rubies</span>
-
-<span class="o">=</span>&gt; ree-1.8.7-2010.02 <span class="o">[</span> x86_64 <span class="o">]</span>
-   ruby-1.8.7-p302 <span class="o">[</span> x86_64 <span class="o">]</span>
-   ruby-1.9.1-p378 <span class="o">[</span> x86_64 <span class="o">]</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>ruby -v
-ruby 1.8.7 <span class="o">(</span>2010-04-19 patchlevel 253<span class="o">)</span> <span class="o">[</span>i686-darwin10.4.0<span class="o">]</span>, MBARI 0x6770, Ruby Enterprise Edition 2010.02
-
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+<div class="highlight"><pre><code class="css">   <span class="o">&lt;</span><span class="nt">table</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
+   <span class="o">&lt;/</span><span class="nt">table</span><span class="o">&gt;</span>
+  
 </code></pre>
 </div>
 
 
-<p>Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree</p>
+<p>As you see, it's a common list an instead of using <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code> its using a <code>&lt;table&gt;</code>.</p>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>bundle install
-Installing ...
-Installing ....
-Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
-Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
+<p>A better way to do this would be:</p>
 
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+<div class="highlight"><pre><code class="css">    <span class="o">&lt;</span><span class="nt">ul</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">ul</span><span class="o">&gt;</span>
+  
 </code></pre>
 </div>
 
 
-<p>Hint: go to this <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">post</a> and make rvm always use your desired gemset@ruby</p>
+<p>You <strong>must</strong> use the correct tag; if you are not familiar with all of them
+take a look at <a href="http://w3schools.com/tags/default.asp">w3schools html reference</a>.
+Here you will find the complete list of tags with examples and everything you need.</p>
 
-<p>Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power</p>
+<p>Also, this is important because, it is easier for search engines to
+identify your page and understand its code. Remember that search engines
+are like a blind users.</p>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-..
-... in 62.33s
+<h3>Use comments</h3>
 
-SLOW SPEC: 5.9991  Test A
-SLOW SPEC: 5.3510  Test B
-SLOW SPEC: 7.8485  Test C
-SLOW SPEC: 7.6710  Test D
-SLOW SPEC: 5.8465  Test E
-SLOW SPEC: 5.9972  Test F
-SLOW SPEC: 5.9707  Test G
-SLOW SPEC: 5.4557  Test H
-SLOW SPEC: 6.0631  Test I
-SLOW SPEC: 5.4861  Test J
-1763/1763:     100% |##########################################| Time: 00:10:43
+<p>Try to put comments on your CSS. It is easier for others to see the comments and
+know what the styles are being used for.</p>
 
-Finished in 643.211296 seconds
+<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Common</span> <span class="nt">tags</span> <span class="nt">styles</span>
+  <span class="nt">a</span> <span class="p">{</span>
+    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
+  <span class="p">}</span>
 
-1763 examples, 0 failure, 1 pending
+  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">styles</span>
+  <span class="nf">#header</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+  <span class="p">}</span>
 
-real  13m45.186s
-user  11m0.745s
-sys   0m20.082s
+  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">//</span><span class="nt">end</span>
+
+  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span> <span class="nt">styles</span>
+  <span class="nf">#left-menu</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
+  <span class="p">}</span>
+  <span class="o">//</span><span class="nt">end</span>
 </code></pre>
 </div>
 
 
-<p>Mmhm, that was... 'fast', I wonder how previous numbers performed.</p>
+<h3>Avoid absolute positions</h3>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use 1.8.7
-Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
-Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>bundle install
-Installing ...
-Installing ....
-Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
-Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
+<p>When you start making CSS, you can find it "easy" to put every element on
+the right place using absolute position. This is a very common, yet
+incorrect
+method to align your elements. Sometimes when you use absolute positions,
+you will get weird behavior after a window resize or in different
+browsers or screens, just try to avoid it and use margins and
+paddings to do the work.  Always remember <a href="http://www.w3.org/TR/CSS21/box.html">the box model</a>.</p>
 
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-...
-in 84.92s
+<h2>Ok, First steps</h2>
 
-SLOW SPEC: 8.6082  Test A
-SLOW SPEC: 10.3736 Test B
-SLOW SPEC: 11.3856 Test C
-SLOW SPEC: 7.4864  Test D
-SLOW SPEC: 6.5998  Test E
-SLOW SPEC: 8.8307  Test F
-SLOW SPEC: 8.8013  Test G
-SLOW SPEC: 8.8126  Test H
-SLOW SPEC: 8.9622  Test I
-SLOW SPEC: 8.9033  Test J
-1763/1763:     100% |##########################################| Time: 00:15:30
+<h3>Reset your CSS</h3>
 
-Finished in 930.143889 seconds
+<p>Did you ever realize the huge differences between the browser when you put
+a text into a <code>&lt;div&gt;</code> or inside <code>&lt;p&gt;</code>? You will always face a couple of differences in
+how each browser renders the elements.</p>
 
-1763 examples, 0 failure, 1 pending
+<p><img src="/images/2011/renders.jpg" title="Renders" alt="Diferent renders" /></p>
 
-real  19m40.629s
-user  16m13.691s
-sys   0m21.632s
+<p>This happens because the browsers have different ways to render the elements
+of a page. An easy way to avoid this is by resetting your CSS, a simple
+technique where you put all the style to 0/none by default.
+You can achieve this by applying <a href="http://meyerweb.com/eric/tools/css/reset/index.html">Eric Meyer's css reset</a>,
+download it and put it on your public folder, or link to the url
+directly.</p>
+
+<h3>Styles for tags first</h3>
+
+<p>I prefer to write styles for tags first, it’s something like starting from
+the general to the particular. In other words, make it general, and use
+exceptions only when it is really necessary.</p>
+
+<div class="highlight"><pre><code class="css">  <span class="nt">body</span><span class="p">{</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nt">h1</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nc">.secondary_pages</span> <span class="nt">h1</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">.</span> <span class="m">1em</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Verdana</span><span class="p">;</span>
+  <span class="p">}</span>
 </code></pre>
 </div>
 
 
-<p>Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!</p>
+<h3>Be modular</h3>
 
-<p>Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">Garbage Collector Performance Tunning</a>. Twitter has published their production settings, let's see what we can get.</p>
+<p>Remember to separate your CSS like modules, first, the body definitions,
+then the header definitions, and so on.
+Also separate them by files like <strong>main.css</strong> and <strong>form.css</strong>.</p>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use ree
-Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
-Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span><span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span>500000 <span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span>250000 <span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span>1 <span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span>50000000 rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-..
-...in 44.06s
-SLOW SPEC: 6.2397  Test C
-SLOW SPEC: 8.4131  Test D
-SLOW SPEC: 5.6498  Test E
-1763/1763:     100% |##########################################| Time: 00:06:53
+<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">CSS</span>
+  <span class="nf">#header</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+  <span class="p">}</span>
 
-Finished in 413.352603 seconds
-
-1763 examples, 0 failure, 1 pending
-
-real  9m26.457s
-user  6m46.696s
-sys   0m20.475s
+  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span>
+  <span class="nf">#left-menu</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
+  <span class="p">}</span>
+  <span class="nt">a</span><span class="p">{</span>
+    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
+  <span class="p">}</span>
 </code></pre>
 </div>
 
 
-<p>You should've seen my face when I came back and saw the results, that meant 2.2x faster!</p>
+<h3>Do you feel like I am re-writing the whole bible? (Old and new testament!)</h3>
 
-<p>My next thought was: I have to make this a permanent change in my system, so it was easy:</p>
+<p>Sometimes you start to write CSS and then you get velocity, or you have a
+deadline, then you get yourself coding like a mad man. Tons and tons of CSS
+lines. Then, you end up with like 10 different files with a thousand lines on
+each one.</p>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_MIN_SLOTS=500000&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_INCREMENT=250000&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_GC_MALLOC_LIMIT=50000000&quot;</span> &gt;&gt; ~/.bash_profile
-</code></pre>
-</div>
+<p>Well if you end up having that, you are doing it completely wrong.</p>
 
+<p>Take your time to write the CSS, once you get the expected result,
+take a look at your code and try to clean the clean it.</p>
 
-<p>After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:</p>
+<blockquote><p>Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</p>
 
-<h3>Using Standard Ruby 1.8.7</h3>
+<h4>Antoine de Saint-Exupery <em>French writer (1900 - 1944)</em></h4></blockquote>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
+<p>There's always a way to make your code look better. If you take care about
+it you will get maintainable, very easy to read and understandable code.</p>
 
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+<h3>Cross-browser testing <strong>ALWAYS</strong></h3>
 
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
+<p>I highlighted "always" with caps and bold, because it is something that we
+forget about very often. We write and write CSS lines, and we test on Firefox or
+Chrome because we love those browsers, and we are very happy about the way
+our site looks, then after a couple of days of coding, you start thinking
+about how it will look on IE... that awfulness all web developers fear to
+see their work on. You test in IE and you realize that the entire
+site is messed up, the whole layout is broken.</p>
 
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
+<p>You don’t know where to start but you do it anyway.
+Begin making changes here and there and you finish with tons
+of patches or writing a new CSS file just for IE.</p>
 
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   56.476 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360264 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    17.71 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       5647.631 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       56.476 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          1683.51 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+<p>That’s not necessary if you take into consideration what you are doing right
+from the first step. If you wrote 2 lines, verify in all browsers that your
+style is working right. By doing this you will end with clean code and
+compatible with all browsers.</p>
 
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.8      0       6
-Processing:    89 5378 899.5   5653    6163
-Waiting:       88 5377 899.5   5652    6162
-Total:         92 5378 898.9   5653    6165
-</code></pre>
-</div>
+<h3>Remember the W3C</h3>
 
+<p>Always keep in mind the standards and validate your site using the
+<a href="http://jigsaw.w3.org/css-validator/">CSS</a> and
+<a href="http://validator.w3.org/">HTML</a> validators. If your code passes the validation, your site will
+be readable for all browsers for sure.</p>
 
-<h3>Ruby Enterprise Edition</h3>
+<h3>My final words</h3>
 
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
+<p>All suggestions regarding good CSS writing, are about taking care of the
+details.  Details make the difference, you only have to put some attention
+and code in the right way.  Remeber that sometimes your code is gonna be
+seen by other developers and you have to make it clear for them and for the
+browsers too.</p>
 
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+<p>Also remember the accessibility of your site, think of the people at all
+times... people with some illness or different capacities, like the blind
+people and so on. You can check the <a href="http://www.w3.org/TR/WCAG10/">Web Content Accessibility Guidelines</a>
+and try to at least complete the guides for Level A, the visitors of your
+site will be grateful about this.</p>
 
+<p><strong>And for God’s sake... Code clean!!!!</strong></p>
 
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   45.212 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360134 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    22.12 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       4521.241 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       45.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2102.92 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    1   1.0      0       5
-Processing:    83 4285 706.4   4456    5027
-Waiting:       82 4284 706.4   4455    5026
-Total:         88 4286 705.5   4456    5028
-</code></pre>
-</div>
-
-
-<h3>Ruby Enterprise Edition with twitter settings</h3>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   31.348 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360048 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    31.90 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       3134.784 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       31.348 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          3033.01 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.9      0       5
-Processing:   210 2962 562.4   3074    3873
-Waiting:      210 2961 562.4   3073    3872
-Total:        215 2963 561.6   3074    3873
-</code></pre>
-</div>
-
-
-<h3>Ruby Enterprise Edition with 37signals settings</h3>
-
-<p>37signals has published their production settings too, and I tried to apply them in my project and I got:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   46.230 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360135 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    21.63 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       4622.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       46.230 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2056.64 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.9      0       5
-Processing:    79 4390 760.8   4473    5830
-Waiting:       78 4390 760.8   4472    5829
-Total:         84 4391 760.0   4473    5830
-</code></pre>
-</div>
-
-
-<p>For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.</p>
-
-<p>*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.</p>
-
-      
-    
     </div>
     <div class="comments">
-      <h2><a href="/2010/12/07/improving-your-dev-life-with-ree.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/03/24/how-to-write-good-css.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Improving your development life with Ruby Enterprise Edition"
+          data-text="How to write good CSS"
           data-count="none"
           data-via="crowdint"
-          data-related="Edwin Cruz:with">Tweet</a>
+          data-related="Hector Bustillos:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></h1>
+  <p class="author">
+    <span class="date"><b>Mar 18</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/cd962d009c918bfc2dc6e63fc1b3b5cb" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>In our <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">last post we talk about Sinatra framework</a>; and Omar showed us how to build our
+first test-driven Sinatra app.
+Today, we're going to talk about what is behind Sinatra, the pros and cons, without any coding.
+-- <cite><a href="http://twitter.com/mariozaizar">Mario</a></cite></p>
+
+<p><img src="/images/what_is_sinatra/sinatra.png" alt="Sinatra" /></p>
+
+<p>So, you've heard about Sinatra, and you're excited.
+but what is it? and what it's for?
+Just read the answers.</p>
+
+<h2>Sinatra is.</h2>
+
+<hr />
+
+<ul>
+<li><em>A Ruby web framework.</em> Use it to develop sites, web apps, services..</li>
+<li><em>Written in Ruby.</em> And we all love Ruby, isn't?</li>
+<li><em>Very simple, but yet powerful.</em> Like Frank, but ninja.</li>
+<li><em>A Domain Specific Language (DSL).</em> Say no to Controllers, hi to Routes.</li>
+<li><em>RESTful</em>. So it's based in URLs, and HTTP methods (get, post, put, delete, info)</li>
+</ul>
+
+
+<h3>Advantages</h3>
+
+<ul>
+<li><em>It's simple</em>, you only get what you need.</li>
+<li><em>No obscure magic involved</em>. You always knows where you are, what you got, how and why.</li>
+<li><em>Better performance than Rails</em>, less drama.</li>
+<li><em>Gems still talks to you</em>. You can use your favorite gems.</li>
+<li><em>Talks templates</em>. The views, supports all of them.</li>
+<li><em>No big-fat app</em>, Your app can be stored in just one file!</li>
+</ul>
+
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li><em>No Rails mystical magic</em>, forget it.</li>
+<li><em>You only get the basics</em>, sometimes that means write from scratch.</li>
+<li><em>Not a MVC framework</em>, No controller/action based.</li>
+<li><em>Not as popular as Rails</em>, remember, there is life beyond Rails.</li>
+<li><em>No builtin helpers</em>, but you can use them, including filters, configs.</li>
+</ul>
+
+
+<h2>Good for?</h2>
+
+<hr />
+
+<p>API implementations, quick demos, minimal applications, widgets, mobile sites implementations,
+RESTul systems, service-based applications.
+You're  looking for <em>something more like Rails?</em>, check
+this out: <a href="http://www.padrinorb.com/">The Padrino project</a>.</p>
+
+<p>And, that's pretty much Sinatra. Now, you should start with <a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's</a> example, or read
+the <a href="http://www.sinatrarb.com/intro.html">README</a> section on Sinatra's website, you should
+get your app running after 1 minute.</p>
+
+<h2><a href="http://www.sinatrarb.com/">www.sinatrarb.com</a></h2>
+
+<p><em>Thanks! and happy coding</em></p>
+
+<p>&nbsp;</p>
+
+<h2>References</h2>
+
+<hr />
+
+<ul>
+<li><a href="http://www.sinatrarb.com/documentation">Sinatra documentation</a> by Sinatra project</li>
+<li><a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Sinatra, the green way</a> by Omar Vargas</li>
+<li><a href="http://www.slideshare.net/cpjolicoeur/sinatra-ruby-framework-presentation">Ruby frameworks</a> by Craig Jolicoeur</li>
+</ul>
+
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/03/18/what-is-sinatra.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="What is Sinatra?"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Mario Zaizar:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
     </div>
 </div>
 
@@ -853,7 +656,7 @@ Total:         84 4391 760.0   4473    5830
       <a href="/page6" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 7 of 12</span>
+  <span class="page_number ">Page: 7 of 21</span>
   
     <a href="/page8" class="next ">Next</a>
   
@@ -862,6 +665,8 @@ Total:         84 4391 760.0   4473    5830
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -900,8 +705,6 @@ Total:         84 4391 760.0   4473    5830
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

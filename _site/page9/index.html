@@ -47,448 +47,646 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/11/01/ignoring-files-with-git.html">Ignoring files with Git</a></h1>
+  <h1><a href="/2011/02/25/why-ruby.html">Why ruby?</a></h1>
   <p class="author">
-    <span class="date"><b>Nov 01</b><br />2010</span>
+    <span class="date"><b>Feb 25</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/554ca5879badb8dfd61f5ea7e54aef9e" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>When you work on an application there are some files you do not really need in the project (eg. database files, logs, dynamic created files, etc.)</p>
+      <p>We have been seeing a lot of posts about different Rails and Ruby topics,
+such as  benchmarks, ways to develop ,implementations and more. But if you
+are a n00b in the ruby world or if you are thinking in change to ruby, but you
+are not sure about it, I will try to give some answers for the most common
+questions that I think you may have.
+Like PHP vs Ruby? or thoose sorts of things...</p>
 
-<p>Fortunately our versioning system / best friend, Git, comes with the ability to ignore those files. All you have to do is include a file in one of your project folders with the name ".gitignore"</p>
+<h2>PHP, .net, flex or ruby??</h2>
 
-<div class="highlight"><pre><code class="bash">touch .gitignore
+<h3>PHP advantage</h3>
+
+<p>Well PHP is one of the most common and widely used languages for
+ coding dynamic webpages. You can write code inserted directly in HTML,
+ it's secure, stable an open source.</p>
+
+<p>I have to said that it is easy to use, I've started to write webpages
+in PHP and it was easy to understand 'cause, when I began using it I knew C,
+and PHP is C based.  It runs in almost all systems (UNIX, Windows and MAC OSX).<br/>
+Beginning to use it is as simple as installing Apache and add the PHP module,
+ then you’re set.</p>
+
+<p>PHP has a wide community and a lot of useful libraries.
+There are a lot of books to learn from, and also PHP.net is awesome.</p>
+
+<h3>PHP disadvantages</h3>
+
+<p>First of all, not everything in PHP is a piece of cake, when I was coding in it,
+I got some issues when I tried doing some more "complex" things, like making a
+file upload feature and things like that.</p>
+
+<p>PHP is not a 100% Object oriented, it's trying to implement it in the newest version, but is not as good as others.
+The error handling is very poor in PHP.</p>
+
+<p>Sometimes, you will get messy code because of  the lack of good practices.</p>
+
+<p>You have to take care of some security flaws on your own.</p>
+
+<h3>.net framework advantages</h3>
+
+<p>I really don’t like to talk about it, but, I have to say that it's easy and it has a
+very complete documentation.  It's an event language, so it is easy for n00b developers.
+C# is powerful, binding and a couple of more features.</p>
+
+<h3>.net framework disadvantages</h3>
+
+<p>With this framework you have to work in Windows and within this enviroment, you will get a
+lot of issues trying to connect to other DB instead of to a SQL Server. And it is heavy as hell!
+Also, you have to pay for everything.</p>
+
+<h3>Flex advantages</h3>
+
+<p>I really don’t know much about it, so I ask to a friend of mine whom is nicknamed <em>Chicken</em>(Adrian Castillo). <br/>
+He told me that Flex had a lot of positive points, like:
+* Cross-browser.
+* Multiplatform.
+* Multimedia content.
+* Authorship, you can create digital signs for you projects.
+* And it is extensible.</p>
+
+<h3>Flex disadvantages</h3>
+
+<p>The bad things about Flex are:
+when you create a project you have to choose a flash version, and you will
+have to use that version only. If you want the edgy stuff, It will be not available
+for everyone. There’s not to many docs and examples.</p>
+
+<p>It's a event language, so if you are not careful, you will get a mess</p>
+
+<h3>Ruby advantages</h3>
+
+<p>Well, I am new in ruby too, I have like ~9 months using it, I think, and I have to say that
+it has been amazing time. Everything is so easy, you dont have to worry in write
+common methods, you have to worry about solving the problem that you have, not in trivial
+stuff.</p>
+
+<p>The guy who wrote it <a href="http://en.wikipedia.org/wiki/Yukihiro_Matsumoto"><em>Yukihiro Matsumoto</em></a> wants to have simple code
+not so complex, something with the developers feel free and happy.</p>
+
+<p>It's also fast to learn, just take a look at the documentation and that’s all you have to do, besides practicing it.</p>
+
+<p>In ruby everything is an object, an example.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="nb">puts</span> <span class="s2">&quot;hello world&quot;</span><span class="p">}</span>
 </code></pre>
 </div>
 
 
-<p>On this file you can include those files you do not want to be tracked by git:</p>
+<p>Take a look at the code and you will see that "10" is an object with the method "times", and it will show on the screen “hello world” 10 times, just like that. That's simple, huh?.</p>
 
-<div class="highlight"><pre><code class="bash">some_file.rb
-*.log
-doc/**/*
-public/images/system/**/*
+<p>Another plus is that ruby has an excellent error handler.</p>
+
+<p>The community is huge now, and you have a lot of gems and plugins to help in your projects.</p>
+
+<p>When we are talking of ruby and PHP, we have to talk about <a href="http://rubyonrails.org"><em>Ruby on Rails</em></a> an
+awesome framework for ruby, there are other out there(like sinatra), but
+right now is the one I like the most.</p>
+
+<p>So, What can I say about it?. Well you can create a web site in minutes...
+I really meant that, with the <em>scaffold</em> function you will have a template
+in a second(not recommended for important projects).
+Theres a lot of cool functions, like time methods:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+ <span class="c1">#2010-12-19 23:55:57 -0600</span>
+<span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
+ <span class="c1">#2010-12-20 23:56:06 -0600</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">ago</span>
+ <span class="c1">#Sat, 18 Dec 2010 05:57:15 UTC +00:00</span>
 </code></pre>
 </div>
 
 
-<p>As you see, you can include the file name or include wildcards to select several files.</p>
+<p>It's a simple stuff but so usefull.</p>
 
-<p>Git by default ignores empty folders, so if your application requires a folder to exist, you just need to create a blank .gitignore file.</p>
+<p>In ruby on rails, you will write a lot less code,
+ easy configuration, it has an integrated testing framework.</p>
 
-<p>But what if you must include a file inside a folder among others you want to ignore? such as config files, or whatever. Then you may want to prevent git from ignoring those files:</p>
+<p>And more and more and more.....</p>
 
-<div class="highlight"><pre><code class="bash">config/*
-!config/a_special_file.rb
-</code></pre>
-</div>
+<h3>Ruby disadvantages</h3>
 
+<p>Like all the languages it has disadvantages, not everything is beatiful.
+ Ok now a couple of them:</p>
 
-<p>This will tell git to ignore all the files, except for the one that is marked with a bang (!).</p>
+<p>The documentation is mostly complete, but it doesn't have method examples or stuff
+like PHP.net</p>
 
-<p>I hope this is helpful for someone.</p>
+<p>If you don't have the money to pay the hosting it will be difficult to get your app
+online, there's a solution <a href="http://www.heroku.com"><em>heroku</em></a>. Heroku is a free web  hosting company, but only free startups.
+So I have to say that it's expensive to host apps.</p>
 
-      
-    
+<p>Another thing is when ruby sites grow they will need a
+robust infraestructure, it's heavy.</p>
+
+<h2>My coworkers opinion</h2>
+
+<p>I've asked to some of my co-workers about the things that they like about ruby,
+and the things they don't. And I got the next anwsers about their likes:</p>
+
+<p>They love the way you can change everything, like opening the methods and rewritting
+them.
+They said that everything is so easy to do, the sintax, write methods, the blocks,
+etc.
+Also, it's amazing how everything is an object, you can create methods for
+that object, and access them so quickly.
+It's really easy to learn.</p>
+
+<p>On the other hand, I ask about the things that they don't like about it.</p>
+
+<p>It's not multithread.multitask
+It's so easy that sometimes it turns you into a lazy developer.
+It's perfect. (I know i now I'm just telling you what they said).
+It's heavier than PHP.</p>
+
+<h2>Final thoughts</h2>
+
+<p>This are a couple of things, just to get an idea across. If you dig more I am sure,
+that you will find more things, good and bad ones, and it's the same in every
+language, you have to try it by yourself and see what can you do with ruby.</p>
+
+<p>If you have another question or if you want to say that this post it's pure
+crap, don't hesitate on telling. I am open to any kind of feedback.</p>
+
+<p>I hope this help you a little bit to take a step into ruby or maybe to keep
+outside of it.</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/11/01/ignoring-files-with-git.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/02/25/why-ruby.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Ignoring files with Git"
+          data-text="Why ruby?"
           data-count="none"
           data-via="crowdint"
-          data-related="Daniel Gaytán:with">Tweet</a>
+          data-related="Hector Bustillos:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Daniel Gaytán | daniel@crowdint.com</p>
+      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
     </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/10/27/working-with-postgresql-and-rails3.html">Working with PostgreSQL and Rails3</a></h1>
+  <h1><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></h1>
   <p class="author">
-    <span class="date"><b>Oct 27</b><br />2010</span>
+    <span class="date"><b>Feb 21</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/44db71cea383d8a2203162ed1ecbec35" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>Now, since Rails3 is released, many projects come to be on their phase of migration, but this time I'll show you how I got my Rails environment to work with PostgreSQL.</p>
+      <p>Earlier this month I decided to go to <a href="http://www.larubyconf.com">LA Ruby Conf 2011</a>.
+I was already in San Francisco, and, since I was just an hour away via
+plane, I jumped into one and attended the conference sessions on Saturday.</p>
 
-<p>It's very important to carefully decide which database will be used for your application and what you really care about: Performance, Security, Availability; so in this case we'll just state that we need Security and Availability regardless of Performance, which better approaches us to PostgreSQL. It's important to say that I did this in Ubuntu 10.04 - Lucid Lynx distro.</p>
+<p>As expected, the organization and the conferences were awesome. Kudos to
+the organizers.</p>
 
-<p>OK so, let's begin with our brief trip</p>
+<p>Now, a small recap of what I learned there.</p>
 
-<h2>Installing Ruby</h2>
+<h2>ActiveSupport Three - It is finally getting interesting</h2>
 
-<p>I'd personally recommend using <a href="http://rvm.beginrescueend.com/">RVM</a> (Ruby Version Manager) to manage Ruby versions since it's pretty easy to switch, install or remove any version you'd like to test, so let's run:</p>
+<h3>Bryan Lyles</h3>
 
-<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">rvm</span> <span class="n">install</span> <span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">7</span>
-</code></pre>
-</div>
+<p><a href="http://smartic.us/">Bryan Liles</a>, being the Greatest
+Man Alive gave an awesome talk on ActiveSupport and its similarities
+with <a href="http://rubyworks.github.com/facets/">Ruby Facets</a>.</p>
 
+<p>To be honest, I have never used Facets, but it seems it's worth taking a
+look.</p>
 
-<p>and switch to that ruby version by running:</p>
+<p>Here's the <a href="http://rubyworks.github.com/facets/learn.html">API Documentation</a>, I've already
+gone through it and I found a lot of interesting things going on there.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm 1.8.7
-</code></pre>
-</div>
+<p>Sadly, Bryan was time constrained and he just gave a small part of what
+seems to be a big, interesting talk about those two libraries.</p>
 
+<p>The most interesting part of this talk for me was to learn that Rails 3
+ships with a lot of built-in instrumentation, so, expect a lot of gems
+to measure performance of the applications more acurately in the near
+future.</p>
 
-<h2>Installing Rails</h2>
+<p>Tried to google on the subject, and couldn't find a lot on
+Instrumentations, so I went straight to the Rails source code.</p>
 
-<p> When we're ready to use ruby, lets install Rails, if you want, you could install it in any gemset defined in rvm by executing 'rvm gemset create <em><gemset_name></em>' and 'rvm gemset use <em><gemset_name></em>', so after this we do:</p>
+<p><a href="http://bit.ly/earFTF">Here you can get an example</a> more or less on how it works.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install rails --version 3.0.0
-</code></pre>
-</div>
+<h2>NinjaScript: JavaScript so unobtrusive, you won't see it coming.</h2>
 
+<h3>Evan Dorn</h3>
 
-<p><em>Note: if you're using RVM you don't need to use SUDO for Debian based operating systems.</em></p>
+<p>These guys are making an awesome effort of separating the Javascript
+dependency out of the HTML and the CSS.</p>
 
-<h2>Installing PostgreSQL with Visual Administrator</h2>
+<p>So, they wrote <a href="https://github.com/LRDesign/NinjaScript">NinjaScript</a>.
+From their github page:</p>
 
-<p>Once we have it on the rails, let's proceed to the main business... Installing PostgreSQL:</p>
+<p>NinjaScript is a jQuery library designed to allow unobstrusive scripting simply and easily.
+Essentially, we use jQuery selectors to apply behavior the same way we use CSS stylesheets
+to apply stylings.
+Additionally, NinjaScript makes it easy to package up useful behaviors and apply
+them quickly to disparate elements, or in different projects.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libpgsql-ruby libgda-4.0-postgres libpq-dev
-</code></pre>
-</div>
+<p>Looks promising, but there's still a lot of Javascript involved, and I
+usually try to stay away from Javascript as much as I can, I am old
+school.</p>
 
+<p>Lucky for me, they also wrote the <a href="https://github.com/LRDesign/mizugumo">Mizugumo</a>
+gem.</p>
 
-<p> Aditionally you can install <em>'pgadmin'</em> visual management tool to make queries, add users or manage any other information from your databases with:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install pgadmin3 postgresql-doc
-</code></pre>
-</div>
-
-
-<p>OK, so at this point we have PostgreSQL installed in our system, so... what's next?? Go to sleep? Don't despair! we're near...
- As you can see, we have Rails3 and PostgreSQL installed separately; all we need is an adapter to communicate each other, how do we do it? Easily, just add pg gem to your Gemfile:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</code></pre>
-</div>
-
-
-<p>And run the bundler:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
-</code></pre>
-</div>
-
-
-<p>And in your <em>'config/database.yml'</em> file use <em>'postgresql'</em> as your adapter for each environment.</p>
-
-<p>You could use <em>'postgres'</em> as the username, but, I'd recommend using a different one. To create it you'll first have to connect to PostgreSQL server by doing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo -u postgres psql template1
-</code></pre>
-</div>
-
-
-<p>This will let you into PostgreSQL command line where you can tell the DBMS what you want to do, lets tell it we didn't like that name and create our own:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span> <span class="k">WITH</span> <span class="k">CREATEDB</span> <span class="k">CREATEUSER</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>I put some words in capital so you can identify the reserved words that PostgreSQL uses and in <em>&lt;></em> tags you can put your own information.
-So this will create a user with database and user creation permissions with a defined password.</p>
-
-<p>But if you opted to keep using <em>'postgres'</em> user, you can always change the password with:</p>
-
-<div class="highlight"><pre><code class="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">postgres</span> <span class="k">WITH</span> <span class="k">ENCRYPTED</span> <span class="n">PASSWORD</span> <span class="s1">&#39;&lt;new_password&gt;&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-
-<p>Note: Don't forget to put <em>';' (semicollon)</em> at the end of each instruction in PostgreSQL console</p>
-
-<h2>Configuring our database.yml to use PostgreSQL adapter</h2>
-
-<p>And finally, we have to put that information into your <em>'config/database.yml'</em>:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">development_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">test_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">postgresql</span>
-  <span class="n">database</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">production_database_name</span><span class="o">&gt;</span>
-  <span class="n">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">user_name</span><span class="o">&gt;</span>
-  <span class="n">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span>
-  <span class="n">host</span><span class="p">:</span> <span class="mi">127</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span>
-</code></pre>
-</div>
-
-
-<p>And that's it! We can test our connection by creating a model and putting some data in it, but don't forget to <em>follow the BDD with Cucumber and RSpec cycle!</em> That's very important!</p>
-
-<p>This is my first post so I'll appreciate any feedback, if there is any problem with the steps or additional help I may give you... Thank you in advance!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/27/working-with-postgresql-and-rails3.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Working with PostgreSQL and Rails3"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Luis Velasco:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Velasco | luis.velasco@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 22</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0a34cf6219c554ee75506e544473aea1" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.</p>
-
-<p>There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.</p>
-
-<p>Let's use Rails to dynamically generate a sitemap on request.</p>
-
-<p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
-    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
-        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
-        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
-        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
-<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
-    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-    <span class="k">end</span>
-    
-    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
-        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
-            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
-        <span class="k">end</span>
-    <span class="k">end</span>  
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
-
-<p>The parameters of the xml are straightforward:</p>
+<p>Mizugumo is a gem designed to provide Rails with JavaScript and AJAX behavior that is:</p>
 
 <ul>
-<li><em>loc</em> is the url</li>
-<li><em>lastmod</em> is the last modified date of that url</li>
-<li><em>changefreq</em> is how often this url is updated</li>
-<li><em>priority</em> is the importance of this url compared to the rest of the urls in our website</li>
+<li>Absolutely seamless</li>
+<li>Completely unombtrusive - no markup whatsoever in your HTML and</li>
+<li>Gracefully-degrading: defaults to fully functional and sensible page-reload behavior when JavaScript is not available.</li>
 </ul>
 
 
-<p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
+<p>Now, that's more like it.</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
+<p>You can see it in action <a href="http://mizugumo-demo.lrdesign.com/products">right here</a>.
+Try using that UI both with your JS enabled and disabled. See what
+happens.</p>
+
+<p>You're supposed to get all that sweetness just by dropping the gem and
+doing some minimal configuration.</p>
+
+<p>Haven't tried it myself, but probably will soon.</p>
+
+<h2>The Rails Tutorial Story</h2>
+
+<h3>Michael Hartl</h3>
+
+<p>I have never heard about <a href="http://ruby.railstutorial.org/">The Rails Tutorial</a>.</p>
+
+<p>Michael Hartl told us the story behind it, and how he ended up writing
+all of that, and let me tell you something: it was <em>Inspiring</em>.</p>
+
+<p>Talk about perseverance. I won't ruin this story for you, because,
+obviously I can't tell it as good nor accurate as he did.</p>
+
+<p>All I can tell you is, take a look at the site, do yourself some good,
+buy the screencast / PDF bundle.</p>
+
+<p>It does look like a very good way to learn Rails 3.</p>
+
+<h2>How To Jam In Code</h2>
+
+<h3>Ron Evans</h3>
+
+<p>You probably know Ron Evans, he knows everyone. I had already seen this
+talk when he gave it at <a href="http://www.magmarails.com">MagmaRails</a>.</p>
+
+<p>Awesome. Period. Ron knows how to involve the crowd on his talks.</p>
+
+<p>If you haven't seen this talk, you are out of luck since now he's more
+into <a href="http://www.kidsruby.com/">Kids Ruby</a>. Can't wait to see that
+talk later in the year, Bravo Ron! for thinking of the kids. Someone has
+to.</p>
+
+<h2>Working in Virtual Machines, the Vagrant Way</h2>
+
+<h3>Mitchell Hashimoto</h3>
+
+<p><a href="http://vagrantup.com/">Vagrant</a> is a tool for building and distributing
+virtualized development environments.</p>
+
+<p>I wonder if you can do some funky stuff with vagrant where you create
+Windows virtual machines and run your cucumber features or Selenium
+tests automagically on them.</p>
+
+<p>I will have to play with this eventually.</p>
+
+<h2>Securing Your Rails App</h2>
+
+<h3>Jim Weirich, Matt Yoho</h3>
+
+<p>Basics on Rails app security. I was sort of expecting something more
+advanced from Jim Weirich, but, it was good.</p>
+
+<p>Learned about the existence of these two papers:</p>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a></li>
+<li><a href="https://www.owasp.org/images/8/89/Rails_Security_2.pdf">OWASP Ruby on Rails Security Guide</a></li>
+</ul>
+
+
+<p>No Rails developer should be allowed to send code to production without
+reading those.</p>
+
+<p>Also learned that security holes can slip everywhere, <a href="http://martinfowler.com/snips/201102031214.html">even to the best
+people out there</a>.</p>
+
+<p>No one is safe on the interwebs.</p>
+
+<p>By the way, if you've finally decided to be more serious about security, take
+a look at <a href="http://www.metasploit.com/framework/">Metasploit</a>. A
+framework to perform penetration testing on your Network.</p>
+
+<h2>Twitter Mobile</h2>
+
+<h3>Ben Sandofsky</h3>
+
+<p>This talk was full of interesting stuff and could easily be it's own
+post by itself.</p>
+
+<p>Ben described how they work at twitter. I'll highlight what I think was the most
+interesting parts of the talk.</p>
+
+<ul>
+<li>The record of tweets per second was set last New Years eve at 6,939
+tps.</li>
+<li>Twitter is heavily Service oriented. They didn't start that way, but
+they have been transitioning in the last few years. Doesn't sound like
+an easy task.</li>
+<li>They created a DSL that allows them to create new Service endpoints
+with just a few lines of code. Clever.</li>
+<li>They use YAJL for JSON. Twice the performance just by dropping a gem.</li>
+<li>They use GD2 for image processing since it's way faster than Image
+Magick.</li>
+<li>They use <a href="https://github.com/dbalatero/typhoeus">Typhoeus</a> for
+parallel HTTP requests betwen their services.</li>
+<li>They work in small agile teams</li>
+<li>Usually composed of 1 PM, 1 Designer, 3 Devs</li>
+<li>Iterative development</li>
+<li>They believe in continuous shipping. They usually do 3 deploys a
+day. The record? 7 in one day.</li>
+<li>They have a rigorous test suite in place. It runs for 1 hour by
+itself but they built an awesome fleet of servers that can run it in
+<em>2 minutes</em>.</li>
+<li>Sadly, no details on how they do that :(</li>
+<li>They do beleive in Pair programming, but it's up to the teams to do
+actually do it.</li>
+<li>They do require code review before pushing something.</li>
+<li>They deliver the features to small amounts of users before full
+release.</li>
+<li>They have no QA team. Every team is responsible of their features and
+their code. They believe that developers tend to become lazy and
+careless when there's a QA team in place.</li>
+<li>Company culture is key to success.</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>I missed a review on some of the conferences, but I just included on
+this post what I personally found as the most interesting part of the event.</p>
+
+<p>LARubyconf just made me reassure my thoughts about small regional
+conferences being way better than the big ones, being single tracked and
+with a lot better content.</p>
+
+<p>Many thanks to Ron Evans of <a href="http://hybridgroup.com/">The Hybrid Group</a>
+for inviting us to have delicious brunch the next day at his place. Good
+times.</p>
+
+<p>Looking forward to my next conference. Don't know where or when yet,
+<a href="http://www.rubynation.org//">Ruby Nation</a>'s lineup looks very promising.</p>
+
+<p>Until the next time.</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="What we learned at LA Ruby Conf"
+          data-count="none"
+          data-via="crowdint"
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2011/02/15/internationalizing-your-rails-app.html">Internationalizing your Rails application with i18n</a></h1>
+  <p class="author">
+    <span class="date"><b>Feb 15</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>In this now-globalized world, we frequently want to reach audience that does not speak our language or does not speak as fluently as we wished or the other way around we do not speak their language, so the more IT’s continue expanding in our society the more we need to communicate our business,  projects or simply our ideas in other countries.</p>
+
+<p>So let’s say you have your company’s web page in a Rails application, and you want it to be available in three different languages: English (default), Spanish and French.</p>
+
+<p>Well, there's good news! Setting these options is piece of cake with Rails! Since it includes the i18n API, (a.k.a Rails internationalization).
+With this API you only need to split your contents into .yml or .rb files, which we will be calling dictionaries, one for each language you want in your page, for example: en.yml, es.yml, fr.yml
+You have to save them in the config/locales folder in your app.</p>
+
+<p>The ‘tricky’ thing is that you must follow a order in your files, they must have the exact same structure for the labels, so you just need to add the translation, the examples of the dictionaries will be done in .yml:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
 </code></pre>
 </div>
 
 
-<p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
 
-<p>If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.</p>
 
-<p>Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
+</code></pre>
+</div>
 
-      
-    
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
+  <span class="n">main_page</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+<p>To set up the app you just need to add the following into your <em>Application Controller</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">before_filter</span> <span class="ss">:set_locale</span>
+
+<span class="k">def</span> <span class="nf">set_locale</span>
+ <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">extract_locale_from_tld</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">extract_locale_from_tld</span>
+ <span class="n">parsed_locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span>
+ <span class="no">I18n</span><span class="o">.</span><span class="n">available_locales</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">parsed_locale</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span> <span class="p">?</span> <span class="n">parsed_locale</span>  <span class="p">:</span> <span class="kp">nil</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>And you will need to create a scope in your routes files in order for your routes to work:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">match</span> <span class="s1">&#39;/:locale&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;home#index&#39;</span>
+
+<span class="n">scope</span> <span class="s2">&quot;(:locale)&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="sr">/en|es|fr/</span> <span class="k">do</span>
+ <span class="n">resources</span> <span class="ss">:contact</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>With the <em>exctract_locale_from_tld</em> method in the ApplicationController the locale will be passed to the URL in the params, but you will get a not-so-nice url, like this: www.yourpage.com/contact?locale=en, so if you prefer to have more readable url, like for example www.yourpage.com/en/contact, you should use instead these methods:</p>
+
+<div class="highlight"><pre><code class="ruby"> <span class="n">before_filter</span> <span class="ss">:set_locale</span>
+
+ <span class="k">def</span> <span class="nf">set_locale</span>
+   <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:locale</span><span class="o">]</span>
+ <span class="k">end</span>
+
+ <span class="k">def</span> <span class="nf">default_url_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+   <span class="p">{</span><span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span><span class="p">}</span>
+ <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In order to switch language in your application you will probably need a menu with the supported languages, and your menu will need to pass the ##:locale of the selected language, to do it you can do something like this</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">menu</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;English&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;en&quot;</span><span class="p">)</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Française&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;fr&quot;</span><span class="p">)</span>
+  <span class="o">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;Español&quot;</span><span class="p">,</span> <span class="ss">:locale</span> <span class="o">=&gt;</span> <span class="s2">&quot;es&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Now you need to tell rails where it is going to look for the dictionaries, and which language will be the default, usually (if you haven’t removed them) you will have this lines commented in the application.rb file.</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;my&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="ss">:en</span>
+</code></pre>
+</div>
+
+
+<p>If you have a lot of sections in your page, and you would like to have your dictionaries in separate folders depending on their section, you can save the folders in config/locales,  and have something like this, config/locales/views/home and save in there all the dictionaries for the home page.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span>   <span class="no">My</span> <span class="no">Company</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">es</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hola</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenido</span> <span class="n">a</span> <span class="no">Mi</span> <span class="no">Empresa</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+
+
+<div class="highlight"><pre><code class="ruby"><span class="n">fr</span><span class="p">:</span>
+ <span class="n">views</span><span class="p">:</span>
+    <span class="n">home</span><span class="p">:</span>
+      <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Salut</span><span class="err">”</span>
+      <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Bienvenue</span> <span class="err">à</span> <span class="no">Mon</span> <span class="no">Entreprise</span><span class="err">”</span>
+</code></pre>
+</div>
+
+
+<p>And of course you will need to change the path you set in the application.rb file to something like this</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;locales&#39;</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;*.{rb,yml}&#39;</span><span class="p">)</span><span class="o">]</span>
+</code></pre>
+</div>
+
+
+<p>And finally, how do we get the text we want from our dictionaries files?
+Well it’s easy, you just need to put the tags in the right order to obtain the text, for example, with:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
+  <span class="o">%</span><span class="n">h1</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
+  <span class="o">%</span><span class="nb">p</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Something cool about this, is that in your dictionaries you can use HTML to give your text some style or format</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">en</span><span class="p">:</span>
+<span class="n">views</span><span class="p">:</span>
+  <span class="n">home</span><span class="p">:</span>
+    <span class="n">hello</span><span class="p">:</span> <span class="err">“</span><span class="no">Hello</span><span class="err">”</span>
+    <span class="n">welcome</span><span class="p">:</span> <span class="err">“</span><span class="no">Welcome</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="no">Crowd</span> <span class="no">Interactive</span><span class="o">&lt;</span><span class="sr">/b&gt;”</span>
+</code></pre>
+</div>
+
+
+<p>If you do this, you will need to use ‘raw’ to escape the HTML...</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">.</span><span class="n">content</span>
+  <span class="o">%</span><span class="n">h1</span>
+    <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.hello&quot;</span><span class="p">)</span>
+  <span class="o">%</span><span class="nb">p</span>
+    <span class="o">=</span> <span class="n">raw</span> <span class="n">t</span><span class="p">(</span><span class="s2">&quot;views.home.welcome&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>Well, as you can see, it is pretty easy to set up i18n, and I hope this small guide help you through the internationalization process of your site!</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/02/15/internationalizing-your-rails-app.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Improve your SEO with a sitemap"
+          data-text="Internationalizing your Rails application with i18n"
           data-count="none"
           data-via="crowdint"
-          data-related="Roberto Sanchez:with">Tweet</a>
+          data-related="Ana Rosas:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Roberto Sanchez | roberto.sanchez@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 18</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>And it's all thanks to <em>you</em>.</p>
-
-<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
-
-<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
-
-<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
-
-<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
-
-<div style="text-align:center; margin: 10px">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
-</div>
-
-
-<p>Thanks again to everyone involved.</p>
-
-<p>Hope to see you next year!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Magma Rails 2010, a success!"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 07</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>We're very proud and excited to be host to this great event that will take place in the city of Colima, Mexico.</p>
-
-<p>Magma Rails symbolizes the beginning of Crowd Interactive's quest for establishing RoR as the best option for web 2.0 development in México.</p>
-
-<div style="text-align:center">
-  <a href="http://www.magmarails.com"><img src="/images/2010/10/07/bluetooth.png" /></a>
-</div>
-
-
-<p>More info on the site: <a href="http://www.magmarails.com">http://www.magmarails.com</a></p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/10/07/magma-rails.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Magma Rails is just around the corner!"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Ana Rosas | ana.rosas@crowdint.com</p>
     </div>
 </div>
 
@@ -499,7 +697,7 @@ So this will create a user with database and user creation permissions with a de
       <a href="/page8" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 9 of 12</span>
+  <span class="page_number ">Page: 9 of 21</span>
   
     <a href="/page10" class="next ">Next</a>
   
@@ -508,6 +706,8 @@ So this will create a user with database and user creation permissions with a de
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -546,8 +746,6 @@ So this will create a user with database and user creation permissions with a de
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

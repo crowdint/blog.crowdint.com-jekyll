@@ -47,136 +47,82 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to your Ruby classes</a></h1>
+  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
   <p class="author">
-    <span class="date"><b>Jun 13</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Validations are one of the most useful things in ActiveRecord.
-To use them all you have to do is make your class inherit from ActiveRecord::Base,
-but, what if you don't want to save the records in a database?
-Does it make sense to use ActiveRecord and its overload only for validations?
-In case you're wondering, the answer is NO.</p>
-
-<p>Fortunately, in Rails 3, validations were moved from <em>ActiveRecord</em> to
-<em>ActiveModel</em>. This give us the ability to use validations in our ruby
-classes very easily, even if you don't want to use ActiveRecord.</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="c1"># contact.rb</span>
-    <span class="k">class</span> <span class="nc">Contact</span>
-      <span class="kp">include</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">Validations</span>
-      
-      <span class="kp">attr_accessor</span> <span class="ss">:name</span>
-      
-      <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
-      
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>By including the <em>ActiveModel::Validations</em> module in our class we are able
-to use methods like the following</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="n">contact</span> <span class="o">=</span> <span class="no">Contact</span><span class="o">.</span><span class="n">new</span>
-    <span class="n">contact</span><span class="o">.</span><span class="n">valid?</span> <span class="c1"># =&gt; false</span>
-</code></pre>
-</div>
-
-
-<p>or</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="n">contact</span><span class="o">.</span><span class="n">errors</span> <span class="c1"># =&gt; {:name=&gt;[&quot;can&#39;t be blank&quot;]}</span>
-</code></pre>
-</div>
-
-
-<p>We can use all of
-the <a href="http://edgeguides.rubyonrails.org/3_0_release_notes.html#validations">Rails 3 Validations</a>.</p>
-
-<p>Hope this may help you</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/06/13/add-validations-to-your-ruby-classes.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Add Validations to your Ruby classes"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Omar Vargas:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
-  <p class="author">
-    <span class="date"><b>May 24</b><br />2011</span>
+    <span class="date"><b>Jul 11</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
+      <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
 
-<p>I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.</p>
+<p>The basic steps we recommend are:</p>
 
-<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
+<h2>Let us know who you are</h2>
 
-<p>And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.</p>
+<p>You can set up your email and name by using the following command:</p>
 
-<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
+<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+</code></pre>
+</div>
 
-<p>The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
 
-<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
+<h2>Reduce the risk factor</h2>
 
-<p>Since we enjoy conferences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.</p>
+<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
 
-<p>We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
++ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
++ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+</code></pre>
+</div>
 
-<p><a href="http://www.magmarails.com">
-<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
-</a></p>
 
-<p>Right now we're looking for <a href="http://www.magmarails.com/callforpapers">speakers</a>
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
+<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+
+<p>So, we recommend our rookies to use the following command:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+</code></pre>
+</div>
+
+
+<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+
+<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+</code></pre>
+</div>
+
+
+<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+
+<h2>Add color to your life</h2>
+
+<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
+<span class="nv">$ </span>git config --global color.diff auto
+<span class="nv">$ </span>git config --global color.interactive auto
+</code></pre>
+</div>
+
+
+<p>Hope this guide helps you in some way, cheers!</p>
 
     </div>
     <div class="comments">
-      <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Railsconf 2011"
+          data-text="First Things First... Our initial git configuration"
           data-count="none"
           data-via="crowdint"
           data-related="David Padilla:with">Tweet</a>
@@ -190,89 +136,15 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
-  <p class="author">
-    <span class="date"><b>May 02</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/ec9ab4537f5224def5fc54cd7465008b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>While working on a project, we were required to override the
-destroy method in order to create a soft delete method, in other words
-to change the active state of the object to deleted instead of deleting
-it from the database.</p>
-
-<p>That was no problem at all, but, issues came when we needed this method to use
-callbacks in order for the counter caches to work properly.</p>
-
-<p>In Rails 2 you can override the destroy method without affecting callbacks
-by overriding the method <em>destroy_without_callbacks</em></p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">destroy_without_callbacks</span>
-    <span class="k">unless</span> <span class="n">new_record?</span>
-      <span class="c1"># your code here</span>
-    <span class="k">end</span>
-    <span class="nb">freeze</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>But in Rails 3 things have changed and the previous methods won't
-work. So, after some research, we found out that you can call the method
-callbacks with the run_callbacks method from ActiveSupport</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">destroy</span>
-      <span class="n">run_callbacks</span> <span class="ss">:destroy</span> <span class="k">do</span>
-        <span class="c1"># your code here</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In this case we use it for the destroy method, but you can use it for
-any method you override and need their callbacks. If you don't specify
-any callbacks, all callbacks will be called.</p>
-
-<p>You can find more info
-<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html">here</a></p>
-
-<p>Hope this may help you in your overriding tasks.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="How to override destroy method keeping the callbacks"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Ana Rosas & Omar Vargas:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas & Omar Vargas | ana.rosas+omar.vargas@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
-      <a href="/page4" class="previous">Previous</a>
+      <a href="/page20" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 5 of 21</span>
+  <span class="page_number ">Page: 21 of 21</span>
   
-    <a href="/page6" class="next ">Next</a>
+    <span class="next ">Next</span>
   
 </div>
 

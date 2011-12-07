@@ -47,66 +47,108 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/09/28/negative-code.html">Negative Code</a></h1>
+  <h1><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html">Auditrail, how to play dirty with callbacks.</a></h1>
   <p class="author">
-    <span class="date"><b>Sep 28</b><br />2010</span>
+    <span class="date"><b>Feb 05</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was "negative code". "What is it?" I thought.</p>
+      <p>Recently, we've been working in a very interesting project here at Crowd Interactive. We needed to audit some of our models
+in order to keep track of their changes, among other things. We searched for options (you know, plugins, gems, etc.)
+to help us accomplish that task. We found a few ones, but eventually we came to a dead end when those tools
+were not fitting our expectations, they were either too complicated or too rough for our needs. So, we decided to
+create a new solution named <a href="http://github.com/crowdint/auditrail">auditrail</a>.</p>
 
-<p>As astonished as I was at that time, I took a few seconds to ask my old fellow (<a href="http://www.google.com">G...</a>) "what is negative code?". Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found <a href="http://stackoverflow.com/questions/3800707/what-is-negative-code">this</a> discussion at <a href="http://stackoverflow.com">stackoverflow</a>. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:</p>
+<p>Auditrail is a gem that provides a highly configurable solution to audit your models. It provides two generators.
+The first one creates the Audit model with a couple of methods that helps you use it, and the second creates the migration for its table.</p>
 
-<p>  "...reducing lines of code, by removing redundancies or using more concise constructs".</p>
+<h2>How is it used?</h2>
 
-<p>Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, "Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!".</p>
+<p>Quite simple. You just need to install the <em>auditrail</em> gem, and then, run the generators provided
+(<em>auditrail:migrations</em> and <em>auditrail:model</em>). Then you just need to call the method <em>auditable</em>
+in the models you want to audit, and, that's it!</p>
 
-<p>A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:</p>
+<h2>How does it work?</h2>
 
-<p>  "When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put "-2000" on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied."</p>
-
-<p>Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:</p>
-
-<p>"Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!".</p>
-
-<p>Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.</p>
-
-<p>Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?</p>
-
-<p>Well, there are two solutions.</p>
+<p>Auditrail was built to make it easily and readable. So, if you take a quick look at the source code
+you can identify all the components.</p>
 
 <ul>
-<li>We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.</li>
-<li>Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".</li>
+<li><p>Auditrail keeps track of the changes in the audited models through the Audit model. Here, you can configure your own methods to manipulate those changes, or, you can place your filters or special actions.</p></li>
+<li><p>Auditrail is a module that extends <em>ActiveRecord::Base</em>, so you can use it just by calling the <em>auditable</em>
+method on the models you want to Audit. Simple, isn't it?</p></li>
+<li><p>In order to manipulate the plugin requests auditrail uses a basic DSL to handle the method calls.
+Those methods where built to specify a list of the attributes that you want to audit
+and/or include the actor that is making the changes to the audited model.</p></li>
+<li><p>It extends the ActiveSupport::Concern to facilitate the manipulation of the instance methods and the
+class methods in the same module, dealing with the necessity to include an extend for the ActiveRecord::Base. Example:</p></li>
 </ul>
 
 
-<p>All those LOC we "saved", or that we didn't write, that is negative code.</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Auditrail</span>
+  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
 
-<p>We usually fall in a hole when someone says "do not re-invent the wheel, re-use". That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.</p>
+  <span class="k">module</span> <span class="nn">ClassMethods</span>
 
-<p>Remember, the less code you use, the less code you maintain!</p>
+    <span class="k">def</span> <span class="nf">some_method</span>
+      <span class="c1"># Include some code for your class method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
 
-<p>I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.</p>
+  <span class="k">module</span> <span class="nn">InstanceMethods</span>
 
-      
-    
+    <span class="k">def</span> <span class="nf">track_changes</span><span class="p">(</span><span class="o">*</span><span class="n">options</span><span class="p">)</span>
+      <span class="c1"># Include some code for your instance method...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">Auditrail</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<ul>
+<li><p>Auditrail uses ActiveRecord <em>callbacks</em> to trigger the methods that actually audit the models.</p></li>
+<li><p>Once auditrail knows when an object is modified it will track the changes using <em>ActiveModel::Dirty</em>.</p></li>
+<li><p>ActiveModel::Dirty returns a hash that we serialize in order to save them in our Audit model.</p></li>
+<li><p>All these changes will be stored in the <em>dumped_changes</em> field on the audits table.</p></li>
+</ul>
+
+
+<p>*The dumped_changes fields is generated with type <strong>string</strong> by default, in case you're planing to track big models,
+you should change its type to <strong>text</strong>.</p>
+
+<p>Here you can find a list with the attributes on the Audit model:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">==============</span>  <span class="o">====</span>      <span class="o">===========================================================================</span>
+<span class="no">Attribute</span>         <span class="no">Type</span>      <span class="no">Usage</span>
+<span class="o">--------------</span>  <span class="o">----</span>      <span class="o">---------------------------------------------------------------------------</span>
+<span class="ss">:dumped_changes</span>    <span class="n">text</span>      <span class="no">Keep</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">serialized</span><span class="o">.</span>
+<span class="ss">:action</span>            <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">whether</span> <span class="n">was</span> <span class="n">creation</span> <span class="p">(</span><span class="s2">&quot;creating&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">update</span> <span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:model_changed</span>     <span class="n">string</span>    <span class="no">Indicates</span> <span class="n">the</span> <span class="n">model</span> <span class="n">that</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:element_id</span>        <span class="n">integer</span>   <span class="no">Indicates</span> <span class="n">the</span> <span class="n">element</span> <span class="n">from</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">that</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="ss">:invoker</span>           <span class="n">string</span>    <span class="no">Optional</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">chose</span> <span class="k">if</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">action</span> <span class="n">invoker</span> <span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span>
+<span class="ss">:timestamps</span>                  <span class="no">You</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">timestamps</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">when</span> <span class="n">the</span> <span class="n">audited</span> <span class="n">model</span> <span class="n">has</span> <span class="n">changed</span><span class="o">.</span>
+<span class="o">==============</span>  <span class="o">=======</span>   <span class="o">===========================================================================</span>
+</code></pre>
+</div>
+
+
+<p>As with all open source projects, feel free to collaborate with this
+gem by forking it on github.</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/09/28/negative-code.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/02/05/auditrail-how-to-play-dirty-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Negative Code"
+          data-text="Auditrail, how to play dirty with callbacks."
           data-count="none"
           data-via="crowdint"
           data-related="Luis Galaviz:with">Tweet</a>
@@ -121,287 +163,120 @@
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
+  <h1><a href="/2011/01/31/attack-of-the-backticks.html">Attack of the backtick</a></h1>
   <p class="author">
-    <span class="date"><b>Sep 22</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.</p>
-
-<p>They are built within forward slashes and they even have their own class</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; Regexp</span>
-</code></pre>
-</div>
-
-
-<h2>Taxonomy of a Regular Expression</h2>
-
-<p>If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/o</span><span class="n">ptions</span>
-</code></pre>
-</div>
-
-
-<p>Also, in Ruby you can express a regular expression in two alternate ways:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">%r{expression}o</span><span class="n">ptions</span>
-
-<span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span> <span class="o">[</span><span class="p">,</span> <span class="n">options</span><span class="o">]</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>The <em>match</em> method and the operator <em>=~</em> can be used to verify if a string matches a regular expression:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">match1</span> <span class="o">=</span> <span class="sr">/Example/</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Example of a Regexp&quot;</span><span class="p">)</span>
-<span class="c1">#=&gt; &quot;Example&quot;</span>
-<span class="nb">puts</span> <span class="n">match1</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; MatchData</span>
-</code></pre>
-</div>
-
-
-<p>When using the <em>match</em> method, the returned value is the matched string or <em>nil</em> if no match was found. The class of the object that received the assignment is <em>MatchData</em>.</p>
-
-<h2>Building regular expressions</h2>
-
-<p>To start building our own regular expressions, there is a couple of lists we have to become familiar with:</p>
-
-<h3>1. Special Characters</h3>
-
-<p>Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is <strong>\</strong>.</p>
-
-<h4>Special characters list</h4>
-
-<p>^<br/>
-$<br/>
-?<br/>
-.<br/>
-/<br/>
-\<br/>
-[<br/>
-]<br/>
-{<br/>
-}<br/>
-(<br/>
-)<br/>
-+<br/>
-*</p>
-
-<h3>2. Types of expressions</h3>
-
-<p>The most common patterns we can specify in a regular expressions are included in the following table:</p>
-
-<table>
-    <tr>
-        <th>expression</th>
-        <th>meaning</th>
-  </tr>
-  <tr>
-        <td>.</td>
-        <td>any character</td>
-    </tr>
-  <tr>
-        <td>[ ]</td>
-        <td>specify a range (e.g. [a-z] means a letter from a to z)</td>
-    </tr>
-  <tr>
-        <td>\w</td>
-        <td>letter or digit; same as [0-9A-Za-z]</td>
-    </tr>
-  <tr>
-        <td>\W</td>
-        <td>any character but letter or a number</td>
-    </tr>
-  <tr>
-        <td>\s</td>
-        <td>space character; same as [ \t\n\r\f]</td>
-    </tr>
-  <tr>
-      <td>\S</td>
-      <td>any character but a space space char</td>
-    </tr>
-  <tr>
-      <td>\d</td>
-      <td>a number; same as [0-9]</td>
-    </tr>
-  <tr>
-      <td>\D</td>
-      <td>any character but a number</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>backspace (0x08), only within a range</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>word limit, if NOT within a range</td>
-    </tr>
-  <tr>
-      <td>\B</td>
-      <td>not word limit</td>
-    </tr>
-  <tr>
-      <td>*</td>
-      <td>zero or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>+</td>
-      <td>one or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>^</td>
-      <td>matches the beginning of a line</td>
-    </tr>
-  <tr>
-      <td>$</td>
-      <td>matches the end of a line</td>
-    </tr>
-    <tr>
-        <td>\A</td>
-        <td>matches the beginning of the string</td>
-    </tr>
-    <tr>
-        <td>\z</td>
-        <td>matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')</td>
-  <tr>
-      <td>{m[,n]}</td>
-      <td>at least 'm', topping 'n' matches of the preceeding ('n' is optional)</td>
-    </tr>
-  <tr>
-      <td>?</td>
-      <td>at least one match of the preceeding (same as {1})</td>
-    </tr>
-  <tr>
-      <td>( )</td>
-      <td>group expressions</td>
-    </tr>
-    <tr>
-        <td>|</td>
-        <td>logical operator 'or', in [a|b] looks for a OR b</td>
-    </tr>
-</table>
-
-
-<h2>Common examples</h2>
-
-<h3>The e-mail address</h3>
-
-<p>This is a very common pattern example (it's the one that you get by default in <a href="" title="http://rubular.com">Rubular</a>).</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/</span>
-</code></pre>
-</div>
-
-
-<p>First, '\A' makes sure to match the string against the start of string; then ([<sup>@\s]+)</sup> groups the recipient's name, avoiding @ character and space characters.</p>
-
-<p>After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.</p>
-
-<p>Finally, the '\Z' makes sure to match the end of line</p>
-
-<h3>The phone number</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\((\d{3})\)\s+(\d{3})-(\d{4})/</span>
-</code></pre>
-</div>
-
-
-<p>First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.</p>
-
-<h2>Where to look for more information</h2>
-
-<p>The star of these links is <a href="" title="http://rubular.com">Rubular</a>
-but there are some few more useful links to look at:
-<a href="http://www.regular-expressions.info/ruby.html">http://www.regular-expressions.info/ruby.html</a>
-<a href="http://www.rubyist.net/~slagell/ruby/regexp.html">http://www.rubyist.net/~slagell/ruby/regexp.html</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ">http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new">http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new</a>
-<a href="http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm">http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm</a></p>
-
-<p>Enjoy!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/22/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="First contact with regular expressions"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html">Installing gems skipping RDoc and RI</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 17</b><br />2010</span>
+    <span class="date"><b>Jan 31</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>Because, let's be honest, these days, we're always connected to the internet.</p>
+      <p>It all started because I was getting some weird warning while running
+the specs on one of my apps.</p>
 
-<p>Personally, I've never used the RDoc included on gem installations.</p>
+<p>I know that, as a developer, I am suppposed to ignore all warnings, but,
+this one felt ackward, so I had to track it down.</p>
 
-<p>If I need info about a class, method, module, I ask uncle <em>Google</em>.</p>
-
-<p>Besides, it gets kind of annoying, specially when there's gems that take longer to generate the RDoc, than it takes for the actual gem to install.</p>
-
-<p>So, here's a tip for those who don't want to wait for gem to install RDoc you'll never use.</p>
-
-<p>It is as simple as, opening or creating a <em>.gemrc</em> file in your home directory, and adding the following line:</p>
-
-<div class="highlight"><pre><code class="bash">gem: --no-rdoc --no-ri
+<div class="highlight"><pre><code class="bash">/Users/dab/.rvm/gems/ree-1.8.7-2010.02@project/gems/activerecord-3.0.3/lib/active_record/base.rb:1838: <span class="nb">command </span>not found:
 </code></pre>
 </div>
 
 
-<p>And that's it. You're setting those options as default when using the gem command. So, the next time you install a gem, it will skip the part where it compiles the gem's documentation.</p>
+<p>What? Why is activerecord trying to run some command? what command? and
+why it isn't finding that command?</p>
 
-<p>There you go, enjoy!</p>
+<p>Let's figure it out. So, I opened base.rb an went to line 1838 and all I saw was
+something like this:</p>
 
-      
-    
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">convert_number_column_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">false</span>
+    <span class="mi">0</span>
+  <span class="k">elsif</span> <span class="n">value</span> <span class="o">==</span> <span class="kp">true</span>
+    <span class="mi">1</span>
+  <span class="k">elsif</span> <span class="n">value</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="o">.</span><span class="n">blank?</span>
+    <span class="kp">nil</span>
+  <span class="k">else</span>
+    <span class="n">value</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Nothing useful there, line 1838 was just doing some if thing. So, what's
+going on?</p>
+
+<p>I went through lots of source files, trying to narrow down the
+posibilites. But I just couldn't find anything unusual. If there was a
+syntax error, why is the code not breaking completely, it's just a
+warning on STDOUT.</p>
+
+<p>I ended up doing the worst thing ever (for me, anyway) to figure out this
+one, run the code with <em>ruby-debug</em>, put a couple of breakpoints. I feel
+dirty just by admiting that.</p>
+
+<p>Anyway, the problem was caused by some unintentional mistake:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">items_returned</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">cancelled?</span><span class="sb">``</span>
+</code></pre>
+</div>
+
+
+<p>How could I have missed that? the <em>backticks</em> at the end of the line, of
+course.</p>
+
+<p>In ruby, the backtick method returns the standard output of running the string encompassed
+by the backticks in a subshell.</p>
+
+<p>Yes, it is a method, like almost every operator in Ruby.</p>
+
+<p>A few examples:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">hey</span> <span class="o">=</span> <span class="sb">`echo hey`</span> <span class="c1"># =&gt; &quot;hey\n&quot;</span>
+<span class="n">list_of_files</span> <span class="o">=</span> <span class="sb">`ls`</span> <span class="c1"># =&gt; &quot;file1\nfile2\nfile3\n&quot;</span>
+</code></pre>
+</div>
+
+
+<p>It also sets a special variable $? with a Process::Status object with
+the PID of that subshell.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="sb">`exit 99`</span>
+<span class="vg">$?</span>           <span class="c1">#  =&gt; # &lt;Process::Status: pid 7781 exit 99&gt;</span>
+<span class="vg">$.</span><span class="n">exitstatus</span> <span class="c1">#  =&gt; 99</span>
+</code></pre>
+</div>
+
+
+<p>So, I guess what was happening is that, the <em>cancelled?</em> method was
+taking the result of `` as a parameter, in this case, a string, printing the result of that to
+STDOUT and just ignoring the value of the parameter.</p>
+
+<p>In other words, I was calling <em>cancelled?</em> like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">cancelled?</span><span class="p">(</span><span class="sb">``</span><span class="p">)</span>
+</code></pre>
+</div>
+
+
+<p>But, since cancelled wasn't expecting a parameter at all, it just
+ignored the input. That's why I wasn't getting a syntax error or a
+runtime error.</p>
+
+<p>Probably nothing useful on my experience, since this is such a weird
+problem to have, yet I just felt like explaining the power of the backticks.</p>
+
+<p>Cheers</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/09/17/installing-gems-skipping-rdoc-and-ri.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/01/31/attack-of-the-backticks.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Installing gems skipping RDoc and RI"
+          data-text="Attack of the backtick"
           data-count="none"
           data-via="crowdint"
           data-related="David Padilla:with">Tweet</a>
@@ -416,294 +291,318 @@ but there are some few more useful links to look at:
 
 
 <div class="post prepend-1">
-  <h1><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></h1>
+  <h1><a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></h1>
   <p class="author">
-    <span class="date"><b>Sep 10</b><br />2010</span>
+    <span class="date"><b>Jan 24</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.</p>
+      <p>If you are a Ruby developer, by now, you have probably used tons of
+gems in your apps.</p>
 
-<p>We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?</p>
+<p>That's one of the best things of using Ruby, a lot of people writes
+repeatable code that you can easily integrate into your own apps.</p>
 
-<p>Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.</p>
+<p>In this brief tutorial, I will try to explain the basic things you need
+to know in order to start writing your own gems, you know, just in case
+you have something to share with the world.</p>
 
-<p>So, let's try an example:</p>
+<h2>Setting up the folders</h2>
 
-<h2>Hands on!</h2>
+<p>We'll start by creating the gem folder structure using Bundler.</p>
 
-<p>First, we need to create a new Rails Project:</p>
+<p>First thing you have to do is, install bundler itself. Easy.</p>
 
-<div class="highlight"><pre><code class="bash">rails new g_test
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install bundler
 </code></pre>
 </div>
 
 
-<p>In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:</p>
+<p>Now, bundler comes with a handy command to generate the basic files to
+start writing a gem.</p>
 
-<div class="highlight"><pre><code class="bash">rails new g_test -T
+<div class="highlight"><pre><code class="ruby"><span class="err">$</span> <span class="n">bundle</span> <span class="n">gem</span> <span class="n">awesome_gem</span>
+
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Gemfile</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="no">Rakefile</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/.</span><span class="n">gitignore</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">gemspec</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">.</span><span class="n">rb</span>
+  <span class="n">create</span>  <span class="n">awesome_gem</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">awesome_gem</span><span class="o">/</span><span class="n">version</span><span class="o">.</span><span class="n">rb</span>
 </code></pre>
 </div>
 
 
-<p>Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:</p>
+<h2>The Gemspec</h2>
 
-<div class="highlight"><pre><code class="bash">group :test <span class="k">do</span>
-<span class="k">  </span>gem <span class="s2">&quot;rspec-rails&quot;</span>, <span class="s2">&quot;&gt;= 2.0.0.beta.19&quot;</span>
-  gem <span class="s1">&#39;cucumber-rails&#39;</span>
-  gem <span class="s1">&#39;capybara&#39;</span>
-end
+<p>All gems have a <em>.gemspec</em> file. This files contains all the info on your
+gem. The name, a description, dependencies. Let's open it and see how it
+looks.</p>
 
-gem <span class="s1">&#39;haml-rails&#39;</span>
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
+
+<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your name&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;TODO: Write your email address&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{TODO: Write a gem summary}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{TODO: Write a gem description}</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>Then, we just need to install our gems to start playing with our generators:</p>
+<p>Now, all you have to do is replace some of the fields here with your own
+information.</p>
 
-<div class="highlight"><pre><code class="bash">bundle install
+<p>The only things that is not explicitily given is a place to define
+dependencies.</p>
+
+<p>Also, you have to declare your gem's dependencies to other gems, if any.</p>
+
+<p>Let's say your gem heavily depends on <em>rails</em>. Then, you have to add a
+line to state so:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
 </code></pre>
 </div>
 
 
-<p>And, that's it! Now we have a perfect (almost) environment to work with.</p>
+<p>You use shoulda or mocha? Since you use them only to test it while
+developing, you define it as a <em>development dependency</em>.</p>
 
-<h2>Generators</h2>
-
-<p>Now, let's invoke a Rails generator to create a new controller called Test:</p>
-
-<div class="highlight"><pre><code class="bash">rails g controller Test
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
 </code></pre>
 </div>
 
 
-<p>This function is just going to invoke many other generators, to create something like this:</p>
+<p>So, our .gemspec file ends up loking like this:</p>
 
-<div class="highlight"><pre><code class="bash">create  app/controllers/test_controller.rb
-invoke  haml
-create    app/views/test
-invoke  test_unit
-create    <span class="nb">test</span>/functional/test_controller_test.rb
-invoke  helper
-create    app/helpers/test_helper.rb
-invoke    test_unit
-create      <span class="nb">test</span>/unit/helpers/test_helper_test.rb
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;awesome_gem/version&quot;</span>
+
+<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">name</span>        <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">platform</span>    <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Platform</span><span class="o">::</span><span class="no">RUBY</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">authors</span>     <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;David Padilla&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">email</span>       <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;david@crowdint.com&quot;</span><span class="o">]</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">homepage</span>    <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">summary</span>     <span class="o">=</span> <span class="sx">%q{A gem that will change the world}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="sx">%q{A long description for a gem that will change the world}</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">rubyforge_project</span> <span class="o">=</span> <span class="s2">&quot;awesome_gem&quot;</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">files</span>         <span class="o">=</span> <span class="sb">`git ls-files`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">test_files</span>    <span class="o">=</span> <span class="sb">`git ls-files -- {test,spec,features}/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">executables</span>   <span class="o">=</span> <span class="sb">`git ls-files -- bin/*`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">require_paths</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;lib&quot;</span><span class="o">]</span>
+
+  <span class="n">s</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="s1">&#39;rails&#39;</span><span class="p">,</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;shoulda&#39;</span><span class="p">)</span>
+  <span class="n">s</span><span class="o">.</span><span class="n">add_development_dependency</span><span class="p">(</span><span class="s1">&#39;mocha&#39;</span><span class="p">)</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:</p>
+<p>The best thing about this is that now, you can just run the <em>bundler
+install</em> command, and you will get the gem dependencies installed on your
+computer.</p>
 
-<div class="highlight"><pre><code class="bash">rails g cucumber:install
-rails g rspec:install
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>bundle install
+
+  Installing rails <span class="o">(</span>3.0.0<span class="o">)</span>
+  Using mocha <span class="o">(</span>0.9.10<span class="o">)</span>
+  Using shoulda <span class="o">(</span>2.11.3<span class="o">)</span>
+  ...
 </code></pre>
 </div>
 
 
-<p>Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)</p>
+<p>For more information on what should be on this file, you can read the
+<a href="http://docs.rubygems.org/read/chapter/20">specification here</a>.</p>
 
-<div class="highlight"><pre><code class="bash">config.generators <span class="k">do</span> |g|
-  g.test_framework :rspec
-end
+<h3>The code</h3>
+
+<p>By definition, you have a file called <em>lib/THE_NAME_OF_YOUR_GEM.rb</em> that
+will be called when you require your gem on any piece of ruby code.</p>
+
+<p>Usually, your gem will have a lot of code spread in Modules and Classes.
+This file should only work as the glue to put everything together.</p>
+
+<p>Let's say your gem introduces a new class called <em>Mushroom</em>. You will
+have to create a <em>lib/mushroom.rb</em> file with the class definition:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Mushroom</span>
+  <span class="c1"># Some code</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>If we try to generate a new controller called RspecTest something like this will show up:</p>
+<p>And then, require it on <em>lib/awesome_gem.rb</em></p>
 
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller RspecTest
-create  app/controllers/rspec_test_controller.rb
-invoke  haml
-create    app/views/rspec_test
-invoke  rspec
-create    spec/controllers/rspec_test_controller_spec.rb
-invoke  helper
-create    app/helpers/rspec_test_helper.rb
-invoke    rspec
-create      spec/helpers/rspec_test_helper_spec.rb
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;mushroom&#39;</span>
 </code></pre>
 </div>
 
 
-<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.rb' like this:</p>
+<p>And so on. Obviously, you will probably want to put the classes and
+their files on a namespace hierarchy. Create folders for each namespace.</p>
 
-<div class="highlight"><pre><code class="bash">g.test_framework :rspec, :views <span class="o">=</span>&gt; <span class="nb">false</span>
+<p>So, if for example, you had some classes that are used to access
+different stuff, you want to create an Accessor namespace and put all
+the classes on the <em>lib/accessors</em> folder.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Accessor</span><span class="o">::</span><span class="no">TextFileAccessor</span>
+
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:</p>
+<p>From here on, you have to rely on <em>Ruby Metaprogramming</em>, but I'll leave
+that for another post.</p>
 
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g generator my_test_method
-create  lib/generators/my_test_method
-create  lib/generators/my_test_method/my_test_method_generator.rb
-create  lib/generators/my_test_method/USAGE
-create  lib/generators/my_test_method/templates
+<h2>Unit tests</h2>
+
+<p>To include some rake tasks to test your gem, add the following lines to
+<em>Rakefile</em>.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;rake/testtask&#39;</span>
+<span class="no">Rake</span><span class="o">::</span><span class="no">TestTask</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:test</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">test</span><span class="o">|</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">libs</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;lib&#39;</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;test&#39;</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;test/**/test_*.rb&#39;</span>
+  <span class="nb">test</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named "generators" is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.</p>
+<p>This will add a <em>rake test</em> rake task that will run all the tests that
+you define on the <em>test</em> folder.</p>
 
-<p>What commands can you use inside your generator? Rails 3 generators were created on top of <a href="http://github.com/wycats/thor">Thor</a>, so you could check Thor <a href="http://rdoc.info/github/wycats/thor/master">documentation</a>, and also there is a great document you can follow on <a href="http://edgeguides.rubyonrails.org/generators.html">RailsGuides</a>.</p>
+<p>You can also install rspec, bacon, minitest or any test framework of
+your choice. Read each of their documentation to find out how to add
+them to your gem.</p>
 
-<p>Anyway, if you want to know more about an specific generator, you could use this command:</p>
+<h2>Testing your code on an existing app</h2>
 
-<div class="highlight"><pre><code class="bash">rails g <span class="o">[</span>generator_name<span class="o">]</span> -h
+<p>Obviously, to test your gem, you'd use something like <em>rspec</em> or
+<em>minitest</em>, but, just in case you want to see how it will end up working
+on an existing app that uses Bundler, you can add it to the other's app
+Gemfile and specify the local path to use the local version of the gem
+instead of downloading it from a repo:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;awesome_gem&#39;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s1">&#39;/Users/some_path/awesome_gem&#39;</span>
 </code></pre>
 </div>
 
 
-<p>There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the <a href="http://github.com/indirect/rails3-generators">rails3-generators</a> gem, there are many helpful generators that can make your coding more DRY.</p>
+<p>This way, any change you make on the gem will be immediately reflected
+on the app where you installed it.</p>
 
-<p>By the way, there are other things I can't make them to do. For example, if I try to use "my_test_method_generator" as follows, I get an error:</p>
+<h2>Deploying to rubygems.org</h2>
 
-<p>in "application.rb":</p>
+<p>Once you are done writing some awesome ruby code, it's time to deploy
+your app for everyone to use.</p>
 
-<div class="highlight"><pre><code class="bash">g.helper :myhelper
+<p>All you have to do is run</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake release
 </code></pre>
 </div>
 
 
-<p>in you terminal:</p>
+<p>And this will publish your gem to rubygems.org.</p>
 
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller <span class="o">[</span>name<span class="o">]</span>
-...
-error  myhelper <span class="o">[</span>not found<span class="o">]</span>
+<h2>Version</h2>
+
+<p>To have control over hav your gem changes overtime, you want to use a
+version.</p>
+
+<p>Your gem's version is defined on the <em>lib/awesome_gem/version.rb</em> file.</p>
+
+<p>If you open it, you'll see that there's only one line on the file:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">AwesomeGem</span>
+  <span class="no">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.</p>
+<p>Remember this line on the gemspec?</p>
 
-      
-    
+<div class="highlight"><pre><code class="ruby"><span class="n">s</span><span class="o">.</span><span class="n">version</span>     <span class="o">=</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span>
+</code></pre>
+</div>
+
+
+<p>This means that, the version defined on the gemspec is being pulled from
+this file.</p>
+
+<p>It also means that you can access the version of the gem from anywhere
+in the code, even on the code where you are using the gem.</p>
+
+<p>So, you can do things like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="no">AwesomeGem</span><span class="o">::</span><span class="no">VERSION</span> <span class="o">==</span> <span class="s1">&#39;1.0.0&#39;</span>
+  <span class="c1"># Do it this way for verision 1.0.0</span>
+<span class="k">else</span>
+  <span class="c1"># For all the other versions do it that way</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This, of course, is not recommended and should be only used in case
+where there's no other solution, or, to display deprecation messages.</p>
+
+<h2>Conclusion</h2>
+
+<p>Before writing a gem, make sure you google around and browse github for
+the behavior that you are looking for. Most of the times, someone already
+thought of a generic solution for your problem. Sometimes you won't
+like that solution and you'll end up writing your own gem, sometimes
+you will like it and use it.</p>
+
+<p>Contributing is what keeps the community alive, write lots of gems!</p>
+
+<p>Hope this points you in the right direction.</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2010/09/10/customize-your-generators-workflow.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/01/24/how-to-start-writing-a-gem.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Customize your Generators Workflow in Rails 3.0.0"
+          data-text="How to start writing a ruby gem"
           data-count="none"
           data-via="crowdint"
-          data-related="Luis Galaviz:with">Tweet</a>
+          data-related="David Padilla:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html">A simple way to setup a class for global values</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 06</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
-
-<h2>Setting up the class</h2>
-
-<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
-</code></pre>
-</div>
-
-
-<p>The class' attributes will be available as a hash:</p>
-
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;app_name&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;My application name&quot;</span>
-
-AppConfig<span class="o">[</span><span class="s1">&#39;base_domain&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;myapp.com&quot;</span>
-</code></pre>
-</div>
-
-
-<p>You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
-<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-
-<span class="n">development</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-</code></pre>
-</div>
-
-
-<p>Now your class has some hashes values like this:</p>
-
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app key&quot;</span>
-
-AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s1">&#39;twitter_prod_secret&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app secret&quot;</span>
-</code></pre>
-</div>
-
-
-<h2>Enjoy!</h2>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="A simple way to setup a class for global values"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
     </div>
 </div>
 
@@ -714,7 +613,7 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
       <a href="/page9" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 10 of 12</span>
+  <span class="page_number ">Page: 10 of 21</span>
   
     <a href="/page11" class="next ">Next</a>
   
@@ -723,6 +622,8 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -761,8 +662,6 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

@@ -47,211 +47,504 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2011/09/05/ruby-benchmarks.html">Ruby benchmarks</a></h1>
+  <h1><a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></h1>
   <p class="author">
-    <span class="date"><b>Sep 05</b><br />2011</span>
+    <span class="date"><b>Oct 24</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2ae35d2e0dfd4ca72c07ead1eec4a8f7" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>I recently started a new client project. Lucky me, <a href="http://weblog.rubyonrails.org/2011/8/31/rails-3-1-0-has-been-released">Rails 3.1 has just been released</a> so, it means I'll get to learn a bunch of things while building it, you know, the fancy <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a> stuff everyone's talking about and so on.</p> <p>I wrote a couple of rspec specs and cucumber features, made them pass, and while I was about to start new features, decided to stop to check the current state of all the different rubies to...
-           <div class = "continue_reading"><a href="/2011/09/05/ruby-benchmarks.html">Continue reading...</a></div>
-        
-      
-    
+      <p>Today in Twitter I found a tweet about a big change in <a href="http://cukes.info">Cucumber</a>, the BDD Framework for Rails - well not only for Rails at this point -. Looking at the commit that introduces this change, there was a sentence that summarize very well what the change is about:</p>
+
+<blockquote><p>"Cucumber scenarios should not be a series of steps that describe what a user clicks. Instead, they should express what a user <em>does</em>"</p></blockquote>
+
+<p>What this means, is that since the first version of Cucumber we have learned that the way to write Cucumber scenarios is:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="no">Feature</span> <span class="no">Signin</span>
+    <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">use</span> <span class="n">the</span> <span class="n">website</span>
+    <span class="no">As</span> <span class="n">a</span> <span class="n">user</span>
+    <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">signin</span>
+
+    <span class="no">Scenario</span><span class="p">:</span> <span class="no">Signin</span> <span class="n">with</span> <span class="n">valid</span> <span class="n">credentials</span>
+        <span class="no">Given</span> <span class="n">I</span> <span class="n">am</span> <span class="n">on</span> <span class="n">signin</span> <span class="n">page</span>
+        <span class="no">When</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Email&#39;</span> <span class="n">with</span> <span class="s1">&#39;mail@example.org&#39;</span>
+        <span class="no">And</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Password&#39;</span> <span class="n">with</span> <span class="s1">&#39;s3cr3t&#39;</span>
+        <span class="no">And</span> <span class="n">I</span> <span class="n">press</span> <span class="s1">&#39;Login&#39;</span>
+        <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="s1">&#39;Welcome&#39;</span>
+</code></pre>
+</div>
+
+
+<p>And the scenario steps are:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="no">Given</span><span class="sr"> /^(?:|I )am on (.+)$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">page_name</span><span class="o">|</span>
+      <span class="n">visit</span> <span class="n">path_to</span><span class="p">(</span><span class="n">page_name</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="no">When</span><span class="sr"> /^(?:|I )fill in &quot;([^&quot;]*)&quot; with &quot;([^&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
+      <span class="n">fill_in</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="no">When</span><span class="sr"> /^(?:|I )press &quot;([^&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">button</span><span class="o">|</span>
+      <span class="n">click_button</span><span class="p">(</span><span class="n">button</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="no">Then</span><span class="sr"> /^(?:|I )should see \/([^\/]*)\/$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">regexp</span><span class="o">|</span>
+      <span class="n">regexp</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">regexp</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">page</span><span class="o">.</span><span class="n">respond_to?</span> <span class="ss">:should</span>
+        <span class="n">page</span><span class="o">.</span><span class="n">should</span> <span class="n">have_xpath</span><span class="p">(</span><span class="s1">&#39;//*&#39;</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">regexp</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="n">assert</span> <span class="n">page</span><span class="o">.</span><span class="n">has_xpath?</span><span class="p">(</span><span class="s1">&#39;//*&#39;</span><span class="p">,</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">regexp</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>We have seen scenarios like this in so many places: blog posts, <a href="http://railscasts.com/episodes/155-beginning-with-cucumber">screencasts</a> and <a href="http://pragprog.com/book/achbd/the-rspec-book">books</a>.</p>
+
+<p>But what is wrong with this scenario? well, I would say that nothing is wrong - per se -, it does what it is meant to do; it does add some additional value to our test since it describes in a very simple language - not programmer language - the steps and the expectation of our software behavior. And this is great if we are working together with non-technical people, but if the only people involved in writing and reading those scenarios are technical people, it becomes cumbersome to write and to maintain.</p>
+
+<p>The steps for our scenario were created when we installed Cucumber in our project, they exists in features/step_definitions/web_steps.rb. In this example we did not have to write anything more than the text that describes our scenario, but web_steps aren't enough for most of the cases in our scenarios so we have to write our own.</p>
+
+<p>Probably this why when <a href="https://github.com/cavalle/steak">Steak</a> become public it had some attraction and opened the discussion about the Cucumber-way. Steak is a DSL on top of Rspec-Rails that allow us to write features and scenarios - like Cucumber - but without the cumbersome of being too verbose for us the programmers; this reduce the maintenance burden, when for some reason, we have to change the scenarios.</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">feature</span> <span class="s2">&quot;Sigin&quot;</span> <span class="k">do</span>
+        <span class="n">scenario</span> <span class="s1">&#39;Signin with valid credentials&#39;</span> <span class="k">do</span>
+            <span class="n">visit</span> <span class="s1">&#39;/signin&#39;</span>
+            <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Email&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;mail@example.org&#39;</span><span class="p">)</span>
+            <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Password&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;s3cr3t&#39;</span><span class="p">)</span>
+            <span class="n">click_button</span><span class="p">(</span><span class="s1">&#39;Login&#39;</span><span class="p">)</span>
+
+            <span class="n">page</span><span class="o">.</span><span class="n">should</span> <span class="n">have_content</span><span class="p">(</span><span class="s1">&#39;Welcome&#39;</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Later on Steak was merge with <a href="https://github.com/jnicklas/capybara">Capybara</a> but kept the same philosophy. Personally I did favor Steak over Cucumber and I have used for several <a href="http://blog.crowdint.com/2011/07/06/acceptance-testing-with-steak.html">projects</a>.</p>
+
+<p>A few weeks ago when someone here at Crowd had to review a project that was tested with Steak, told me that he had a hard time trying to figure out what some of the
+scenarios were doing just by looking at the specs, he told me that if the scenarios were written in Cucumber it could have been more easy for him to understand what was going on.</p>
+
+<p>Somehow this person had a point, it definitely takes more time to learn what a scenario is doing in Steak than in Cucumber. This leads us back to the beginning of this post; are we misusing Cucumber? why we can't have the best of both worlds "Cucumber-Steak", well starting from version 1.1.0 we could have this; actually we don't have to wait for that version, we can do it today, but after this commit Cucumber itself will force us to change the way that we work with it.</p>
+
+<p>First this new version will not provide the features/step_definitions/web_steps.rb file, so we are alone, we would not be able to use steps like "When I fill in 'Email' with 'mail@example.org'" out of the box. And we have to write our scenarios to express what the user does:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="no">Feature</span> <span class="no">Signin</span>
+    <span class="no">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">use</span> <span class="n">the</span> <span class="n">website</span>
+    <span class="no">As</span> <span class="n">a</span> <span class="n">user</span>
+    <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">signin</span>
+
+    <span class="no">Scenario</span><span class="p">:</span> <span class="no">Signin</span> <span class="n">with</span> <span class="n">valid</span> <span class="n">credentials</span>
+        <span class="no">Given</span> <span class="n">I</span> <span class="n">have</span> <span class="n">signed</span> <span class="n">up</span> <span class="n">with</span> <span class="s1">&#39;mail@example.org&#39;</span>
+        <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="s1">&#39;Welcome&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Our scenario steps become:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="no">Given</span><span class="sr"> /^I have signed up as &quot;([^&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">email</span><span class="o">|</span>
+        <span class="n">visit</span><span class="p">(</span><span class="n">signup_path</span><span class="p">)</span>
+        <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Email&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="n">email</span><span class="p">)</span>
+        <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Email&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="n">email</span><span class="p">)</span>
+        <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Password&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;s3cr3t&#39;</span><span class="p">)</span>
+        <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Password Confirmation&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;s3cr3t&#39;</span><span class="p">)</span>
+        <span class="n">click_button</span><span class="p">(</span><span class="s1">&#39;Sign up&#39;</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="no">Then</span><span class="sr"> /^I should see &quot;([^&quot;]*)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">message</span><span class="o">|</span>
+        <span class="n">page</span><span class="o">.</span><span class="n">should</span> <span class="n">have_content</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In my opinion this simple change brings the best of both worlds, our scenario is more clean, easy to read and easy to maintain, the most important is that this is not a change in the Cucumber code, but a change in the mind set on how to use Cucumber.</p>
+
+<p>If you want to take a look by your self at the commit that implemented this change here is the <a href="https://github.com/cucumber/cucumber-rails/commit/f027440965b96b780e84e50dd47203a2838e8d7d">link</a></p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2011/09/05/ruby-benchmarks.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/10/24/cucumber-steak.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Ruby benchmarks"
+          data-text="Has Cucumber become more ... "Steak"?"
           data-count="none"
           data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
+          data-related="Mario Chavez:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Mario Chavez | mac@crowdint.com</p>
     </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Auto Retry Failed Cucumber Tests</a></h1>
+  <h1><a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 22</b><br />2011</span>
+    <span class="date"><b>Oct 05</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/6be5df410f2695b1341f0c359bc9b461" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>If you're tired of having to re-kick builds in your CI server because of non deterministic failures, this post is for you. After I implemented this awesome feature our builds started to be more realistic, and developers actually care now if their branch is red.</p> <p>I'm going to show you how I got to the point where failed cucumber features auto retry themselves. I started to dig into the cucumber documentation and I couldn't find how to implement an auto...
-           <div class = "continue_reading"><a href="/2011/08/22/auto-retry-failed-cucumber-tests.html">Continue reading...</a></div>
-        
-      
-    
+      <p>While working with ruby, you have some alternatives to manage your binaries,
+but as you think of them, I hope you are not really considering delegating this
+task directly to your OS package manager since it is discouraged, otherwise you
+would end up with a messy workstation.</p>
+
+<p>There are a few tools that allow you to manage your rubies and gems, the most
+popular among them is, without doubts, <a href="http://beginrescueend.com/">RVM</a>
+(Ruby Version Manager) which in all fairness is good, it provides a CLI to
+switch between your rubies and gemsets. If you haven't used RVM, you should
+read <a href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html">this guide</a>.</p>
+
+<p>Even when RVM is great, there are a couple of things that I don't like about it:</p>
+
+<ul>
+<li><p>Personally, I had a painful situation as a Linux user, every time I wanted to
+get a fresh ruby version with support for readline and zlib libraries and its
+dependencies.</p></li>
+<li><p>Its gemset management feature tends to duplicate gems across your projects. I
+get it, sometimes you need to isolate your gems to keep them compatible. But
+there is another player in the field, called bundler. (mentioned down below)</p></li>
+<li><p>Plus that last bullet, some colleages have mentioned having a 5~6 GB .rvm
+folder.</p></li>
+</ul>
+
+
+<p>A couple of days ago, I was struggling to track down a gem that I wasn't sure
+where exactly came from, anyway I was about to create a new gemset to do a fresh
+start when someone adviced me to check out rbenv.</p>
+
+<h2>The rbenv way</h2>
+
+<p>A highlight in favor of rbenv is that you don't actually need to worry about
+maintaing your gemsets, since it relays on <a href="http://gembundler.com/">bundler</a>
+who takes care of all your application dependencies. Letting you care about
+just the version of the ruby you want to use globally, locally and in a per
+project basis. Let's check out <a href="http://gituhub.com/ssthepenson/rbenv">rbenv</a>.</p>
+
+<p><em>RVM and rbenv aren't friends :(</em></p>
+
+<p>First of all, you better avoid using both in the same environment because they
+are incompatible. Don't say I didn't warn you.</p>
+
+<h2>Installation</h2>
+
+<h3>1. Get rid of RVM by running:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rvm implode
+</code></pre>
+</div>
+
+
+<h3>2. To install rbenv, must be at ~ and clone it:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+</code></pre>
+</div>
+
+
+<h3>3. Add scope for rbenv binaries to your $PATH</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;&#39;</span> &gt;&gt; .bash_profile
+<span class="c"># be sure of do this to your bash source file (e.g. .bashrc, .profile)</span>
+</code></pre>
+</div>
+
+
+<h3>4. Setup bash autocompletion:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;eval &quot;$(rbenv init -)&quot;&#39;</span> &gt;&gt; .bash_profile
+</code></pre>
+</div>
+
+
+<h3>5. Restart your shell.</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">exec</span>
+</code></pre>
+</div>
+
+
+<p>There are two ways of installing rubies with rbenv. From source and <em>make it</em>
+into "~/.rbenv/versions/&lt;x.x.x-pxxx>" or the one I prefer using <em>ruby-build</em></p>
+
+<h3>6. Install ruby-build</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git clone git://github.com/sstephenson/ruby-build.git ~/.ruby-build
+<span class="nv">$ </span><span class="nb">cd</span> ~/.ruby-build
+<span class="nv">$ </span>./install.sh
+<span class="c"># you may need to run with sudo, since it installs a binary in /usr/local/bin</span>
+</code></pre>
+</div>
+
+
+<h3>7. Install a ruby</h3>
+
+<p>Now, we are ready to install a ruby version.</p>
+
+<p><em>Note:</em> After a couple times trying to get a ruby with readline support
+for my <em>irb</em>, I googled and found a way.</p>
+
+<p><em>For Ubuntu</em> I used my readline path:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ CONFIGURE_OPTS</span><span class="o">=</span><span class="s2">&quot;--with-readline-dir=/usr/include/readline&quot;</span> rbenv
+install 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p>And there we go, we give it some time, get some coffee or play a ping pong
+match. Once rbenv finishes, and every time after installing a ruby
+you need to run:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv rehash
+</code></pre>
+</div>
+
+
+<p>I have to mention, that it seems tricky, but you can set an alias in
+your <code>~/.bash_profile</code> or export an environment variable.</p>
+
+<h2>Usage</h2>
+
+<p>Let's suposse you've got some more rubies, now, how do we specify the
+version of ruby we want to use:</p>
+
+<p><em>To setup a global ruby you do something like:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv global 1.9.3-preview1
+</code></pre>
+</div>
+
+
+<p><em>To setup a local (per-project) ruby you do:</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv <span class="nb">local </span>1.9.2-p290
+<span class="c"># this creates a rbenv-version file in the current folder</span>
+</code></pre>
+</div>
+
+
+<p><em>What version of ruby am I using?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv version
+</code></pre>
+</div>
+
+
+<p><em>What versions of ruby do I have?</em></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rbenv versions
+</code></pre>
+</div>
+
+
+<h2>Conclusions</h2>
+
+<p>There are a couple of things that remain unexplored, but for now this is a great
+start. In case you miss the gemset, <a href="http://github.com/jamis/rbenv-gemset">this</a>
+is something you might want to look at.</p>
+
+<p>So, give it a try, you might like it. For now I'm happy with my fresh
+rbenv install. Let us know your rbenv experience.</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2011/08/22/auto-retry-failed-cucumber-tests.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="Auto Retry Failed Cucumber Tests"
+          data-text="Using rbenv to manage your rubies"
           data-count="none"
           data-via="crowdint"
-          data-related="Edwin Cruz:with">Tweet</a>
+          data-related="Ignacio Galindo:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+      <p><b>Author:</b> Ignacio Galindo | ignacio.galindo@crowdint.com</p>
     </div>
 </div>
 
 
 <div class="post prepend-1">
-  <h1><a href="/2011/08/11/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant box</a></h1>
+  <h1><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 11</b><br />2011</span>
+    <span class="date"><b>Sep 27</b><br />2011</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/3902dd38c6f69b1865c5b20e168e827a" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>If you don't know what Vagrant is, go read our <a href="http://blog.crowdint.com/2011/06/21/vagrant.html">first post about it</a></p> <h2>Introduction</h2> <p>Ok, we've been using <code>Vagrant</code> to manage our servers and services for a while, and we love it. It's clean, easy and we don't mess with our original systems. Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql</code> but nothing seemed to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe, but it looks like it...
-           <div class = "continue_reading"><a href="/2011/08/11/postgresql-in-vagrant.html">Continue reading...</a></div>
-        
-      
-    
+      <p>While Rich Snippets started indexing by Google two years ago it’s still rarely
+used on small and medium size websites. Big players on market such as Amazon,
+Hotels.com, eBay are using it successfully and getting more benefits in SEO.
+So, why don’t utilize it?</p>
+
+<h2>What are Rich Snippets?</h2>
+
+<p>Rich Snippets allows search engines to collect more Meta information about
+pages and its contents. The more information Google can collect about your
+website the more relevant results users get, and thus you have better targeting on web.</p>
+
+<h2>What you can do with Rich Snippets?</h2>
+
+<p>Today Rich Snippets allow describing entities of several types:</p>
+
+<ul>
+<li>Organizations</li>
+<li>People</li>
+<li>Products and offers</li>
+<li>Reviews</li>
+<li>Events</li>
+<li>Breadcrumbs</li>
+<li>Videos</li>
+<li>and Recipes</li>
+</ul>
+
+
+<p>In eCommerce we’re mostly interested in describing organizations, products,
+reviews and breadcrumbs. Other types we use in particular cases.</p>
+
+<h2>Describe online store</h2>
+
+<p>In practice it makes sense to implement it on About or Contact page.
+With Rich Snippets for Organizations you can specify following Meta info:</p>
+
+<ul>
+<li>Name of your business</li>
+<li>Link to organization home page</li>
+<li>Location of the business</li>
+<li>Telephone numbers</li>
+<li>Geographical coordinates of its location</li>
+</ul>
+
+
+<p>With this structured information Google understands your website more accurately.
+Additionally you might get benefits in local search as Google adds your business
+to Google Places service.</p>
+
+<h2>Describe your products</h2>
+
+<p>Benefits of implementing Rich Snippets to describe products are evident. Take a
+look at picture below:</p>
+
+<p><img src="images/2011/09/27/search_results.png" alt="Search Results" /></p>
+
+<p>The website on top <a href="www.pandoramoa.com">www.pandoramoa.com</a> describes products
+in proper format. Because of that Google knows and provides not only relevant page
+to users search query, but also shows relevant image and list of similar products
+with links to them. Such huge snippet in SERPs grabs more attention and makes
+it more likely to click on it.
+It supports following Meta info:</p>
+
+<ul>
+<li>The name of the product</li>
+<li>Product image</li>
+<li>Product description</li>
+<li>Brand of the product</li>
+<li>Product review</li>
+<li>Product ID (sku, asin, upc, isbn or mpn)</li>
+</ul>
+
+
+<h2>Format customer reviews</h2>
+
+<p>Customer reviews is a common tool in eCommerce which is used almost on every
+online store. Once you give it a proper shape according Rich Snippets requirements
+you get additional weight on search results. See how stars grab attention..</p>
+
+<p>To enable Rich Snippet reviews on your page you need to specify following attributes:
+* Item being reviewed
+* Numerical quality rating for the item
+* The author of the review
+* The date that the item was reviewed
+* Review body
+* Short summary of the review</p>
+
+<h2>Beautify breadcrumbs</h2>
+
+<p>Instead of displaying long URL in SERPs (which often looks ugly and gives no
+real value to user) Google can show breadcrumbs if you create right markup for it.</p>
+
+<p>Notice that each item in breadcrumbs is a link to specific page on your website.
+So, in practice you replace long, non-valuable and not clickable URL with
+structured chain of clickable links to your website.</p>
+
+<p>To format breadcrumbs in this way you just need to specify following
+attributes for each item:</p>
+
+<ul>
+<li>The title of a breadcrumb</li>
+<li>The URL of a breadcrumb</li>
+<li>The next breadcrumb in the hierarchy</li>
+</ul>
+
+
+<h2>How to markup Rich Snippets?</h2>
+
+<p>Google supports three formats:</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Microdata_(HTML5)">Microdata (HTML5 specification)</a></li>
+<li><a href="http://microformats.org/">Microformats (simple conventions)</a></li>
+<li><a href="http://en.wikipedia.org/wiki/RDFa">RDFa (a way to label content)</a></li>
+</ul>
+
+
+<h2>One step back</h2>
+
+<p>While you have all these opportunities to increase evidence and weight in SERPs
+remember that Google doesn’t guarantee that it will be 100% used. In most cases
+it’s using, however consider it as an opportunity of SEO improvement.</p>
+
+<h2>Links to check</h2>
+
+<ul>
+<li><a href="http://www.google.com/support/webmasters/bin/topic.py?hl=en&amp;topic=21997">Rich Snippets documentation</a></li>
+<li><a href="http://www.google.com/webmasters/tools/richsnippets">Rich Snippets testing tool</a></li>
+</ul>
+
+
+<h2>Your turn</h2>
+
+<p>Tell u which types of Rich Snippets makes the most value for you?</p>
+
     </div>
     <div class="comments">
-      <h2><a href="/2011/08/11/postgresql-in-vagrant.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="How to install Postgresql 8.4 in a Vagrant box"
+          data-text="Better SEO with Rich Snippets for eCommerce"
           data-count="none"
           data-via="crowdint"
-          data-related="Mario Zaizar:with">Tweet</a>
+          data-related="Pavel Reva:with">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       </div>
     </p>
   </div>
       <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 06</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2f2bc78de007915554f49c3ea0fef125" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Acceptance testing is a technique that helps determine if the requirements of our application are met. There are several frameworks to help us with this. One of the most popular is Cucumber, in which you practically describe in plain English your stories, but you also have to code a lot of steps in order for your tests to work.</p> <p>To avoid this, and just test your features in Ruby, we have Steak, which works very well with Rspec. To use...
-           <div class = "continue_reading"><a href="/2011/07/06/acceptance-testing-with-steak.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/07/06/acceptance-testing-with-steak.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Acceptance testing with Steak"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Ana Rosas:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas | ana@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint (Updated)</a></h1>
-  <p class="author">
-    <span class="date"><b>Jun 27</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>So, we all know that Rails 3.1 comes with a Sass compiler. But still, there are a few of us that used <a href="http://compass-style.org/">compass</a> on most of our pre 3.1 projects not just because of the sass, but because of the <a href="http://www.blueprintcss.org/">blueprint</a> integration.</p> <p>Well, it's very easy to use Compass with Rails 3.1 and get all those Blueprint mixins for your stylesheets.</p> <p>All you have to do is, add the compass gem to your Gemfile:</p> <div class="highlight"><pre><code class="ruby"><span class="n">group</span>...
-           <div class = "continue_reading"><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Rails 3.1, Compass and Blueprint (Updated)"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+      <p><b>Author:</b> Pavel Reva | pavel.reva@crowdint.com</p>
     </div>
 </div>
 
@@ -262,7 +555,7 @@
       <a href="../index.html" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 2 of 12</span>
+  <span class="page_number ">Page: 2 of 21</span>
   
     <a href="/page3" class="next ">Next</a>
   
@@ -271,6 +564,8 @@
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -309,8 +604,6 @@
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

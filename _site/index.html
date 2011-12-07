@@ -47,6 +47,119 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 07</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0db484da0a364dbadf287398f97a97db" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>In the latest project I've been working on here at <strong>Crowd Interactive</strong>, an
+issue came up when serving images on the site. We have our app on <em>Heroku</em> and
+we have a shop on <em>Shopify</em> as an external service; one of the features we
+had to implement was to upload, process and serve images. For this we use the
+Dragonfly gem, it stores original versions of the content in a datastore that can
+be the filesystem, s3, or any other storage service. The thing is, we needed
+to upload the images in the Heroku app but serve them on the Shopify
+store.</p>
+
+<p>When we upload images with <a href="https://github.com/markevans/dragonfly">Dragonfly</a>
+in a datastore like Amazon S3 and request the URL of the dragonfly image,
+dragonfly serves an URL  relative to the site where we upload the image,
+therefore, when we render the image in the browser it receives a permanent
+redirect (301) to the original URL of the image at Amazon S3, and if we
+want to resize the image, dragonfly applies the transformation on the fly.</p>
+
+<p>Both situations lead to performance issues, the need to redirect and resolve
+the original image URL, and at the same moment use the server time to apply the
+resize process to the image. So if we have a web site, where we render a lot of
+images, a significant delay will be observed.</p>
+
+<p>An easy way to solve both problems, is using a couple of methods which
+Dragonfly provides to help us remotely serve processed versions of
+content such as thumbnails.</p>
+
+<p>For this case, we just needed to create a <em>Thumb</em> table to store the jobs with
+two strings columns:  <em>job</em> and <em>uid</em>, and then just add the configuration block
+for the <strong>before_serve</strong> and <strong>define_url</strong> methods inside the <em>app.configure do |config| block</em> in on our <strong>../initializers/dragonfly.rb</strong> as follows:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;dragonfly&#39;</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="no">Dragonfly</span><span class="o">[</span><span class="ss">:app_name</span><span class="o">]</span>
+<span class="n">app</span><span class="o">.</span><span class="n">configure_with</span><span class="p">(</span><span class="ss">:imagemagick</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">configure_with</span><span class="p">(</span><span class="ss">:rails</span><span class="p">)</span>
+
+<span class="c1"># Is up to us to determine or not an expiration time for the thumbnails</span>
+<span class="n">app</span><span class="o">.</span><span class="n">cache_duration</span> <span class="o">=</span> <span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">365</span><span class="o">*</span><span class="mi">3</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">url_host</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">production?</span> <span class="p">?</span> <span class="s1">&#39;http://myapp.herokuapp.com&#39;</span> <span class="p">:</span> <span class="s1">&#39;http://localhost:3000&#39;</span>
+    <span class="c1"># First we configure our before_serve method,</span>
+    <span class="c1"># Before serving, the first time it is requested stores the thumbnail in the datastore</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">before_serve</span> <span class="k">do</span> <span class="o">|</span><span class="n">job</span><span class="p">,</span> <span class="n">env</span><span class="o">|</span>
+    <span class="n">uid</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">store</span>
+    <span class="c1"># Keep track of its uid</span>
+    <span class="c1"># Holds all the job info, e.g fetch &#39;image_uid&#39; then resize to &#39;40x40&#39;</span>
+    <span class="no">Thumb</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span> <span class="ss">:uid</span> <span class="o">=&gt;</span> <span class="n">uid</span><span class="p">,</span> <span class="ss">:job</span> <span class="o">=&gt;</span> <span class="n">job</span><span class="o">.</span><span class="n">serialize</span> <span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="c1"># Next we define the url for our processed images, overriding the default .url method...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">define_url</span> <span class="k">do</span> <span class="o">|</span><span class="n">app</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">opts</span><span class="o">|</span>
+    <span class="n">thumb</span> <span class="o">=</span> <span class="no">Thumb</span><span class="o">.</span><span class="n">find_by_job</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">serialize</span><span class="p">)</span>
+    <span class="c1"># If (the job fetch &#39;image_uid&#39; then resize to &#39;40x40&#39;) has been stored already..</span>
+    <span class="c1"># then serve the url from the datastore filesystem, s3, etc</span>
+    <span class="k">if</span> <span class="n">thumb</span>
+      <span class="n">app</span><span class="o">.</span><span class="n">datastore</span><span class="o">.</span><span class="n">url_for</span><span class="p">(</span><span class="n">thumb</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+    <span class="k">else</span>
+    <span class="c1"># ...otherwise if the job hasn&#39;t been stored, serve it from the Dragonfly server as usual</span>
+      <span class="n">app</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">url_for</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</code></pre>
+</div>
+
+
+<p>This would give us the first time the job is stored:</p>
+
+<p><strong>image.thumb('40x40').url</strong>  <em>normal dragonfly url e.g. /media/image...</em></p>
+
+<p>Then from the second time onwards:</p>
+
+<p><strong>image.thumb('40x40').url</strong>     <em>datastore url  /my-bucket.s3.amazonaws.com/2011…</em></p>
+
+<p>This solution allowed us to cache the images, avoid permanent redirects, decrease
+dragonfly's jobs load, and overall improvement on our site performance.</p>
+
+<p>Hope you can find this post useful, see you next time! XD</p>
+
+<p><em>PS. Thanks to Mario 'Chido' and Mumo for helping me out with some concepts!!</em></p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/12/07/serving-remote-content-with-dragonfly.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Serving Remote Content with Dragonfly"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Nora Alvarado:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Nora Alvarado | nora.alvarado@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></h1>
   <p class="author">
     <span class="date"><b>Nov 30</b><br />2011</span>
@@ -54,10 +167,6 @@
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/89c6420fb99cb01bcf2e3502a7851da2" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
       <p>As you may know, when we want to enhance the functionality of a class, we usually
 'include' or 'extend' it through modules which include new methods or override
 existing ones.</p>
@@ -147,7 +256,6 @@ different code to self.included() such as logging:</p>
   <a href="http://api.rubyonrails.org/classes/ActiveSupport/Concern.html">ActiveSupport Concern</a>
   <a href="http://www.google.com">Google</a></p>
 
-    
     </div>
     <div class="comments">
       <h2><a href="/2011/11/30/concerning-rails-3-internals.html#disqus_thread">Click here for Comments</a></h2>
@@ -179,17 +287,171 @@ different code to self.included() such as logging:</p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/8a4d383333234bd653b7d768ee999c11" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>A few days ago I was just wondering what the best way to craft a <a href="http://en.wikipedia.org/wiki/RubyGems">Gem</a> was, and I figured out it doesn't really matter. Any way you take will lead you to the same place, yet, I really liked an special way to do it: I found <a href="https://github.com/technicalpickles/jeweler">JEWELER</a>. In short, Jeweler is a GEM to make GEMS, great, right?</p> <p>Its quite simple to use, you just need to follow a few steps to get the skeleton of...
-           <div class = "continue_reading"><a href="/2011/11/15/making-gems-with-jeweler.html">Continue reading...</a></div>
-        
-      
-    
+      <p>A few days ago I was just wondering what the best way to craft a
+<a href="http://en.wikipedia.org/wiki/RubyGems">Gem</a> was, and I
+figured out it doesn't really matter. Any way you take will lead you to the same place, yet,
+I really liked an special way to do it: I found <a href="https://github.com/technicalpickles/jeweler">JEWELER</a>.
+In short, Jeweler is a GEM to make GEMS, great, right?</p>
+
+<p>Its quite simple to use, you just need to follow a few steps to get the skeleton
+of a GEM and then you will get it ready to use.</p>
+
+<p>The greatest stuff about Jeweler is that you have a library to manage and release
+<a href="http://en.wikipedia.org/wiki/RubyGems">RubyGem</a> projects. Don't forget to create
+your account on the RubyGems website, that will be your signature like a gem crafter.</p>
+
+<p>You can also use its scaffold generator to start a new RubyGem project.</p>
+
+<h3>We need to use RubyGems to install JEWELER and get started:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install jeweler
+</code></pre>
+</div>
+
+
+<h3>Now with JEWELER installed we are ready to start building our own gem</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>jeweler &lt;my-gem-name&gt;
+</code></pre>
+</div>
+
+
+<p>for instance:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>jeweler My-Gem
+</code></pre>
+</div>
+
+
+<p>You'll get this output:</p>
+
+<div class="highlight"><pre><code class="bash">  create  .gitignore
+  create  Rakefile
+  create  Gemfile
+  create  LICENSE.txt
+  create  README.rdoc
+  create  .document
+  create  lib
+  create  lib/My-Gem.rb   <span class="c">#Here you need to put your code</span>
+  create  <span class="nb">test</span>       <span class="c">#Here you need to put your Unit Test code</span>
+  create  <span class="nb">test</span>/helper.rb
+  create  <span class="nb">test</span>/test_My-Gem.rb
+</code></pre>
+</div>
+
+
+<p>This means now you have the skeleton for your gem in the My-Gem directory.</p>
+
+<p>If you want to see the JEWELER command options just run jeweler --help</p>
+
+<h3>Then we need rake commnad to interact with our gem</h3>
+
+<p>This step is really important because with this you can generate and validate
+the gemspec, realease the gem, run its test suite, display the current version, etc.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake -T
+
+  rake build              <span class="c"># Build gem into pkg</span>
+  rake clobber_rcov       <span class="c"># Remove rcov products for rcov</span>
+  rake clobber_rdoc       <span class="c"># Remove rdoc products</span>
+  rake console<span class="o">[</span>script<span class="o">]</span>    <span class="c"># Start IRB with all runtime dependencies loaded</span>
+  rake gemcutter:release  <span class="c"># Release gem to Gemcutter</span>
+  rake gemspec            <span class="c"># Generate and validate gemspec</span>
+  rake gemspec:debug      <span class="c"># Display the gemspec for debugging purposes, as jeweler</span>
+  rake gemspec:generate   <span class="c"># Regenerate the gemspec on the filesystem</span>
+  rake gemspec:release    <span class="c"># Regenerate, validate gemspec.</span>
+  rake gemspec:validate   <span class="c"># Validates the gemspec on the filesystem</span>
+  rake git:release        <span class="c"># Tag and push release to git.</span>
+  rake install            <span class="c"># Build and install gem using `gem install`</span>
+  rake rcov               <span class="c"># Analyze code coverage with tests</span>
+  rake rdoc               <span class="c"># Build the rdoc HTML Files</span>
+  rake release            <span class="c"># Release gem</span>
+  rake rerdoc             <span class="c"># Force a rebuild of the RDOC files</span>
+  rake <span class="nb">test</span>               <span class="c"># Run tests</span>
+  rake version            <span class="c"># Displays the current version</span>
+  rake version:bump:major <span class="c"># Bump the major version by 1</span>
+  rake version:bump:minor <span class="c"># Bump the a minor version by 1</span>
+  rake version:bump:patch <span class="c"># Bump the patch version by 1</span>
+  rake version:write      <span class="c"># Writes out an explicit version.</span>
+</code></pre>
+</div>
+
+
+<h3>Now we need to set a version before we start using the gem</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake version:write <span class="nv">MAJOR</span><span class="o">=</span>1 <span class="nv">MINOR</span><span class="o">=</span>0 <span class="nv">PATCH</span><span class="o">=</span>0
+</code></pre>
+</div>
+
+
+<p>The small explanation for this is: if you do a small change you need to
+increase PATCH (0 - 9) then you will start to increase MINOR (0 - 9) stage, and
+when you get MAJOR changes, its because you did a whole new version of your gem.</p>
+
+<p>You will see this message:</p>
+
+<div class="highlight"><pre><code class="bash">Updated version: 1.0.0
+</code></pre>
+</div>
+
+
+<h3>Then, we need to edit our Rakefile and change a couple of lines inside, I suggest to you use VIM/MVIM/GVIM to do that:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>vim Rakefile
+</code></pre>
+</div>
+
+
+<p>If your gem depends upon other libraries, you'll need to define a gem specification, commonly called a "gemspec".</p>
+
+<h3>Inside Rakefile look for "gem" and that is the Gem Specification Reference.</h3>
+
+<p>Here you need to change:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem.summary <span class="o">=</span> %Q<span class="o">{</span>TODO: summary here about your gem<span class="o">}</span>
+<span class="nv">$ </span>gem.description <span class="o">=</span> %Q<span class="o">{</span>TODO: longer description of your gem<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>  to this:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem.summary <span class="o">=</span> %Q<span class="o">{</span>Writte a summary here about your gem<span class="o">}</span>
+<span class="nv">$ </span>gem.description <span class="o">=</span> %Q<span class="o">{</span>Writte a longer description of your gem<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<h3>After this, we'll install our gem locally and so, we can start testing it:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake install
+</code></pre>
+</div>
+
+
+<h3>If later you want to release your gem into www.rubygems.org you just need to run the command:</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>rake release
+</code></pre>
+</div>
+
+
+<p>This will automatically:
+* Generate My-Gem.gemspec and commit it
+* Use git to tag v1.0.0 and push it
+* Build My-Gem-1.0.0.gem and push it to rubygems.org</p>
+
+<h2>Conclusions</h2>
+
+<p>Now you to know about use jeweler, use it and see how this works, its
+not the only way to do a gem, it just works for me, but you can find your own way to do
+it however you feel more confortable.</p>
+
+<p><em>Make your gem and release it</em> to RubyGems, everybody is waiting for your sexy gems to
+make their developer life easier.</p>
+
+<blockquote><p>"Easy way to make yours owns gems (FEB). Faster, Easy and Beautiful"</p></blockquote>
+
     </div>
     <div class="comments">
       <h2><a href="/2011/11/15/making-gems-with-jeweler.html#disqus_thread">Click here for Comments</a></h2>
@@ -213,137 +475,11 @@ different code to self.included() such as logging:</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2ae35d2e0dfd4ca72c07ead1eec4a8f7" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>Today in Twitter I found a tweet about a big change in <a href="http://cukes.info">Cucumber</a>, the BDD Framework for Rails - well not only for Rails at this point -. Looking at the commit that introduces this change, there was a sentence that summarize very well what the change is about:</p> <blockquote><p>"Cucumber scenarios should not be a series of steps that describe what a user clicks. Instead, they should express what a user <em>does</em>"</p></blockquote> <p>What this means, is that since the...
-           <div class = "continue_reading"><a href="/2011/10/24/cucumber-steak.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/10/24/cucumber-steak.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Has Cucumber become more ... "Steak"?"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Mario Chavez:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Chavez | mac@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html">Using rbenv to manage your rubies</a></h1>
-  <p class="author">
-    <span class="date"><b>Oct 05</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/6be5df410f2695b1341f0c359bc9b461" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>While working with ruby, you have some alternatives to manage your binaries, but as you think of them, I hope you are not really considering delegating this task directly to your OS package manager since it is discouraged, otherwise you would end up with a messy workstation.</p> <p>There are a few tools that allow you to manage your rubies and gems, the most popular among them is, without doubts, <a href="http://beginrescueend.com/">RVM</a> (Ruby Version Manager) which in all fairness is good,...
-           <div class = "continue_reading"><a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/10/05/using-rbenv-for-managing-your-rubies.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Using rbenv to manage your rubies"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Ignacio Galindo:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ignacio Galindo | ignacio.galindo@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Better SEO with Rich Snippets for eCommerce</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 27</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/3902dd38c6f69b1865c5b20e168e827a" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        
-           <p>While Rich Snippets started indexing by Google two years ago it’s still rarely used on small and medium size websites. Big players on market such as Amazon, Hotels.com, eBay are using it successfully and getting more benefits in SEO. So, why don’t utilize it?</p> <h2>What are Rich Snippets?</h2> <p>Rich Snippets allows search engines to collect more Meta information about pages and its contents. The more information Google can collect about your website the more relevant results users get, and thus...
-           <div class = "continue_reading"><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html">Continue reading...</a></div>
-        
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/09/27/better-seo-with-rich-snippets-for-e-commerce.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Better SEO with Rich Snippets for eCommerce"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Pavel Reva:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Pavel Reva | pavel.reva@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     <span class="previous">Previous</span>
   
-  <span class="page_number ">Page: 1 of 12</span>
+  <span class="page_number ">Page: 1 of 21</span>
   
     <a href="/page2" class="next ">Next</a>
   
@@ -352,6 +488,8 @@ different code to self.included() such as logging:</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -390,8 +528,6 @@ different code to self.included() such as logging:</p>
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

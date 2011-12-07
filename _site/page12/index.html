@@ -47,731 +47,308 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
-  <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
+  <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
   <p class="author">
-    <span class="date"><b>Aug 06</b><br />2010</span>
+    <span class="date"><b>Dec 21</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>In almost every Rails application, you will need to <em>show dates in a given format</em>...</p>
+
+<p>That's why the <em>strftime</em> function exists, and you can customize the output to meet your needs to something like this:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/%d/%Y %l:%M %P&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;12/19/2010 10:45 pm&quot;</span>
+</code></pre>
+</div>
+
+
+<p>This is very customizable, but unfortunately, is hard to mantain and definitly... <em>not cool</em> ;)<br/>
+In fact, this looks like old C/PHP code</p>
+
+<h2>The "cool" way</h2>
+
+<p>Rails is a cool framework that follows DRY and Convention over Configuration.</p>
+
+<p>So that's why we need to use the <em>to_s method (and to_formatted_s), which uses the Time::DATE_FORMATS</em></p>
+
+<p><em>This works with Rails 3 and is compatible with Rails 2.x</em>!
+By default, Rails comes with a few ones that you can use:</p>
+
+<pre><code>- :long_ordinal  #&lt;- December 19th, 2010 22:42
+- :long          #&lt;- December 19, 2010 22:42
+- :db            #&lt;- 2010-12-19 22:42:43
+- :short         #&lt;- 19 Dec 22:42
+- :time          #&lt;- 22:42
+- :number        #&lt;- 20101219224243
+- :rfc822        #&lt;- Sun, 19 Dec 2010 22:42:43 +0000
+</code></pre>
+
+<p>So, you can execute for example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:short</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;19 Dec 16:27&quot;</span>
+</code></pre>
+</div>
+
+
+<p>Much better now, isn't it?</p>
+
+<h2>Custom formats</h2>
+
+<p>The problem is that Rails doesn't provide an obvious way to do that...</p>
+
+<p>So reading the Rails source code (activesupport/lib/active_support/core_ext/date_time/conversions.rb), I found that <em>you could create an initializer in your Rails project and add your own custom formats</em> there:</p>
+
+<p><em>config/initizers/time_formats.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># == Adding your own datetime formats to to_formatted_s</span>
+<span class="c1"># DateTime formats are shared with Time. You can add your own to the</span>
+<span class="c1"># Time::DATE_FORMATS hash. Use the format name as the hash key and</span>
+<span class="c1"># either a strftime string or Proc instance that takes a time or</span>
+<span class="c1"># datetime argument as the value.</span>
+
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:month_and_year</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;%B %Y&quot;</span>
+<span class="no">Time</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">[</span><span class="ss">:human</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p>So here I'm creating 2 new date/time formats to use with the to_s method.</p>
+
+<p>Let's see how different and clean the code is:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="c1"># the &quot;cool&quot; way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">to_s</span> <span class="ss">:human</span>
+
+<span class="c1"># the old school way</span>
+<span class="mi">2</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="o">.</span><span class="n">strftime</span> <span class="s1">&#39;%m/%d/%y @ %I:%M%p&#39;</span>
+</code></pre>
+</div>
+
+
+<p><em>Cool, isn't it?</em></p>
+
+<p>And after several reuses of the format, you will start noticing the adventages... especially <em>when you need a change in the format: with this aproach is only one change</em> (versus search the whole project for strftime usages).</p>
+
+<p>Hope this help...<br/>
+Thanks for reading<br/>
+Gonzalo "aka Chalo" Fernandez</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/21/cool-date-formatting-in-rails.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Cool date formatting in Rails"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Gonzalo Fernandez:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Gonzalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/15/always-think-restful.html">Always Think RESTful</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 15</b><br />2010</span>
   </p>
   <div class="body prepend-1 append-1">
     <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
     <div id='main'>
-    
-    
-    
-    
-      
-        <p>Using git to track changes on your source code is an easy task, a branch here, a merge there, no big deal. But, when you add different teams and features to the mix, things can get a little tricky.</p>
+      <p>What I am about to describe in this post is probably something obvious to the
+advanced Rails developer. Yet, it's sometimes hard to get the concept
+when you come from other frameworks or technology.</p>
 
-<p>Here is how we do git, hoping this explanation helps someone understand <em>the power of git</em>.</p>
+<p>I, at least, personally had a problem getting it when I first started
+using Rails.</p>
 
-<p>Let's say we have our first commit A.</p>
+<h2>REST</h2>
 
-<p><img src="/images/2010/08/09/a.jpg" alt="A" /></p>
+<p>REST stands for <em>Representational State Transfer</em>.
+What does that mean anyway? well, a lot of things, but, for now, I'll
+just focus on what it means when designing a Rails app.</p>
 
-<p>Now, we're developing Feature 1, and one of our teammates is developing Feature 2. At this point, we'd like to create a branch per feature.</p>
+<h3>The wrong way</h3>
 
-<div class="highlight"><pre><code class="bash">git branch feature1
-git branch feature2
-</code></pre>
-</div>
+<p>I've seen it a lot of times. It's just easy to think that, let's say, a
+OrderController, must always be tied to a Order model, and that,
+all actions performed on the Order objects should be done via that controller.</p>
 
+<p>So, with that thought on your mind, you end up with a controller like this:</p>
 
-<p>Now, Team Feature 1 works hard and commits B and C.</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<p>Now, our tree looks a bit like this:</p>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<p><img src="/images/2010/08/09/b.jpg" alt="B" /></p>
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<p>Team Feature 2 catches up and creates commit D</p>
+  <span class="k">def</span> <span class="nf">update</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<p><img src="/images/2010/08/09/c.jpg" alt="C" /></p>
+  <span class="k">def</span> <span class="nf">review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<p>Once a feature has been tested and approved for production, we merge it into master. If Feature 2 was approved first:</p>
+  <span class="k">def</span> <span class="nf">remove_review</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature2
+  <span class="k">def</span> <span class="nf">cancel</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-Updating 04511b4..ed6d1fb
-Fast-forward
-</code></pre>
-</div>
+  <span class="k">def</span> <span class="nf">pay</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-
-<p><img src="/images/2010/08/09/d.jpg" alt="D" /></p>
-
-<p>Master was unchanged since the time the feature2 branch was created, so, what happens here is called a fast-forward, there's no merge or rebase involved, master simply now points to D.</p>
-
-<p>Once Feature 1 is approved, we want to merge it into master too. We can't do a Fast-Forward here because master now has Feature 2 in it, so, the first thing to do is merge <em>master into feature1</em>.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout feature1
-git merge master
-</code></pre>
-</div>
-
-
-<p><img src="/images/2010/08/09/e.jpg" alt="E" /></p>
-
-<p>Test, Test, Test. In case we find a bug, or a feature incompatibility, we know the problem exists only on our feature branch, master remains stable.</p>
-
-<p>After we're sure everything is going to be all right, we now merge <em>feature1 into master</em>.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout master
-git merge feature1
-
-Updating ed6d1fb..359c6cf
-Fast-forward
-</code></pre>
-</div>
-
-
-<p><img src="/images/2010/08/09/f.jpg" alt="F" /></p>
-
-<p>Since no changes where required, once again, master is Fast-Forwarded. Now, it is the Feature2 team's responsibility to update their branch with the recent updates we did on master.</p>
-
-<div class="highlight"><pre><code class="bash">git checkout feature2
-git merge master
-
-Updating ed6d1fb..359c6cf
-Fast-forward
-</code></pre>
-</div>
-
-
-<p>Now, all of the branches are at the same level and both teams are ready to start working on new features.</p>
-
-<p><img src="/images/2010/08/09/h.jpg" alt="H" /></p>
-
-<p>And that's basically how we use git, on a small scale. In real life we do this for 4 - 5 features being developed at the same time by teams of 2 - 4 people, but we follow the same workflow.</p>
-
-<p>Cheers!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/06/our-git-workflow.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Our git workflow"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html">Instant blog using Jekyll and Heroku</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 02</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>When we were trying to put this blog online, we checked out different options, until we stumbled upon <a href="http://wiki.github.com/mojombo/jekyll/">Jekyll</a>.</p>
-
-<p>It was geeky enough for us, so we decided to try it out, and now, I am very happy that we decided to go with it.</p>
-
-<p>We needed to put it online somewhere, and since Heroku is such an awesome, not to mention free, platform, we decided to host there.</p>
-
-<p>Now, I'll make a brief explanation on how we did this. I won't get into the details on how to use Jekyll, just a brief intro.</p>
-
-<p>You can find more info on how to use this awesome content management tool on their <a href="http://wiki.github.com/mojombo/jekyll/">Wiki</a>.</p>
-
-<h2>Setup jekyll</h2>
-
-<p>The first thing you have to do is, install the jekyll gem. Follow the instructions <a href="http://wiki.github.com/mojombo/jekyll/install">here</a>, but, basically
-all you have to do is run:</p>
-
-<div class="highlight"><pre><code class="bash">gem install jekyll
-</code></pre>
-</div>
-
-
-<h2>Create the site structure</h2>
-
-<p>Create a folder wherever you want to put your blog files.</p>
-
-<div class="highlight"><pre><code class="bash">mkdir my_blog
-</code></pre>
-</div>
-
-
-<p>and create the following files:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">cd </span>my_blog
-touch _config.yml
-touch index.html
-mkdir _posts
-mkdir _layouts
-touch _layouts/default.html
-</code></pre>
-</div>
-
-
-<p>For more info on what those files do, or what should you put on them, take a look <a href="http://wiki.github.com/mojombo/jekyll/usage">here</a>, or checkout <a href="http://wiki.github.com/mojombo/jekyll/sites">this huge list</a> of working examples.</p>
-
-<h2>"Hello World" Jekyll</h2>
-
-<h3>_layouts/default.html</h3>
-
-<p>First, let's create a Layout, open <em>_layouts/default.html</em> and put the following code on it:</p>
-
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
-
-
-<p>Now, we need an index page. Open <em>index.html</em> and add the following code at the top:</p>
-
-<div class="highlight"><pre><code class="html">---
-layout: default
----
-</code></pre>
-</div>
-
-
-<p>What we're telling the index page is to use the default layout we created earlier.</p>
-
-<p>Run:</p>
-
-<div class="highlight"><pre><code class="bash">jekyll--server --auto
-</code></pre>
-</div>
-
-
-<p>Open your browser and go to http://127.0.0.1:4000</p>
-
-<p>You should now see "Hello World"</p>
-
-<h2>Deploying to Heroku</h2>
-
-<p>Now, let's try and deploy our Hello World blog to Heroku. There is a gem called <a href="http://github.com/bry4n/rack-jekyll">rack-jekyll</a> that makes this very easy.</p>
-
-<p>You can read the documentation on the gem page, the basic steps are:</p>
-
-<p>First, install the Heroku gem</p>
-
-<div class="highlight"><pre><code class="bash">gem install heroku
-</code></pre>
-</div>
-
-
-<p>Create a config.ru file:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;rack/jekyll&quot;</span>
-
-<span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span>
-</code></pre>
-</div>
-
-
-<p>Add the rack-jekyll gem to the heroku manifest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s2">&quot;rack-jekyll&quot;</span> &gt; .gems
-</code></pre>
-</div>
-
-
-<p>Create a git repo and an initial commit:</p>
-
-<div class="highlight"><pre><code class="bash">git init
-git add .
-git commit -m <span class="s2">&quot;First commit&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Create a Heroku app:</p>
-
-<div class="highlight"><pre><code class="bash">heroku create
-</code></pre>
-</div>
-
-
-<p>And, deploy!</p>
-
-<div class="highlight"><pre><code class="bash">git push heroku master
-</code></pre>
-</div>
-
-
-<p>Check out how it looks:</p>
-
-<div class="highlight"><pre><code class="bash">heroku open
-</code></pre>
-</div>
-
-
-<p>This is just the basic stuff on Jekyll, make sure you go through the source code of <a href="http://wiki.github.com/mojombo/jekyll/sites">other blogs</a> to get more tips on advanced stuff like archives, comments, includes, links to posts...</p>
-
-<p>Cheers!</p>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/02/instant-blog-using-jekyll-and-heroku.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Instant blog using Jekyll and Heroku"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 28</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.</p>
-
-<p>With Rails being in a phase where version 3 is in development, you may (and should) want to take a look to its new features, but surely you don't want to touch your perfectly working Rails 2.3.x installation.</p>
-
-<p>Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this version gap.</p>
-
-<h2>Installing RVM</h2>
-
-<p>We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this <a href="/2010/07/11/git-initial-configuration.html">post</a>.</p>
-
-<div class="highlight"><pre><code class="bash">bash &lt; &lt;<span class="o">(</span> curl http://rvm.beginrescueend.com/releases/rvm-install-head <span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>This is the best option to install RVM in your machine and will work in Macintosh and *nix environments, can't promise anything about Windows, though.</p>
-
-<p>There are other two options: from the latest source tarball and as a gem, but the guys from <a href="http://rvm.beginrescueend.com/rvm/install/">BeginRescueEnd</a> recommend to stick to the described method.</p>
-
-<p>After RVM is installed in your system, you need to add this line to your ~/.bashrc and ~/.bash_profile</p>
-
-<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$HOME</span>/.rvm/scripts/rvm <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$HOME</span>/.rvm/scripts/rvm
-</code></pre>
-</div>
-
-
-<h2>Now what?</h2>
-
-<p>Well, you should be ready to start playing around with any Ruby version you want to work with; but before that, it is a good practice to check the Ruby versions that RVM is aware of</p>
-
-<div class="highlight"><pre><code class="bash">rvm list known
-</code></pre>
-</div>
-
-
-<p>To install a specific Ruby version, you just have to:</p>
-
-<div class="highlight"><pre><code class="bash">rvm install &lt;ruby version&gt;
-</code></pre>
-</div>
-
-
-<p>When you already have several 'Rubies', you can make any of them the default version:</p>
-
-<div class="highlight"><pre><code class="bash">rvm --default &lt;ruby version&gt;
-</code></pre>
-</div>
-
-
-<p>If you ever want (or need) to go back to your previously Ruby/Rails installed version, here's the trick:</p>
-
-<div class="highlight"><pre><code class="bash">rvm system
-</code></pre>
-</div>
-
-
-<h2>What about Rails???</h2>
-
-<p>The real awesomeness start when you discover that you can install as many Rails versions as you want; and the 'bestest' part is the ability to mix them up with your installed 'Rubies'!!!</p>
-
-<p>Let's take one step at a time.</p>
-
-<h3>Gemsets</h3>
-
-<p>RVM provides a feature/concept called 'gemset'; which will allows us to install gems to test them with any of the Ruby versions you have installed.</p>
-
-<p>To create a gemset you have to run:</p>
-
-<div class="highlight"><pre><code class="bash">rvm gemset create &lt;name <span class="k">for </span>your gemset&gt;
-</code></pre>
-</div>
-
-
-<p>I like naming my gemsets after the project I will use the Rails version / Gems version; most of the developers will prefer using a naming convention like 'Rails235', 'Rails_3_0_0_beta4', 'Rails3rc' or anything like that.</p>
-
-<p>Now, to mix any of your Ruby version with any of your Rails versions, you'll use:</p>
-
-<div class="highlight"><pre><code class="bash">rvm use &lt;ruby version&gt;@&lt;gemset name&gt; <span class="o">(</span>e.g.<span class="o">)</span> rvm use 1.8.7@rails_300_RC
-</code></pre>
-</div>
-
-
-<p>you can omit the word 'use' and it will work too</p>
-
-<p>Now, install the Rails version you want to try within this gemset:</p>
-
-<div class="highlight"><pre><code class="bash">gem install rails -v 2.3.3
-</code></pre>
-</div>
-
-
-<h3>Forget about sudo to install gems</h3>
-
-<p>This is very important, since you need to install the gems to your current gemset folder, so avoid using sudo or else forget about the magic</p>
-
-<h2>Checking versions</h2>
-
-<p>This is pretty straight forward, but make sure to check your Ruby/Rails version each time you switch:</p>
-
-<div class="highlight"><pre><code class="bash">ruby -v <span class="o">&amp;&amp;</span> rails -v
-</code></pre>
-</div>
-
-
-<h2>What else is important?</h2>
-
-<p>Check on the documentation to become an expert using RVM; you can remove Ruby installations, delete-import-export gemsets and a whole bunch of features that will make your life easier (at least working with RoR versions)</p>
-
-<p>Also, the BeginRescueEnd guys have a section for each OS; stop by and take a look.</p>
-
-<h2>Current Ruby selection in your prompt line</h2>
-
-<p>There is one interesting post in <a href="http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments">RafLabs</a> about the subject and a very simple implementation by typing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ &quot;</span>
-</code></pre>
-</div>
-
-
-<p>This will allow your prompt to look a little bit like this:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="o">[</span>localhost:ruby-1.8.7-p299@r3rc<span class="o">]</span> home~ 
-
-or
-
-<span class="o">[</span>dab-mac:ruby-1.9.1-p378<span class="o">]</span>~ home<span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<h2>Enjoy!</h2>
-
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/07/28/getting-started-with-rvm.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Getting started with Ruby Version Manager (RVM)"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
-<div class="post prepend-1">
-  <h1><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 18</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/56839e737258faa963847dd7269a8059" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Nowadays, one of the best practices to develop your web applications involves Behavior Driven Development or BDD, as it is also known.</p>
-
-<p>Specifically talking about Ruby on Rails, the best tool to accomplish this is definitively Cucumber for describing your features and RSpec for your unit tests, and I'd like to talk a little more, about how to set them up, so you'll be able to start using them as the very handy tool they are.</p>
-
-<h2>Installing RSpec, RSpec-Rails, Cucumber, Cucumber-Rails</h2>
-
-<p>First of all, you need to install the cucumber and RSpec gems, (you may need to add a sudo prefix to your commands according to your system), so open up a shell and type:</p>
-
-<div class="highlight"><pre><code class="bash">gem install rspec-rails
-</code></pre>
-</div>
-
-
-<p>You can type <em>spec --help</em> to see the options available to use with rspec. Now, every time you want to run your rspec tests run the command:</p>
-
-<div class="highlight"><pre><code class="bash">spec spec/
-</code></pre>
-</div>
-
-
-<p>It's time to install cucumber gem like this:</p>
-
-<div class="highlight"><pre><code class="bash">gem install cucumber-rails
-</code></pre>
-</div>
-
-
-<p>It may ask you for gherkin gem in order to install cucumber, so don't forget to install it too:</p>
-
-<div class="highlight"><pre><code class="bash">gem install gherkin
-</code></pre>
-</div>
-
-
-<p>After that, try to install cucumber gem again, and if there is no problem, you may see cucumber help:</p>
-
-<div class="highlight"><pre><code class="bash">cucumber --help
-</code></pre>
-</div>
-
-
-<p>In order to run your cucumber scenarios, you use this command:</p>
-
-<div class="highlight"><pre><code class="bash">cucumber features/
-</code></pre>
-</div>
-
-
-<p>Just as a note here, when you write your features and describe your steps for a web application it is a handy to make use of the webrat gem which includes some useful steps:</p>
-
-<div class="highlight"><pre><code class="bash">gem install webrat
-</code></pre>
-</div>
-
-
-<h2>Installing ZenTest, Autotest-Rails y Autotest-Growl</h2>
-
-<p>At this point we are ready to start writing our features, but before we do that, we want to go a little bit further and install autotest, which will allow us to write our features and rspec scenarios while autotest will handle to run tests every time it detects a change in our code, really cool eh?</p>
-
-<p>We need to include gemcutter as a repository in case we don't have it already:</p>
-
-<div class="highlight"><pre><code class="bash">gem sources -add http://gemcutter.org
-</code></pre>
-</div>
-
-
-<p>After that we go for the Gems we need for autotest:</p>
-
-<div class="highlight"><pre><code class="bash">gem install autotest-rails
-</code></pre>
-</div>
-
-
-<p>You may need to install before ZenTest, in case autotest didn't do it previously:</p>
-
-<div class="highlight"><pre><code class="bash">gem install ZenTest
-</code></pre>
-</div>
-
-
-<p>And for MacOS users we can even "beautify" it a more using Growl to show us notifications about the status of our tests. So let's keep going.</p>
-
-<p>In order to do that, now you have to install the autotest/growl gem:</p>
-
-<div class="highlight"><pre><code class="bash">gem install autotest-growl
-</code></pre>
-</div>
-
-
-<p>Now create a  file ~/.autotest where you need to require it:</p>
-
-<div class="highlight"><pre><code class="ruby"> 
-<span class="nb">require</span> <span class="s1">&#39;autotest/growl&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Once you have written  your features, and rspec tests, you can use autospec for rspec and it will be waiting for you to make changes and rerun automatically your tests every time, you just have to use this command:</p>
-
-<div class="highlight"><pre><code class="bash">autospec
-</code></pre>
-</div>
-
-
-<p>And you can do so to include cucumber scenarios in you autotest:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">AUTOFEATURE</span><span class="o">=</span><span class="nb">true </span>autospec
-</code></pre>
-</div>
-
-
-<p>You'll be getting a nice Growl notification every time you change your code and you can be aware of the status of your tests at any time.</p>
-
-<p>In the case you include cucumber, it may be running the tests indefinitely which can be  a little bit annoying, also could be a memory hazard, so I encourage you to add a new file .autotest in your application root directory and write this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">Autotest</span><span class="o">.</span><span class="n">add_hook</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">at</span><span class="o">|</span>
-    <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^\.git}</span>  <span class="c1"># ignore Version Control System</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="sr">%r{^./tmp}</span>  <span class="c1"># ignore temp files, lest autotest will run again, and again...</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_exception</span> <span class="s2">&quot;rerun.txt&quot;</span>
-     <span class="n">at</span><span class="o">.</span><span class="n">add_mapping</span><span class="p">(</span><span class="sr">%r{^lib/.*\.rb$}</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span>
-          <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;spec/**/*.rb&#39;</span><span class="o">]</span>
-     <span class="k">end</span>
-     <span class="kp">nil</span>
+  <span class="k">def</span> <span class="nf">return_order</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>After this you are now good to go, and you can start using cucumber and rspec to "bddify" your app development!!</p>
+<h3>What's wrong here?</h3>
 
-      
-    
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
+<p>If you take a look at it, there's all these actions on the controller
+that shouldn't be there: review, remove_review, cancel, pay,
+return_order.</p>
 
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Roberto Cataneo:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Roberto Cataneo | roberto.cataneo@crowdint.com</p>
-    </div>
-</div>
+<p>Thinking restful is thinking CRUD. Create, Retrieve, Update, Delete. It
+means that you have <em>resources</em> and that with every request you are
+creating, updating, deleting or retrieving for display that resource or
+many of them.</p>
 
+<p>A resource is not necesarily a model, it's just <em>something</em> that has a
+state or that can be altered.</p>
 
-<div class="post prepend-1">
-  <h1><a href="/2010/07/11/git-initial-configuration.html">First Things First... Our initial git configuration</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 11</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-    
-    
-    
-    
-      
-        <p>Whenever a new teammate joins Crowd Interactive, one of the first things they have to do is setup their git environment.</p>
+<h3>How to make it right?</h3>
 
-<p>The basic steps we recommend are:</p>
+<p>So, if we go back to our example, the right thing to do, is to think
+about those <em>bad</em> actions as a resource.</p>
 
-<h2>Let us know who you are</h2>
+<p>If you're going to review an order, then, you need a <em>OrderReview</em>
+controller.</p>
 
-<p>You can set up your email and name by using the following command:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderReviewController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global user.name <span class="s2">&quot;YOURNAME&quot;</span>
-<span class="nv">$ </span>git config --global user.email <span class="s2">&quot;YOUREMAIL&quot;</span>
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<h2>Reduce the risk factor</h2>
+<p>See? Now we're thinking of the review as a <em>resource</em>, a resource that
+can receive all the <em>CRUD</em> actions. In this specific case we <em>SHOULD</em> have
+a <em>OrderReview</em> model and whatnot, but I just wanted to make an example
+out of it.</p>
 
-<p>Well, it has happened to us before. Let's say you did something weird on your_branch and you need to force a push for some weird reason. You check everything looks ok on your branch and you push it.</p>
+<p>A most common mistake... an action that actually alters the state of an
+object like the cancel action.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push --force
-+ 013c43a...0759089 master -&gt; master <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 your_branch -&gt; your_branch <span class="o">(</span>forced update<span class="o">)</span>
-+ 013c43a...0759089 not_your_branch -&gt; not_your_branch <span class="o">(</span>forced update<span class="o">)</span>
+<p>I know you're, just changing some field from '<em>active</em>' to '<em>enabled</em>' or
+something, but still, this looks much better:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">OrderCancellationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">delete</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>Woah, you just force updated 2 more branches than expected and now you've made quite a mess of your repo. Not good, it is bad enough that you are pushing forced updates to the repo, now you're gonna get yelled at.</p>
+<p>In case you're wondering, the <em>delete</em> action would be used to cancel the
+cancellation (it can happen).</p>
 
-<p>So, we recommend our rookies to use the following command:</p>
+<p>You could now refactor all the other actions to their respective
+controller: <em>PaymentsController</em>, <em>ReturnsController</em>.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global push.default current
+<h2>Associations</h2>
+
+<p>In terms of REST, <em>everything is a resource</em>. And the best way to think
+how models relate to each other is by thiking that their relationship is
+a resource.</p>
+
+<p>For example, if you had a User that can add other User objects as its
+friends, instead of creating a <em>add_friend</em> or something action, you'd add
+a <em>Friendship</em> controller, with <em>create</em> and <em>delete</em> actions.</p>
+
+<p>By the way, I've seen relationships like:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">has_and_belongs_to_many</span> <span class="ss">:users</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># Plus a lot of weird code to make this work</span>
+
+<span class="k">end</span>
 </code></pre>
 </div>
 
 
-<p>What this does is configure git to push only your current branch, and nothing else. So, in the last example you would've made a smaller mess.</p>
+<p><em>Always remember to think restful</em>, probably the user should:</p>
 
-<p>If you want to push a branch that is not the one you're working on, you can do so by specifying the remote and the branch name:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:friendships</span>
+<span class="n">has_many</span> <span class="ss">:friends</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="ss">:friendships</span>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git push origin your_branch
+<span class="c1"># This actually requires more code to make it work, but, you get the</span>
+<span class="c1"># point, right?</span>
 </code></pre>
 </div>
 
 
-<p>At this point I am very used to push like that, using bash auto completion makes it very easy and it makes me feel clean.</p>
+<p>Think about it. Way better.</p>
 
-<h2>Add color to your life</h2>
+<h3>But, why? You have to write all this "unnecesary" code</h3>
 
-<p>Last but not least, who likes dull colorless console messages?, run this commands and add some color to your git outputs:</p>
+<p><em>Mantainability</em> and <em>Readability</em> mostly. If you're not thinking about
+these two while writing your code, you're being rude to your collegues
+or yourself.</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>git config --global color.branch auto
-<span class="nv">$ </span>git config --global color.diff auto
-<span class="nv">$ </span>git config --global color.interactive auto
-</code></pre>
-</div>
-
+<p>Also, Rails its all about love and following conventions. This is one of
+them.</p>
 
 <p>Hope this guide helps you in some way, cheers!</p>
 
-      
-    
     </div>
     <div class="comments">
-      <h2><a href="/2010/07/11/git-initial-configuration.html#disqus_thread">Click here for Comments</a></h2>
+      <h2><a href="/2010/12/15/always-think-restful.html#disqus_thread">Click here for Comments</a></h2>
     </div>
 
     <p>
       <div class="tweet left">
         <a href="http://twitter.com/share"
           class="twitter-share-button"
-          data-text="First Things First... Our initial git configuration"
+          data-text="Always Think RESTful"
           data-count="none"
           data-via="crowdint"
           data-related="David Padilla:with">Tweet</a>
@@ -781,6 +358,367 @@ or
   </div>
       <div class="author_box">
       <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
+  <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 07</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Have you ever wondered if you can do something to make your ruby development even faster?
+Are you tired of waiting for rspec to finish?
+Is your rails application eating more and more memory and you have to restart your app once in a while?</p>
+
+<p>Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.</p>
+
+<h2>What is REE?</h2>
+
+<p>As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "<a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep">mark-and-sweep</a>".</p>
+
+<p>Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.</p>
+
+<p>Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "<a href="http://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">tweak the garbage collector</a> via environment variables.</p>
+
+<p>Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.</p>
+
+<h2>Installing REE</h2>
+
+<p>I'll guide you through this post assuming that you already have <a href="http://rvm.beginrescueend.com/rvm/install/">rvm</a> installed on your computer.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm install ree
+<span class="c">#go and grab a drink, preferably coffee or beer</span>
+<span class="c">#some output</span>
+<span class="c">#done.</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm use ree
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm list
+
+rvm <span class="nv">rubies</span>
+
+<span class="o">=</span>&gt; ree-1.8.7-2010.02 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.8.7-p302 <span class="o">[</span> x86_64 <span class="o">]</span>
+   ruby-1.9.1-p378 <span class="o">[</span> x86_64 <span class="o">]</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-04-19 patchlevel 253<span class="o">)</span> <span class="o">[</span>i686-darwin10.4.0<span class="o">]</span>, MBARI 0x6770, Ruby Enterprise Edition 2010.02
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Hint: go to this <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">post</a> and make rvm always use your desired gemset@ruby</p>
+
+<p>Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+... in 62.33s
+
+SLOW SPEC: 5.9991  Test A
+SLOW SPEC: 5.3510  Test B
+SLOW SPEC: 7.8485  Test C
+SLOW SPEC: 7.6710  Test D
+SLOW SPEC: 5.8465  Test E
+SLOW SPEC: 5.9972  Test F
+SLOW SPEC: 5.9707  Test G
+SLOW SPEC: 5.4557  Test H
+SLOW SPEC: 6.0631  Test I
+SLOW SPEC: 5.4861  Test J
+1763/1763:     100% |##########################################| Time: 00:10:43
+
+Finished in 643.211296 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  13m45.186s
+user  11m0.745s
+sys   0m20.082s
+</code></pre>
+</div>
+
+
+<p>Mmhm, that was... 'fast', I wonder how previous numbers performed.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use 1.8.7
+Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>bundle install
+Installing ...
+Installing ....
+Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
+Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
+
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+...
+in 84.92s
+
+SLOW SPEC: 8.6082  Test A
+SLOW SPEC: 10.3736 Test B
+SLOW SPEC: 11.3856 Test C
+SLOW SPEC: 7.4864  Test D
+SLOW SPEC: 6.5998  Test E
+SLOW SPEC: 8.8307  Test F
+SLOW SPEC: 8.8013  Test G
+SLOW SPEC: 8.8126  Test H
+SLOW SPEC: 8.9622  Test I
+SLOW SPEC: 8.9033  Test J
+1763/1763:     100% |##########################################| Time: 00:15:30
+
+Finished in 930.143889 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  19m40.629s
+user  16m13.691s
+sys   0m21.632s
+</code></pre>
+</div>
+
+
+<p>Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!</p>
+
+<p>Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">Garbage Collector Performance Tunning</a>. Twitter has published their production settings, let's see what we can get.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use ree
+Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
+Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span><span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span>500000 <span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span>250000 <span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span>1 <span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span>50000000 rake <span class="nv">spec</span>
+<span class="o">=</span>&gt; Building fixtures
+..
+...in 44.06s
+SLOW SPEC: 6.2397  Test C
+SLOW SPEC: 8.4131  Test D
+SLOW SPEC: 5.6498  Test E
+1763/1763:     100% |##########################################| Time: 00:06:53
+
+Finished in 413.352603 seconds
+
+1763 examples, 0 failure, 1 pending
+
+real  9m26.457s
+user  6m46.696s
+sys   0m20.475s
+</code></pre>
+</div>
+
+
+<p>You should've seen my face when I came back and saw the results, that meant 2.2x faster!</p>
+
+<p>My next thought was: I have to make this a permanent change in my system, so it was easy:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_MIN_SLOTS=500000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_INCREMENT=250000&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&quot;</span> &gt;&gt; ~/.bash_profile
+ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_GC_MALLOC_LIMIT=50000000&quot;</span> &gt;&gt; ~/.bash_profile
+</code></pre>
+</div>
+
+
+<p>After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:</p>
+
+<h3>Using Standard Ruby 1.8.7</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   56.476 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360264 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    17.71 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       5647.631 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       56.476 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1683.51 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       6
+Processing:    89 5378 899.5   5653    6163
+Waiting:       88 5377 899.5   5652    6162
+Total:         92 5378 898.9   5653    6165
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   45.212 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360134 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    22.12 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4521.241 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       45.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2102.92 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0       5
+Processing:    83 4285 706.4   4456    5027
+Waiting:       82 4284 706.4   4455    5026
+Total:         88 4286 705.5   4456    5028
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with twitter settings</h3>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.348 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360048 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    31.90 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3134.784 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.348 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          3033.01 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:   210 2962 562.4   3074    3873
+Waiting:      210 2961 562.4   3073    3872
+Total:        215 2963 561.6   3074    3873
+</code></pre>
+</div>
+
+
+<h3>Ruby Enterprise Edition with 37signals settings</h3>
+
+<p>37signals has published their production settings too, and I tried to apply them in my project and I got:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
+This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8080
+
+Document Path:          /store/Category/1/1/100/new
+Document Length:        97015 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   46.230 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      97360135 bytes
+HTML transferred:       97015000 bytes
+Requests per second:    21.63 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       4622.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       46.230 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2056.64 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.9      0       5
+Processing:    79 4390 760.8   4473    5830
+Waiting:       78 4390 760.8   4472    5829
+Total:         84 4391 760.0   4473    5830
+</code></pre>
+</div>
+
+
+<p>For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.</p>
+
+<p>*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/07/improving-your-dev-life-with-ree.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Improving your development life with Ruby Enterprise Edition"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Edwin Cruz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
     </div>
 </div>
 
@@ -791,15 +729,17 @@ or
       <a href="/page11" class="previous">Previous</a>
     
   
-  <span class="page_number ">Page: 12 of 12</span>
+  <span class="page_number ">Page: 12 of 21</span>
   
-    <span class="next ">Next</span>
+    <a href="/page13" class="next ">Next</a>
   
 </div>
 
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
   <li><span><b>30 Nov 2011</b></span> &raquo; <a href="/2011/11/30/concerning-rails-3-internals.html">Concerning Rails 3 Internals</a></li>
 
@@ -838,8 +778,6 @@ or
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
-
-  <li><span><b>18 Mar 2011</b></span> &raquo; <a href="/2011/03/18/what-is-sinatra.html">What is Sinatra?</a></li>
 
   </ul>
 </div>

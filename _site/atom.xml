@@ -4,9 +4,103 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-11-29T17:02:25-08:00</updated>
+ <updated>2011-12-07T08:20:02-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Serving Remote Content with Dragonfly</title>
+   <link href="http://blog.crowdint.com/2011/12/07/serving-remote-content-with-dragonfly.html"/>
+   <updated>2011-12-07T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2011/12/07/serving-remote-content-with-dragonfly</id>
+   <photo>0db484da0a364dbadf287398f97a97db</photo>
+   <content type="html">&lt;p&gt;In the latest project I've been working on here at &lt;strong&gt;Crowd Interactive&lt;/strong&gt;, an
+issue came up when serving images on the site. We have our app on &lt;em&gt;Heroku&lt;/em&gt; and
+we have a shop on &lt;em&gt;Shopify&lt;/em&gt; as an external service; one of the features we
+had to implement was to upload, process and serve images. For this we use the
+Dragonfly gem, it stores original versions of the content in a datastore that can
+be the filesystem, s3, or any other storage service. The thing is, we needed
+to upload the images in the Heroku app but serve them on the Shopify
+store.&lt;/p&gt;
+
+&lt;p&gt;When we upload images with &lt;a href=&quot;https://github.com/markevans/dragonfly&quot;&gt;Dragonfly&lt;/a&gt;
+in a datastore like Amazon S3 and request the URL of the dragonfly image,
+dragonfly serves an URL  relative to the site where we upload the image,
+therefore, when we render the image in the browser it receives a permanent
+redirect (301) to the original URL of the image at Amazon S3, and if we
+want to resize the image, dragonfly applies the transformation on the fly.&lt;/p&gt;
+
+&lt;p&gt;Both situations lead to performance issues, the need to redirect and resolve
+the original image URL, and at the same moment use the server time to apply the
+resize process to the image. So if we have a web site, where we render a lot of
+images, a significant delay will be observed.&lt;/p&gt;
+
+&lt;p&gt;An easy way to solve both problems, is using a couple of methods which
+Dragonfly provides to help us remotely serve processed versions of
+content such as thumbnails.&lt;/p&gt;
+
+&lt;p&gt;For this case, we just needed to create a &lt;em&gt;Thumb&lt;/em&gt; table to store the jobs with
+two strings columns:  &lt;em&gt;job&lt;/em&gt; and &lt;em&gt;uid&lt;/em&gt;, and then just add the configuration block
+for the &lt;strong&gt;before_serve&lt;/strong&gt; and &lt;strong&gt;define_url&lt;/strong&gt; methods inside the &lt;em&gt;app.configure do |config| block&lt;/em&gt; in on our &lt;strong&gt;../initializers/dragonfly.rb&lt;/strong&gt; as follows:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;dragonfly&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Dragonfly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:app_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configure_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:imagemagick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configure_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:rails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Is up to us to determine or not an expiration time for the thumbnails&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cache_duration&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3600&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;365&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;configure&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url_host&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;production?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://myapp.herokuapp.com&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://localhost:3000&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# First we configure our before_serve method,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Before serving, the first time it is requested stores the thumbnail in the datastore&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;before_serve&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;uid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;store&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Keep track of its uid&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Holds all the job info, e.g fetch &amp;#39;image_uid&amp;#39; then resize to &amp;#39;40x40&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;Thumb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:uid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:job&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serialize&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# Next we define the url for our processed images, overriding the default .url method...&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;define_url&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;opts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;thumb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thumb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_job&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# If (the job fetch &amp;#39;image_uid&amp;#39; then resize to &amp;#39;40x40&amp;#39;) has been stored already..&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# then serve the url from the datastore filesystem, s3, etc&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thumb&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datastore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thumb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# ...otherwise if the job hasn&amp;#39;t been stored, serve it from the Dragonfly server as usual&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This would give us the first time the job is stored:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;image.thumb('40x40').url&lt;/strong&gt;  &lt;em&gt;normal dragonfly url e.g. /media/image...&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Then from the second time onwards:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;image.thumb('40x40').url&lt;/strong&gt;     &lt;em&gt;datastore url  /my-bucket.s3.amazonaws.com/2011…&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This solution allowed us to cache the images, avoid permanent redirects, decrease
+dragonfly's jobs load, and overall improvement on our site performance.&lt;/p&gt;
+
+&lt;p&gt;Hope you can find this post useful, see you next time! XD&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;PS. Thanks to Mario 'Chido' and Mumo for helping me out with some concepts!!&lt;/em&gt;&lt;/p&gt;
+</content>
+   <author>
+     <name>Nora Alvarado</name>
+     <email>nora.alvarado@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Concerning Rails 3 Internals</title>
@@ -1735,102 +1829,6 @@ any callbacks, all callbacks will be called.&lt;/p&gt;
    <author>
      <name>Ana Rosas &amp; Omar Vargas</name>
      <email>ana.rosas+omar.vargas@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>One File Web Page with Rack</title>
-   <link href="http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack.html"/>
-   <updated>2011-04-25T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/04/25/one-file-web-page-with-rack</id>
-   <photo>a302e7dd208f335dc67761a6db911561</photo>
-   <content type="html">&lt;p&gt;There are times when you need to quickly create small &lt;strong&gt;Ruby&lt;/strong&gt; web
-applications. You can do that in many different ways like, creating a
-&lt;strong&gt;Rails&lt;/strong&gt;, &lt;strong&gt;Sinatra&lt;/strong&gt; or &lt;strong&gt;Rack&lt;/strong&gt; application.&lt;/p&gt;
-
-&lt;p&gt;I like &lt;strong&gt;Rack&lt;/strong&gt;, it gives you more than enough tools to build a web page, and
-allows you to have full control of the components that you employ to
-build it.&lt;/p&gt;
-
-&lt;p&gt;In this article I'll show some examples about how to create simple one page
-&lt;em&gt;Rack&lt;/em&gt; web applications.&lt;/p&gt;
-
-&lt;p&gt;For a bigger overview about &lt;strong&gt;Rack&lt;/strong&gt; look at this article:
-&lt;a href=&quot;http://blog.crowdint.com/2010/11/17/rack-basics-a-rack-introduction.html&quot;&gt;Rack Basics - A Rack Introduction&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Also remember, a middleware is nothing more than another &lt;strong&gt;Rack&lt;/strong&gt;
-application, and, &lt;strong&gt;Rack&lt;/strong&gt; middlewares can be stacked up in order to compose
-bigger systems.&lt;/p&gt;
-
-&lt;h2&gt;Examples source code&lt;/h2&gt;
-
-&lt;p&gt;You can download and run the examples by following the next steps:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  git clone git://gist.github.com/935008.git gist-935008
-  &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gist-935008
-  gem install bundler &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; bundle install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;h2&gt;Hello world&lt;/h2&gt;
-
-&lt;p&gt;Let's start by building a simple hello world example, save the following
-code as &lt;em&gt;hello.ru&lt;/em&gt;:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/935008.js?file=hello1.ru&quot;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Now, run the &lt;em&gt;hello.ru&lt;/em&gt; app with:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  rackup hello.ru
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Optionally you may specify what port you want your application to run
-at:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;  rackup hello.ru -p 8080
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;And then, go to &lt;a href=&quot;http://localhost:9292/&quot;&gt;http://localhost:9292/&lt;/a&gt; or
-&lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; (depending on what port
-you specified), so you can see your app alive.&lt;/p&gt;
-
-&lt;p&gt;Creating an application in this way, requires you to manually specify the
-headers, just as I did when I added the &lt;em&gt;Content-Length&lt;/em&gt; and
-&lt;em&gt;Content-Type&lt;/em&gt; headers. Also, this can be accomplished in a simpler way
-by using the &lt;strong&gt;Rack::ContentLength&lt;/strong&gt; and &lt;strong&gt;Rack::ContentType&lt;/strong&gt; middlewares:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/935008.js?file=hello2.ru&quot;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;OK, now let's add ERB rendering to this example.&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/935008.js?file=hello3.ru&quot;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Now, run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
-
-&lt;p&gt;In order to show one last example let's write our view using
-&lt;strong&gt;HAML&lt;/strong&gt;, and passing variables to the view:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/935008.js?file=hello4.ru&quot;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Run the script again. You should see the &lt;em&gt;Hello World&lt;/em&gt; message.&lt;/p&gt;
-
-&lt;p&gt;That's it, you've seen how to create web pages by simply using
-&lt;strong&gt;Rack&lt;/strong&gt;, no frameworks, just &lt;strong&gt;Rack&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Thank you for your reading.&lt;/p&gt;
-</content>
-   <author>
-     <name>Emmanuel Delgado</name>
-     <email>emmanuel.delgado@crowdint.com</email>
    </author>
  </entry>
  
