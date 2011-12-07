@@ -6,15 +6,35 @@ email: nora.alvarado@crowdint.com
 avatar: 0db484da0a364dbadf287398f97a97db
 published: true
 ---
-In the last project I've been working on, here at __CrowdInteractive__, an issue came up when serving images on the site. We have our app on _Heroku_ and also we have a shop on _Shopify_ as an external service; one of the features we had to implement was to upload, process and serve images, for that we use the Dragonfly gem, it stores original versions of content in a datastore which could be the filesystem, s3, or any other storage service. The thing is, we needed to upload the images in the Heroku app but serve them on the Shopify side.
 
-When we upload images with [Dragonfly](https://github.com/markevans/dragonfly) in a datastore like Amazon S3 and request the URL of the dragonfly image, dragonfly serves an URL  relative to the site where we upload the image, therefore, when we render the image in the browser it receives a permanent redirect (301) to the original URL of the image at Amazon S3, and if we also want to resize the image, dragonfly applies the resize on that moment.
+In the latest project I've been working on here at __Crowd Interactive__, an
+issue came up when serving images on the site. We have our app on _Heroku_ and
+we have a shop on _Shopify_ as an external service; one of the features we
+had to implement was to upload, process and serve images. For this we use the
+Dragonfly gem, it stores original versions of the content in a datastore that can
+be the filesystem, s3, or any other storage service. The thing is, we needed
+to upload the images in the Heroku app but serve them on the Shopify
+store.
 
-Both situations lead to performance issues, the need to redirect and resolve the original image URL, and at the same moment use the server time to apply the resize process to the image. So if we have a web site, where we render a lot of images, a significant delay may be observed.
+When we upload images with [Dragonfly](https://github.com/markevans/dragonfly)
+in a datastore like Amazon S3 and request the URL of the dragonfly image,
+dragonfly serves an URL  relative to the site where we upload the image,
+therefore, when we render the image in the browser it receives a permanent
+redirect (301) to the original URL of the image at Amazon S3, and if we
+want to resize the image, dragonfly applies the transformation on the fly.
 
-An easy way to solve both problems, is using a couple of methods which Dragonfly provides to help us to remotely serve processed versions of content such as thumbnails. 
+Both situations lead to performance issues, the need to redirect and resolve
+the original image URL, and at the same moment use the server time to apply the
+resize process to the image. So if we have a web site, where we render a lot of
+images, a significant delay will be observed.
 
-For this case, we just needed to create a _Thumb_ table to store the jobs with two strings columns:  _job_ and _uid_, and then just add the configuration block for the __before\_serve__ and __define\_url__ methods inside the _app.configure do |config| block_ in on our __../initializers/dragonfly.rb__ as follows:
+An easy way to solve both problems, is using a couple of methods which
+Dragonfly provides to help us remotely serve processed versions of
+content such as thumbnails.
+
+For this case, we just needed to create a _Thumb_ table to store the jobs with
+two strings columns:  _job_ and _uid_, and then just add the configuration block
+for the __before\_serve__ and __define\_url__ methods inside the _app.configure do |config| block_ in on our __../initializers/dragonfly.rb__ as follows:
 
 {% highlight ruby %}
 require 'dragonfly'
@@ -24,7 +44,7 @@ app.configure_with(:imagemagick)
 app.configure_with(:rails)
 
 # Is up to us to determine or not an expiration time for the thumbnails
-app.cache_duration = 3600*24*365*3 
+app.cache_duration = 3600*24*365*3
 
 app.configure do |config|
   config.url_host = Rails.env.production? ? 'http://myapp.herokuapp.com' : 'http://localhost:3000'
@@ -34,19 +54,19 @@ app.configure do |config|
     uid = job.store
     # Keep track of its uid
     # Holds all the job info, e.g fetch 'image_uid' then resize to '40x40'
-    Thumb.create!( :uid => uid, :job => job.serialize )    
+    Thumb.create!( :uid => uid, :job => job.serialize )
   end
 
   # Next we define the url for our processed images, overriding the default .url method...
   config.define_url do |app, job, opts|
-    thumb = Thumb.find_by_job(job.serialize) 
+    thumb = Thumb.find_by_job(job.serialize)
     # If (the job fetch 'image_uid' then resize to '40x40') has been stored already..
     # then serve the url from the datastore filesystem, s3, etc
     if thumb
-      app.datastore.url_for(thumb.uid) 
+      app.datastore.url_for(thumb.uid)
     else
     # ...otherwise if the job hasn't been stored, serve it from the Dragonfly server as usual
-      app.server.url_for(job)  
+      app.server.url_for(job)
     end
   end
 end
@@ -61,8 +81,9 @@ Then from the second time onwards:
 
 __image.thumb('40x40').url__     _datastore url  /my-bucket.s3.amazonaws.com/2011…_
 
-This solution allowed us to cache the images, avoid permanent redirects, decrease dragonfly's jobs load, and an overall improvement on our site performance. So, hope you could find this post useful and see you next time! XD
+This solution allowed us to cache the images, avoid permanent redirects, decrease
+dragonfly's jobs load, and overall improvement on our site performance.
 
-### -Nora
+Hope you can find this post useful, see you next time! XD
 
-_PS. Thanks to Mario 'Chido' and Mumo to help me out with some concepts!!_
+_PS. Thanks to Mario 'Chido' and Mumo for helping me out with some concepts!!_
