@@ -1,11 +1,11 @@
 Vagrant::Config.run do |config|
   config.vm.box = "lucid64"
   config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
-  config.vm.network "33.33.33.10"
+  config.vm.network :hostonly, "33.33.33.10"
 
   # config.vm.boot_mode = :gui
 
-  config.vm.forward_port "jekyll"       , 4000, 4000
+  config.vm.forward_port 4000, 4000
   # config.vm.forward_port "mongodb_admin" , 28017 , 28017
   # config.vm.forward_port "mysql"         , 3306  , 3306
   # config.vm.forward_port "postgresql"    , 5432  , 5432
@@ -24,9 +24,7 @@ Vagrant::Config.run do |config|
      # chef.add_recipe "solr"
   end
 
-  config.vm.customize do |vm|
-    vm.memory_size = 1024
-  end
+  config.vm.customize ["modifyvm", :id, "--memory", "1024"]
 
   config.vm.share_folder "blog", "./blog", ".",
       {:nfs => true}
