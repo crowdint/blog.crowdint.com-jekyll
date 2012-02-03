@@ -4,9 +4,157 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2011-12-07T08:20:02-08:00</updated>
+ <updated>2012-02-03T09:44:10-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>Twitter's Bootstrap in the Asset Pipeline</title>
+   <link href="http://blog.crowdint.com/2012/02/03/bootstrap-in-the-asset-pipeline.html"/>
+   <updated>2012-02-03T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2012/02/03/bootstrap-in-the-asset-pipeline</id>
+   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
+   <content type="html">&lt;p&gt;Hello. We're in February already. We've been so unbelievable busy at
+&lt;a href=&quot;http://www.crowdint.com&quot;&gt;Crowd Interactive&lt;/a&gt; that we almost forgot about
+our blog, but worry not, we're back.&lt;/p&gt;
+
+&lt;p&gt;So, you've probably heard about
+&lt;a href=&quot;http://twitter.github.com/bootstrap/&quot;&gt;Twitter's Bootstrap&lt;/a&gt;, the new hotness
+when it comes to CSS frameworks.&lt;/p&gt;
+
+&lt;p&gt;I've been using it for a couple of websites where design doesn't really matter
+and it has really helped me make them look good without too much effort. I even
+&lt;a href=&quot;https://github.com/dabit/bootstrap-form&quot;&gt;wrote a gem&lt;/a&gt; to make forms look good
+even faster, though, since &lt;a href=&quot;https://github.com/plataformatec/simple_form&quot;&gt;SimpleForm&lt;/a&gt;
+just got Bootstrap too, I think it became a way better and more complete option
+to style your forms.&lt;/p&gt;
+
+&lt;p&gt;Well, the only piece that was missing for me was being able to use Bootstrap in
+the &lt;a href=&quot;http://guides.rubyonrails.org/asset_pipeline.html&quot;&gt;Rails 3.1+ Asset Pipeline&lt;/a&gt;,
+so I could write my own CSS classes along with the Bootstrap mixins.&lt;/p&gt;
+
+&lt;p&gt;For this example, let's pretend that we want to use Bootstrap to make all the
+tables on our website look good. If you take a look at the
+&lt;a href=&quot;http://twitter.github.com/bootstrap/base-css.html#tables&quot;&gt;documentation&lt;/a&gt;, when
+you are using the Bootstrap CSS file directly, to make a table look good you
+would have to add a couple of classes, depending on what you want to see:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;table table-bordered table-striped&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  ...
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;There's two problems here, first, look at all those classes!, second, think
+of all the tables that will be part of your website. What will happen when you
+want to remove the border on all of them? You'd have to edit one by one and
+remove the &lt;em&gt;.table-bordered. class&lt;/em&gt; A lot of unnecessary work, if you ask me.&lt;/p&gt;
+
+&lt;p&gt;This is a case where you want to use the asset pipeline to mix Bootstrap with
+your own classes.&lt;/p&gt;
+
+&lt;p&gt;First thing you have to do is include the excellent
+&lt;a href=&quot;https://github.com/metaskills/less-rails-bootstrap&quot;&gt;less-rails-bootstrap&lt;/a&gt; gem
+in your Gemfile.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;less-rails-bootstrap&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now, edit your &lt;em&gt;app/assets/stylesheets/application.css&lt;/em&gt; file and require bootstrap:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;c&quot;&gt;/*&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt; *= require &amp;#39;twitter/bootstrap&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt; *= require_self&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt; *= require_tree .&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;*/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This includes all the Bootstrap CSS directly into your own CSS, the same thing
+as including it as a separate file on your HTML headers. Look at your website,
+it already looks better just by doing this.&lt;/p&gt;
+
+&lt;p&gt;Now, go ahead and create a file called &lt;em&gt;app/assets/stylesheets/tables.css.less&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before you can use Bootstrap mixins on a &lt;em&gt;less&lt;/em&gt; file, you always have to import
+these two mixin files at the very top:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/variables&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/mixins&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Don't worry, if you don't use them at all, no code will be added to the resulting
+CSS file.&lt;/p&gt;
+
+&lt;p&gt;For our specific example, we want to use the tables mixins, so we import
+that file too:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/variables&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/mixins&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/tables&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Now, we can use the table mixins on our own classes or elements. In this case,
+I want &lt;em&gt;all&lt;/em&gt; the tables to look exactly the same:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;css&quot;&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/variables&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/mixins&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;twitter/bootstrap/tables&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bordered&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;striped&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;This makes all the tables on the website look exactly the same, all bordered and
+striped.&lt;/p&gt;
+
+&lt;p&gt;Your HTML suffers no more from class-itis:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&amp;gt;&lt;/span&gt;
+  ...
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;And still, all tables, look bordered and striped!&lt;/p&gt;
+
+&lt;p&gt;If, for example, you just want to get rid of the table border, you'd just remove the
+&lt;em&gt;.table-bordered&lt;/em&gt; mixin from this &lt;em&gt;.less&lt;/em&gt; file, not from all the view files.
+Cake.&lt;/p&gt;
+
+&lt;p&gt;You might want to take a look at all the &lt;em&gt;bootstrap .less&lt;/em&gt;
+&lt;a href=&quot;https://github.com/twitter/bootstrap/tree/master/less&quot;&gt;source files&lt;/a&gt; to get
+a better idea of all the mixins that you can use, they all have great inline
+documentation.&lt;/p&gt;
+
+&lt;h2&gt;More reading&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://guides.rubyonrails.org/asset_pipeline.html&quot;&gt;http://guides.rubyonrails.org/asset_pipeline.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.lesscss.org&quot;&gt;http://www.lesscss.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://twitter.github.com/bootstrap/&quot;&gt;http://twitter.github.com/bootstrap/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+   <author>
+     <name>David Padilla</name>
+     <email>david@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Serving Remote Content with Dragonfly</title>
@@ -1774,61 +1922,6 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
    <author>
      <name>David Padilla</name>
      <email>david@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>How to override destroy method keeping the callbacks</title>
-   <link href="http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks.html"/>
-   <updated>2011-05-02T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/05/02/How-to-override-destroy-with-callbacks</id>
-   <photo>ec9ab4537f5224def5fc54cd7465008b</photo>
-   <content type="html">&lt;p&gt;While working on a project, we were required to override the
-destroy method in order to create a soft delete method, in other words
-to change the active state of the object to deleted instead of deleting
-it from the database.&lt;/p&gt;
-
-&lt;p&gt;That was no problem at all, but, issues came when we needed this method to use
-callbacks in order for the counter caches to work properly.&lt;/p&gt;
-
-&lt;p&gt;In Rails 2 you can override the destroy method without affecting callbacks
-by overriding the method &lt;em&gt;destroy_without_callbacks&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy_without_callbacks&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_record?&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;# your code here&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;freeze&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;But in Rails 3 things have changed and the previous methods won't
-work. So, after some research, we found out that you can call the method
-callbacks with the run_callbacks method from ActiveSupport&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;run_callbacks&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:destroy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# your code here&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;In this case we use it for the destroy method, but you can use it for
-any method you override and need their callbacks. If you don't specify
-any callbacks, all callbacks will be called.&lt;/p&gt;
-
-&lt;p&gt;You can find more info
-&lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Hope this may help you in your overriding tasks.&lt;/p&gt;
-</content>
-   <author>
-     <name>Ana Rosas &amp; Omar Vargas</name>
-     <email>ana.rosas+omar.vargas@crowdint.com</email>
    </author>
  </entry>
  

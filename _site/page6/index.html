@@ -47,6 +47,80 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
+  <p class="author">
+    <span class="date"><b>May 02</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/ec9ab4537f5224def5fc54cd7465008b" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>While working on a project, we were required to override the
+destroy method in order to create a soft delete method, in other words
+to change the active state of the object to deleted instead of deleting
+it from the database.</p>
+
+<p>That was no problem at all, but, issues came when we needed this method to use
+callbacks in order for the counter caches to work properly.</p>
+
+<p>In Rails 2 you can override the destroy method without affecting callbacks
+by overriding the method <em>destroy_without_callbacks</em></p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">destroy_without_callbacks</span>
+    <span class="k">unless</span> <span class="n">new_record?</span>
+      <span class="c1"># your code here</span>
+    <span class="k">end</span>
+    <span class="nb">freeze</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>But in Rails 3 things have changed and the previous methods won't
+work. So, after some research, we found out that you can call the method
+callbacks with the run_callbacks method from ActiveSupport</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">destroy</span>
+      <span class="n">run_callbacks</span> <span class="ss">:destroy</span> <span class="k">do</span>
+        <span class="c1"># your code here</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>In this case we use it for the destroy method, but you can use it for
+any method you override and need their callbacks. If you don't specify
+any callbacks, all callbacks will be called.</p>
+
+<p>You can find more info
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html">here</a></p>
+
+<p>Hope this may help you in your overriding tasks.</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="How to override destroy method keeping the callbacks"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Ana Rosas & Omar Vargas:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Ana Rosas & Omar Vargas | ana.rosas+omar.vargas@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/04/25/one-file-web-page-with-rack.html">One File Web Page with Rack</a></h1>
   <p class="author">
     <span class="date"><b>Apr 25</b><br />2011</span>
@@ -258,144 +332,6 @@ how to disable jQuery effects off.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 06</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Last week, I spent about half a day trying to get Sinatra working
-with Compass and Blueprint. At first, it was a pain in the ass because the
-documentation is pretty lame. But after some reading here and there and
-trying via command line, I failed again and again.</p>
-
-<p>But, don't despair, there is hope... I got it to work eventually and here is how I did it:</p>
-
-<p>First of all, you have to setup your sinatra app as usual.
-If you have read
-<a href="http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html">Omar's post about setting up your sinatra app with test</a>
-you know what I'm talking about. Take a look at it if you haven't.</p>
-
-<p>It is very easy to setup your sinatra apps, a couple of minutes and you're done.</p>
-
-<p>You can also fork my ready-to-use github repo <a href="http://github.com/hecbuma/sinatra-blueprint">Sinatra+Haml+Compas+Blueprint</a>
-and make your changes there.</p>
-
-<h2>The real deal</h2>
-
-<p>Ok, now that we have our sinatra app, it's time to add some stuff so we are able
-to use Haml and Compass.</p>
-
-<p>First add these gems to you Gemfile (Compass and Haml). You will end up with something like this:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">source</span> <span class="s2">&quot;http://rubygems.org&quot;</span>
-
-<span class="n">gem</span> <span class="s1">&#39;compass&#39;</span> 
-<span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
-<span class="n">gem</span> <span class="s1">&#39;haml&#39;</span>
-<span class="n">gem</span> <span class="s1">&#39;cucumber&#39;</span>
-<span class="n">gem</span> <span class="s1">&#39;cucumber-sinatra&#39;</span>
-<span class="n">gem</span> <span class="s1">&#39;capybara&#39;</span>
-<span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Now you have to add a config file for compass:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir config
-<span class="nv">$ </span>touch compass.rb
-</code></pre>
-</div>
-
-
-<p>and add this content to it:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Sinatra</span><span class="p">)</span>
-  <span class="c1"># This is the configuration to use when running within sinatra</span>
-  <span class="n">project_path</span> <span class="o">=</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">root</span>
-  <span class="n">environment</span> <span class="o">=</span> <span class="ss">:development</span>
-<span class="k">else</span>
-  <span class="c1"># this is the configuration to use when running within the compass command line tool.</span>
-  <span class="n">css_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;stylesheets&#39;</span>
-  <span class="n">relative_assets</span> <span class="o">=</span> <span class="kp">true</span>
-  <span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span>
-<span class="k">end</span>
-
-<span class="c1"># This is common configuration</span>
-<span class="n">sass_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;views&#39;</span><span class="p">,</span> <span class="s1">&#39;stylesheets&#39;</span>
-<span class="n">images_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;images&#39;</span>
-<span class="n">http_path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
-<span class="n">http_images_path</span> <span class="o">=</span> <span class="s2">&quot;/images&quot;</span>
-<span class="n">http_stylesheets_path</span> <span class="o">=</span> <span class="s2">&quot;/stylesheets&quot;</span>
-</code></pre>
-</div>
-
-
-<p>Note that I've changed the css_dir and the image dir to use "public" instead of "static"</p>
-
-<p>Ok, we are half way there.</p>
-
-<p>Now, let's add some more configuration for compass, but this time in your app file (myapp.rb):</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;compass&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;sinatra&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;haml&#39;</span>
-
-<span class="n">configure</span> <span class="k">do</span>
-  <span class="n">set</span> <span class="ss">:haml</span><span class="p">,</span> <span class="p">{</span><span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:html5</span><span class="p">,</span> <span class="ss">:escape_html</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">}</span>
-  <span class="n">set</span> <span class="ss">:scss</span><span class="p">,</span> <span class="p">{</span><span class="ss">:style</span> <span class="o">=&gt;</span> <span class="ss">:compact</span><span class="p">,</span> <span class="ss">:debug_info</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">}</span>
-  <span class="no">Compass</span><span class="o">.</span><span class="n">add_project_configuration</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Sinatra</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;compass.rb&#39;</span><span class="p">))</span>
-<span class="k">end</span>
-
-<span class="n">get</span> <span class="s1">&#39;/stylesheets/:name.css&#39;</span> <span class="k">do</span>
-  <span class="n">content_type</span> <span class="s1">&#39;text/css&#39;</span><span class="p">,</span> <span class="ss">:charset</span> <span class="o">=&gt;</span> <span class="s1">&#39;utf-8&#39;</span>
-  <span class="n">scss</span><span class="p">(</span><span class="ss">:&quot;stylesheets/</span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="si">}</span><span class="ss">&quot;</span> <span class="p">)</span> 
-<span class="k">end</span>
-
-<span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
-  <span class="n">haml</span> <span class="ss">:index</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>With this you are telling compass to automatically convert SCSS files into CSS files.</p>
-
-<p>And the final touch: let's setup blueprint for this project.</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>compass install blueprint
-</code></pre>
-</div>
-
-
-<p>And that is all. I hope this is helpful for you.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/06/sinatra-haml-compass-blueprint.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="How to Sinatra + Haml + Compass(SCSS) + Blueprint"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Hector Bustillos:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -411,6 +347,8 @@ to use Haml and Compass.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
   <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
@@ -449,8 +387,6 @@ to use Haml and Compass.</p>
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   </ul>
 </div>

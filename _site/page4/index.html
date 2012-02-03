@@ -47,6 +47,219 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/08/11/postgresql-in-vagrant.html">How to install Postgresql 8.4 in a Vagrant box</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 11</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>If you don't know what Vagrant is, go read our <a href="http://blog.crowdint.com/2011/06/21/vagrant.html">first post about it</a></p>
+
+<h2>Introduction</h2>
+
+<p>Ok, we've been using <code>Vagrant</code> to manage our servers and services for a while, and we love it.
+It's clean, easy and we don't mess with our original systems.
+Last week we started a new proyect that uses <code>postgresql</code>, so we tried doing the common <code>apt-get install postgresql</code>
+but nothing seemed to work, there is a <a href="http://vagrantup.com/docs/provisioners/introduction.html">chef</a> recipe,
+but it looks like it has some issues and we didn't have enough time to do the research.
+In one word: Frustration.</p>
+
+<p>So, what did we do?, we installed it with our bare hands, step by step.</p>
+
+<hr />
+
+<h2>Let's start!</h2>
+
+<p>Start your vagrant box.</p>
+
+<div class="highlight"><pre><code class="bash">you<span class="nv">$ </span>vagrant up
+you<span class="nv">$ </span>vagrant ssh
+</code></pre>
+</div>
+
+
+<h2>1) Fixing the 'Please check that your locale settings' error</h2>
+
+<p>Seems like the current box from vagrant have issues with postgres &amp; lang settings. Easy to fix..</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo vim /etc/bash.bashrc
+
+<span class="c"># Add this lines to the bottom:</span>
+<span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</code></pre>
+</div>
+
+
+<p>Save &amp; Exit. Then run these commands:</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo locale-gen en_US.UTF-8
+vagrant<span class="nv">$ </span>sudo dpkg-reconfigure locales
+</code></pre>
+</div>
+
+
+<p>Ok, now your system has configured the default LANG. No more 'LANG=C' error.</p>
+
+<h2>2) Install postgres 8.4, and the comunity extras</h2>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo apt-get install postgresql postgresql-contrib; 
+</code></pre>
+</div>
+
+
+<p>Add postgres's binaries to the PATH.</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo nano /etc/bash.bashrc
+
+<span class="c"># Add this lines to the file:</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/postgresql/8.4/bin/
+<span class="nb">export </span><span class="nv">PGDATA</span><span class="o">=</span>/usr/local/pgsql/data
+</code></pre>
+</div>
+
+
+<p>Save &amp; Exit. Ok, now you can run <code>postgres --version</code> and other postgresql executables.
+Also, you've defined the default data folder, you will need that soon (1).</p>
+
+<h3>Setup postgres's user, and data folder.</h3>
+
+<p>Postgresql server should be started by his own system user,
+and it have been created by the installation but using a random password.
+Now you'll change that password.</p>
+
+<p>Change postgres's password.</p>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>sudo su
+root# passwd postgres
+<span class="c"># Type a new password, like &#39;postgres&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Init postgres data structure, and create the storage folder</p>
+
+<div class="highlight"><pre><code class="bash">root# mkdir /usr/local/pgsql/data
+root# chown postgres /usr/local/pgsql/data
+root# su postgres
+</code></pre>
+</div>
+
+
+<p>Init the data folder</p>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>initdb -D /usr/local/pgsql/data
+</code></pre>
+</div>
+
+
+<p><em>Note (1): Make sure this is the same directory as your <code>PGDATA</code> variable.</em></p>
+
+<h3>3) Enable remote connections</h3>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>vim /usr/local/pgsql/data/postgres.conf
+
+<span class="c"># Change this `listen_address=&#39;localhost&#39;` to</span>
+<span class="nv">listen_address</span><span class="o">=</span><span class="s1">&#39;*&#39;</span>
+</code></pre>
+</div>
+
+
+<p>Save &amp; exit.</p>
+
+<h3>Enable access from local network</h3>
+
+<div class="highlight"><pre><code class="bash">postgres<span class="nv">$ </span>nano /usr/local/pgsql/data/pg_hba.conf
+
+<span class="c"># Vagrant uses 33.33.33.10 like addresses</span>
+host all all 33.33.33.0/24 trust
+</code></pre>
+</div>
+
+
+<p>Save &amp; exit.</p>
+
+<h3>Start server</h3>
+
+<div class="highlight"><pre><code class="bash">vagrant<span class="nv">$ </span>su postgres
+postgres<span class="nv">$ </span>postgres
+</code></pre>
+</div>
+
+
+<h2>Done.</h2>
+
+<p>Congrats!</p>
+
+<hr />
+
+<h2>Extras</h2>
+
+<h3>Notes:</h3>
+
+<ul>
+<li>You can stop the server pressing <code>ctrl + C</code>.</li>
+<li>You can start the server in background using <code>postgres$ postgres &amp;</code></li>
+<li>You must start postgresql using postgres user.</li>
+<li><em>You could improve this post saying how to start postgresql as a service, would you?</em></li>
+</ul>
+
+
+<h3>GUI admin?</h3>
+
+<p>Now you can install tools like <code>pgAdmin3</code> to manage your postgresql server and databases directly from your host.
+It's multiplatform and free.</p>
+
+<h3>References:</h3>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/8.4/static/creating-cluster.html">Official postgres documentation</a></li>
+<li><a href="http://bookmarks.honewatson.com/2009/05/30/perl-warning-please-check-that-your-locale-settings-ubuntu/">About the locale error</a></li>
+<li><a href="http://www.pgadmin.org/">Download pgAdmin 3</a></li>
+<li><del>Mom</del></li>
+</ul>
+
+
+<h2>Disclamer &amp; feedback</h2>
+
+<p>Please note that all of these steps have been <code>discovered</code> by us entirely with some help of google's special powers...
+feel free to add comments if you know of a better way to do something, or if there is a mistake
+that need to be remarked. Also, if you are using Ubuntu, you probably won't need all of these steps,
+as Ubuntu provides the server with all the structure, and preconfigured files.</p>
+
+<p>Also, we should write another post describing how to use a Chef recipe for this
+avoiding all this s**t... And it shall be called, <code>The Easy Way</code>, coming soon.</p>
+
+<h2>Stay tuned!</h2>
+
+<h3>-Mario</h3>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/08/11/postgresql-in-vagrant.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="How to install Postgresql 8.4 in a Vagrant box"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Mario Zaizar:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/07/06/acceptance-testing-with-steak.html">Acceptance testing with Steak</a></h1>
   <p class="author">
     <span class="date"><b>Jul 06</b><br />2011</span>
@@ -330,137 +543,6 @@ file.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
-  <p class="author">
-    <span class="date"><b>Jun 21</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
-machine is old fashioned. They won't let you handle different versions, or different
-configurations, and most of the time your dev machine isn't the same as your production server.
-That's why Vagrant is there for us.</p>
-
-<p>Vagrant allows you to create different virtualized machines, easy and separated from your
-computer internals. So, you can handle all your dev environments (dev, stage, production)
-including specific versions of all servers and services.</p>
-
-<p>For example, I'm currently working on two different projects, and both use
-<a href="http://mongodb.org">mongodb</a> as the primary database locked with different
-(and incompatible) versions.</p>
-
-<p>So, I've started using Vagrant to handle that. When I need one version, I just start the box
-that contains that server, and I don't mess with my system. That's why Vagrant is so important.</p>
-
-<p>It uses <a href="http://virtualbox.org">Virtualbox</a> internally, and supports command line, easy ssh access,
-easy distribution, shared folders, and other goodies.</p>
-
-<p>You can even package your own boxes, and distribute it to all of your team members.
-One box to rule them all.</p>
-
-<h3>Installation</h3>
-
-<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em>.</p>
-
-<div class="highlight"><pre><code class="bash">    gem install vagrant
-    vagrant --help
-</code></pre>
-</div>
-
-
-<h3>Creating a new box</h3>
-
-<div class="highlight"><pre><code class="bash">    mkdir ~/Vagrants;
-    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant box add base http://files.vagrantup.com/lucid32.box;
-    vagrant init
-</code></pre>
-</div>
-
-
-<p><em>Notes:</em>
-The <code>vagrant box add</code> command will download a pre-created ubuntu linux system
-(so ~260Mb will be downloaded)
-Vagrant uses one configuration file per box, and it's called <code>VagrantFile</code>.</p>
-
-<h3>Starting your box</h3>
-
-<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant up
-</code></pre>
-</div>
-
-
-<p>And that's it. Now you have a new Linux environment ready to be configured
-and installed with your software, servers, services, etc.</p>
-
-<p><em>Note:</em> if you require direct access from the outside to your box, just enable ssh
-access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>.
-For example, if you're configuring a MySQL instance, your client will connect to 33.33.33.10:3606.</p>
-
-<h3>Accessing it</h3>
-
-<p>Now, to install your servers, all you need to do is log in to the box,
-do some apt-get install, configure your settings.</p>
-
-<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
-    vagrant ssh
-    <span class="c"># sudo apt-get install your-stuff-1.2.3</span>
-    <span class="nb">exit</span>
-</code></pre>
-</div>
-
-
-<h3>Power OFF, suspend, resume..</h3>
-
-<p>It's as easy as:</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="n">vagrant</span> <span class="n">halt</span>
-    <span class="n">vagrant</span> <span class="n">suspend</span>
-    <span class="n">vagrant</span> <span class="n">resume</span>
-    <span class="n">vagrant</span> <span class="n">destroy</span>
-</code></pre>
-</div>
-
-
-<h2>And that's it</h2>
-
-<p>Now it's your turn. Try it, learn it, use it, enjoy it.
-<em>And, see you next time!</em></p>
-
-<h3>More info</h3>
-
-<ul>
-<li>More info at: <a href="http://vagrantup.com">vagrantup.com</a></li>
-<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first Vagrant explanation.</li>
-</ul>
-
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/06/21/vagrant.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Vagrant to manage multiple dev environments"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Mario Zaizar:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -476,6 +558,8 @@ do some apt-get install, configure your settings.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
   <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
@@ -514,8 +598,6 @@ do some apt-get install, configure your settings.</p>
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   </ul>
 </div>

@@ -47,6 +47,60 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html">Happy Holidays, your friends from Crowd Interactive</a></h1>
+  <p class="author">
+    <span class="date"><b>Dec 25</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/43c0c5387a923d62b0060291c5c297f4" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<br />
+
+
+<p><img src="/images/2010/12/30/holidays.jpg" alt="Happy Holidays" /></p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/12/25/happy-holidays-from-crowd-interactive.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Happy Holidays, your friends from Crowd Interactive"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Crowd Interactive:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Crowd Interactive | info@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/12/21/cool-date-formatting-in-rails.html">Cool date formatting in Rails</a></h1>
   <p class="author">
     <span class="date"><b>Dec 21</b><br />2010</span>
@@ -362,367 +416,6 @@ them.</p>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/12/07/improving-your-dev-life-with-ree.html">Improving your development life with Ruby Enterprise Edition</a></h1>
-  <p class="author">
-    <span class="date"><b>Dec 07</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Have you ever wondered if you can do something to make your ruby development even faster?
-Are you tired of waiting for rspec to finish?
-Is your rails application eating more and more memory and you have to restart your app once in a while?</p>
-
-<p>Ok, This is one of those paths to improve your ruby dev life, nothing new, but it's very effective.</p>
-
-<h2>What is REE?</h2>
-
-<p>As you can read on the ruby site: "Ruby is a dynamic, open source programming language with a focus on simplicity and productivity. It has an elegant syntax that is natural to read and easy to write.... and it continues". But the most important part, as of this post, is its garbage collection technique: "<a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Na.C3.AFve_mark-and-sweep">mark-and-sweep</a>".</p>
-
-<p>Modern requirements has pushed developers to implement and improve current techniques to recycle memory and maximize resources.</p>
-
-<p>Ruby Enterprise Edition has come to attack this matter, replacing the garbage collector algorithm with "<a href="http://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>", implementing a forking model(reducing application's memory usage by 33% on average) and the most important part (again, as of this post): the ability to <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">tweak the garbage collector</a> via environment variables.</p>
-
-<p>Based on the documentation and some research made by well known companies (twitter, 37signals), you can gain a lot of performance if you tweak the garbage collector settings used by ruby enterprise edition, I'll show you my own benchmark tests. Being part of a release engineering team, I need to run all tests as fast as possible, finding this technique highly effective.</p>
-
-<h2>Installing REE</h2>
-
-<p>I'll guide you through this post assuming that you already have <a href="http://rvm.beginrescueend.com/rvm/install/">rvm</a> installed on your computer.</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm install ree
-<span class="c">#go and grab a drink, preferably coffee or beer</span>
-<span class="c">#some output</span>
-<span class="c">#done.</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm use ree
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm list
-
-rvm <span class="nv">rubies</span>
-
-<span class="o">=</span>&gt; ree-1.8.7-2010.02 <span class="o">[</span> x86_64 <span class="o">]</span>
-   ruby-1.8.7-p302 <span class="o">[</span> x86_64 <span class="o">]</span>
-   ruby-1.9.1-p378 <span class="o">[</span> x86_64 <span class="o">]</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>ruby -v
-ruby 1.8.7 <span class="o">(</span>2010-04-19 patchlevel 253<span class="o">)</span> <span class="o">[</span>i686-darwin10.4.0<span class="o">]</span>, MBARI 0x6770, Ruby Enterprise Edition 2010.02
-
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
-</code></pre>
-</div>
-
-
-<p>Done, you are ready to rock using ruby enterprise edition, next step, install gems under ree</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="nv">$ </span>bundle install
-Installing ...
-Installing ....
-Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
-Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02@my_new_gems
-
-ecruz@ecruz-mbp:project <span class="o">(</span>master<span class="o">)</span><span class="err">$</span>
-</code></pre>
-</div>
-
-
-<p>Hint: go to this <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">post</a> and make rvm always use your desired gemset@ruby</p>
-
-<p>Ok, perfect... let's play with our new toy, I'll run our rspec suite to demonstrate the ree power</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-..
-... in 62.33s
-
-SLOW SPEC: 5.9991  Test A
-SLOW SPEC: 5.3510  Test B
-SLOW SPEC: 7.8485  Test C
-SLOW SPEC: 7.6710  Test D
-SLOW SPEC: 5.8465  Test E
-SLOW SPEC: 5.9972  Test F
-SLOW SPEC: 5.9707  Test G
-SLOW SPEC: 5.4557  Test H
-SLOW SPEC: 6.0631  Test I
-SLOW SPEC: 5.4861  Test J
-1763/1763:     100% |##########################################| Time: 00:10:43
-
-Finished in 643.211296 seconds
-
-1763 examples, 0 failure, 1 pending
-
-real  13m45.186s
-user  11m0.745s
-sys   0m20.082s
-</code></pre>
-</div>
-
-
-<p>Mmhm, that was... 'fast', I wonder how previous numbers performed.</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use 1.8.7
-Using /Users/ecruz/.rvm/gems/ruby-1.8.7-p302
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset create my_new_gems
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
-Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>bundle install
-Installing ...
-Installing ....
-Using bundler <span class="o">(</span>1.0.3<span class="o">)</span> 
-Your bundle is <span class="nb">complete</span>! It was installed into /Users/ecruz/.rvm/gems/ruby-1.8.7-p302@my_new_gems
-
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span>rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-...
-in 84.92s
-
-SLOW SPEC: 8.6082  Test A
-SLOW SPEC: 10.3736 Test B
-SLOW SPEC: 11.3856 Test C
-SLOW SPEC: 7.4864  Test D
-SLOW SPEC: 6.5998  Test E
-SLOW SPEC: 8.8307  Test F
-SLOW SPEC: 8.8013  Test G
-SLOW SPEC: 8.8126  Test H
-SLOW SPEC: 8.9622  Test I
-SLOW SPEC: 8.9033  Test J
-1763/1763:     100% |##########################################| Time: 00:15:30
-
-Finished in 930.143889 seconds
-
-1763 examples, 0 failure, 1 pending
-
-real  19m40.629s
-user  16m13.691s
-sys   0m21.632s
-</code></pre>
-</div>
-
-
-<p>Wow! I hadn't noticed the huge difference between ruby 1.8.7 and ruby enterprise edition, that was ~1.4x faster!</p>
-
-<p>Ok, I got huge difference between two versions, the question is, can it be improved? The answer is found in REE documentation, section <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">Garbage Collector Performance Tunning</a>. Twitter has published their production settings, let's see what we can get.</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm use ree
-Using /Users/ecruz/.rvm/gems/ree-1.8.7-2010.02
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>rvm gemset use my_new_gems
-Now using gemset <span class="s1">&#39;my_new_gems&#39;</span>
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">time </span><span class="nv">RUBY_HEAP_MIN_SLOTS</span><span class="o">=</span>500000 <span class="nv">RUBY_HEAP_SLOTS_INCREMENT</span><span class="o">=</span>250000 <span class="nv">RUBY_HEAP_SLOTS_GROWTH_FACTOR</span><span class="o">=</span>1 <span class="nv">RUBY_GC_MALLOC_LIMIT</span><span class="o">=</span>50000000 rake <span class="nv">spec</span>
-<span class="o">=</span>&gt; Building fixtures
-..
-...in 44.06s
-SLOW SPEC: 6.2397  Test C
-SLOW SPEC: 8.4131  Test D
-SLOW SPEC: 5.6498  Test E
-1763/1763:     100% |##########################################| Time: 00:06:53
-
-Finished in 413.352603 seconds
-
-1763 examples, 0 failure, 1 pending
-
-real  9m26.457s
-user  6m46.696s
-sys   0m20.475s
-</code></pre>
-</div>
-
-
-<p>You should've seen my face when I came back and saw the results, that meant 2.2x faster!</p>
-
-<p>My next thought was: I have to make this a permanent change in my system, so it was easy:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_MIN_SLOTS=500000&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_INCREMENT=250000&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_HEAP_SLOTS_GROWTH_FACTOR=1&quot;</span> &gt;&gt; ~/.bash_profile
-ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;RUBY_GC_MALLOC_LIMIT=50000000&quot;</span> &gt;&gt; ~/.bash_profile
-</code></pre>
-</div>
-
-
-<p>After I put new configs to always apply, I decided to benchmark the app, via web, and I found this:</p>
-
-<h3>Using Standard Ruby 1.8.7</h3>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   56.476 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360264 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    17.71 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       5647.631 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       56.476 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          1683.51 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.8      0       6
-Processing:    89 5378 899.5   5653    6163
-Waiting:       88 5377 899.5   5652    6162
-Total:         92 5378 898.9   5653    6165
-</code></pre>
-</div>
-
-
-<h3>Ruby Enterprise Edition</h3>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   45.212 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360134 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    22.12 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       4521.241 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       45.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2102.92 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    1   1.0      0       5
-Processing:    83 4285 706.4   4456    5027
-Waiting:       82 4284 706.4   4455    5026
-Total:         88 4286 705.5   4456    5028
-</code></pre>
-</div>
-
-
-<h3>Ruby Enterprise Edition with twitter settings</h3>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   31.348 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360048 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    31.90 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       3134.784 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       31.348 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          3033.01 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.9      0       5
-Processing:   210 2962 562.4   3074    3873
-Waiting:      210 2961 562.4   3073    3872
-Total:        215 2963 561.6   3074    3873
-</code></pre>
-</div>
-
-
-<h3>Ruby Enterprise Edition with 37signals settings</h3>
-
-<p>37signals has published their production settings too, and I tried to apply them in my project and I got:</p>
-
-<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:project <span class="o">(</span>develop<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://127.0.0.1:8080/store/Category/1/1/100/new
-This is ApacheBench, Version 2.3 &lt;<span class="nv">$Revision</span>: 655654 <span class="nv">$&gt;</span>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking 127.0.0.1 <span class="o">(</span>be patient<span class="o">)</span>
-
-
-Server Software:        
-Server Hostname:        127.0.0.1
-Server Port:            8080
-
-Document Path:          /store/Category/1/1/100/new
-Document Length:        97015 bytes
-
-Concurrency Level:      100
-Time taken <span class="k">for </span>tests:   46.230 seconds
-Complete requests:      1000
-Failed requests:        0
-Write errors:           0
-Total transferred:      97360135 bytes
-HTML transferred:       97015000 bytes
-Requests per second:    21.63 <span class="o">[</span><span class="c">#/sec] (mean)</span>
-Time per request:       4622.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
-Time per request:       46.230 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
-Transfer rate:          2056.64 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
-
-Connection Times <span class="o">(</span>ms<span class="o">)</span>
-              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
-Connect:        0    0   0.9      0       5
-Processing:    79 4390 760.8   4473    5830
-Waiting:       78 4390 760.8   4472    5829
-Total:         84 4391 760.0   4473    5830
-</code></pre>
-</div>
-
-
-<p>For all my tests, I used unicorn with 3 workers running in production mode and memcached enabled. Another huge difference is memory usage, I've seen flat, much less memory utilization and response time has been responding ~1.8x faster. You should definitively consider using this approach in your production environments.</p>
-
-<p>*Disclaimer, this is not an extensive research about REE and it's features, it's just intended to show small tweaks that can make a huge difference in your daily development work.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/12/07/improving-your-dev-life-with-ree.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Improving your development life with Ruby Enterprise Edition"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Edwin Cruz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -738,6 +431,8 @@ Total:         84 4391 760.0   4473    5830
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
   <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
@@ -776,8 +471,6 @@ Total:         84 4391 760.0   4473    5830
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   </ul>
 </div>

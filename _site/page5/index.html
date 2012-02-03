@@ -47,6 +47,137 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
+  <p class="author">
+    <span class="date"><b>Jun 21</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/29612de9aa10447dc2f9ec84cf2ab1b2" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Lets start rocking like a pro. Installing services (like mysql, redis, mongo) in your own
+machine is old fashioned. They won't let you handle different versions, or different
+configurations, and most of the time your dev machine isn't the same as your production server.
+That's why Vagrant is there for us.</p>
+
+<p>Vagrant allows you to create different virtualized machines, easy and separated from your
+computer internals. So, you can handle all your dev environments (dev, stage, production)
+including specific versions of all servers and services.</p>
+
+<p>For example, I'm currently working on two different projects, and both use
+<a href="http://mongodb.org">mongodb</a> as the primary database locked with different
+(and incompatible) versions.</p>
+
+<p>So, I've started using Vagrant to handle that. When I need one version, I just start the box
+that contains that server, and I don't mess with my system. That's why Vagrant is so important.</p>
+
+<p>It uses <a href="http://virtualbox.org">Virtualbox</a> internally, and supports command line, easy ssh access,
+easy distribution, shared folders, and other goodies.</p>
+
+<p>You can even package your own boxes, and distribute it to all of your team members.
+One box to rule them all.</p>
+
+<h3>Installation</h3>
+
+<p>You will require <em>ruby</em>, <em>rubygems</em>, and <em>virtualbox 4</em>.</p>
+
+<div class="highlight"><pre><code class="bash">    gem install vagrant
+    vagrant --help
+</code></pre>
+</div>
+
+
+<h3>Creating a new box</h3>
+
+<div class="highlight"><pre><code class="bash">    mkdir ~/Vagrants;
+    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant box add base http://files.vagrantup.com/lucid32.box;
+    vagrant init
+</code></pre>
+</div>
+
+
+<p><em>Notes:</em>
+The <code>vagrant box add</code> command will download a pre-created ubuntu linux system
+(so ~260Mb will be downloaded)
+Vagrant uses one configuration file per box, and it's called <code>VagrantFile</code>.</p>
+
+<h3>Starting your box</h3>
+
+<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant up
+</code></pre>
+</div>
+
+
+<p>And that's it. Now you have a new Linux environment ready to be configured
+and installed with your software, servers, services, etc.</p>
+
+<p><em>Note:</em> if you require direct access from the outside to your box, just enable ssh
+access editing the <code>VagrantFile</code>, and uncommenting this: <code>config.vm.network "33.33.33.10"</code>.
+For example, if you're configuring a MySQL instance, your client will connect to 33.33.33.10:3606.</p>
+
+<h3>Accessing it</h3>
+
+<p>Now, to install your servers, all you need to do is log in to the box,
+do some apt-get install, configure your settings.</p>
+
+<div class="highlight"><pre><code class="bash">    <span class="nb">cd</span> ~/Vagrants/;
+    vagrant ssh
+    <span class="c"># sudo apt-get install your-stuff-1.2.3</span>
+    <span class="nb">exit</span>
+</code></pre>
+</div>
+
+
+<h3>Power OFF, suspend, resume..</h3>
+
+<p>It's as easy as:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">vagrant</span> <span class="n">halt</span>
+    <span class="n">vagrant</span> <span class="n">suspend</span>
+    <span class="n">vagrant</span> <span class="n">resume</span>
+    <span class="n">vagrant</span> <span class="n">destroy</span>
+</code></pre>
+</div>
+
+
+<h2>And that's it</h2>
+
+<p>Now it's your turn. Try it, learn it, use it, enjoy it.
+<em>And, see you next time!</em></p>
+
+<h3>More info</h3>
+
+<ul>
+<li>More info at: <a href="http://vagrantup.com">vagrantup.com</a></li>
+<li>And thanks to <a href="https://twitter.com/#!/softr8">Edwin</a>, for his first Vagrant explanation.</li>
+</ul>
+
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/06/21/vagrant.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Vagrant to manage multiple dev environments"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Mario Zaizar:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Mario Zaizar | mario@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/06/13/add-validations-to-your-ruby-classes.html">Add Validations to your Ruby classes</a></h1>
   <p class="author">
     <span class="date"><b>Jun 13</b><br />2011</span>
@@ -190,80 +321,6 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
-  <p class="author">
-    <span class="date"><b>May 02</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/ec9ab4537f5224def5fc54cd7465008b" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>While working on a project, we were required to override the
-destroy method in order to create a soft delete method, in other words
-to change the active state of the object to deleted instead of deleting
-it from the database.</p>
-
-<p>That was no problem at all, but, issues came when we needed this method to use
-callbacks in order for the counter caches to work properly.</p>
-
-<p>In Rails 2 you can override the destroy method without affecting callbacks
-by overriding the method <em>destroy_without_callbacks</em></p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="k">def</span> <span class="nf">destroy_without_callbacks</span>
-    <span class="k">unless</span> <span class="n">new_record?</span>
-      <span class="c1"># your code here</span>
-    <span class="k">end</span>
-    <span class="nb">freeze</span>
-  <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>But in Rails 3 things have changed and the previous methods won't
-work. So, after some research, we found out that you can call the method
-callbacks with the run_callbacks method from ActiveSupport</p>
-
-<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">destroy</span>
-      <span class="n">run_callbacks</span> <span class="ss">:destroy</span> <span class="k">do</span>
-        <span class="c1"># your code here</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>In this case we use it for the destroy method, but you can use it for
-any method you override and need their callbacks. If you don't specify
-any callbacks, all callbacks will be called.</p>
-
-<p>You can find more info
-<a href="http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html">here</a></p>
-
-<p>Hope this may help you in your overriding tasks.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="How to override destroy method keeping the callbacks"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Ana Rosas & Omar Vargas:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Ana Rosas & Omar Vargas | ana.rosas+omar.vargas@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -279,6 +336,8 @@ any callbacks, all callbacks will be called.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
   <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
@@ -317,8 +376,6 @@ any callbacks, all callbacks will be called.</p>
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   </ul>
 </div>

@@ -47,6 +47,56 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 18</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>And it's all thanks to <em>you</em>.</p>
+
+<p>We will be posting all the pictures, slides and videos in the <a href="http://www.magmarails.com">official Magma Rails site</a> as soon as we're done organizing and encoding everything.</p>
+
+<p>However, if you are impatient, you can take a peek at what it was like through it's <a href="http://bit.ly/bm3a4J">Hashalbum</a>.</p>
+
+<p>I loved the crowd's reaction to the event, and we're hoping it helped them catch some inspiration to choose a career path on the wonderful world of Ruby on Rails.</p>
+
+<p>We still feel so excited about Magma Rails that, the 2011 edition is already being planned. Remember to send all the feedback you can to <em>info@magmarails.com</em>, we'd love to hear from you on how to improve the event for next year. (We already know that the lack of internet in the room was a big disappointment so, don't bother sending feedback about that ;) )</p>
+
+<div style="text-align:center; margin: 10px">
+  <a href="http://www.magmarails.com"><img src="/images/2010/10/18/entrance.jpg" /></a>
+</div>
+
+
+<p>Thanks again to everyone involved.</p>
+
+<p>Hope to see you next year!</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/18/magmarails-2010-was-a-success.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Magma Rails 2010, a success!"
+          data-count="none"
+          data-via="crowdint"
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/07/magma-rails.html">Magma Rails is just around the corner!</a></h1>
   <p class="author">
     <span class="date"><b>Oct 07</b><br />2010</span>
@@ -155,235 +205,6 @@
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 22</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>If you're looking for a way to save yourself some lines of code along with some time thinking about match cases, regular expressions are your friend. Mainly used to recognize patterns, a regular expression is a way to specify a pattern of characters to be searched within a string.</p>
-
-<p>They are built within forward slashes and they even have their own class</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; Regexp</span>
-</code></pre>
-</div>
-
-
-<h2>Taxonomy of a Regular Expression</h2>
-
-<p>If you've seen a regular expression before, they must look scary to you; in fact, that's the reason why many developers won't take the time to learn about them. Underneath such a scary mob of characters, there a extremely simple structure:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/expression/o</span><span class="n">ptions</span>
-</code></pre>
-</div>
-
-
-<p>Also, in Ruby you can express a regular expression in two alternate ways:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">%r{expression}o</span><span class="n">ptions</span>
-
-<span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span> <span class="o">[</span><span class="p">,</span> <span class="n">options</span><span class="o">]</span><span class="p">)</span>
-</code></pre>
-</div>
-
-
-<p>The <em>match</em> method and the operator <em>=~</em> can be used to verify if a string matches a regular expression:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">match1</span> <span class="o">=</span> <span class="sr">/Example/</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Example of a Regexp&quot;</span><span class="p">)</span>
-<span class="c1">#=&gt; &quot;Example&quot;</span>
-<span class="nb">puts</span> <span class="n">match1</span><span class="o">.</span><span class="n">class</span>
-<span class="c1">#=&gt; MatchData</span>
-</code></pre>
-</div>
-
-
-<p>When using the <em>match</em> method, the returned value is the matched string or <em>nil</em> if no match was found. The class of the object that received the assignment is <em>MatchData</em>.</p>
-
-<h2>Building regular expressions</h2>
-
-<p>To start building our own regular expressions, there is a couple of lists we have to become familiar with:</p>
-
-<h3>1. Special Characters</h3>
-
-<p>Some characters have a special meaning in regular expressions, and must be escaped to prevent them from processing and be able to search for them. The escape character used is <strong>\</strong>.</p>
-
-<h4>Special characters list</h4>
-
-<p>^<br/>
-$<br/>
-?<br/>
-.<br/>
-/<br/>
-\<br/>
-[<br/>
-]<br/>
-{<br/>
-}<br/>
-(<br/>
-)<br/>
-+<br/>
-*</p>
-
-<h3>2. Types of expressions</h3>
-
-<p>The most common patterns we can specify in a regular expressions are included in the following table:</p>
-
-<table>
-    <tr>
-        <th>expression</th>
-        <th>meaning</th>
-  </tr>
-  <tr>
-        <td>.</td>
-        <td>any character</td>
-    </tr>
-  <tr>
-        <td>[ ]</td>
-        <td>specify a range (e.g. [a-z] means a letter from a to z)</td>
-    </tr>
-  <tr>
-        <td>\w</td>
-        <td>letter or digit; same as [0-9A-Za-z]</td>
-    </tr>
-  <tr>
-        <td>\W</td>
-        <td>any character but letter or a number</td>
-    </tr>
-  <tr>
-        <td>\s</td>
-        <td>space character; same as [ \t\n\r\f]</td>
-    </tr>
-  <tr>
-      <td>\S</td>
-      <td>any character but a space space char</td>
-    </tr>
-  <tr>
-      <td>\d</td>
-      <td>a number; same as [0-9]</td>
-    </tr>
-  <tr>
-      <td>\D</td>
-      <td>any character but a number</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>backspace (0x08), only within a range</td>
-    </tr>
-  <tr>
-      <td>\b</td>
-      <td>word limit, if NOT within a range</td>
-    </tr>
-  <tr>
-      <td>\B</td>
-      <td>not word limit</td>
-    </tr>
-  <tr>
-      <td>*</td>
-      <td>zero or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>+</td>
-      <td>one or more matches of the preceding</td>
-    </tr>
-  <tr>
-      <td>^</td>
-      <td>matches the beginning of a line</td>
-    </tr>
-  <tr>
-      <td>$</td>
-      <td>matches the end of a line</td>
-    </tr>
-    <tr>
-        <td>\A</td>
-        <td>matches the beginning of the string</td>
-    </tr>
-    <tr>
-        <td>\z</td>
-        <td>matches the end of the string (\Z will do the same unless the string ends with a '\n', in which case it matches just before the '\n')</td>
-  <tr>
-      <td>{m[,n]}</td>
-      <td>at least 'm', topping 'n' matches of the preceeding ('n' is optional)</td>
-    </tr>
-  <tr>
-      <td>?</td>
-      <td>at least one match of the preceeding (same as {1})</td>
-    </tr>
-  <tr>
-      <td>( )</td>
-      <td>group expressions</td>
-    </tr>
-    <tr>
-        <td>|</td>
-        <td>logical operator 'or', in [a|b] looks for a OR b</td>
-    </tr>
-</table>
-
-
-<h2>Common examples</h2>
-
-<h3>The e-mail address</h3>
-
-<p>This is a very common pattern example (it's the one that you get by default in <a href="" title="http://rubular.com">Rubular</a>).</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/</span>
-</code></pre>
-</div>
-
-
-<p>First, '\A' makes sure to match the string against the start of string; then ([<sup>@\s]+)</sup> groups the recipient's name, avoiding @ character and space characters.</p>
-
-<p>After the recipient's name, we have the @ character and then we have a group with two groups inside: (?:[-a-z0-9]+.) which only matches to alpha-numeric characters plus a single dot at least once; and then +[a-z]{2,}, at least two alpha-numeric characters for the domain.</p>
-
-<p>Finally, the '\Z' makes sure to match the end of line</p>
-
-<h3>The phone number</h3>
-
-<div class="highlight"><pre><code class="ruby"><span class="sr">/\((\d{3})\)\s+(\d{3})-(\d{4})/</span>
-</code></pre>
-</div>
-
-
-<p>First, ((\d{3}))\s+ will look for a group of three numeric characters enclosed by parenthesis and a blank space at least once; then (\d{3})- searches for three numeric characters and dash, and finally (\d{4}) will look for the final four numeric characters.</p>
-
-<h2>Where to look for more information</h2>
-
-<p>The star of these links is <a href="" title="http://rubular.com">Rubular</a>
-but there are some few more useful links to look at:
-<a href="http://www.regular-expressions.info/ruby.html">http://www.regular-expressions.info/ruby.html</a>
-<a href="http://www.rubyist.net/~slagell/ruby/regexp.html">http://www.rubyist.net/~slagell/ruby/regexp.html</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ">http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html#UJ</a>
-<a href="http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new">http://www.ruby-doc.org/docs/ProgrammingRuby/html/ref_c_regexp.html#Regexp.new</a>
-<a href="http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm">http://www.troubleshooters.com/codecorn/ruby/basictutorial.htm</a></p>
-
-<p>Enjoy!</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/22/first-contact-with-regular-expressions.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="First contact with regular expressions"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -399,6 +220,8 @@ but there are some few more useful links to look at:
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
   <li><span><b>07 Dec 2011</b></span> &raquo; <a href="/2011/12/07/serving-remote-content-with-dragonfly.html">Serving Remote Content with Dragonfly</a></li>
 
@@ -437,8 +260,6 @@ but there are some few more useful links to look at:
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
 
   <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
-
-  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   </ul>
 </div>

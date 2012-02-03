@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: Sinatra, the green way</title>
+  <title>Crowd Interactive Tech Blog :: Twitter's Bootstrap in the Asset Pipeline</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,143 +46,147 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>Sinatra, the green way</h1>  
+  <h1>Twitter's Bootstrap in the Asset Pipeline</h1>  
   <p class="author">
-    <span class="date"><b>Mar 14</b><br />2011</span>
+    <span class="date"><b>Feb 03</b><br />2012</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/433031df4018635dfb177f4066c37a3b" class="avatar" alt="Avatar" /></div>
-    <p>Sinatra is one of the most popular micro frameworks for Ruby, it’s an easy and fast way to create web applications or services.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <p>Hello. We're in February already. We've been so unbelievable busy at
+<a href="http://www.crowdint.com">Crowd Interactive</a> that we almost forgot about
+our blog, but worry not, we're back.</p>
 
-<p>On the other hand, Cucumber is a powerful tool to create user stories and acceptance tests.
-Together they are a quick and efficient way to create web applications.</p>
+<p>So, you've probably heard about
+<a href="http://twitter.github.com/bootstrap/">Twitter's Bootstrap</a>, the new hotness
+when it comes to CSS frameworks.</p>
 
-<p>In this post we'll create our first Sinatra application using 'outside-in' development with
-Cucumber or how I like to call it, <em>the green way</em>.</p>
+<p>I've been using it for a couple of websites where design doesn't really matter
+and it has really helped me make them look good without too much effort. I even
+<a href="https://github.com/dabit/bootstrap-form">wrote a gem</a> to make forms look good
+even faster, though, since <a href="https://github.com/plataformatec/simple_form">SimpleForm</a>
+just got Bootstrap too, I think it became a way better and more complete option
+to style your forms.</p>
 
-<h2>First Sinatra application.</h2>
+<p>Well, the only piece that was missing for me was being able to use Bootstrap in
+the <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rails 3.1+ Asset Pipeline</a>,
+so I could write my own CSS classes along with the Bootstrap mixins.</p>
 
-<p>First of all, we need to create our basic environment. Personally, I like to use a gemset per project.</p>
+<p>For this example, let's pretend that we want to use Bootstrap to make all the
+tables on our website look good. If you take a look at the
+<a href="http://twitter.github.com/bootstrap/base-css.html#tables">documentation</a>, when
+you are using the Bootstrap CSS file directly, to make a table look good you
+would have to add a couple of classes, depending on what you want to see:</p>
 
-<p>Then we need to create our application's directory. Let’s call it ‘greenway’. Inside the ‘greenway’ directory,
-call bundle init (assuming you already installed bundler) and then edit the Gemfile so that it looks
-like the example below:</p>
-
-<div class="highlight"><pre><code class="ruby">  <span class="n">source</span> <span class="s1">&#39;http://rubygems.org&#39;</span>
-
-  <span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
-  <span class="n">gem</span> <span class="s1">&#39;cucumber&#39;</span>
-  <span class="n">gem</span> <span class="s1">&#39;cucumber-sinatra&#39;</span>
-  <span class="n">gem</span> <span class="s1">&#39;capybara&#39;</span>
-  <span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span>
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;table table-bordered table-striped&quot;</span><span class="nt">&gt;</span>
+  ...
+<span class="nt">&lt;/table&gt;</span>
 </code></pre>
 </div>
 
 
-<blockquote><p>With rvm you can use diferents rubies and gemsets for each project. If you don't know rvm. What are you waiting for?
-go to <a href="http://rvm.beginrescueend.com/">RVM</a>.
-For more info on gemsets and RVM check out these posts: <a href="http://blog.crowdint.com/2010/07/28/getting-started-with-rvm.html">getting started with rvm</a> <a href="http://blog.crowdint.com/2010/08/17/use-a-project-specific-ruby-version-rvm.html">Use a project specific Ruby version</a></p></blockquote>
+<p>There's two problems here, first, look at all those classes!, second, think
+of all the tables that will be part of your website. What will happen when you
+want to remove the border on all of them? You'd have to edit one by one and
+remove the <em>.table-bordered. class</em> A lot of unnecessary work, if you ask me.</p>
 
-<p>Now we can install our gems, with this command</p>
+<p>This is a case where you want to use the asset pipeline to mix Bootstrap with
+your own classes.</p>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>bundle install
+<p>First thing you have to do is include the excellent
+<a href="https://github.com/metaskills/less-rails-bootstrap">less-rails-bootstrap</a> gem
+in your Gemfile.</p>
+
+<div class="highlight"><pre><code class="ruby">  <span class="n">gem</span> <span class="s1">&#39;less-rails-bootstrap&#39;</span>
 </code></pre>
 </div>
 
 
-<p>If you haven’t installed Bundler, you can do so with:</p>
+<p>Now, edit your <em>app/assets/stylesheets/application.css</em> file and require bootstrap:</p>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>gem install bundler
+<div class="highlight"><pre><code class="css"><span class="c">/*</span>
+<span class="c"> *= require &#39;twitter/bootstrap&#39;</span>
+<span class="c"> *= require_self</span>
+<span class="c"> *= require_tree .</span>
+<span class="c">*/</span>
 </code></pre>
 </div>
 
 
-<p>Now we need to create our Sinatra application, set the configuration for Cucumber, define the web steps and so on.
-To start we have to install the cucumber-sinatra gem, it does most of the configuration work for us.
-For more info visit <a href="https://github.com/bernd/cucumber-sinatra">cucumber-sinatra</a></p>
+<p>This includes all the Bootstrap CSS directly into your own CSS, the same thing
+as including it as a separate file on your HTML headers. Look at your website,
+it already looks better just by doing this.</p>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>cucumber-sinatra init --app Hello src/hello.rb
+<p>Now, go ahead and create a file called <em>app/assets/stylesheets/tables.css.less</em>.</p>
+
+<p>Before you can use Bootstrap mixins on a <em>less</em> file, you always have to import
+these two mixin files at the very top:</p>
+
+<div class="highlight"><pre><code class="css"><span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/variables&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/mixins&quot;</span><span class="p">;</span>
 </code></pre>
 </div>
 
 
-<h3>Writing tests</h3>
+<p>Don't worry, if you don't use them at all, no code will be added to the resulting
+CSS file.</p>
 
-<p>Now we can write our cucumber test... yes, I said test.</p>
+<p>For our specific example, we want to use the tables mixins, so we import
+that file too:</p>
 
-<p>Inside the features directory create a new file called hello.feature.</p>
-
-<div class="highlight"><pre><code class="ruby">        <span class="no">Feature</span><span class="p">:</span> <span class="no">Cucumber</span> <span class="n">web</span> <span class="n">testing</span>
-          <span class="no">In</span> <span class="no">Order</span> <span class="n">to</span> <span class="n">verify</span> <span class="k">if</span> <span class="n">my</span> <span class="n">app</span> <span class="n">works</span>
-          <span class="no">As</span> <span class="n">A</span> <span class="n">developer</span>
-          <span class="n">I</span> <span class="n">want</span> <span class="n">to</span> <span class="n">see</span> <span class="n">my</span> <span class="n">home</span> <span class="n">page</span>
-
-          <span class="no">Scenario</span><span class="p">:</span> <span class="no">View</span> <span class="n">hello</span> <span class="n">page</span>
-            <span class="no">Given</span> <span class="n">I</span> <span class="n">am</span> <span class="n">on</span> <span class="n">the</span> <span class="n">home</span> <span class="n">page</span>
-            <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="s2">&quot;It&#39;s alive!&quot;</span>
-    
+<div class="highlight"><pre><code class="css"><span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/variables&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/mixins&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/tables&quot;</span><span class="p">;</span>
 </code></pre>
 </div>
 
 
-<p>Then run the test:</p>
+<p>Now, we can use the table mixins on our own classes or elements. In this case,
+I want <em>all</em> the tables to look exactly the same:</p>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>cucumber feature/hello.feature
+<div class="highlight"><pre><code class="css"><span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/variables&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/mixins&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;twitter/bootstrap/tables&quot;</span><span class="p">;</span>
+
+<span class="nt">table</span> <span class="p">{</span>
+  <span class="o">.</span><span class="n">table</span><span class="p">;</span>
+  <span class="o">.</span><span class="n">table</span><span class="o">-</span><span class="n">bordered</span><span class="p">;</span>
+  <span class="o">.</span><span class="n">table</span><span class="o">-</span><span class="n">striped</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 
 
-<p><img src="/images/sinatra_green_way/sinatra_red_tests.jpg" alt="Red tests" /></p>
+<p>This makes all the tables on the website look exactly the same, all bordered and
+striped.</p>
 
-<p>And... it Fails! But don’t worry, that was expected. Now we are ready to write the code we need to make that test pass.</p>
+<p>Your HTML suffers no more from class-itis:</p>
 
-<h3>Writing Code</h3>
-
-<p>This is the moment to write the code to pass the test. Open the file src/hello.rb and edit it to look like the following:</p>
-
-<div class="highlight"><pre><code class="ruby">        <span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
-
-        <span class="k">class</span> <span class="nc">Hello</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
-          <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
-            <span class="s2">&quot;It&#39;s alive!&quot;</span>
-          <span class="k">end</span>
-        <span class="k">end</span>
-    
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;table&gt;</span>
+  ...
+<span class="nt">&lt;/table&gt;</span>
 </code></pre>
 </div>
 
 
-<p>And now, run the test again</p>
+<p>And still, all tables, look bordered and striped!</p>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>cucumber feature/hello.feature
-</code></pre>
-</div>
+<p>If, for example, you just want to get rid of the table border, you'd just remove the
+<em>.table-bordered</em> mixin from this <em>.less</em> file, not from all the view files.
+Cake.</p>
 
+<p>You might want to take a look at all the <em>bootstrap .less</em>
+<a href="https://github.com/twitter/bootstrap/tree/master/less">source files</a> to get
+a better idea of all the mixins that you can use, they all have great inline
+documentation.</p>
 
-<p><img src="/images/sinatra_green_way/sinatra_green_tests.jpg" alt="Green tests" /></p>
+<h2>More reading</h2>
 
-<p>Now we're green. If you want to see your web application, you can do it with:</p>
+<ul>
+<li><a href="http://guides.rubyonrails.org/asset_pipeline.html">http://guides.rubyonrails.org/asset_pipeline.html</a></li>
+<li><a href="http://www.lesscss.org">http://www.lesscss.org</a></li>
+<li><a href="http://twitter.github.com/bootstrap/">http://twitter.github.com/bootstrap/</a></li>
+</ul>
 
-<div class="highlight"><pre><code class="bash">  <span class="nv">$ </span>rackup -p 4567
-</code></pre>
-</div>
-
-
-<p>And you just have to go to "localhost:4567/" in your browser</p>
-
-<p>Congrats for your first "green way" Sinatra application! To celebrate, I’ll leave you with <a href="http://www.youtube.com/watch?v=Aht9hcDFyVw">Frank</a></p>
-
-<h2>References</h2>
-
-<p><a href="http://cukes.info/">Cucumber</a> Behavior Driven Development tool.</p>
-
-<p><a href="http://www.sinatrarb.com/">Siantra</a> a DSL for quickly creating web applications in Ruby.</p>
-
-<p><a href="https://github.com/bernd/cucumber-sinatra">Cucumber-Sinatra</a> helpful gem to initialize a cucumber environment for a sinatra application.</p>
-
-<p><a href="http://rvm.beginrescueend.com/">RVM</a> Command line tool to easily install, manage and work with multiple ruby environments.</p>
-
-<p><a href="http://gembundler.com/">Bundler</a> a tool that manages gem dependencies for your ruby application.</p>
 
     
     <p>
@@ -211,21 +215,19 @@ For more info visit <a href="https://github.com/bernd/cucumber-sinatra">cucumber
       <br><br>     
   		<div class="left">
   		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
-        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2011/03/14/Sinatra-the-green-way.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2012/02/03/bootstrap-in-the-asset-pipeline.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
       </div>
       
     </p>
   </div>
   
   <div class="author_box">
-    <p><b>Author:</b> Omar Vargas | omar@crowdint.com</p>
+    <p><b>Author:</b> David Padilla | david@crowdint.com</p>
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2011/03/08/as-monty-python-said-and-now-for-something-completly-different.html"><< As Monty Python said... "And Now For Something Completly Different"</a></div>
+      <div class="previous span-8"><a href="/2011/12/07/serving-remote-content-with-dragonfly.html"><< Serving Remote Content with Dragonfly</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2011/03/18/what-is-sinatra.html">What is Sinatra? >></a></div>
     
   </div>
 </div>
@@ -233,15 +235,15 @@ For more info visit <a href="https://github.com/bernd/cucumber-sinatra">cucumber
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
-
   <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
-  <li><span><b>18 Jul 2010</b></span> &raquo; <a href="/2010/07/18/setting-up-automation-with-cucumber-rspec-autotest.html">Setting up Automation with Cucumber, RSpec, Autotest in RoR 2.3.8</a></li>
+  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+
+  <li><span><b>24 Mar 2011</b></span> &raquo; <a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></li>
 
   <li><span><b>14 Jan 2011</b></span> &raquo; <a href="/2011/01/14/building-a-basic-dsl-to-create-callbacks-in-ruby.html">Building a basic DSL to create callbacks in Ruby</a></li>
 
-  <li><span><b>15 Nov 2011</b></span> &raquo; <a href="/2011/11/15/making-gems-with-jeweler.html">Making gems with jeweler</a></li>
+  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
 
   </ul>
   <div id="disqus_thread"></div>
