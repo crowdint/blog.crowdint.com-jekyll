@@ -47,6 +47,73 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/09/28/negative-code.html">Negative Code</a></h1>
+  <p class="author">
+    <span class="date"><b>Sep 28</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was "negative code". "What is it?" I thought.</p>
+
+<p>As astonished as I was at that time, I took a few seconds to ask my old fellow (<a href="http://www.google.com">G...</a>) "what is negative code?". Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found <a href="http://stackoverflow.com/questions/3800707/what-is-negative-code">this</a> discussion at <a href="http://stackoverflow.com">stackoverflow</a>. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:</p>
+
+<p>  "...reducing lines of code, by removing redundancies or using more concise constructs".</p>
+
+<p>Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, "Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!".</p>
+
+<p>A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:</p>
+
+<p>  "When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put "-2000" on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied."</p>
+
+<p>Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:</p>
+
+<p>"Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!".</p>
+
+<p>Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.</p>
+
+<p>Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?</p>
+
+<p>Well, there are two solutions.</p>
+
+<ul>
+<li>We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.</li>
+<li>Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".</li>
+</ul>
+
+
+<p>All those LOC we "saved", or that we didn't write, that is negative code.</p>
+
+<p>We usually fall in a hole when someone says "do not re-invent the wheel, re-use". That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.</p>
+
+<p>Remember, the less code you use, the less code you maintain!</p>
+
+<p>I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/09/28/negative-code.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Negative Code"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Luis Galaviz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/09/22/first-contact-with-regular-expressions.html">First contact with regular expressions</a></h1>
   <p class="author">
     <span class="date"><b>Sep 22</b><br />2010</span>
@@ -327,191 +394,6 @@ but there are some few more useful links to look at:
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 10</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>When we talk about a concept like DRY, we usually associate it with coding (partials, controllers, models, helpers, rakes, automatic deploys, etc.), and all that other stuff. We don't usually realize that, what we do on our day by day, like, when we create new layers, controllers, test fixtures, etc. we create (sometimes) a big source of waste.</p>
-
-<p>We have to remember that the DRY concept was conceived with the idea to avoid as much waste as we can. So, why do we need to waste time creating all we we need by separate, for example, when we create a new controller, or model?</p>
-
-<p>Fortunately, Rails 3 provides an easy way to configure your generators and make it easy for us to customize them, you can even customize their workflow.</p>
-
-<p>So, let's try an example:</p>
-
-<h2>Hands on!</h2>
-
-<p>First, we need to create a new Rails Project:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test
-</code></pre>
-</div>
-
-
-<p>In our case, we will exclude Test::Unit because we will use Cucumber and RSpec. You can easily do that with the -T option:</p>
-
-<div class="highlight"><pre><code class="bash">rails new g_test -T
-</code></pre>
-</div>
-
-
-<p>Ok, now we can configure our Gemfile. We need haml, cucumber, capybara and rspec:</p>
-
-<div class="highlight"><pre><code class="bash">group :test <span class="k">do</span>
-<span class="k">  </span>gem <span class="s2">&quot;rspec-rails&quot;</span>, <span class="s2">&quot;&gt;= 2.0.0.beta.19&quot;</span>
-  gem <span class="s1">&#39;cucumber-rails&#39;</span>
-  gem <span class="s1">&#39;capybara&#39;</span>
-end
-
-gem <span class="s1">&#39;haml-rails&#39;</span>
-</code></pre>
-</div>
-
-
-<p>Then, we just need to install our gems to start playing with our generators:</p>
-
-<div class="highlight"><pre><code class="bash">bundle install
-</code></pre>
-</div>
-
-
-<p>And, that's it! Now we have a perfect (almost) environment to work with.</p>
-
-<h2>Generators</h2>
-
-<p>Now, let's invoke a Rails generator to create a new controller called Test:</p>
-
-<div class="highlight"><pre><code class="bash">rails g controller Test
-</code></pre>
-</div>
-
-
-<p>This function is just going to invoke many other generators, to create something like this:</p>
-
-<div class="highlight"><pre><code class="bash">create  app/controllers/test_controller.rb
-invoke  haml
-create    app/views/test
-invoke  test_unit
-create    <span class="nb">test</span>/functional/test_controller_test.rb
-invoke  helper
-create    app/helpers/test_helper.rb
-invoke    test_unit
-create      <span class="nb">test</span>/unit/helpers/test_helper_test.rb
-</code></pre>
-</div>
-
-
-<p>As you can see, this generator is still invoking Test::Unit as our test environment, but what we want is to invoke Rspec, so let's change our generators workflow. First we need to install Rspec and Cucumber on our project:</p>
-
-<div class="highlight"><pre><code class="bash">rails g cucumber:install
-rails g rspec:install
-</code></pre>
-</div>
-
-
-<p>Then, just add these lines to our (<del>'~/application.erb'</del>) '~/application.rb' (Thanks to Bernardo466)</p>
-
-<div class="highlight"><pre><code class="bash">config.generators <span class="k">do</span> |g|
-  g.test_framework :rspec
-end
-</code></pre>
-</div>
-
-
-<p>If we try to generate a new controller called RspecTest something like this will show up:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller RspecTest
-create  app/controllers/rspec_test_controller.rb
-invoke  haml
-create    app/views/rspec_test
-invoke  rspec
-create    spec/controllers/rspec_test_controller_spec.rb
-invoke  helper
-create    app/helpers/rspec_test_helper.rb
-invoke    rspec
-create      spec/helpers/rspec_test_helper_spec.rb
-</code></pre>
-</div>
-
-
-<p>We could also specify that we don't want to create view specs just by adding ':views => false' in our '~/application.rb' like this:</p>
-
-<div class="highlight"><pre><code class="bash">g.test_framework :rspec, :views <span class="o">=</span>&gt; <span class="nb">false</span>
-</code></pre>
-</div>
-
-
-<p>Now what? Do you want to create your own generator? Generators, can even generate generators (sounds like a tongue twisters), check this out:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g generator my_test_method
-create  lib/generators/my_test_method
-create  lib/generators/my_test_method/my_test_method_generator.rb
-create  lib/generators/my_test_method/USAGE
-create  lib/generators/my_test_method/templates
-</code></pre>
-</div>
-
-
-<p>This generator creates the files you need to start working. How does it work? Well, it's simple. Basically a directory named "generators" is created in your lib folder and, 'my_generator'_generator.rb is where you will put your generator logic, USAGE describes what your generator makes and 'templates' is where you will put you generator templates.</p>
-
-<p>What commands can you use inside your generator? Rails 3 generators were created on top of <a href="http://github.com/wycats/thor">Thor</a>, so you could check Thor <a href="http://rdoc.info/github/wycats/thor/master">documentation</a>, and also there is a great document you can follow on <a href="http://edgeguides.rubyonrails.org/generators.html">RailsGuides</a>.</p>
-
-<p>Anyway, if you want to know more about an specific generator, you could use this command:</p>
-
-<div class="highlight"><pre><code class="bash">rails g <span class="o">[</span>generator_name<span class="o">]</span> -h
-</code></pre>
-</div>
-
-
-<p>There is a list of generators that Rails can handle, also there are others hidden in many gems. If you wan to obtain a lot of helpful generators, I'd recommend you check the <a href="http://github.com/indirect/rails3-generators">rails3-generators</a> gem, there are many helpful generators that can make your coding more DRY.</p>
-
-<p>By the way, there are other things I can't make them to do. For example, if I try to use "my_test_method_generator" as follows, I get an error:</p>
-
-<p>in "application.rb":</p>
-
-<div class="highlight"><pre><code class="bash">g.helper :myhelper
-</code></pre>
-</div>
-
-
-<p>in you terminal:</p>
-
-<div class="highlight"><pre><code class="bash">~<span class="nv">$ </span>rails g controller <span class="o">[</span>name<span class="o">]</span>
-...
-error  myhelper <span class="o">[</span>not found<span class="o">]</span>
-</code></pre>
-</div>
-
-
-<p>However, generators can really help you when you try to be as DRY as possible. So, try it, you might like it.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/10/customize-your-generators-workflow.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Customize your Generators Workflow in Rails 3.0.0"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Luis Galaviz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -527,6 +409,8 @@ error  myhelper <span class="o">[</span>not found<span class="o">]</span>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -565,8 +449,6 @@ error  myhelper <span class="o">[</span>not found<span class="o">]</span>
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

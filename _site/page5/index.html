@@ -47,6 +47,126 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html">Rails 3.1, Compass and Blueprint (Updated)</a></h1>
+  <p class="author">
+    <span class="date"><b>Jun 27</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>So, we all know that Rails 3.1 comes with a Sass compiler. But still,
+there are a few of us that used <a href="http://compass-style.org/">compass</a> on
+most of our pre 3.1 projects not just
+because of the sass, but because of the <a href="http://www.blueprintcss.org/">blueprint</a>
+integration.</p>
+
+<p>Well, it's very easy to use Compass with Rails 3.1 and get all those
+Blueprint mixins for your stylesheets.</p>
+
+<p>All you have to do is, add the compass gem to your Gemfile:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">group</span> <span class="ss">:assets</span> <span class="k">do</span>
+  <span class="n">gem</span> <span class="s1">&#39;compass&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 0.12.alpha&#39;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p><em>NOTE:</em> If you want the scss files compiled on the fly, you have to put
+the compass gem line <em>outside of the assets group</em>.</p>
+
+<p>The trick here is that you have to use the latest alpha version of compass <span class="updated">compass edge version from git, and
+the <em>rails31</em> branch currently under development</span>.</p>
+
+<p><span class="updated">This might change in future compass releases, but for now, this is the
+only way.</span></p>
+
+<h2>Blueprint styles</h2>
+
+<p>If you just want to use the blueprint classes on your application, create a
+<em>blueprint.css.scss</em> file on <em>app/assets/stylesheets</em> with
+the following contents:</p>
+
+<div class="highlight"><pre><code class="css">  <span class="k">@import</span> <span class="s1">&#39;_blueprint&#39;</span><span class="p">;</span>
+
+  <span class="k">@include</span> <span class="nt">blueprint</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>This file will just be used to load the blueprint css framework onto our
+stylesheet files.</p>
+
+<p>Now, on <em>app/assets/stylesheets/application.css</em> make sure you require
+the file that you just created by adding it right after <em>require_self</em>
+in the manifest:</p>
+
+<div class="highlight"><pre><code class="css">  <span class="o">*=</span> <span class="nt">require_self</span>
+  <span class="o">*=</span> <span class="nt">require</span> <span class="nt">blueprint</span>
+  <span class="o">*=</span> <span class="nt">require_tree</span> <span class="o">.</span>
+</code></pre>
+</div>
+
+
+<p>And, that's it. Now you'll be able to use all the usual blueprint styles
+on your Rails 3.1 application.</p>
+
+<h2>Mixins</h2>
+
+<p>If you want to use the blueprint mixins, you must do something a bit
+different than the regular asset pipeline stuff.</p>
+
+<p>Let's say you will have a bookstore.css file with all your styles. If
+this is the case, create a file named
+<em>app/assets/stylesheets/bookstore.css.scss</em> with the following contents:</p>
+
+<div class="highlight"><pre><code class="css"><span class="c">/*</span>
+<span class="c">  *= require_self</span>
+<span class="c">  *= require blueprint</span>
+<span class="c">*/</span>
+
+<span class="k">@import</span> <span class="s1">&#39;bookstore/*&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<p>This way, all the css.scss on your <em>app/assets/stylesheets/bookstore</em>
+will be compiled into bookstore.css.</p>
+
+<h3>Why not just use require_tree ./bookstore?</h3>
+
+<p>You might think that it's better to use require_tree for this, but, since the asset
+pipeline compiles each individual css file for development, all of them
+would have to be headed with the 'require blueprint' line, else, it will
+show you an error saying that it doesn't recognize the mixins on each
+file.</p>
+
+<p>Hope this helps you somehow.</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/06/27/rails-3-1-compass-and-blueprint.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Rails 3.1, Compass and Blueprint (Updated)"
+          data-count="none"
+          data-via="crowdint"
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/06/21/vagrant.html">Vagrant to manage multiple dev environments</a></h1>
   <p class="author">
     <span class="date"><b>Jun 21</b><br />2011</span>
@@ -252,75 +372,6 @@ the <a href="http://edgeguides.rubyonrails.org/3_0_release_notes.html#validation
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
-  <p class="author">
-    <span class="date"><b>May 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
-
-<p>I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.</p>
-
-<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
-
-<p>And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.</p>
-
-<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
-
-<p>The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
-
-<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
-
-<p>Since we enjoy conferences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.</p>
-
-<p>We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.</p>
-
-<p><a href="http://www.magmarails.com">
-<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
-</a></p>
-
-<p>Right now we're looking for <a href="http://www.magmarails.com/callforpapers">speakers</a>
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Railsconf 2011"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -336,6 +387,8 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -374,8 +427,6 @@ and sponsors, contact us if you're interested. I promise it will be a lot of fun
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

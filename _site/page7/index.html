@@ -47,6 +47,103 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></h1>
+  <p class="author">
+    <span class="date"><b>Apr 13</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the
+TDD + BDD approach when coding new applications.</p>
+
+<p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use
+<a href="http://cukes.info">Cucumber</a> for BDD, although
+lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of
+Cucumber and so far I am loving it.</p>
+
+<p>When you are using Capybara + Selenium for testing with Cucumber or
+Steak, sometimes you can get an error when you write tests for clicks that are
+followed by an animation.</p>
+
+<p>For example:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">scenario</span> <span class="s2">&quot;New resource&quot;</span> <span class="k">do</span>
+  <span class="n">click_link</span> <span class="s1">&#39;New Resource&#39;</span>
+  <span class="c1"># Shows up an overlay window with the form that</span>
+  <span class="c1"># takes 5 seconds to show up</span>
+
+  <span class="n">fill_in</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;Some value&#39;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>You get the following error:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Error</span><span class="o">::</span><span class="no">ElementNotDisplayedError</span><span class="p">:</span>
+  <span class="no">Element</span> <span class="n">is</span> <span class="ow">not</span> <span class="n">currently</span> <span class="n">visible</span> <span class="ow">and</span> <span class="n">so</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">interacted</span> <span class="n">with</span>
+</code></pre>
+</div>
+
+
+<p>This happens because Capybara is trying to access the input element, but
+since the animation is still happening it is not visible yet.</p>
+
+<p>To avoid this, you can simply tell jQuery to turn off all effects when
+in test mode.</p>
+
+<p>How? Very simple.</p>
+
+<p>All you have to do is add this line within the <code>&lt;head&gt;</code>
+section of your layout.</p>
+
+<h3>Haml</h3>
+
+<div class="highlight"><pre><code class="haml"><span class="p">=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span>
+</code></pre>
+</div>
+
+
+<h3>ERB</h3>
+
+<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span> <span class="cp">%&gt;</span><span class="x"></span>
+</code></pre>
+</div>
+
+
+<p>This way, every time you run your tests you will be telling jQuery to disable
+all effects and your test will pass, and, in some cases, even perform faster.</p>
+
+<p>You can <a href="http://api.jquery.com/jQuery.fx.off/">read the documentation here</a> for more info on
+how to disable jQuery effects off.</p>
+
+<p>Enjoy!</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Turn jQuery effects off for testing"
+          data-count="none"
+          data-via="crowdint"
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></h1>
   <p class="author">
     <span class="date"><b>Apr 06</b><br />2011</span>
@@ -418,268 +515,6 @@ The truth is that adding an extra slash to the end is not that big of a deal. Do
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/03/24/how-to-write-good-css.html">How to write good CSS</a></h1>
-  <p class="author">
-    <span class="date"><b>Mar 24</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/fa56812143dd6049ef19d1a8032f21da" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>After a while of working with CSS, in different projects and with
-different people, I have realized that there is a lack of standards for
-it. Like, when you have to make some corrections or improvements and open
-the CSS file and you get a thousand lines of code with no comments at
-all.</p>
-
-<p>Well, I have a couple Ideas of how CSS should be coded:</p>
-
-<h2>The ABC of CSS</h2>
-
-<h3>Keep it simple.</h3>
-
-<p>Imagine that every time you write a <code>&lt;div&gt;</code> tag somebody kicks you in the nuts,
-painful huh?... Use only the necessary div tags. Think twice before writing a
-one, because if you don’t care about it you will get a super complex page.
-Always remember to keep it simple.</p>
-
-<h3>Use HTML tags for their propose</h3>
-
-<p>I'm always finding some code like this:</p>
-
-<div class="highlight"><pre><code class="css">   <span class="o">&lt;</span><span class="nt">table</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nt">tr</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">td</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">tr</span><span class="o">&gt;</span>
-   <span class="o">&lt;/</span><span class="nt">table</span><span class="o">&gt;</span>
-  
-</code></pre>
-</div>
-
-
-<p>As you see, it's a common list an instead of using <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code> its using a <code>&lt;table&gt;</code>.</p>
-
-<p>A better way to do this would be:</p>
-
-<div class="highlight"><pre><code class="css">    <span class="o">&lt;</span><span class="nt">ul</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Potatoes</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Apples</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Watermelons</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Oranges</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">Cucumbers</span><span class="o">&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nt">ul</span><span class="o">&gt;</span>
-  
-</code></pre>
-</div>
-
-
-<p>You <strong>must</strong> use the correct tag; if you are not familiar with all of them
-take a look at <a href="http://w3schools.com/tags/default.asp">w3schools html reference</a>.
-Here you will find the complete list of tags with examples and everything you need.</p>
-
-<p>Also, this is important because, it is easier for search engines to
-identify your page and understand its code. Remember that search engines
-are like a blind users.</p>
-
-<h3>Use comments</h3>
-
-<p>Try to put comments on your CSS. It is easier for others to see the comments and
-know what the styles are being used for.</p>
-
-<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Common</span> <span class="nt">tags</span> <span class="nt">styles</span>
-  <span class="nt">a</span> <span class="p">{</span>
-    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">styles</span>
-  <span class="nf">#header</span><span class="p">{</span>
-    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
-  <span class="p">}</span>
-
-  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
-    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="o">//</span><span class="nt">end</span>
-
-  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span> <span class="nt">styles</span>
-  <span class="nf">#left-menu</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
-  <span class="p">}</span>
-  <span class="o">//</span><span class="nt">end</span>
-</code></pre>
-</div>
-
-
-<h3>Avoid absolute positions</h3>
-
-<p>When you start making CSS, you can find it "easy" to put every element on
-the right place using absolute position. This is a very common, yet
-incorrect
-method to align your elements. Sometimes when you use absolute positions,
-you will get weird behavior after a window resize or in different
-browsers or screens, just try to avoid it and use margins and
-paddings to do the work.  Always remember <a href="http://www.w3.org/TR/CSS21/box.html">the box model</a>.</p>
-
-<h2>Ok, First steps</h2>
-
-<h3>Reset your CSS</h3>
-
-<p>Did you ever realize the huge differences between the browser when you put
-a text into a <code>&lt;div&gt;</code> or inside <code>&lt;p&gt;</code>? You will always face a couple of differences in
-how each browser renders the elements.</p>
-
-<p><img src="/images/2011/renders.jpg" title="Renders" alt="Diferent renders" /></p>
-
-<p>This happens because the browsers have different ways to render the elements
-of a page. An easy way to avoid this is by resetting your CSS, a simple
-technique where you put all the style to 0/none by default.
-You can achieve this by applying <a href="http://meyerweb.com/eric/tools/css/reset/index.html">Eric Meyer's css reset</a>,
-download it and put it on your public folder, or link to the url
-directly.</p>
-
-<h3>Styles for tags first</h3>
-
-<p>I prefer to write styles for tags first, it’s something like starting from
-the general to the particular. In other words, make it general, and use
-exceptions only when it is really necessary.</p>
-
-<div class="highlight"><pre><code class="css">  <span class="nt">body</span><span class="p">{</span>
-    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="nt">h1</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="nc">.secondary_pages</span> <span class="nt">h1</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">.</span> <span class="m">1em</span><span class="p">;</span>
-    <span class="k">font-family</span><span class="o">:</span> <span class="n">Verdana</span><span class="p">;</span>
-  <span class="p">}</span>
-</code></pre>
-</div>
-
-
-<h3>Be modular</h3>
-
-<p>Remember to separate your CSS like modules, first, the body definitions,
-then the header definitions, and so on.
-Also separate them by files like <strong>main.css</strong> and <strong>form.css</strong>.</p>
-
-<div class="highlight"><pre><code class="css">  <span class="o">//</span> <span class="nt">Header</span> <span class="nt">CSS</span>
-  <span class="nf">#header</span><span class="p">{</span>
-    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nf">#header</span> <span class="nt">a</span><span class="p">{</span>
-    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="o">//</span> <span class="nt">Left</span> <span class="nt">Menu</span>
-  <span class="nf">#left-menu</span><span class="p">{</span>
-    <span class="k">font-size</span><span class="o">:</span> <span class="m">.8em</span><span class="p">;</span> 
-  <span class="p">}</span>
-  <span class="nt">a</span><span class="p">{</span>
-    <span class="k">text-transform</span><span class="o">:</span> <span class="k">uppercase</span><span class="p">;</span>
-  <span class="p">}</span>
-</code></pre>
-</div>
-
-
-<h3>Do you feel like I am re-writing the whole bible? (Old and new testament!)</h3>
-
-<p>Sometimes you start to write CSS and then you get velocity, or you have a
-deadline, then you get yourself coding like a mad man. Tons and tons of CSS
-lines. Then, you end up with like 10 different files with a thousand lines on
-each one.</p>
-
-<p>Well if you end up having that, you are doing it completely wrong.</p>
-
-<p>Take your time to write the CSS, once you get the expected result,
-take a look at your code and try to clean the clean it.</p>
-
-<blockquote><p>Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</p>
-
-<h4>Antoine de Saint-Exupery <em>French writer (1900 - 1944)</em></h4></blockquote>
-
-<p>There's always a way to make your code look better. If you take care about
-it you will get maintainable, very easy to read and understandable code.</p>
-
-<h3>Cross-browser testing <strong>ALWAYS</strong></h3>
-
-<p>I highlighted "always" with caps and bold, because it is something that we
-forget about very often. We write and write CSS lines, and we test on Firefox or
-Chrome because we love those browsers, and we are very happy about the way
-our site looks, then after a couple of days of coding, you start thinking
-about how it will look on IE... that awfulness all web developers fear to
-see their work on. You test in IE and you realize that the entire
-site is messed up, the whole layout is broken.</p>
-
-<p>You don’t know where to start but you do it anyway.
-Begin making changes here and there and you finish with tons
-of patches or writing a new CSS file just for IE.</p>
-
-<p>That’s not necessary if you take into consideration what you are doing right
-from the first step. If you wrote 2 lines, verify in all browsers that your
-style is working right. By doing this you will end with clean code and
-compatible with all browsers.</p>
-
-<h3>Remember the W3C</h3>
-
-<p>Always keep in mind the standards and validate your site using the
-<a href="http://jigsaw.w3.org/css-validator/">CSS</a> and
-<a href="http://validator.w3.org/">HTML</a> validators. If your code passes the validation, your site will
-be readable for all browsers for sure.</p>
-
-<h3>My final words</h3>
-
-<p>All suggestions regarding good CSS writing, are about taking care of the
-details.  Details make the difference, you only have to put some attention
-and code in the right way.  Remeber that sometimes your code is gonna be
-seen by other developers and you have to make it clear for them and for the
-browsers too.</p>
-
-<p>Also remember the accessibility of your site, think of the people at all
-times... people with some illness or different capacities, like the blind
-people and so on. You can check the <a href="http://www.w3.org/TR/WCAG10/">Web Content Accessibility Guidelines</a>
-and try to at least complete the guides for Level A, the visitors of your
-site will be grateful about this.</p>
-
-<p><strong>And for God’s sake... Code clean!!!!</strong></p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/03/24/how-to-write-good-css.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="How to write good CSS"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Hector Bustillos:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Hector Bustillos | hector.bustillos@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -695,6 +530,8 @@ site will be grateful about this.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -733,8 +570,6 @@ site will be grateful about this.</p>
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

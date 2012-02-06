@@ -4,9 +4,54 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2012-02-03T09:44:10-08:00</updated>
+ <updated>2012-02-06T08:43:59-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
+ 
+ <entry>
+   <title>MagmaRails 2012 Announced</title>
+   <link href="http://blog.crowdint.com/2012/02/06/magmarails-2012-announced.html"/>
+   <updated>2012-02-06T00:00:00-08:00</updated>
+   <id>http://blog.crowdint.com/2012/02/06/magmarails-2012-announced</id>
+   <photo>2ae35d2e0dfd4ca72c07ead1eec4a8f7</photo>
+   <content type="html">&lt;p&gt;MagmaRails Round 3 has been announced for this year, this time it will happen
+from June 6 - 8 in the beautiful city of Manzanillo, Colima.&lt;/p&gt;
+
+&lt;p&gt;After the forces of nature made us cancel and hold a smaller event for
+Round 2, this new date will have much better weather conditions
+to have a great conference.&lt;/p&gt;
+
+&lt;p&gt;Between the confirmed keynoters we have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Aaron Patterson (Aaron Patterson) from AT&amp;amp;T Interactive&lt;/li&gt;
+&lt;li&gt;Scott Chacon (Scott Chacon) from &lt;a href=&quot;http://www.github.com&quot;&gt;Gitgub&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Dr Nic (Dr Nic Williams) from &lt;a href=&quot;http://www.engineyard.com&quot;&gt;EngineYard&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;And many more speakers from Ruby/Rails world.&lt;/p&gt;
+
+&lt;p&gt;Also we will have workshops from basic to intermediate levels for anyone
+that wants to learn Ruby/Ruby On Rails.&lt;/p&gt;
+
+&lt;p&gt;Check out the @magmarails website for more
+details: &lt;a href=&quot;http://www.magmarails.com/#main&quot;&gt;http://magmarails.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Also, if you are a speaker and want to take part of MagmaRails, we have re-opened
+our &lt;a href=&quot;http://www.magmarails.com/#cfp&quot;&gt;call for papers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As always, Github is one of our main sponsors, but if you or your company is
+interested in sponsoring MagmaRails you are welcome to request our
+prospectus: &lt;a href=&quot;http://sponspors.magmarails.com&quot;&gt;http://sponsors.magmarails.com/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;See you in Manzanillo!&lt;/p&gt;
+</content>
+   <author>
+     <name>Mario Chavez</name>
+     <email>mac@crowdint.com</email>
+   </author>
+ </entry>
  
  <entry>
    <title>Twitter's Bootstrap in the Asset Pipeline</title>
@@ -1872,56 +1917,6 @@ the &lt;a href=&quot;http://edgeguides.rubyonrails.org/3_0_release_notes.html#va
    <author>
      <name>Omar Vargas</name>
      <email>omar@crowdint.com</email>
-   </author>
- </entry>
- 
- <entry>
-   <title>Railsconf 2011</title>
-   <link href="http://blog.crowdint.com/2011/05/24/railsconf-2011.html"/>
-   <updated>2011-05-24T00:00:00-07:00</updated>
-   <id>http://blog.crowdint.com/2011/05/24/railsconf-2011</id>
-   <photo>d32b52ec6403614b1adf3e648cbbe584</photo>
-   <content type="html">&lt;p&gt;Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
-every year, it was a ton of fun, there was a lot to learn and it was inspiring.&lt;/p&gt;
-
-&lt;p&gt;I love going to conferences, not just because of the talks, but, because you
-get to meet people. I like talking to the persons that wrote the gems that
-I use everyday and thank them for their effort in creating awesome code so
-we don't have to.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/guns.jpg&quot; alt=&quot;The Crowd Interactive team&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And not just gem writers, it's also fun to meet all those other Ruby
-developers that enjoy using Rails and everything else as much as I do.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/sign.jpg&quot; alt=&quot;The sign&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The best thing you can take out of the experience is inspiration.
-Inspiration to follow the leaders. Inspiration to collaborate to open
-source. Or, as Corey Haines said on his keynote, inspiration to be awesome.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/2011/05/24/friends.jpg&quot; alt=&quot;Friends at Railsconf&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Since we enjoy conferences so much, last year we were bummed that there was not
-a lot of Ruby conferences in Mexico so we organized
-&lt;a href=&quot;http://www.magmarails.com&quot;&gt;Magma Rails&lt;/a&gt;, and it ended
-up being better than expected. this year we're organizing its second edition
-and it's going to be twice as awesome as last year.&lt;/p&gt;
-
-&lt;p&gt;We're moving to Manzanillo Colima, since this year we are inviting people
-from all over the world, it makes more sense to have it at a tourist friendly
-city. You will be able to smell the ocean from your seat.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.magmarails.com&quot;&gt;
-&lt;img src=&quot;http://www.magmarails.com/images/foto-magma.png&quot; alt=&quot;Last year&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Right now we're looking for &lt;a href=&quot;http://www.magmarails.com/callforpapers&quot;&gt;speakers&lt;/a&gt;
-and sponsors, contact us if you're interested. I promise it will be a lot of fun!&lt;/p&gt;
-</content>
-   <author>
-     <name>David Padilla</name>
-     <email>david@crowdint.com</email>
    </author>
  </entry>
  

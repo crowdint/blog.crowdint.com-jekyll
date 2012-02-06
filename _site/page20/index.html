@@ -47,6 +47,95 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 13</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>If you are stuck in your project using <a href="http://github.com/technoweenie/attachment_fu"><em><strong>attachment_fu</strong></em></a> and<br />
+<a href="http://github.com/rails/acts_as_list"><em><strong>acts_as_list</strong></em></a> plugins/gems in your project,<br />
+you might be facing a weird performance issue when dealing with images with thumbnails.</p>
+<p>Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:</p>
+<div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
+<span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
+<span class="k">LIMIT</span> <span class="mi">1</span>
+</code></pre>
+</div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
+<p>So, let&#8217;s assume the following models:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Image</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:article</span>
+  <span class="n">acts_as_list</span> <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="ss">:article</span>      <span class="c1">#acts_as_list declaration</span>
+
+  <span class="n">has_attachment</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="ss">:image</span><span class="p">,</span>   <span class="c1">#attachment_fu declaration</span>
+    <span class="ss">:storage</span> <span class="o">=&gt;</span> <span class="ss">:file_system</span><span class="p">,</span>
+    <span class="ss">:thumbnails</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="o">]</span><span class="p">,</span> <span class="ss">:tiny</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="o">]</span><span class="p">}</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.</p>
+<p>If you add an image attachment now&#8230; <strong>the slow query will be executed for each thumbnail</strong>. The reasons are:</p>
+<ol>
+	<li>The image file is uploaded to the server.</li>
+	<li>attachment_fu saves the image and creates a new Image row with article_id established.</li>
+	<li>acts_as_list assigns the position attribute to the parent image.</li>
+	<li>attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = <span class="caps">NULL</span></li>
+	<li>acts_as_list assigns the position attribute to images after the thumbnail created.</li>
+	<li>Repeat step #4 and #5 for each thumbnail to be created.</li>
+</ol>
+<p>The problem with this procedure, if you see the acts_as_list source code:</p>
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">scope_condition</span>
+  <span class="k">if</span> <span class="c1">#{configuration[:scope].to_s}.nil?</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> IS NULL&quot;</span>
+  <span class="k">else</span>
+    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> = </span><span class="se">\#</span><span class="s2">{</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2">}&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>As we configured our Image model to use <code>acts_as_list :scope =&gt; :article!</code>, and in the thumbnails the article_id is <span class="caps">NULL</span>, the condition is generated as &#8220;<strong><span class="caps">WHERE</span> (article_id  IS <span class="caps">NULL</span>)</strong>&#8221;.</p>
+<p>To avoid this, you need to manually <strong>set the article_id value before the thumbnails are saved</strong>. This can be done using a <strong>callback in the Image model</strong> (as suggested in acts_as_list source code):</p>
+<div class="highlight"><pre><code class="ruby"><span class="c1">#Callback before a thumbnail is saved...</span>
+<span class="c1">#Assign the article_id to avoid a HUGE query with IS NULL clause</span>
+<span class="n">before_thumbnail_saved</span> <span class="k">do</span> <span class="o">|</span><span class="n">record</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">|</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
+  <span class="n">record</span><span class="o">.</span><span class="n">article_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">article_id</span> <span class="k">if</span> <span class="n">image</span>
+<span class="k">end</span>
+</code></pre>
+</div><p>With this callback, after generating a thumbnail each image will have the <code>article_id</code> attribute filled. Thus in the Article model, the has_many relation is defined as:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
+</code></pre>
+</div><p>Now, <strong>only the article images will have thumbnail.nil</strong> and the thumbnails will be hidden in the image.thumbnails relation.</p>
+<h3>Conclusion</h3>
+<p>In our project, we <strong>expected a 570% <span class="caps">SQL</span> improvement</strong> when creating, modifying or deleting image attachments.</p>
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Improve performance between attachment_fu and acts_as_list"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Chalo Fernandez:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/08/06/our-git-workflow.html">Our git workflow</a></h1>
   <p class="author">
     <span class="date"><b>Aug 06</b><br />2010</span>
@@ -336,169 +425,6 @@ git commit -m <span class="s2">&quot;First commit&quot;</span>
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></h1>
-  <p class="author">
-    <span class="date"><b>Jul 28</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Being a Rails developer brings up the need to work with different Ruby versions, whether it is by a project requirement or to test new features coming out the oven... and the same applies to Rails.</p>
-
-<p>With Rails being in a phase where version 3 is in development, you may (and should) want to take a look to its new features, but surely you don't want to touch your perfectly working Rails 2.3.x installation.</p>
-
-<p>Also, you may be working with Ruby 1.8.x and need to test if your current project works fine with Ruby 1.9.x, so... is there something you can do to have several Ruby mixed with several Rails versions? Chances are you already have heard about Ruby Version Manager (RVM), the amazing tool that will be your best friend when you're dealing with this version gap.</p>
-
-<h2>Installing RVM</h2>
-
-<p>We are going to stick to the most straight-forward method, installing RVM as a user (there's also the option to do it as root and system wide) and from the Github repository. You already work with git, right? If not, check out this <a href="/2010/07/11/git-initial-configuration.html">post</a>.</p>
-
-<div class="highlight"><pre><code class="bash">bash &lt; &lt;<span class="o">(</span> curl http://rvm.beginrescueend.com/releases/rvm-install-head <span class="o">)</span>
-</code></pre>
-</div>
-
-
-<p>This is the best option to install RVM in your machine and will work in Macintosh and *nix environments, can't promise anything about Windows, though.</p>
-
-<p>There are other two options: from the latest source tarball and as a gem, but the guys from <a href="http://rvm.beginrescueend.com/rvm/install/">BeginRescueEnd</a> recommend to stick to the described method.</p>
-
-<p>After RVM is installed in your system, you need to add this line to your ~/.bashrc and ~/.bash_profile</p>
-
-<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$HOME</span>/.rvm/scripts/rvm <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$HOME</span>/.rvm/scripts/rvm
-</code></pre>
-</div>
-
-
-<h2>Now what?</h2>
-
-<p>Well, you should be ready to start playing around with any Ruby version you want to work with; but before that, it is a good practice to check the Ruby versions that RVM is aware of</p>
-
-<div class="highlight"><pre><code class="bash">rvm list known
-</code></pre>
-</div>
-
-
-<p>To install a specific Ruby version, you just have to:</p>
-
-<div class="highlight"><pre><code class="bash">rvm install &lt;ruby version&gt;
-</code></pre>
-</div>
-
-
-<p>When you already have several 'Rubies', you can make any of them the default version:</p>
-
-<div class="highlight"><pre><code class="bash">rvm --default &lt;ruby version&gt;
-</code></pre>
-</div>
-
-
-<p>If you ever want (or need) to go back to your previously Ruby/Rails installed version, here's the trick:</p>
-
-<div class="highlight"><pre><code class="bash">rvm system
-</code></pre>
-</div>
-
-
-<h2>What about Rails???</h2>
-
-<p>The real awesomeness start when you discover that you can install as many Rails versions as you want; and the 'bestest' part is the ability to mix them up with your installed 'Rubies'!!!</p>
-
-<p>Let's take one step at a time.</p>
-
-<h3>Gemsets</h3>
-
-<p>RVM provides a feature/concept called 'gemset'; which will allows us to install gems to test them with any of the Ruby versions you have installed.</p>
-
-<p>To create a gemset you have to run:</p>
-
-<div class="highlight"><pre><code class="bash">rvm gemset create &lt;name <span class="k">for </span>your gemset&gt;
-</code></pre>
-</div>
-
-
-<p>I like naming my gemsets after the project I will use the Rails version / Gems version; most of the developers will prefer using a naming convention like 'Rails235', 'Rails_3_0_0_beta4', 'Rails3rc' or anything like that.</p>
-
-<p>Now, to mix any of your Ruby version with any of your Rails versions, you'll use:</p>
-
-<div class="highlight"><pre><code class="bash">rvm use &lt;ruby version&gt;@&lt;gemset name&gt; <span class="o">(</span>e.g.<span class="o">)</span> rvm use 1.8.7@rails_300_RC
-</code></pre>
-</div>
-
-
-<p>you can omit the word 'use' and it will work too</p>
-
-<p>Now, install the Rails version you want to try within this gemset:</p>
-
-<div class="highlight"><pre><code class="bash">gem install rails -v 2.3.3
-</code></pre>
-</div>
-
-
-<h3>Forget about sudo to install gems</h3>
-
-<p>This is very important, since you need to install the gems to your current gemset folder, so avoid using sudo or else forget about the magic</p>
-
-<h2>Checking versions</h2>
-
-<p>This is pretty straight forward, but make sure to check your Ruby/Rails version each time you switch:</p>
-
-<div class="highlight"><pre><code class="bash">ruby -v <span class="o">&amp;&amp;</span> rails -v
-</code></pre>
-</div>
-
-
-<h2>What else is important?</h2>
-
-<p>Check on the documentation to become an expert using RVM; you can remove Ruby installations, delete-import-export gemsets and a whole bunch of features that will make your life easier (at least working with RoR versions)</p>
-
-<p>Also, the BeginRescueEnd guys have a section for each OS; stop by and take a look.</p>
-
-<h2>Current Ruby selection in your prompt line</h2>
-
-<p>There is one interesting post in <a href="http://raflabs.com/blogs/silence-is-foo/2010/07/25/setting-your-terminal-title-to-include-your-current-ruby-version/#comments">RafLabs</a> about the subject and a very simple implementation by typing:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;[\h:$(~/.rvm/bin/rvm-prompt)]\W \u$ &quot;</span>
-</code></pre>
-</div>
-
-
-<p>This will allow your prompt to look a little bit like this:</p>
-
-<div class="highlight"><pre><code class="bash"><span class="o">[</span>localhost:ruby-1.8.7-p299@r3rc<span class="o">]</span> home~ 
-
-or
-
-<span class="o">[</span>dab-mac:ruby-1.9.1-p378<span class="o">]</span>~ home<span class="nv">$ </span>
-</code></pre>
-</div>
-
-
-<h2>Enjoy!</h2>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/07/28/getting-started-with-rvm.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Getting started with Ruby Version Manager (RVM)"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Francisco Guzm&aacute;n:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -514,6 +440,8 @@ or
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -552,8 +480,6 @@ or
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

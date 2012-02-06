@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Crowd Interactive Tech Blog :: A simple way to setup a class for global values</title>
+  <title>Crowd Interactive Tech Blog :: MagmaRails 2012 Announced</title>
   <link rel="stylesheet" href="/stylesheets/screen.css?853991" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print" />
   <link rel="stylesheet" href="/stylesheets/styles.css?853991" type="text/css" media="screen" />
@@ -46,74 +46,44 @@
       <div id="white-body" class="span-24">
         <div class="left-side span-17">
           <div class="post prepend-1">
-  <h1>A simple way to setup a class for global values</h1>  
+  <h1>MagmaRails 2012 Announced</h1>  
   <p class="author">
-    <span class="date"><b>Sep 06</b><br />2010</span>
+    <span class="date"><b>Feb 06</b><br />2012</span>
   </p>
   <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/c000ffd0c4ed3e23d09cae624d24b525" class="avatar" alt="Avatar" /></div>
-    <p>Most everytime we are working on a Rails app, we face the need to set up config values for said app; this is a good practice to avoid hardcoded lines. For example, think of the Application Name value... if you had to use it over a hundred times in your views (including mailers), wouldn't you want it to be called from a class so if your app name's ever changes, well... you wouldn't have to search and replace it.</p>
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/2ae35d2e0dfd4ca72c07ead1eec4a8f7" class="avatar" alt="Avatar" /></div>
+    <p>MagmaRails Round 3 has been announced for this year, this time it will happen
+from June 6 - 8 in the beautiful city of Manzanillo, Colima.</p>
 
-<h2>Setting up the class</h2>
+<p>After the forces of nature made us cancel and hold a smaller event for
+Round 2, this new date will have much better weather conditions
+to have a great conference.</p>
 
-<p>It couldn't be more simple. We just have to create a ruby file under config/initializers (you can name it whatever you want) and specify the YML file which holds the values for you class (config/app_config.yml is used in this example):</p>
+<p>Between the confirmed keynoters we have:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="no">AppConfig</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">RAILS_ROOT</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;app_config.yml&#39;</span><span class="p">))</span>
-</code></pre>
-</div>
-
-
-<p>This will open up the class AppConfig with several attributes for you to use throughout your app, for example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-<span class="n">twitter_app_token</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">token</span>
-</code></pre>
-</div>
+<ul>
+<li>Aaron Patterson (Aaron Patterson) from AT&amp;T Interactive</li>
+<li>Scott Chacon (Scott Chacon) from <a href="http://www.github.com">Gitgub</a></li>
+<li>Dr Nic (Dr Nic Williams) from <a href="http://www.engineyard.com">EngineYard</a></li>
+</ul>
 
 
-<p>The class' attributes will be available as a hash:</p>
+<p>And many more speakers from Ruby/Rails world.</p>
 
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;app_name&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;My application name&quot;</span>
+<p>Also we will have workshops from basic to intermediate levels for anyone
+that wants to learn Ruby/Ruby On Rails.</p>
 
-AppConfig<span class="o">[</span><span class="s1">&#39;base_domain&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;myapp.com&quot;</span>
-</code></pre>
-</div>
+<p>Check out the @magmarails website for more
+details: <a href="http://www.magmarails.com/#main">http://magmarails.com/</a></p>
 
+<p>Also, if you are a speaker and want to take part of MagmaRails, we have re-opened
+our <a href="http://www.magmarails.com/#cfp">call for papers</a>.</p>
 
-<p>You can take advantage of YAML's syntax and use indentation to create a hash of hashes for your values:</p>
+<p>As always, Github is one of our main sponsors, but if you or your company is
+interested in sponsoring MagmaRails you are welcome to request our
+prospectus: <a href="http://sponspors.magmarails.com">http://sponsors.magmarails.com/</a>.</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="n">defaults</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">defaults</span>
-<span class="n">app_name</span><span class="p">:</span> <span class="no">My</span> <span class="n">application</span> <span class="nb">name</span>
-<span class="n">base_domain</span><span class="p">:</span> <span class="n">myapp</span><span class="o">.</span><span class="n">com</span>
-
-<span class="n">development</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_dev_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_dev_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-
-<span class="n">production</span><span class="p">:</span>
-  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">defaults</span>
-  <span class="n">twitter_app_prod_key</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">key</span>
-  <span class="n">twitter_app_prod_secret</span><span class="p">:</span> <span class="no">Your</span> <span class="n">app</span> <span class="n">secret</span>
-</code></pre>
-</div>
-
-
-<p>Now your class has some hashes values like this:</p>
-
-<div class="highlight"><pre><code class="bash">AppConfig<span class="o">[</span><span class="s1">&#39;development&#39;</span><span class="o">][</span><span class="s1">&#39;twitter_app_prod_key&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app key&quot;</span>
-
-AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s1">&#39;twitter_prod_secret&#39;</span><span class="o">]</span>
-<span class="c">#=&gt; &quot;Your app secret&quot;</span>
-</code></pre>
-</div>
-
-
-<h2>Enjoy!</h2>
+<p>See you in Manzanillo!</p>
 
     
     <p>
@@ -142,21 +112,19 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
       <br><br>     
   		<div class="left">
   		  <!-- http://www.facebook.com/pages/Crowd-Interactive/63293958828  -->
-        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2010/09/06/a-simple-way-to-setup-a-class-for-global-values.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
+        <iframe src="http://www.facebook.com/plugins/like.php?href=http://blog.crowdint.com/2012/02/06/magmarails-2012-announced.html" scrolling="no" frameborder="0" style="height: 62px; width: 100%" allowTransparency="true"></iframe>
       </div>
       
     </p>
   </div>
   
   <div class="author_box">
-    <p><b>Author:</b> Francisco Guzm&aacute;n | francisco.guzman@crowdint.com</p>
+    <p><b>Author:</b> Mario Chavez | mac@crowdint.com</p>
   </div>
   <div class="nav_links span-16">
     
-      <div class="previous span-8"><a href="/2010/08/31/open-and-watch-specific-git-branches-using-gitx.html"><< Open and watch specific git branches using gitx</a></div>
+      <div class="previous span-8"><a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html"><< Twitter's Bootstrap in the Asset Pipeline</a></div>
     
-    
-      <div class="next span-8 last"><a href="/2010/09/10/customize-your-generators-workflow.html">Customize your Generators Workflow in Rails 3.0.0 >></a></div>
     
   </div>
 </div>
@@ -164,15 +132,15 @@ AppConfig<span class="o">[</span>Rail.env<span class="o">][</span><span class="s
   <h1>Related Posts</h1>
   <ul class="archives">
 
-  <li><span><b>24 Jan 2011</b></span> &raquo; <a href="/2011/01/24/how-to-start-writing-a-gem.html">How to start writing a ruby gem</a></li>
+  <li><span><b>21 Feb 2011</b></span> &raquo; <a href="/2011/02/21/what-we-learned-at-la-ruby-conf.html">What we learned at LA Ruby Conf</a></li>
 
-  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
+  <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
-  <li><span><b>11 Nov 2010</b></span> &raquo; <a href="/2010/11/11/subdomains-in-rails-2-and-3.html">Subdomains in Rails (2.3.x &amp; 3)</a></li>
-
-  <li><span><b>30 Nov 2010</b></span> &raquo; <a href="/2010/11/30/rspec-for-really-newbies.html">RSpec for really newbies</a></li>
+  <li><span><b>24 Oct 2011</b></span> &raquo; <a href="/2011/10/24/cucumber-steak.html">Has Cucumber become more ... "Steak"?</a></li>
 
   <li><span><b>28 Jul 2010</b></span> &raquo; <a href="/2010/07/28/getting-started-with-rvm.html">Getting started with Ruby Version Manager (RVM)</a></li>
+
+  <li><span><b>17 Nov 2010</b></span> &raquo; <a href="/2010/11/17/rack-basics-a-rack-introduction.html">Rack Basics - A Rack Introduction</a></li>
 
   </ul>
   <div id="disqus_thread"></div>

@@ -47,6 +47,105 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html">Improve your SEO with a sitemap</a></h1>
+  <p class="author">
+    <span class="date"><b>Oct 22</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/0a34cf6219c554ee75506e544473aea1" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Having a sitemap is the way search engines like Google, Yahoo, Bing and others can crawl the information of all of the urls in our website.</p>
+
+<p>There are tools for generating sitemaps, we could use one of those tools if our website is static and it doesn't change that often. But, if we have a website that is continuously changing and generating new urls, we would need a way to dynamically generate our sitemap on a regular basis.</p>
+
+<p>Let's use Rails to dynamically generate a sitemap on request.</p>
+
+<p>In our example we will assume we have a small e-commerce website where we have categories for the products. So, the first thing we do is to define a controller action:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">sitemap</span>
+    <span class="vi">@categories</span> <span class="o">=</span> <span class="no">Category</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>
+        <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="s1">&#39;path, updated_at&#39;</span><span class="p">,</span> 
+        <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span><span class="p">,</span> 
+        <span class="ss">:order</span><span class="o">=&gt;</span> <span class="s1">&#39;updated_at DESC&#39;</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">:layout</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:template</span> <span class="o">=&gt;</span> <span class="s2">&quot;layouts/sitemap&quot;</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>With this method defined, we retrieve all the categories we want to have on the sitemap. And the next step is to create the xml format to display all the urls, we will create a template called sitemap.rxml</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">xml</span><span class="o">.</span><span class="n">instruct!</span>
+<span class="n">xml</span><span class="o">.</span><span class="n">urlset</span><span class="p">(</span><span class="ss">:xmlns</span><span class="o">=&gt;</span> <span class="s1">&#39;http://www.sitemaps.org/schemas/sitemap/0.9&#39;</span><span class="p">)</span> <span class="k">do</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="s2">&quot;http://www.mywebsite.com&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+    <span class="k">end</span>
+    
+    <span class="n">categories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">url</span> <span class="k">do</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="no">URI</span><span class="o">::</span><span class="n">decode</span> <span class="n">url_for</span><span class="p">(</span><span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">category</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="ss">:only_path</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">))</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">lastmod</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">updated_at</span><span class="o">.</span><span class="n">xmlschema</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">changefreq</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>  
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Pretty simple, don't you think? We just have to iterate through our collection to generate all the links from our categories. The parameter <em>:only_path => false</em> is necessary to produce the absolute url of our website as sitemaps require to have a protocol and a domain.</p>
+
+<p>The parameters of the xml are straightforward:</p>
+
+<ul>
+<li><em>loc</em> is the url</li>
+<li><em>lastmod</em> is the last modified date of that url</li>
+<li><em>changefreq</em> is how often this url is updated</li>
+<li><em>priority</em> is the importance of this url compared to the rest of the urls in our website</li>
+</ul>
+
+
+<p>As a final step, we add the route to the sitemap in <em>config/routes.rb</em></p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">map</span><span class="o">.</span><span class="n">connect</span> <span class="s2">&quot;sitemap.xml&quot;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;sitemap&quot;</span>
+</code></pre>
+</div>
+
+
+<p>And that's it, if we go to our www.website.com/sitemap.xml we will be able to see our generated sitemap.</p>
+
+<p>If we want our sitemap to be generated periodically, we can create a rake task to call this method and use a cron job to schedule it for example, once a week.</p>
+
+<p>Give it a try and you will have a nice and easy way to generate the sitemap.xml for your webiste!</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/10/22/improve-your-seo-with-a-sitemap.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Improve your SEO with a sitemap"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Roberto Sanchez:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Roberto Sanchez | roberto.sanchez@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/10/18/magmarails-2010-was-a-success.html">Magma Rails 2010, a success!</a></h1>
   <p class="author">
     <span class="date"><b>Oct 18</b><br />2010</span>
@@ -138,73 +237,6 @@
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/09/28/negative-code.html">Negative Code</a></h1>
-  <p class="author">
-    <span class="date"><b>Sep 28</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/1e7f8fb8733b6193cf3bdbc85693f515" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>Last night I was checking certain social network at home, you know, the usual bad habit, when suddenly I found a phrase that caught my attention. What was that uncertain concept that attracted my senses? Well, it was "negative code". "What is it?" I thought.</p>
-
-<p>As astonished as I was at that time, I took a few seconds to ask my old fellow (<a href="http://www.google.com">G...</a>) "what is negative code?". Of course, as wise as always, it showed me several conversations about that interesting topic. I found many concepts thrown in the air, but nothing that I could define the concept until I found <a href="http://stackoverflow.com/questions/3800707/what-is-negative-code">this</a> discussion at <a href="http://stackoverflow.com">stackoverflow</a>. A user named Thilo mentioned a concept that barely filled my expectations, and here is it:</p>
-
-<p>  "...reducing lines of code, by removing redundancies or using more concise constructs".</p>
-
-<p>Well, that means something, doesn’t it? Well, yes, but at the same time I felt something was missing. I thought, "Ok, everybody knows that if you code to write less code, but obtain a correct result, that code becomes in saving code lines! But! That isn't negative code!".</p>
-
-<p>A little shocked and confused I continued reading below on the discussion. Thilo also quoted an old anecdote he found:</p>
-
-<p>  "When the Lisa team was pushing to finalize their software in 1982, project managers started requiring programmers to submit weekly forms reporting on the number of lines of code they had written. Bill Atkinson thought that was silly. For the week in which he had rewritten QuickDraw’s region calculation routines to be six times faster and 2000 lines shorter, he put "-2000" on the form. After a few more weeks the managers stopped asking him to fill out the form, and he gladly complied."</p>
-
-<p>Sometimes I think I'm just slow, because I didn't understand what this was trying to say at the beginning. I ask myself:</p>
-
-<p>"Why managers stopped to bother him after he wrote -2000 LOC? I know, he improved the system throwing away the fat and... oh, I see!".</p>
-
-<p>Yes, that was the answer I was looking for. But, what does it mean? Well, as I understood the re-factory concept fits perfectly to negative code, and let me explain why.</p>
-
-<p>Sometimes, we found many new problems to solve in our way and we keep coding and coding until we solve them. There will be times where our code is optimal, but that's not the case all of the time. Sometimes we find old and reviewed problems we already solved before, and we force the same solution to fit those new questions. As time passes these code lines become obsolete. The old code is worth nothing now. What should we do?</p>
-
-<p>Well, there are two solutions.</p>
-
-<ul>
-<li>We keep updating our code to fit new requirements; we make it more robust, more stable and more compatible with old code.</li>
-<li>Or we just simply throw away that old code and we remake it. Writing lean code, "same result less code".</li>
-</ul>
-
-
-<p>All those LOC we "saved", or that we didn't write, that is negative code.</p>
-
-<p>We usually fall in a hole when someone says "do not re-invent the wheel, re-use". That, in a way, is correct. Why should you create a new tool if there are many out there? The answer is simple: sometimes, it's more than you need at the moment. Period.</p>
-
-<p>Remember, the less code you use, the less code you maintain!</p>
-
-<p>I encourage you to find better ways to solve the same problem. Throw away those awful lines you wanted to forget and improve them.</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/09/28/negative-code.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Negative Code"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Luis Galaviz:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Luis Galaviz | luis.galaviz@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -220,6 +252,8 @@
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -258,8 +292,6 @@
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

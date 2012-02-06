@@ -47,6 +47,462 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2010/08/26/thin-vs-unicorn.html">Benchmarking thin vs unicorn</a></h1>
+  <p class="author">
+    <span class="date"><b>Aug 26</b><br />2010</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/f7412b373affd1d6db10752cf5d69315" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Hi All!, I have been buzzed lately about Unicorn (one of the newest Ruby web application servers) and I've been asked if we have already tested it, I answered that no, we haven't. We're really happy using nginx + haproxy + thin + akamai.</p>
+
+<p>But, I have to admit that after to have a short read about unicorn and having some free time, I started to dig at some already performed benchmarking comparisons between thin and unicorn my friend google showed me some, but all I could find were using really small basic scripts. I needed more realistic numbers, so with some beers in my fridge and no plans with my saturday, I decided to take our 5gb database with ~130 tables, a huge rails project and try to do my own research.</p>
+
+<p>Let's start with my nginx.conf, it looks like this <a href="/extras/2010/08/26/nginx.conf.txt">nginx.conf</a>:</p>
+
+<p>I'm going to use rvm to create isolated environments, since I am familiar with thin, I'll start with it.</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create thin_test
+
+info: Gemset <span class="s1">&#39;thin_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use thin_test
+
+info: Now using gemset <span class="s1">&#39;thin_test&#39;</span>
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+Installing RedCloth <span class="o">(</span>4.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing active_presenter <span class="o">(</span>1.2.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing crack <span class="o">(</span>0.1.8<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing httparty <span class="o">(</span>0.6.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing bitly <span class="o">(</span>0.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing cgi_multipart_eof_fix <span class="o">(</span>2.5.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing columnize <span class="o">(</span>0.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing curb <span class="o">(</span>0.7.7.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing daemons <span class="o">(</span>1.1.0<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing delayed_job <span class="o">(</span>2.0.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastercsv <span class="o">(</span>1.5.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing fastthread <span class="o">(</span>1.0.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing gem_plugin <span class="o">(</span>0.2.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing handsoap <span class="o">(</span>1.1.7<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing json <span class="o">(</span>1.4.6<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing linecache <span class="o">(</span>0.43<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing mash <span class="o">(</span>0.1.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mime-types <span class="o">(</span>1.16<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing mysql <span class="o">(</span>2.8.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing nokogiri <span class="o">(</span>1.4.3.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing oauth <span class="o">(</span>0.4.2<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing packet <span class="o">(</span>0.1.15<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing rmagick <span class="o">(</span>2.13.1<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug-base <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ with native extensions 
+Installing ruby-debug <span class="o">(</span>0.10.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter <span class="o">(</span>0.6.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Installing twitter_oauth <span class="o">(</span>0.4.3<span class="o">)</span> from rubygems repository at http://rubygems.org/ 
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri thin
+Building native extensions.  This could take a <span class="k">while</span>...
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed eventmachine-0.12.10
+Successfully installed thin-1.2.7
+3 gems installed
+</code></pre>
+</div>
+
+
+<p>Good! I'm happy to have bundler, I might've spent all my afternoon installing required gems by hand. But, we're here to see numbers:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>ruby -v
+ruby 1.8.7 <span class="o">(</span>2010-06-23 patchlevel 299<span class="o">)</span> <span class="o">[</span>i686-darwin10.3.1<span class="o">]</span>
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d start
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>It's ready, my nginx is listening two virtual hosts and I've added to my /etc/hosts these virtual names. Ok, since we're starting, let's use small numbers</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.713 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817362 bytes
+HTML transferred:       813850 bytes
+Requests per second:    14.02 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       713.256 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       71.326 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1119.10 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:   711  712   0.5    713     713
+Waiting:      710  711   0.6    711     712
+Total:        711  713   0.4    713     713
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    713
+  66%    713
+  75%    713
+  80%    713
+  90%    713
+  95%    713
+  98%    713
+  99%    713
+ 100%    713 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Mhm, 713 ms per request, I've seen better numbers in our production servers, but well, I'm doing this in my MBP, without memcached and mysql query cached disabled, so, I'd say that: cool!</p>
+
+<p>Now let's work with Unicorn:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset create unicorn_test
+
+info: Gemset <span class="s1">&#39;unicorn_test&#39;</span> created.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>rvm gemset use unicorn_test
+
+info: Now using gemset <span class="s1">&#39;unicorn_test&#39;</span>
+gecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri bundler
+Successfully installed bundler-0.9.26
+1 gem installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>bundle install
+Fetching <span class="nb">source </span>index from http://rubygems.org/
+   <span class="c">#same gems</span>
+   
+Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>gem install --no-rdoc --no-ri unicorn
+Building native extensions.  This could take a <span class="k">while</span>...
+Successfully installed rack-1.2.1
+Successfully installed unicorn-1.1.2
+2 gems installed
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+</code></pre>
+</div>
+
+
+<p>Done... I love bundler, I really do, OK, let's continue with our tests:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+
+ecruz@ecruz-mbp:~ <span class="nv">$ </span>ab -n 10 -c 10 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      10
+Time taken <span class="k">for </span>tests:   0.737 seconds
+Complete requests:      10
+Failed requests:        0
+Write errors:           0
+Total transferred:      817581 bytes
+HTML transferred:       813910 bytes
+Requests per second:    13.56 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       737.212 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       73.721 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          1083.02 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       0
+Processing:    47  332 227.5    406     736
+Waiting:       47  332 227.5    406     736
+Total:         48  332 227.4    406     737
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    406
+  66%    436
+  75%    480
+  80%    510
+  90%    737
+  95%    737
+  98%    737
+  99%    737
+ 100%    737 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Ok, decent numbers with small difference and knowing that we used a single app server for both, let's simulate a little bit more a production config:</p>
+
+<p>I've adjusted my nginx.conf to support multiples thins</p>
+
+<div class="highlight"><pre><code class="bash">upstream balancer_thin <span class="o">{</span>
+  server 127.0.0.1:3000;
+  server 127.0.0.1:3001;
+  server 127.0.0.1:3002;
+  server 127.0.0.1:3003;
+  server 127.0.0.1:3004;
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<p>And I started 5 thins listening in ports 3000-3004</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>thin -e production -p 3000 -d -s 5 start
+Starting server on 0.0.0.0:3000 ... 
+Starting server on 0.0.0.0:3001 ... 
+Starting server on 0.0.0.0:3002 ... 
+Starting server on 0.0.0.0:3003 ... 
+Starting server on 0.0.0.0:3004 ... 
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>I'll use 100 requests with 15 concurrent users(remember that I'm using my MBP).</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.665 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8173616 bytes
+HTML transferred:       8138500 bytes
+Requests per second:    37.53 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       399.706 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.647 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2995.47 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    54  374 227.0    324     918
+Waiting:       51  271 167.3    232     708
+Total:         54  375 227.0    325     919
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    325
+  66%    494
+  75%    528
+  80%    594
+  90%    656
+  95%    858
+  98%    919
+  99%    919
+ 100%    919 <span class="o">(</span>longest request<span class="o">)</span>
+</code></pre>
+</div>
+
+
+<p>Whohoo 399ms, no bad for 15 concurrent users and 100 requests, it's time to see how unicorn performs, I tried to read unicorn documentation and I saw I can adjust unicorn behavior via custom configurator.rb, but since I'm lazy engineer I've modified unicorn gem directly to start with 5 workers:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>mate /Users/ecruz/.rvm/gems/ruby-1.8.7-p299@unicorn_test/gems/unicorn-1.1.2/lib/unicorn/configurator.rb
+
+ecruz@ecruz-mbp:ecomm <span class="o">(</span>prod<span class="o">)</span><span class="nv">$ </span>unicorn_rails -p 8000 -E production
+I, <span class="o">[</span>2010-08-14T20:52:48.684992 <span class="c">#40603]  INFO -- : listening on addr=0.0.0.0:8000 fd=3</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.685496 <span class="c">#40603]  INFO -- : worker=0 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.686348 <span class="c">#40603]  INFO -- : worker=1 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687000 <span class="c">#40603]  INFO -- : worker=2 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.687786 <span class="c">#40603]  INFO -- : worker=3 spawning...</span>
+I, <span class="o">[</span>2010-08-14T20:52:48.689268 <span class="c">#40603]  INFO -- : worker=4 spawning...</span>
+</code></pre>
+</div>
+
+
+<p>Done, I have unicorn running 5 workers and listening at port 8000, let's send it the same traffic:</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 100 -c 15 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      15
+Time taken <span class="k">for </span>tests:   2.672 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      8175813 bytes
+HTML transferred:       8139100 bytes
+Requests per second:    37.42 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       400.860 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       26.724 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2987.65 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.1      0       1
+Processing:    69  368 165.3    334     642
+Waiting:       69  368 165.3    334     641
+Total:         69  368 165.3    334     642
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%    334
+  66%    504
+  75%    523
+  80%    543
+  90%    587
+  95%    614
+  98%    622
+  99%    642
+ 100%    642 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Look at that!!! the difference is minimal, this is a really huge surprise.</p>
+
+<p>Ok, I'll run tests using extreme over loading against the same 5 thins and unicorn with 5 workers (For each test I restarted my machine):</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_thin/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_thin
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81385 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   31.030 seconds
+Complete requests:      1000
+Failed requests:        4
+   <span class="o">(</span>Connect: 0, Receive: 0, Length: 4, Exceptions: 0<span class="o">)</span>
+Write errors:           0
+Total transferred:      81736483 bytes
+HTML transferred:       81385312 bytes
+Requests per second:    32.23 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       3102.981 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       31.030 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2572.39 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    1   1.0      0      10
+Processing:    55 3035 1467.6   2880    7831
+Waiting:       54 2433 1276.4   2202    7369
+Total:         55 3036 1468.1   2880    7833
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2880
+  66%   3314
+  75%   3584
+  80%   3794
+  90%   4485
+  95%   6825
+  98%   7073
+  99%   7369
+ 100%   7833 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>
+</code></pre>
+</div>
+
+
+<p>Wow! my machine survived...</p>
+
+<div class="highlight"><pre><code class="bash">ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="nv">$ </span>ab -n 1000 -c 100 http://ecomm_unicorn/store/Apparel
+
+Server Software:        nginx/0.7.64
+Server Hostname:        ecomm_unicorn
+Server Port:            80
+
+Document Path:          /store/Apparel
+Document Length:        81391 bytes
+
+Concurrency Level:      100
+Time taken <span class="k">for </span>tests:   27.692 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      81758141 bytes
+HTML transferred:       81391000 bytes
+Requests per second:    36.11 <span class="o">[</span><span class="c">#/sec] (mean)</span>
+Time per request:       2769.227 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean<span class="o">)</span>
+Time per request:       27.692 <span class="o">[</span>ms<span class="o">]</span> <span class="o">(</span>mean, across all concurrent requests<span class="o">)</span>
+Transfer rate:          2883.18 <span class="o">[</span>Kbytes/sec<span class="o">]</span> received
+
+Connection Times <span class="o">(</span>ms<span class="o">)</span>
+              min  mean<span class="o">[</span>+/-sd<span class="o">]</span> median   max
+Connect:        0    0   0.8      0       4
+Processing:    81 2639 441.8   2671    3178
+Waiting:       81 2638 441.8   2670    3172
+Total:         86 2639 441.1   2671    3179
+
+Percentage of the requests served within a certain <span class="nb">time</span> <span class="o">(</span>ms<span class="o">)</span>
+  50%   2671
+  66%   2759
+  75%   2868
+  80%   2923
+  90%   2976
+  95%   3008
+  98%   3048
+  99%   3099
+ 100%   3179 <span class="o">(</span>longest request<span class="o">)</span>
+ecruz@ecruz-mbp:blog.crowdint.com <span class="o">(</span>edwin.cruz<span class="o">)</span><span class="err">$</span>
+</code></pre>
+</div>
+
+
+<p>Wow! look at that numbers, specifically: Failed Requests, Requests per second, TIme per request and Transfer rate, it looks like unicorn performs better on heavy loading, I'll post another performance numbers with more production like environment running in a dedicated server hosted in rackspace with more advanced features for each configurations: caching, fail over, haproxy between nginx and thins, cdn, etc. Wait for it, I'll try to include some NewRelic numbers and use different pages/modules.</p>
+
+<p>Ok, there're the numbers, think about if it's worth to change any current infrastructure, monitoring tools, deployment scripts, etc to switch between each other. We've taken ours x).</p>
+
+<h2>Machine used:</h2>
+
+<pre><code>Processor: 2.4 GHz Intel Core i5
+Memory: 4GB 1067 MHz DDR3
+Mac OS X: 10.6.3
+</code></pre>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2010/08/26/thin-vs-unicorn.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Benchmarking thin vs unicorn"
+          data-count="none"
+          data-via="crowdint"
+          data-related="Edwin Cruz:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> Edwin Cruz | edwin.cruz@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2010/08/20/what-i-would-ve-loved-to-know-when-i-first-met-ruby.html">What I would've loved I had known when I first met Ruby</a></h1>
   <p class="author">
     <span class="date"><b>Aug 20</b><br />2010</span>
@@ -385,95 +841,6 @@ Once you abandon the project directory, your default Ruby version will be used!<
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html">Improve performance between attachment_fu and acts_as_list</a></h1>
-  <p class="author">
-    <span class="date"><b>Aug 13</b><br />2010</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d3177da7794ac3ce603d65b33bf4a981" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>If you are stuck in your project using <a href="http://github.com/technoweenie/attachment_fu"><em><strong>attachment_fu</strong></em></a> and<br />
-<a href="http://github.com/rails/acts_as_list"><em><strong>acts_as_list</strong></em></a> plugins/gems in your project,<br />
-you might be facing a weird performance issue when dealing with images with thumbnails.</p>
-<p>Every time an image is added, modified or deleted, for each one of the thumbnails a query like this is executed:</p>
-<div class="highlight"><pre><code class="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">images</span>
-<span class="k">WHERE</span> <span class="p">(</span><span class="n">article_id</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
-<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">position</span> <span class="k">DESC</span><span class="p">,</span> <span class="k">position</span>
-<span class="k">LIMIT</span> <span class="mi">1</span>
-</code></pre>
-</div><p>Even if this query is limited to 1 row, this is a really <strong>slow query</strong>. For example in my development machine, each of these queries take about ~900ms (yes! the <i>images</i> table is <span class="caps">HUGE</span>).</p>
-<p>So, let&#8217;s assume the following models:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
-<span class="k">end</span>
-
-<span class="k">class</span> <span class="nc">Image</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-  <span class="n">belongs_to</span> <span class="ss">:article</span>
-  <span class="n">acts_as_list</span> <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="ss">:article</span>      <span class="c1">#acts_as_list declaration</span>
-
-  <span class="n">has_attachment</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="ss">:image</span><span class="p">,</span>   <span class="c1">#attachment_fu declaration</span>
-    <span class="ss">:storage</span> <span class="o">=&gt;</span> <span class="ss">:file_system</span><span class="p">,</span>
-    <span class="ss">:thumbnails</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">150</span><span class="o">]</span><span class="p">,</span> <span class="ss">:tiny</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">70</span><span class="o">]</span><span class="p">}</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>So, there are Articles which contain several Images ordered by position (through acts_as_list plugin) and each image has 2 additional thumbnails.</p>
-<p>If you add an image attachment now&#8230; <strong>the slow query will be executed for each thumbnail</strong>. The reasons are:</p>
-<ol>
-	<li>The image file is uploaded to the server.</li>
-	<li>attachment_fu saves the image and creates a new Image row with article_id established.</li>
-	<li>acts_as_list assigns the position attribute to the parent image.</li>
-	<li>attachment_fu creates the first thumbnail, with parent_id = image_id (the one created in step #2) and thumbnail = :thumb, but article_id = <span class="caps">NULL</span></li>
-	<li>acts_as_list assigns the position attribute to images after the thumbnail created.</li>
-	<li>Repeat step #4 and #5 for each thumbnail to be created.</li>
-</ol>
-<p>The problem with this procedure, if you see the acts_as_list source code:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">scope_condition</span>
-  <span class="k">if</span> <span class="c1">#{configuration[:scope].to_s}.nil?</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> IS NULL&quot;</span>
-  <span class="k">else</span>
-    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2"> = </span><span class="se">\#</span><span class="s2">{</span><span class="si">#{</span><span class="n">configuration</span><span class="o">[</span><span class="ss">:scope</span><span class="o">].</span><span class="n">to_s</span><span class="si">}</span><span class="s2">}&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>As we configured our Image model to use <code>acts_as_list :scope =&gt; :article!</code>, and in the thumbnails the article_id is <span class="caps">NULL</span>, the condition is generated as &#8220;<strong><span class="caps">WHERE</span> (article_id  IS <span class="caps">NULL</span>)</strong>&#8221;.</p>
-<p>To avoid this, you need to manually <strong>set the article_id value before the thumbnails are saved</strong>. This can be done using a <strong>callback in the Image model</strong> (as suggested in acts_as_list source code):</p>
-<div class="highlight"><pre><code class="ruby"><span class="c1">#Callback before a thumbnail is saved...</span>
-<span class="c1">#Assign the article_id to avoid a HUGE query with IS NULL clause</span>
-<span class="n">before_thumbnail_saved</span> <span class="k">do</span> <span class="o">|</span><span class="n">record</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">|</span>
-  <span class="n">image</span> <span class="o">=</span> <span class="no">Image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
-  <span class="n">record</span><span class="o">.</span><span class="n">article_id</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">article_id</span> <span class="k">if</span> <span class="n">image</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>With this callback, after generating a thumbnail each image will have the <code>article_id</code> attribute filled. Thus in the Article model, the has_many relation is defined as:</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">has_many</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s1">&#39;thumbnail IS NULL&#39;</span>
-</code></pre>
-</div><p>Now, <strong>only the article images will have thumbnail.nil</strong> and the thumbnails will be hidden in the image.thumbnails relation.</p>
-<h3>Conclusion</h3>
-<p>In our project, we <strong>expected a 570% <span class="caps">SQL</span> improvement</strong> when creating, modifying or deleting image attachments.</p>
-    </div>
-    <div class="comments">
-      <h2><a href="/2010/08/13/fix-incompatibility-with-attachment-fu-and-acts-as-list.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Improve performance between attachment_fu and acts_as_list"
-          data-count="none"
-          data-via="crowdint"
-          data-related="Chalo Fernandez:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> Chalo Fernandez | gonzalo.fernandez@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -489,6 +856,8 @@ you might be facing a weird performance issue when dealing with images with thum
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -527,8 +896,6 @@ you might be facing a weird performance issue when dealing with images with thum
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>

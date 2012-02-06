@@ -47,6 +47,75 @@
         <div class="left-side span-17">
           
 <div class="post prepend-1">
+  <h1><a href="/2011/05/24/railsconf-2011.html">Railsconf 2011</a></h1>
+  <p class="author">
+    <span class="date"><b>May 24</b><br />2011</span>
+  </p>
+  <div class="body prepend-1 append-1">
+    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
+    <div id='main'>
+      <p>Last week, a good part of our team flew to Baltimore for Railsconf 2011. As
+every year, it was a ton of fun, there was a lot to learn and it was inspiring.</p>
+
+<p>I love going to conferences, not just because of the talks, but, because you
+get to meet people. I like talking to the persons that wrote the gems that
+I use everyday and thank them for their effort in creating awesome code so
+we don't have to.</p>
+
+<p><img src="/images/2011/05/24/guns.jpg" alt="The Crowd Interactive team" /></p>
+
+<p>And not just gem writers, it's also fun to meet all those other Ruby
+developers that enjoy using Rails and everything else as much as I do.</p>
+
+<p><img src="/images/2011/05/24/sign.jpg" alt="The sign" /></p>
+
+<p>The best thing you can take out of the experience is inspiration.
+Inspiration to follow the leaders. Inspiration to collaborate to open
+source. Or, as Corey Haines said on his keynote, inspiration to be awesome.</p>
+
+<p><img src="/images/2011/05/24/friends.jpg" alt="Friends at Railsconf" /></p>
+
+<p>Since we enjoy conferences so much, last year we were bummed that there was not
+a lot of Ruby conferences in Mexico so we organized
+<a href="http://www.magmarails.com">Magma Rails</a>, and it ended
+up being better than expected. this year we're organizing its second edition
+and it's going to be twice as awesome as last year.</p>
+
+<p>We're moving to Manzanillo Colima, since this year we are inviting people
+from all over the world, it makes more sense to have it at a tourist friendly
+city. You will be able to smell the ocean from your seat.</p>
+
+<p><a href="http://www.magmarails.com">
+<img src="http://www.magmarails.com/images/foto-magma.png" alt="Last year" />
+</a></p>
+
+<p>Right now we're looking for <a href="http://www.magmarails.com/callforpapers">speakers</a>
+and sponsors, contact us if you're interested. I promise it will be a lot of fun!</p>
+
+    </div>
+    <div class="comments">
+      <h2><a href="/2011/05/24/railsconf-2011.html#disqus_thread">Click here for Comments</a></h2>
+    </div>
+
+    <p>
+      <div class="tweet left">
+        <a href="http://twitter.com/share"
+          class="twitter-share-button"
+          data-text="Railsconf 2011"
+          data-count="none"
+          data-via="crowdint"
+          data-related="David Padilla:with">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+    </p>
+  </div>
+      <div class="author_box">
+      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
+    </div>
+</div>
+
+
+<div class="post prepend-1">
   <h1><a href="/2011/05/02/How-to-override-destroy-with-callbacks.html">How to override destroy method keeping the callbacks</a></h1>
   <p class="author">
     <span class="date"><b>May 02</b><br />2011</span>
@@ -235,103 +304,6 @@ by using the <strong>Rack::ContentLength</strong> and <strong>Rack::ContentType<
 </div>
 
 
-<div class="post prepend-1">
-  <h1><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></h1>
-  <p class="author">
-    <span class="date"><b>Apr 13</b><br />2011</span>
-  </p>
-  <div class="body prepend-1 append-1">
-    <div class="gravatar span-3"><img src="http://www.gravatar.com/avatar/d32b52ec6403614b1adf3e648cbbe584" class="avatar" alt="Avatar" /></div>
-    <div id='main'>
-      <p>We, at <a href="http://www.crowdint.com">Crowd Interactive</a>, always go with the
-TDD + BDD approach when coding new applications.</p>
-
-<p>The usual, we use <a href="http://www.rspec.info">RSpec</a> for TDD, we use
-<a href="http://cukes.info">Cucumber</a> for BDD, although
-lately, I've been using <a href="https://github.com/cavalle/steak">Steak</a> in place of
-Cucumber and so far I am loving it.</p>
-
-<p>When you are using Capybara + Selenium for testing with Cucumber or
-Steak, sometimes you can get an error when you write tests for clicks that are
-followed by an animation.</p>
-
-<p>For example:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="n">scenario</span> <span class="s2">&quot;New resource&quot;</span> <span class="k">do</span>
-  <span class="n">click_link</span> <span class="s1">&#39;New Resource&#39;</span>
-  <span class="c1"># Shows up an overlay window with the form that</span>
-  <span class="c1"># takes 5 seconds to show up</span>
-
-  <span class="n">fill_in</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;Some value&#39;</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
-
-<p>You get the following error:</p>
-
-<div class="highlight"><pre><code class="ruby"><span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Error</span><span class="o">::</span><span class="no">ElementNotDisplayedError</span><span class="p">:</span>
-  <span class="no">Element</span> <span class="n">is</span> <span class="ow">not</span> <span class="n">currently</span> <span class="n">visible</span> <span class="ow">and</span> <span class="n">so</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">interacted</span> <span class="n">with</span>
-</code></pre>
-</div>
-
-
-<p>This happens because Capybara is trying to access the input element, but
-since the animation is still happening it is not visible yet.</p>
-
-<p>To avoid this, you can simply tell jQuery to turn off all effects when
-in test mode.</p>
-
-<p>How? Very simple.</p>
-
-<p>All you have to do is add this line within the <code>&lt;head&gt;</code>
-section of your layout.</p>
-
-<h3>Haml</h3>
-
-<div class="highlight"><pre><code class="haml"><span class="p">=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span>
-</code></pre>
-</div>
-
-
-<h3>ERB</h3>
-
-<div class="highlight"><pre><code class="erb"><span class="cp">&lt;%=</span> <span class="n">javascript_tag</span> <span class="s1">&#39;$.fx.off = true;&#39;</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">test?</span> <span class="cp">%&gt;</span><span class="x"></span>
-</code></pre>
-</div>
-
-
-<p>This way, every time you run your tests you will be telling jQuery to disable
-all effects and your test will pass, and, in some cases, even perform faster.</p>
-
-<p>You can <a href="http://api.jquery.com/jQuery.fx.off/">read the documentation here</a> for more info on
-how to disable jQuery effects off.</p>
-
-<p>Enjoy!</p>
-
-    </div>
-    <div class="comments">
-      <h2><a href="/2011/04/13/turn-jquery-effects-off-for-testing.html#disqus_thread">Click here for Comments</a></h2>
-    </div>
-
-    <p>
-      <div class="tweet left">
-        <a href="http://twitter.com/share"
-          class="twitter-share-button"
-          data-text="Turn jQuery effects off for testing"
-          data-count="none"
-          data-via="crowdint"
-          data-related="David Padilla:with">Tweet</a>
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-      </div>
-    </p>
-  </div>
-      <div class="author_box">
-      <p><b>Author:</b> David Padilla | david@crowdint.com</p>
-    </div>
-</div>
-
-
 <div class="pagination prepend-1">
   
     
@@ -347,6 +319,8 @@ how to disable jQuery effects off.</p>
 <div class="post prepend-1">
   <h1>Recent Posts</h1>
   <ul class="archives">
+
+  <li><span><b>06 Feb 2012</b></span> &raquo; <a href="/2012/02/06/magmarails-2012-announced.html">MagmaRails 2012 Announced</a></li>
 
   <li><span><b>03 Feb 2012</b></span> &raquo; <a href="/2012/02/03/bootstrap-in-the-asset-pipeline.html">Twitter's Bootstrap in the Asset Pipeline</a></li>
 
@@ -385,8 +359,6 @@ how to disable jQuery effects off.</p>
   <li><span><b>13 Apr 2011</b></span> &raquo; <a href="/2011/04/13/turn-jquery-effects-off-for-testing.html">Turn jQuery effects off for testing</a></li>
 
   <li><span><b>06 Apr 2011</b></span> &raquo; <a href="/2011/04/06/sinatra-haml-compass-blueprint.html">How to Sinatra + Haml + Compass(SCSS) + Blueprint</a></li>
-
-  <li><span><b>31 Mar 2011</b></span> &raquo; <a href="/2011/03/31/make-your-sinatra-more-restful.html">Trying to make your Sinatra more RESTful?</a></li>
 
   </ul>
 </div>
