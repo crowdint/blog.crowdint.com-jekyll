@@ -129,10 +129,21 @@ You might want to take a look at all the _bootstrap .less_
 a better idea of all the mixins that you can use, they all have great inline
 documentation.
 
+# Update
+
+Thanks to [hishma](https://gist.github.com/hishma), for this excellent tip.
+
+You can achieve the same thing with the [bootstrap-sass gem](https://github.com/thomas-mcdonald/bootstrap-sass)
+as [explained on this gist](https://gist.github.com/1749504).
+
+This way, if you are uncomfortable using less for your css files you can still
+use scss.
+
 ## More reading
 
 * [http://guides.rubyonrails.org/asset_pipeline.html](http://guides.rubyonrails.org/asset_pipeline.html)
 * [http://www.lesscss.org](http://www.lesscss.org)
 * [http://twitter.github.com/bootstrap/](http://twitter.github.com/bootstrap/)
+
 
 

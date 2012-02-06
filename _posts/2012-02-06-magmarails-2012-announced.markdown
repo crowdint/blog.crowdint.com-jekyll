@@ -8,7 +8,7 @@ published: true
 ---
 
 MagmaRails Round 3 has been announced for this year, this time it will happen
-from June 6 - 8 in the beautiful city of Manzanillo, Colima.
+from *June 6 - 8* in the beautiful city of Manzanillo, Colima.
 
 After the forces of nature made us cancel and hold a smaller event for
 Round 2, this new date will have much better weather conditions
