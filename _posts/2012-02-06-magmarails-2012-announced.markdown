@@ -1,13 +1,13 @@
 ---
 layout: post
-title: MagmaRails 2012 Announced
+title: Magma Rails 2012 Announced
 author: Mario Chavez
 email: mac@crowdint.com
 avatar: 2ae35d2e0dfd4ca72c07ead1eec4a8f7
 published: true
 ---
 
-MagmaRails Round 3 has been announced for this year, this time it will happen
+Magma Rails Round 3 has been announced for this year, this time it will happen
 from *June 6 - 8* in the beautiful city of Manzanillo, Colima.
 
 After the forces of nature made us cancel and hold a smaller event for
