@@ -131,7 +131,7 @@ documentation.
 
 ## Update 02/06
 
-Thanks to [hishma](https://gist.github.com/hishma) for this excellent tip.
+Thanks to [hishma](https://www.github.com/hishma) for this excellent tip.
 
 You can achieve the same thing with the [bootstrap-sass gem](https://github.com/thomas-mcdonald/bootstrap-sass)
 as [explained on this gist](https://gist.github.com/1749504).
