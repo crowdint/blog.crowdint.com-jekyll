@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2012-02-06T08:55:12-08:00</updated>
+ <updated>2012-02-06T08:58:34-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -186,9 +186,9 @@ Cake.&lt;/p&gt;
 a better idea of all the mixins that you can use, they all have great inline
 documentation.&lt;/p&gt;
 
-&lt;h1&gt;Update&lt;/h1&gt;
+&lt;h2&gt;Update 02/06&lt;/h2&gt;
 
-&lt;p&gt;Thanks to &lt;a href=&quot;https://gist.github.com/hishma&quot;&gt;hishma&lt;/a&gt;, for this excellent tip.&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://gist.github.com/hishma&quot;&gt;hishma&lt;/a&gt; for this excellent tip.&lt;/p&gt;
 
 &lt;p&gt;You can achieve the same thing with the &lt;a href=&quot;https://github.com/thomas-mcdonald/bootstrap-sass&quot;&gt;bootstrap-sass gem&lt;/a&gt;
 as &lt;a href=&quot;https://gist.github.com/1749504&quot;&gt;explained on this gist&lt;/a&gt;.&lt;/p&gt;
