@@ -4,7 +4,7 @@
  <title>Crowd Interactive Tech Blog</title>
  <link href="http://blog.crowdint.com/atom.xml" rel="self"/>
  <link href="http://blog.crowdint.com/"/>
- <updated>2012-02-06T08:43:59-08:00</updated>
+ <updated>2012-02-06T08:55:12-08:00</updated>
  <id>http://blog.crowdint.com/</id>
  
  
@@ -15,7 +15,7 @@
    <id>http://blog.crowdint.com/2012/02/06/magmarails-2012-announced</id>
    <photo>2ae35d2e0dfd4ca72c07ead1eec4a8f7</photo>
    <content type="html">&lt;p&gt;MagmaRails Round 3 has been announced for this year, this time it will happen
-from June 6 - 8 in the beautiful city of Manzanillo, Colima.&lt;/p&gt;
+from &lt;em&gt;June 6 - 8&lt;/em&gt; in the beautiful city of Manzanillo, Colima.&lt;/p&gt;
 
 &lt;p&gt;After the forces of nature made us cancel and hold a smaller event for
 Round 2, this new date will have much better weather conditions
@@ -185,6 +185,16 @@ Cake.&lt;/p&gt;
 &lt;a href=&quot;https://github.com/twitter/bootstrap/tree/master/less&quot;&gt;source files&lt;/a&gt; to get
 a better idea of all the mixins that you can use, they all have great inline
 documentation.&lt;/p&gt;
+
+&lt;h1&gt;Update&lt;/h1&gt;
+
+&lt;p&gt;Thanks to &lt;a href=&quot;https://gist.github.com/hishma&quot;&gt;hishma&lt;/a&gt;, for this excellent tip.&lt;/p&gt;
+
+&lt;p&gt;You can achieve the same thing with the &lt;a href=&quot;https://github.com/thomas-mcdonald/bootstrap-sass&quot;&gt;bootstrap-sass gem&lt;/a&gt;
+as &lt;a href=&quot;https://gist.github.com/1749504&quot;&gt;explained on this gist&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This way, if you are uncomfortable using less for your css files you can still
+use scss.&lt;/p&gt;
 
 &lt;h2&gt;More reading&lt;/h2&gt;
 
