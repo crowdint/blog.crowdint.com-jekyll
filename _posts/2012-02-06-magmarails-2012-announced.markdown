@@ -33,6 +33,6 @@ our [call for papers](http://www.magmarails.com/#cfp).
 
 As always, Github is one of our main sponsors, but if you or your company is
 interested in sponsoring MagmaRails you are welcome to request our
-prospectus: [http://sponsors.magmarails.com/](http://sponspors.magmarails.com).
+prospectus: [http://sponsors.magmarails.com/](http://sponsors.magmarails.com).
 
 See you in Manzanillo!
